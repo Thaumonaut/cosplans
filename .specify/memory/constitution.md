@@ -1,12 +1,14 @@
 <!--
 Sync Impact Report:
-- Version change: 1.3.0 → 1.3.1
-- Modified principles: I. Web-First with Mobile-Responsive Architecture (specified SvelteKit for web, Flutter for mobile)
+- Version change: 1.4.0 → 1.5.0
+- Modified principles: IV. Customizable Workflow States (expanded costume/prop lifecycle stages)
 - Added principles: None
-- Added sections: None
+- Added sections: Extended Principle IV with detailed costume/prop lifecycle stages including sold, damaged, rented states
 - Removed sections: None
 - Templates requiring updates:
-  * ✅ All templates remain aligned - no updates needed
+  * ✅ plan-template.md - constitution check will automatically include updated principle
+  * ✅ spec-template.md - aligned with expanded lifecycle tracking requirements
+  * ✅ tasks-template.md - aligned with costume/prop state management tasks
 - Follow-up TODOs: None
 -->
 
@@ -62,12 +64,29 @@ these workflows would reduce adoption and productivity.
 
 ### IV. Customizable Workflow States
 Teams MUST be able to customize shoot stages (idea → planning → scheduled → editing → 
-posting → complete) and costume/prop tracking stages (acquisition → in-progress → ready). 
-Default workflows are provided but teams can modify stage names, add/remove stages, and 
-define stage transition rules.
+posting → complete) and costume/prop tracking stages. Default workflows are provided but 
+teams can modify stage names, add/remove stages, and define stage transition rules.
+
+**Costume/Prop Lifecycle Stages**: The system MUST support comprehensive lifecycle tracking 
+for costumes and props beyond simple acquisition/in-progress/ready states. Required 
+lifecycle stages include:
+- **Active ownership states**: planned, acquiring, in-progress, ready, owned
+- **Post-use states**: sold (with sale date/price), damaged (with repair notes/cost), 
+  rented (with rental period/cost), lost (with incident details)
+- **Storage states**: stored (with location), loaned (with borrower/return date)
+
+Teams MUST be able to add custom intermediate stages (e.g., "needs weathering", "waiting 
+for materials", "in repair shop") and define allowed transitions between states. State 
+changes MUST be timestamped and attributed to the user making the change. Historical state 
+transitions MUST be preserved for inventory value tracking and insurance documentation.
 
 **Rationale**: Different cosplay teams have varying processes, skill levels, and complexity 
-requirements that cannot be served by rigid predefined workflows.
+requirements that cannot be served by rigid predefined workflows. Cosplayers invest 
+significant money and time in costumes/props—often hundreds of dollars per piece. Tracking 
+lifecycle states (sold, damaged, rented) enables accurate inventory management, helps 
+prevent scheduling shoots with unavailable costumes, supports insurance claims for damaged 
+items, and maintains historical value records for tax/resale purposes. Without granular 
+lifecycle tracking, teams lose visibility into their costume portfolio value and availability.
 
 ### V. Visual-First Content Management
 Reference images, Instagram posts/reels, and progress photos MUST be first-class content 
@@ -88,6 +107,24 @@ is defined as passing tests, not just code existence.
 provides living documentation of expected behavior, catches regressions early, and enables 
 confident refactoring. Without tests, feature quality degrades over time and bugs propagate 
 undetected.
+
+### VII. Team Role Management & Permissions
+Teams MUST support role-based access control with distinct permission levels. Team admins 
+MUST be able to create, modify, and delete shoots, manage team membership, and configure 
+team settings. Regular members MUST be able to view and edit shared content within their 
+assigned permissions. Role assignments MUST be granular: shoot-level roles (photographer, 
+cosplayer, makeup artist, prop master) for task coordination and team-level roles (admin, 
+member, viewer) for access control. Permission checks MUST be enforced consistently across 
+all operations (API endpoints, UI actions, real-time sync). Team member onboarding MUST 
+include clear role assignment and capability overview.
+
+**Rationale**: Cosplay teams vary in size and structure—from small friend groups to large 
+convention groups with 20+ participants. Without role-based permissions, teams cannot scale 
+beyond informal coordination. Admins need authority over critical operations (budget, 
+scheduling, team roster) while enabling members to collaborate freely on assigned shoots. 
+Shoot-level roles ensure accountability (who's bringing the camera? who's responsible for 
+wig styling?) and enable targeted notifications. Consistent permission enforcement prevents 
+accidental data corruption and maintains team trust.
 
 ## Platform Requirements
 
@@ -144,17 +181,18 @@ maintained as features evolve.
 **Code Review Gates**: Test coverage and passing status verification required before review. 
 Mobile-responsive UI changes require testing on multiple device sizes and browsers. External 
 API integrations require error handling and fallback behavior review. Database schema 
-changes require migration plan approval.
+changes require migration plan approval. Permission-related changes require verification of 
+role-based access control across all affected operations.
 
 ## Governance
 
 Constitution supersedes all feature decisions and architectural choices. All pull requests 
-MUST verify mobile-responsive compliance, integration integrity, and test-driven development 
-compliance. Feature complexity beyond core cosplay workflows MUST be justified against user 
-adoption impact.
+MUST verify mobile-responsive compliance, integration integrity, test-driven development 
+compliance, and role-based permission enforcement. Feature complexity beyond core cosplay 
+workflows MUST be justified against user adoption impact.
 
 **Amendment Process**: Constitution changes require documentation of impact on existing 
 integrations and mobile performance. Major principle changes require user feedback 
 validation.
 
-**Version**: 1.3.1 | **Ratified**: 2025-10-15 | **Last Amended**: 2025-10-15
+**Version**: 1.5.0 | **Ratified**: 2025-10-15 | **Last Amended**: 2025-10-15
