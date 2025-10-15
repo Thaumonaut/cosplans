@@ -1,10 +1,10 @@
 <!--
 Sync Impact Report:
-- Version change: 1.2.0 → 1.3.0
-- Modified principles: I. Mobile-First Architecture → Web-First with Mobile-Responsive Architecture (redefined deployment strategy)
+- Version change: 1.3.0 → 1.3.1
+- Modified principles: I. Web-First with Mobile-Responsive Architecture (specified SvelteKit for web, Flutter for mobile)
 - Added principles: None
-- Added sections: Platform Requirements (replaces Mobile-First Constraints with phase-specific details)
-- Removed sections: Mobile-First Constraints (content moved to Platform Requirements)
+- Added sections: None
+- Removed sections: None
 - Templates requiring updates:
   * ✅ All templates remain aligned - no updates needed
 - Follow-up TODOs: None
@@ -16,31 +16,31 @@ Sync Impact Report:
 
 ### I. Web-First with Mobile-Responsive Architecture
 All features MUST be designed with mobile responsiveness as a core requirement. The system 
-will be implemented in three phases: (1) responsive web application (Next.js), (2) Android 
+will be implemented in three phases: (1) responsive web application (SvelteKit), (2) Android 
 native app (Flutter), (3) iOS native app (Flutter). The web application is the primary 
-initial platform; native mobile apps provide enhanced mobile experiences in subsequent 
-phases. Core workflows (shoot creation, editing, status updates, calendar view) MUST be 
-fully functional on mobile web browsers. Responsive design is mandatory for all web 
-interfaces. Native mobile apps MUST maintain feature parity with the web application.
+initial platform using SvelteKit for optimal performance and SEO; native mobile apps built 
+with Flutter provide enhanced mobile experiences with shared codebase between Android/iOS.
 
 **Platform Deployment Strategy**:
-- **Phase 1 (Web)**: Next.js responsive web application serving all users across devices. 
-  Focus on mobile-responsive design, touch-friendly interfaces, and progressive web app 
-  (PWA) capabilities. All core features implemented here first.
+- **Phase 1 (Web)**: SvelteKit responsive web application serving all users across devices. 
+  Focus on mobile-responsive design, touch-friendly interfaces, progressive web app (PWA) 
+  capabilities, and server-side rendering for SEO. All core features implemented here first.
 - **Phase 2 (Android)**: Flutter native app for Android providing enhanced mobile 
   performance, offline capabilities, and native integrations (camera, notifications, 
-  location services). Features migrate from web implementation.
+  location services). Features ported from validated web implementation.
 - **Phase 3 (iOS)**: Flutter native app for iOS with same capabilities as Android. Shared 
   Flutter codebase enables rapid deployment after Android validation.
 
-All platforms MUST share a common backend API to ensure data consistency. Feature 
-development follows the phase order: web → Android → iOS.
+All platforms MUST share a common backend API to ensure data consistency. UI components and 
+design tokens SHOULD be shared where technically feasible to maintain visual consistency 
+across platforms. Feature development follows the phase order: web → Android → iOS.
 
-**Rationale**: Web-first deployment enables rapid development, immediate user feedback, and 
-cross-platform accessibility without app store approval delays. Progressive enhancement to 
-native apps provides better mobile experiences once core features are validated. Cosplayers 
-need mobile access for on-location work, but web-responsive design serves this initially 
-while building toward native app performance.
+**Rationale**: Web-first deployment with SvelteKit enables rapid development, excellent 
+performance (<3 sec loads on 3G), and immediate user feedback without app store delays. 
+Flutter for mobile apps provides native performance with 100% code reuse between Android and 
+iOS, accelerating Phases 2-3 development. Cosplayers need mobile access for on-location 
+work, but web-responsive design serves this initially while building toward native app 
+performance.
 
 ### II. Real-Time Collaboration 
 Team members MUST be able to view and edit shared data in real-time. Changes to shoots, 
@@ -125,12 +125,12 @@ platform conventions (Material Design vs. Human Interface Guidelines).
 
 ## Development Workflow
 
-**Feature Priority Order**: Core CRUD operations for shoots (web) → Mobile-responsive UI → 
+**Feature Priority Order**: Core CRUD operations for shoots (SvelteKit web) → Mobile-responsive UI → 
 Calendar integration → Google Maps integration → Advanced views (kanban, map) → 
-Instagram integration → Document generation → Android app development → iOS app development.
+Instagram integration → Document generation → Flutter Android app development → Flutter iOS app development.
 
 **Platform Development Flow**:
-1. Implement feature in Next.js web app with mobile-responsive design
+1. Implement feature in SvelteKit web app with mobile-responsive design
 2. Validate with users on web and mobile browsers
 3. Port to Flutter Android app (if Phase 2 active)
 4. Deploy to iOS using shared Flutter codebase (if Phase 3 active)
@@ -157,4 +157,4 @@ adoption impact.
 integrations and mobile performance. Major principle changes require user feedback 
 validation.
 
-**Version**: 1.3.0 | **Ratified**: 2025-10-15 | **Last Amended**: 2025-10-15
+**Version**: 1.3.1 | **Ratified**: 2025-10-15 | **Last Amended**: 2025-10-15
