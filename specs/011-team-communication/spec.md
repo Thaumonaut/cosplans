@@ -137,3 +137,168 @@ As a team member catching up, I want to see shoot activity (chat messages, statu
 - **SC-009**: Average response time to @mentions is under 2 hours (indicates notification effectiveness)
 - **SC-010**: Zero message loss during delivery (100% reliability with retry mechanism)
 
+## Team Roles & Member Management *(mandatory)*
+
+### Overview
+
+Effective team collaboration requires clear role definitions and member management capabilities. This section defines how teams are structured, what roles exist, and how team membership is managed across shoots and projects.
+
+### Team Roles
+
+The system supports the following team roles, each with specific responsibilities and permissions:
+
+#### 1. **Team Owner**
+- **Purpose**: Ultimate authority over the team and all shoots
+- **Permissions**:
+  - Create, edit, and delete any shoot
+  - Manage all team members (invite, remove, change roles)
+  - Manage team settings and billing
+  - Access all team data and analytics
+  - Transfer ownership to another member
+- **Limits**: Exactly one owner per team
+- **Default**: User who creates the team
+
+#### 2. **Team Admin**
+- **Purpose**: Help manage team operations without full ownership
+- **Permissions**:
+  - Create and manage shoots
+  - Invite and remove members (cannot remove owner or other admins)
+  - View team analytics and reports
+  - Edit team profile and settings (except billing)
+  - Assign roles to members (except owner and admin)
+- **Limits**: No hard limit, but recommend 2-3 per team
+- **Use Cases**: Co-coordinators, experienced team leads
+
+#### 3. **Coordinator**
+- **Purpose**: Manage specific shoots they're assigned to
+- **Permissions**:
+  - Create shoots and invite members to shoots they coordinate
+  - Edit shoot details, budget, and schedules for assigned shoots
+  - Assign tasks and gear to team members in their shoots
+  - View and approve shot deliverables
+  - Cannot remove team members from the team (only from their shoots)
+- **Limits**: Permissions are shoot-specific
+- **Use Cases**: Project leads, shoot organizers
+
+#### 4. **Member (Standard)**
+- **Purpose**: Active participants in shoots
+- **Permissions**:
+  - View shoots they're invited to
+  - Post in chat, upload files, complete assigned tasks
+  - Mark their own tasks complete
+  - Upload photos/videos for shoots they're part of
+  - Edit their own profile and availability
+  - Cannot create shoots or manage other members
+- **Limits**: None
+- **Use Cases**: Cosplayers, photographers, makeup artists, assistants
+
+#### 5. **Viewer (Read-Only)**
+- **Purpose**: Observe shoots without active participation
+- **Permissions**:
+  - View shoot details, schedules, and chat
+  - Download shared files
+  - Cannot post messages, edit data, or upload content
+- **Limits**: Cannot be assigned tasks or responsibilities
+- **Use Cases**: Clients, family members, friends observing progress
+
+### Team Member Management
+
+#### Inviting Members
+
+- **Invite Methods**:
+  - Email invitation with unique join link
+  - Shareable team join link (with optional approval requirement)
+  - In-app username search and invite
+  - Import from previous shoots
+- **Invite Flow**:
+  1. Inviter selects role for new member
+  2. System sends invite via email/SMS
+  3. Recipient accepts invite and creates account (or logs in)
+  4. Member added to team with assigned role
+- **Permissions**: Owner, Admin, and Coordinator can invite (Coordinator can only invite to their shoots)
+
+#### Removing Members
+
+- **Removal Actions**:
+  - Remove from entire team (Owner/Admin only)
+  - Remove from specific shoot (Coordinator can do this for their shoots)
+  - Member can leave team voluntarily
+- **Data Impact**:
+  - Member's past contributions (messages, uploads) remain attributed
+  - Member loses access to all team/shoot data
+  - If member was assigned tasks, system prompts to reassign
+  - If member uploaded deliverables, they remain in shoot gallery
+- **Confirmation**: Removal requires confirmation dialog with warning about impact
+
+#### Changing Roles
+
+- **Who Can Change Roles**:
+  - Owner: Can change any role
+  - Admin: Can change Member/Viewer/Coordinator roles (not Owner/Admin)
+  - Others: Cannot change roles
+- **Role Change Flow**:
+  1. Select member from team roster
+  2. Choose new role from dropdown
+  3. Confirm change
+  4. Member receives notification of role change
+  5. Permissions update immediately
+- **Restrictions**:
+  - Cannot demote the only Owner (must transfer ownership first)
+  - Role changes are logged in team activity feed
+
+#### Team Roster & Directory
+
+- **Roster View**:
+  - List all team members with name, avatar, role, join date
+  - Filter by role, status (active/inactive), or shoot participation
+  - Search by name or skills
+  - Sort by name, role, join date, or activity level
+- **Member Profiles**:
+  - Display name, profile picture, bio
+  - Role and permissions summary
+  - Shoot history (shoots participated in)
+  - Contribution stats (tasks completed, photos uploaded, messages sent)
+  - Skills/specializations (photographer, makeup, props, etc.)
+  - Availability calendar (integrated with scheduling)
+  - Contact preferences (email, phone, preferred notification method)
+
+### Key Entities for Team Management
+
+- **Team**: Top-level organizational unit. Attributes: team ID, team name, owner user ID, created date, team settings, billing info
+- **TeamMember**: User's membership in team. Attributes: team ID, user ID, role, join date, invited by user ID, status (active/inactive)
+- **ShootMember**: User's participation in specific shoot. Attributes: shoot ID, user ID, role (specific to this shoot), added date, added by user ID
+- **TeamInvite**: Pending invitation. Attributes: invite ID, team ID, inviter user ID, invitee email, role, invite link, status (pending/accepted/expired), created date, expiry date
+- **RoleChangeLog**: Audit trail for role changes. Attributes: team ID, user ID, old role, new role, changed by user ID, change timestamp, reason (optional)
+
+### Functional Requirements for Team Management
+
+- **FR-TM-001**: System MUST support five distinct team roles: Owner, Admin, Coordinator, Member, Viewer
+- **FR-TM-002**: System MUST enforce role-based permissions for all team actions
+- **FR-TM-003**: System MUST allow Owner/Admin to invite new members via email with role assignment
+- **FR-TM-004**: System MUST generate unique, shareable team invite links with optional approval workflow
+- **FR-TM-005**: System MUST allow Owner/Admin to change member roles with immediate permission updates
+- **FR-TM-006**: System MUST allow Owner/Admin to remove members from team with confirmation dialog
+- **FR-TM-007**: System MUST allow Coordinators to add/remove members from shoots they coordinate
+- **FR-TM-008**: System MUST display team roster with member details, roles, and activity stats
+- **FR-TM-009**: System MUST allow searching and filtering team roster by role, shoot participation, or name
+- **FR-TM-010**: System MUST preserve attribution of member contributions after removal (chat messages, uploads)
+- **FR-TM-011**: System MUST prompt for task reassignment when removing member with assigned tasks
+- **FR-TM-012**: System MUST log all role changes with timestamp, actor, and affected user in audit trail
+- **FR-TM-013**: System MUST send notifications to members when their role changes
+- **FR-TM-014**: System MUST allow member to view their own permissions and limitations
+- **FR-TM-015**: System MUST prevent team from having zero Owners (require ownership transfer before demotion)
+- **FR-TM-016**: System MUST allow members to leave team voluntarily with confirmation
+- **FR-TM-017**: System MUST display member profiles with contribution history, skills, and availability
+- **FR-TM-018**: System MUST support shoot-specific role assignments that differ from team-wide role
+
+### Success Criteria for Team Management
+
+- **SC-TM-001**: 95% of teams have clearly defined roles for all members within first week
+- **SC-TM-002**: Teams with 5+ members report 60% less confusion about "who can do what" (survey)
+- **SC-TM-003**: Zero unauthorized actions due to permission enforcement (100% compliance)
+- **SC-TM-004**: Average time to invite and onboard new member is under 3 minutes
+- **SC-TM-005**: Member removal completes in under 10 seconds with proper cleanup
+- **SC-TM-006**: 90% of Coordinators successfully manage their shoots without Admin intervention
+- **SC-TM-007**: Role change notifications arrive within 5 seconds of change
+- **SC-TM-008**: Team roster loads in under 1 second for teams with up to 50 members
+

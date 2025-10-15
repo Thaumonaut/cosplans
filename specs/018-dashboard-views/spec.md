@@ -91,6 +91,23 @@ Teams with shared finances can view consolidated budget dashboard showing total 
 
 ---
 
+### User Story 6 - Costume Inventory Lifecycle Dashboard (Priority: P1)
+
+Users can view and manage the lifecycle of costumes and props directly from the dashboard, with explicit integration of constitutional Principle IV requirements for inventory tracking and state management.
+
+**Why this priority**: Ensures compliance with inventory lifecycle standards and provides a centralized view for managing costume and prop states.
+
+**Independent Test**: Can be fully tested by updating costume/prop states and verifying historical preservation, metadata accuracy, and compliance with Principle IV.
+
+**Acceptance Scenarios**:
+
+1. **Given** a costume is marked as "Planned", **When** user updates its state to "In-Progress", **Then** the dashboard logs the change with a timestamp, user attribution, and historical preservation.
+2. **Given** a prop is marked as "Owned", **When** user updates its state to "Rented", **Then** the dashboard reflects the new state with required metadata (rental period, renter details) and updates inventory value tracking.
+3. **Given** a costume is marked as "Stored", **When** user updates its state to "Damaged", **Then** the dashboard prompts for insurance documentation and logs the change with rationale.
+4. **Given** multiple costumes in various states, **When** user views the lifecycle dashboard, **Then** all items display with their current state, historical changes, and compliance indicators for Principle IV.
+
+---
+
 ### Edge Cases
 
 - What happens when dashboard has 50+ upcoming shoots? System MUST paginate upcoming shoots widget (10 per page), show "View All Shoots" link, and prioritize shoots with alerts/upcoming deadlines at top
