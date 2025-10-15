@@ -1,14 +1,12 @@
 <!--
 Sync Impact Report:
-- Version change: 1.1.0 → 1.2.0
-- Modified principles: III. External Integration Integrity (expanded to include email reminders in v1.1.0)
-- Added principles: VI. Test-Driven Development
-- Added sections: None
-- Removed sections: None
+- Version change: 1.2.0 → 1.3.0
+- Modified principles: I. Mobile-First Architecture → Web-First with Mobile-Responsive Architecture (redefined deployment strategy)
+- Added principles: None
+- Added sections: Platform Requirements (replaces Mobile-First Constraints with phase-specific details)
+- Removed sections: Mobile-First Constraints (content moved to Platform Requirements)
 - Templates requiring updates:
-  * ✅ tasks-template.md: Updated test requirement from OPTIONAL to MANDATORY per TDD principle
-  * ✅ plan-template.md: Already includes testing requirements, aligned with TDD principle
-  * ✅ spec-template.md: Already includes testing scenarios, aligned with TDD principle
+  * ✅ All templates remain aligned - no updates needed
 - Follow-up TODOs: None
 -->
 
@@ -16,14 +14,33 @@ Sync Impact Report:
 
 ## Core Principles
 
-### I. Mobile-First Architecture
-All features MUST be designed with mobile users as the primary experience. Desktop and web 
-interfaces are supplementary. Core workflows (shoot creation, editing, status updates, 
-calendar view) MUST be fully functional on mobile devices. Responsive design is mandatory 
-for all interfaces.
+### I. Web-First with Mobile-Responsive Architecture
+All features MUST be designed with mobile responsiveness as a core requirement. The system 
+will be implemented in three phases: (1) responsive web application (Next.js), (2) Android 
+native app (Flutter), (3) iOS native app (Flutter). The web application is the primary 
+initial platform; native mobile apps provide enhanced mobile experiences in subsequent 
+phases. Core workflows (shoot creation, editing, status updates, calendar view) MUST be 
+fully functional on mobile web browsers. Responsive design is mandatory for all web 
+interfaces. Native mobile apps MUST maintain feature parity with the web application.
 
-**Rationale**: Cosplayers work on-location and need immediate access to shoot details, 
-communication, and updates while traveling or at events.
+**Platform Deployment Strategy**:
+- **Phase 1 (Web)**: Next.js responsive web application serving all users across devices. 
+  Focus on mobile-responsive design, touch-friendly interfaces, and progressive web app 
+  (PWA) capabilities. All core features implemented here first.
+- **Phase 2 (Android)**: Flutter native app for Android providing enhanced mobile 
+  performance, offline capabilities, and native integrations (camera, notifications, 
+  location services). Features migrate from web implementation.
+- **Phase 3 (iOS)**: Flutter native app for iOS with same capabilities as Android. Shared 
+  Flutter codebase enables rapid deployment after Android validation.
+
+All platforms MUST share a common backend API to ensure data consistency. Feature 
+development follows the phase order: web → Android → iOS.
+
+**Rationale**: Web-first deployment enables rapid development, immediate user feedback, and 
+cross-platform accessibility without app store approval delays. Progressive enhancement to 
+native apps provides better mobile experiences once core features are validated. Cosplayers 
+need mobile access for on-location work, but web-responsive design serves this initially 
+while building toward native app performance.
 
 ### II. Real-Time Collaboration 
 Team members MUST be able to view and edit shared data in real-time. Changes to shoots, 
@@ -72,40 +89,67 @@ provides living documentation of expected behavior, catches regressions early, a
 confident refactoring. Without tests, feature quality degrades over time and bugs propagate 
 undetected.
 
-## Mobile-First Constraints
+## Platform Requirements
 
-**Performance Requirements**: App MUST load core features within 3 seconds on 3G networks. 
-Image loading MUST be progressive with low-resolution previews. Battery usage MUST not 
-exceed social media app benchmarks during normal usage.
+### Web Application (Phase 1)
 
-**Offline Capabilities**: Read access to shoot details, costume/prop status, and cached 
-reference images MUST work offline. Edit capabilities MUST queue changes for sync when 
-connection resumes. Location data MUST cache for offline map viewing.
+**Performance**: Initial page load MUST complete within 3 seconds on 3G networks. Core 
+features MUST be interactive within 5 seconds. Image loading MUST be progressive with 
+low-resolution previews.
 
-**Touch Interface Standards**: All interactive elements MUST meet minimum 44px touch targets. 
-Gesture navigation (swipe, pinch-to-zoom) MUST be intuitive. Form inputs MUST use 
-appropriate mobile keyboards and validation patterns.
+**Mobile Responsiveness**: All interfaces MUST adapt to screen sizes from 320px to 4K. 
+Touch targets MUST meet minimum 44px size. Form inputs MUST use appropriate mobile 
+keyboards. Gestures (swipe, pinch-to-zoom) MUST be supported where relevant.
+
+**Progressive Web App**: Service workers MUST enable offline read access to cached shoot 
+details and reference images. Background sync MUST queue offline edits for later submission.
+
+**Browser Support**: Latest 2 versions of Chrome, Firefox, Safari, and Edge. Mobile 
+browsers: Chrome (Android), Safari (iOS).
+
+### Native Mobile Apps (Phases 2-3)
+
+**Offline Capabilities**: Full read/write access to shoots, costumes, props, and reference 
+images MUST work offline. Changes MUST sync automatically when connection resumes with 
+conflict resolution.
+
+**Native Integrations**: Camera integration for reference photo capture. Push notifications 
+for shoot reminders and team updates. Location services for venue discovery. Native sharing 
+to social media platforms.
+
+**Performance**: App launch MUST complete within 2 seconds. Battery usage MUST not exceed 
+social media app benchmarks during normal usage.
+
+**Platform Parity**: Android and iOS apps MUST have identical features. UI/UX may adapt to 
+platform conventions (Material Design vs. Human Interface Guidelines).
 
 ## Development Workflow
 
-**Feature Priority Order**: Core CRUD operations for shoots → Mobile responsiveness → 
+**Feature Priority Order**: Core CRUD operations for shoots (web) → Mobile-responsive UI → 
 Calendar integration → Google Maps integration → Advanced views (kanban, map) → 
-Instagram integration → Document generation.
+Instagram integration → Document generation → Android app development → iOS app development.
+
+**Platform Development Flow**:
+1. Implement feature in Next.js web app with mobile-responsive design
+2. Validate with users on web and mobile browsers
+3. Port to Flutter Android app (if Phase 2 active)
+4. Deploy to iOS using shared Flutter codebase (if Phase 3 active)
 
 **Testing Requirements**: Tests MUST be written before implementation (test-first approach). 
-Every user story MUST have corresponding mobile device tests. Integration tests MUST verify 
-Google API interactions. Performance tests MUST validate mobile network conditions and 
-battery usage. Test coverage MUST be maintained as features evolve.
+Every user story MUST have corresponding tests for web responsive behavior. Integration 
+tests MUST verify Google API interactions. Performance tests MUST validate mobile network 
+conditions. Native app features MUST have platform-specific tests. Test coverage MUST be 
+maintained as features evolve.
 
 **Code Review Gates**: Test coverage and passing status verification required before review. 
-Mobile UI changes require device testing verification. External API integrations require 
-error handling and fallback behavior review. Database schema changes require migration plan 
-approval.
+Mobile-responsive UI changes require testing on multiple device sizes and browsers. External 
+API integrations require error handling and fallback behavior review. Database schema 
+changes require migration plan approval.
 
 ## Governance
 
 Constitution supersedes all feature decisions and architectural choices. All pull requests 
-MUST verify mobile-first compliance, integration integrity, and test-driven development 
+MUST verify mobile-responsive compliance, integration integrity, and test-driven development 
 compliance. Feature complexity beyond core cosplay workflows MUST be justified against user 
 adoption impact.
 
@@ -113,4 +157,4 @@ adoption impact.
 integrations and mobile performance. Major principle changes require user feedback 
 validation.
 
-**Version**: 1.2.0 | **Ratified**: 2025-10-15 | **Last Amended**: 2025-10-15
+**Version**: 1.3.0 | **Ratified**: 2025-10-15 | **Last Amended**: 2025-10-15
