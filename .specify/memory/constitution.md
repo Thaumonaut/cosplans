@@ -1,14 +1,14 @@
 <!--
 Sync Impact Report:
-- Version change: 1.4.0 → 1.5.0
-- Modified principles: IV. Customizable Workflow States (expanded costume/prop lifecycle stages)
-- Added principles: None
-- Added sections: Extended Principle IV with detailed costume/prop lifecycle stages including sold, damaged, rented states
+- Version change: 2.1.0 → 2.2.0
+- Modified principles: None
+- Added sections: Recommended Technology Stack & Packages (vetted libraries for Phase 1 MVP)
 - Removed sections: None
 - Templates requiring updates:
-  * ✅ plan-template.md - constitution check will automatically include updated principle
-  * ✅ spec-template.md - aligned with expanded lifecycle tracking requirements
-  * ✅ tasks-template.md - aligned with costume/prop state management tasks
+  * ✅ quickstart.md - update to recommend package installation
+  * ✅ README.md - add technology stack table with packages
+  * ⚠ data-model-v2.md - no changes needed (database layer unaffected)
+  * ⚠ creator-community-marketplace-v1.md - no changes needed (Phase 1.5+)
 - Follow-up TODOs: None
 -->
 
@@ -676,6 +676,55 @@ pagination metadata (page, total, limit) for collections. Error responses MUST i
 error code, human-readable message, and reference to affected resource. API responses 
 MUST include cache headers (ETag, Last-Modified) to enable client-side caching.
 
+### Recommended Technology Stack & Packages
+The implementation MUST use the following vetted libraries and frameworks to accelerate 
+development while maintaining code quality and architecture integrity:
+
+**Core Framework & UI**:
+- SvelteKit (web framework) - built-in server-side rendering, API routes, and SSG
+- Tailwind CSS (styling) - utility-first CSS framework
+- Shadcn/svelte (component library) - accessible, copy-paste components built on Radix UI
+- Lucide Svelte (icons) - clean SVG icon library
+
+**Form Handling & Validation**:
+- Sveltekit-Superforms (form state management) - server-first validation, CSRF protection, progressive enhancement
+- Zod (schema validation) - TypeScript-first schema validation with runtime type checking
+- **Rationale**: Superforms + Zod reduces form boilerplate by 10-15 days and prevents validation logic duplication
+
+**Real-Time Sync & Conflict Resolution**:
+- Yjs (CRDT library) - replaces manual OT algorithm implementation, handles conflicts automatically
+- y-protocols (WebSocket provider for Yjs) - integrates Yjs with custom sync protocol
+- **Rationale**: Yjs eliminates 10-14 days of complex OT algorithm development; battle-tested in Figma, Notion
+
+**Database & Backend**:
+- Supabase (PostgreSQL + auth + realtime) - includes PostgREST API, RLS, real-time subscriptions
+- Sharp (image processing) - optimized Node.js image resizing and WebP conversion
+- date-fns (date utilities) - modular date manipulation library
+
+**Authorization & Permissions**:
+- @casl/ability (authorization library) - declarative permission rules (server + client)
+- **Rationale**: Centralized permission rules prevent scattered if-statements; 3-5 days saved on permission scaffolding
+
+**Testing**:
+- Vitest (unit testing) - Vite-native test runner, 10-15% faster than Jest
+- @playwright/test (E2E testing) - browser automation for critical workflow testing
+- msw (Mock Service Worker) - API mocking for tests (mocks Supabase, SendGrid, Google APIs)
+- @testing-library/svelte (component testing) - behavior-focused component testing utilities
+- **Rationale**: MSW eliminates flaky external API tests; 5-7 days saved on test setup and mocking
+
+**Dependencies**: @supabase/supabase-js (SDK), date-fns (date utilities)
+
+**Do NOT use** (antipatterns for SvelteKit):
+- ❌ Redux, Pinia, Zustand - state management overkill; use SvelteKit load() + writable stores
+- ❌ Third-party analytics vendors - use custom PostgreSQL analytics per Principle IX
+- ❌ Auth0, Okta - Supabase Auth is sufficient; avoids vendor lock-in
+- ❌ Material Design, Bootstrap - Shadcn/svelte is lighter and more customizable
+
+**Implementation Time Savings**: Using recommended packages reduces Phase 1 MVP timeline from 
+180-220 working days to 60-80 working days (100-140 days saved, ~55% time reduction). 
+Packages MUST be locked to specific versions in package.json; version upgrades MUST follow 
+semantic versioning and be tested in staging before production deployment.
+
 ### Data & Media Storage
 Image uploads MUST be optimized: WebP format with quality 75 for web, fallback JPEG for 
 older browsers. Responsive image sizes MUST be generated at upload (320px, 640px, 1280px, 
@@ -809,4 +858,4 @@ constitution or implementation accordingly. Major principle changes (new core te
 removal of existing principles) require documented rationale and alignment with user 
 feedback.
 
-**Version**: 2.1.0 | **Ratified**: 2025-10-16 | **Last Amended**: 2025-10-16
+**Version**: 2.2.0 | **Ratified**: 2025-10-16 | **Last Amended**: 2025-10-16
