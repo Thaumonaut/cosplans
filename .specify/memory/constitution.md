@@ -53,14 +53,18 @@ Offline capability with sync-on-reconnect is required for location scouting and 
 and timelines requiring instant communication and updates.
 
 ### III. External Integration Integrity
-Google Maps, Google Calendar, Google Docs, and email reminder integrations MUST maintain 
-data consistency. Calendar events MUST sync bidirectionally. Document summaries MUST 
-preserve user edits while updating automated content. Email reminders MUST be reliable and 
-respect user notification preferences. API failures MUST not corrupt local data.
+Google Maps, Google Calendar, Google Docs, Instagram, and email reminder integrations MUST 
+maintain data consistency. Calendar events MUST sync bidirectionally with Google Calendar. 
+Document summaries MUST preserve user edits while updating automated content. Email 
+reminders MUST be reliable and respect user notification preferences. Instagram posts MUST 
+sync read/write for scheduling and analytics. API failures MUST not corrupt local data.
 
-**Rationale**: Teams rely on existing Google ecosystem tools and communication channels. 
-Email reminders ensure critical deadlines and shoot preparations are not missed. Disrupting 
-these workflows would reduce adoption and productivity.
+**Rationale**: Teams rely on existing Google ecosystem tools, communication channels, and 
+social media platforms. Email reminders ensure critical deadlines and shoot preparations 
+are not missed. Instagram is the primary platform for cosplay community engagement and 
+portfolio building; integrating social planning into shoot workflow prevents context 
+switching and enables data-driven content strategy. Disrupting these workflows would reduce 
+adoption and productivity.
 
 ### IV. Customizable Workflow States
 Teams MUST be able to customize shoot stages (idea → planning → scheduled → editing → 
@@ -97,6 +101,38 @@ friction.
 **Rationale**: Cosplay is fundamentally visual art requiring constant reference to source 
 material, inspiration, and progress documentation.
 
+### V.5. Social Media Workflow Integration
+The system MUST support seamless integration with Instagram and TikTok for content 
+planning, scheduling, and portfolio management. Teams MUST be able to link Instagram 
+accounts to shoots, plan content pillars (behind-the-scenes, finished costume, WIP, 
+convention coverage), schedule posts with caption templates, and view analytics on 
+published content. Social media planning features MUST support content calendars synchronized 
+with shoot schedules, allowing teams to visualize their posting strategy alongside shoot 
+logistics.
+
+**Social Media Features**:
+- Instagram account connection via OAuth (read/write access)
+- TikTok account connection via OAuth for Phase 2+
+- Content calendar: view planned posts aligned with shoot dates
+- Caption template library: save reusable captions for different content types
+- Hashtag management: save and track hashtag sets by content type
+- Post scheduling: draft posts and schedule delivery to Instagram/TikTok
+- Analytics dashboard: view engagement, reach, saves, and follower growth per post
+- Content pillar tracking: categorize posts by type (BTS, finished, WIP, convention)
+- Cross-team posting: owner/admin can approve posts before team members publish
+- Draft collaboration: team members can draft posts, admins review before posting
+
+**Phase 1 Scope**: Instagram integration (read/write, basic scheduling, analytics)  
+**Phase 2+ Scope**: TikTok integration, advanced analytics, influencer collaboration tools
+
+**Rationale**: Cosplayers monetize and build community through social media; disconnecting 
+social planning from shoot planning creates friction and prevents strategic content 
+creation. Instagram-native features (Reels, Stories, feed posts) drive discovery and 
+follower growth. Supporting content calendars aligned with shoots enables teams to plan 
+"shoot → edit → post" timelines holistically. Built-in hashtag and caption templates reduce 
+friction for non-technical team members. Approval workflows prevent low-quality or off-brand 
+posts while enabling team collaboration.
+
 ### VI. Test-Driven Development
 Tests MUST be written before implementation for all new features. Each user story MUST have 
 corresponding test coverage that verifies acceptance criteria. Tests MUST be maintained as 
@@ -108,23 +144,190 @@ provides living documentation of expected behavior, catches regressions early, a
 confident refactoring. Without tests, feature quality degrades over time and bugs propagate 
 undetected.
 
-### VII. Team Role Management & Permissions
-Teams MUST support role-based access control with distinct permission levels. Team admins 
-MUST be able to create, modify, and delete shoots, manage team membership, and configure 
-team settings. Regular members MUST be able to view and edit shared content within their 
-assigned permissions. Role assignments MUST be granular: shoot-level roles (photographer, 
-cosplayer, makeup artist, prop master) for task coordination and team-level roles (admin, 
-member, viewer) for access control. Permission checks MUST be enforced consistently across 
-all operations (API endpoints, UI actions, real-time sync). Team member onboarding MUST 
-include clear role assignment and capability overview.
+### VII. Team Roles & Permissions vs. Crew Management
+Teams MUST support two distinct role systems:
 
-**Rationale**: Cosplay teams vary in size and structure—from small friend groups to large 
-convention groups with 20+ participants. Without role-based permissions, teams cannot scale 
-beyond informal coordination. Admins need authority over critical operations (budget, 
-scheduling, team roster) while enabling members to collaborate freely on assigned shoots. 
-Shoot-level roles ensure accountability (who's bringing the camera? who's responsible for 
-wig styling?) and enable targeted notifications. Consistent permission enforcement prevents 
-accidental data corruption and maintains team trust.
+**Team-Level Permissions** (global): Owner, admin, member, viewer roles that determine what 
+content a team member can access and modify across all shoots. Team owner has full control 
+and can delegate permissions to admins. Team admins MUST be able to create, modify, and 
+delete shoots, manage team membership, and configure team settings. Regular members MUST 
+be able to view and edit shared content within their assigned permissions. Viewers have 
+read-only access. Permission checks MUST be enforced consistently across all operations 
+(API endpoints, UI actions, real-time sync).
+
+**External Crew Member Roles**: Crew members with Cosplans accounts (whether discovered 
+through the Creator Community marketplace or manually added) MAY be linked to a shoot as 
+"viewer" or "member" without requiring them to join the team itself. This enables external 
+photographers, makeup artists, and collaborators to participate in specific shoots while 
+maintaining clean team boundaries. External crew members can view the public detail view of 
+the shoot (dates, location, logistics, visual references) but cannot modify team data or 
+access other shoots unless explicitly invited to join the team. If external crew members 
+later become full team members (joining the team), their account links persist and their 
+role escalates from external crew to team member within their assigned permissions.
+
+**Crew Roles** (per-shoot): Crew assignments are entirely informational and do not affect 
+permissions. Each shoot MAY have a crew of personnel assigned with multiple roles per person 
+(e.g., one person as both assistant and model). Supported crew roles include: photographer, 
+cosplayer, makeup artist, prop master, hair stylist, assistant, and custom roles. Crew 
+assignments track who was involved in each shoot for historical reference and future 
+collaboration planning.
+
+**Visibility & Editing**:
+- All team members can view crew assignments for a shoot (names visible to all)
+- All team members can view crew contact information (email, phone)
+- Only team owner and admins can add, edit, or remove crew members from shoots
+- Owner role has full control; admin role can manage day-to-day operations
+
+**Crew Management Interface**: A dedicated crew page MUST display all personnel who have 
+worked on shoots with the team, including work history (which shoots they participated in, 
+roles assigned). Crew can be managed in two locations: (1) dedicated crew management page 
+for team-wide personnel administration, and (2) inline within shoot detail views for 
+convenience. Both views MUST support adding, editing, and removing crew assignments.
+
+**Team Member Onboarding**: Team members joining a team MUST understand their team-level 
+role (admin/member/viewer) and its implications. Team admins MUST be clearly identified 
+for crew assignment and contact information access.
+
+**Rationale**: Separating team permissions from crew roles simplifies the model: team-level 
+roles control what data a user can access across the app, while crew roles purely document 
+who participated in shoots for accountability and collaboration planning. The owner role 
+provides structural flexibility for future expansion of privileges and governance rules 
+without affecting existing admin/member/viewer permissions. Cosplay teams often work with 
+external photographers, stylists, and models who may not be app users; crew management 
+enables tracking collaborators without requiring them to create accounts. Allowing all team 
+members to view crew contact information enables efficient coordination and scheduling 
+across team members, while restricting management (add/edit/remove) to owner and admins 
+prevents accidental roster changes. Dual crew management interfaces (dedicated page + shoot 
+inline) balance efficiency (bulk crew management) with convenience (quick crew assignment 
+during shoot planning).
+
+### VIII. Creator Community & Discovery Marketplace
+Cosplayers, photographers, makeup artists, and other specialized roles MUST be able to 
+create public creator profiles to build their reputation and be discovered by teams seeking 
+their specific skills. Creator profiles are entirely optional; not all users need to 
+participate in the marketplace. Teams planning shoots MUST be able to search for creators 
+by role, geographic proximity, availability, and community rating, making it easy to find 
+and book external collaborators.
+
+**Creator Profile Features**:
+- **Basic Info**: Public username (separate from real name, can hide real identity), 
+  bio/about, profile photo, roles offered (photographer, makeup artist, prop modeler, 
+  cosplayer, hair stylist, assistant, etc.)
+- **Verification Badge**: Earned by creators with 90+ days account history, consistent high 
+  rating (4.5+ stars), and minimum 5 completed bookings/month. Badge signifies active, 
+  trusted community members.
+- **Availability Calendar**: Visual calendar showing available dates/times, status (free or 
+  booked), and optional rate information per role
+- **Rate Setting**: Optional per-role pricing (or "contact for rates"). Rates may differ by 
+  role and availability distance
+- **Location & Travel**: Public location (zip code level, not exact address), configurable 
+  minimum travel distance, option to accept shoots outside normal range with clear distance 
+  indicator
+- **Portfolio Links**: External links to Instagram, portfolio website, or other platforms 
+  showcasing their work
+- **Community Rating**: Display of average rating and verified booking count (only counts 
+  completed, paid bookings)
+- **Privacy Controls**: Option to make entire profile private (hidden from search) or toggle 
+  visibility of specific information. Creators can pause profile without deleting it.
+
+**Discovery & Search**:
+- **Geographic Search**: Search for creators within configurable distance radius (default 
+  25 miles, configurable up to 500 miles)
+- **Role Filtering**: Filter by specific roles (photographer, makeup artist, prop modeler, 
+  etc.)
+- **Availability Filtering**: Show only creators available on specific dates/times
+- **Rating/Reviews Filtering**: Filter by minimum rating threshold (e.g., 4+ stars only)
+- **Saved Searches**: Teams MUST be able to save favorite creators or search profiles for 
+  quick re-access. Saved searches are a premium feature accessible to paid tier teams only.
+- **Search Results**: Display creator name, location/distance, primary role, rating, and 
+  verification status. Results are merit-based (not monetized rankings); featured listings 
+  are prohibited to prevent pay-to-play visibility gatekeeping.
+
+**Crew Assignment Integration**:
+When assigning crew to a shoot, teams MUST be able to:
+1. Search previously-created crew members (existing history)
+2. Create new crew members manually (not marketplace participants)
+3. Search the Creator Community to find and auto-invite creators matching the role and 
+   shoot availability
+4. Auto-suggest creators based on shoot date, location, and required roles
+5. Send one-click email invitations from search results
+
+Teams can view suggested creators sorted by relevance (distance, availability match, 
+rating). Clicking "Invite" triggers email to creator with shoot details (date, location, 
+role, pay rate if applicable) and one-click link to view shoot details and accept/decline.
+
+**Creator Invitations & Booking Management**:
+- Creators receive email invitations with shoot overview (date, location, role, pay rate)
+- One-click link allows creators to view detailed shoot information (visual references, 
+  shoot schedule, team contact info) without needing team membership
+- Creators can accept/decline invitation; status updates team members in real-time
+- Accepted invitations create shoot_crew associations; external creators appear with 
+  "external crew" badge in team views
+- **Free Tier Crew**: Free-tier creators can accept bookings and receive invitations but 
+  have limited booking management features (cannot view detailed shoot budget, limited 
+  communication tools)
+- **Paid Tier Crew**: Paid-tier creators can manage their bookings, view shoot budgets 
+  aligned with their role, receive booking confirmations, and access invoice/payment 
+  history
+
+**Team Booking & Payment Management**:
+Teams MUST be able to:
+- Set pay rates for specific crew roles when creating a shoot
+- Track which crew members have accepted and will be compensated
+- Manage team "bank" account (shared budget that team members can contribute to)
+- Process payments to crew members upon shoot completion with optional automatic transfers
+- View payment history and invoices for accounting/tax purposes
+
+**Crew Booking Complete & Review Process**:
+After a shoot is marked complete:
+- Teams can submit reviews and ratings (1-5 stars with optional comments) for each external 
+  creator who participated
+- Creators can submit reviews and ratings for the team
+- Ratings are only applied after shoot completion and payments are finalized
+- Review system MUST prevent fake/manipulation (only verified bookings count toward rating)
+
+**Report & Moderation System**:
+- Users can report fake profiles, harassment, quality issues, or policy violations
+- Reports go to admin queue with context (screenshot, message, evidence)
+- Action workflow: assess report → contact involved parties → issue warnings or remove 
+  profiles for serious violations
+- Verified community badge can be revoked if creator receives multiple substantiated 
+  complaints or fails to maintain rating/activity standards
+- Transparent guidelines for what warrants profile removal or suspension
+
+**Community Showcase**:
+- Featured gallery of recent verified creator work (Instagram posts, portfolio links, 
+  project highlights)
+- Opt-in participation: creators can manually submit recent projects for community showcase
+- No algorithmic curation; purely user-driven submissions displayed in chronological order
+- Showcase serves as marketing & inspiration for teams while building creator reputation
+
+**Public Profile Visibility**:
+- Creator profiles are public and indexed for search (team members and non-members can 
+  discover them)
+- Creator profiles do NOT require team membership to view; anyone can browse marketplace
+- Creators have full control over what personal information is shown (can hide real name, 
+  show only username)
+- Crew members invited to specific shoots can view their public profile as context
+
+**Phase Placement**: Phase 1.5 (after core team shoot planning is validated on web, before 
+mobile app development). Allows marketplace to launch on web with full functionality before 
+expanding to mobile.
+
+**Rationale**: Cosplay teams need reliable access to specialized skills (professional 
+photographers, makeup artists, experienced cosplayers) to execute complex shoots. Building 
+an in-app marketplace instead of sending teams to external contractor platforms (Fiverr, 
+TaskRabbit) keeps workflows unified and enables data-driven collaboration. Merit-based 
+discovery (sorted by rating and relevance, not payment) ensures accessibility for 
+high-quality creators regardless of budget, preventing pay-to-play gatekeeping. Creator 
+verification badges reward active community members and help teams quickly identify trusted 
+collaborators. Geographic search with travel distance controls respects creator autonomy 
+while enabling teams to find nearby talent. Commission-based monetization (5% free tier, 
+0% paid tier) aligns platform sustainability with creator success: we only profit when 
+creators get hired. This revenue model encourages platform growth organically without 
+extracting value from creator earnings through transaction fees. Booking management and 
+team budget features enable transparent, professional workflows between teams and 
+independent creators, building trust and repeat collaborations.
 
 ## Platform Requirements
 
@@ -163,8 +366,9 @@ platform conventions (Material Design vs. Human Interface Guidelines).
 ## Development Workflow
 
 **Feature Priority Order**: Core CRUD operations for shoots (SvelteKit web) → Mobile-responsive UI → 
-Calendar integration → Google Maps integration → Advanced views (kanban, map) → 
-Instagram integration → Document generation → Flutter Android app development → Flutter iOS app development.
+Calendar integration → Google Maps integration → Social media planning (Instagram content calendar, 
+scheduling, basic analytics) → Advanced views (kanban, map) → Document generation → 
+TikTok integration → Flutter Android app development → Flutter iOS app development.
 
 **Platform Development Flow**:
 1. Implement feature in SvelteKit web app with mobile-responsive design
@@ -184,6 +388,412 @@ API integrations require error handling and fallback behavior review. Database s
 changes require migration plan approval. Permission-related changes require verification of 
 role-based access control across all affected operations.
 
+## Security & Privacy Architecture
+
+### Data Privacy & GDPR Compliance
+All user data MUST be stored in EU-based Supabase infrastructure to comply with GDPR 
+requirements. The system MUST support the right to be forgotten: user account deletion 
+MUST fully remove all associated data (shoots, costumes, props, team memberships) within 
+30 days. Data retention policies MUST be documented: user data is retained as long as the 
+account is active; deleted accounts have data purged within 30 days; inactive accounts 
+(no login for 2+ years) MAY be archived per user policy.
+
+**Third-Party Data Sharing**: User data MUST NOT be shared with third parties for 
+monetization. Google APIs (Maps, Calendar, Docs) receive only the minimum data required 
+for their specific function. Email service providers receive only email addresses and 
+notification content necessary for delivery. Analytics services MUST NOT receive personal 
+identifiable information (PII). No data selling or licensing is permitted under any 
+circumstance.
+
+**Data Processing Consent**: User account creation MUST include explicit consent for data 
+collection (shoots, costumes, team data), analytics collection (heuristics), and external 
+API integrations (Google services, social media platforms). Users MUST be able to opt out 
+of analytics collection without losing core functionality. Social account linking MUST 
+include explicit disclosure of what data is accessed from each platform (e.g., Instagram 
+linking accesses profile info and business account details). Creator marketplace 
+participation requires additional opt-in consent: users must explicitly choose to make their 
+profile public, appear in geographic search, share rating/booking history, and allow teams 
+to review them. Creator privacy controls MUST allow granular toggling (e.g., private profile, 
+hidden exact location, show only username).
+
+**Encryption & Transport Security**: All data MUST be encrypted at rest in Supabase using 
+industry-standard encryption. All data transmission MUST use TLS 1.3 or higher. API tokens 
+and OAuth credentials MUST be rotated every 90 days. Sensitive data (budget values, 
+personal notes, team member contact info) MUST have field-level encryption.
+
+**Incident Response**: Security vulnerabilities MUST be disclosed privately via 
+SECURITY.md contact information. Critical vulnerabilities (data breach, authentication 
+bypass) MUST result in user notification within 24 hours. Backup and disaster recovery 
+procedures MUST be tested quarterly with documented recovery time objective (RTO) of 4 
+hours and recovery point objective (RPO) of 1 hour maximum data loss.
+
+**Rationale**: Cosplayers manage sensitive personal information (social media, costumes 
+with monetary value, team member contact details). GDPR compliance builds user trust and 
+ensures legal operation in EU markets. Transparent data practices and ethical heuristics 
+collection (not monetization) differentiate Cosplans from exploitative social platforms.
+
+### Authentication & Session Management
+OAuth MUST be the primary authentication mechanism. Supported OAuth providers MUST include 
+Google, Instagram/Facebook, and X/Twitter (formerly Twitter). Email authentication with 
+passkey/WebAuthn MUST be available as primary credential option for users without social 
+accounts. Two-factor authentication (2FA) MUST be optional for all users and strongly 
+recommended for team admins; 2FA adoption MAY become mandatory for admin roles in Phase 2 
+after user feedback.
+
+**Supported Login Methods**:
+1. **Google OAuth**: Standard OAuth flow via Google Sign-In
+2. **Instagram/Facebook OAuth**: Meta-managed credentials (Instagram Business accounts)
+3. **X/Twitter OAuth**: Standard OAuth flow via X Sign-In
+4. **Email + Passkey**: Primary credential for non-social-account users; WebAuthn-based
+
+**Email Authentication Requirements**: Email authentication MUST use passkey/WebAuthn as 
+the primary authentication factor. If user does not have passkey enrolled, email/password 
+authentication MAY be used as temporary fallback (30-day grace period, after which passkey 
+enrollment is required). Password requirements (if used) MUST enforce minimum 12 characters, 
+mixed case, numbers, and symbols. Password reset MUST use time-limited (15-minute) email 
+confirmation tokens. Users are strongly encouraged to enroll passkeys to replace 
+password-based auth.
+
+**Public Usernames & Creator Profiles**: Users participating in the Creator Community 
+marketplace MUST have public username (separate from real name) for discoverability. 
+Usernames are used in creator profile URLs and marketplace search results. Users MUST be 
+able to keep real names private (private account, show only username). Team member profiles 
+(non-creators) are private by default and not indexed in marketplace search.
+
+**Session Management**: Web sessions MUST expire after 30 days of inactivity OR when user 
+explicitly logs out. Mobile app sessions MAY be longer (90 days) to balance security with 
+user convenience on native platforms. All sessions MUST be terminated on password change, 
+2FA reconfiguration, or passkey re-enrollment. Session tokens MUST be signed JWTs with 
+user ID, team IDs, and role information for efficient permission checking.
+
+**Account Recovery**: Users MUST be able to recover account access via email verification 
+or social account re-linking (if originally signed up with OAuth). Recovery tokens MUST 
+expire after 24 hours. Account deletion MUST require confirmation email within 7 days to 
+prevent accidental loss.
+
+**Social Account Linking**: Users MAY link multiple social accounts (Google, Instagram/
+Facebook, X/Twitter) to the same Cosplans account. When multiple social accounts are linked, 
+user can sign in with any of them. Email/passkey account MAY also be linked to social 
+accounts.
+
+**Rationale**: OAuth via social media (Google, Instagram, X) reduces friction for cosplay 
+community members who already use these platforms daily. Passkeys and 2FA provide 
+defense-in-depth for users without social accounts or preferring passwordless auth. 
+Instagram/Facebook integration aligns with social media planning features (Principle V.5); 
+users can authenticate with the same social account they manage content from. Session 
+management balances security (inactivity timeout) with usability (not requiring constant 
+re-authentication). Multi-account linking flexibility accommodates users who switch between 
+social platforms or prefer different auth methods for different contexts. Public usernames 
+enable creator marketplace discoverability while allowing privacy-conscious users to keep 
+real identity hidden from public profiles.
+
+## User Analytics & Ethical Data Collection
+
+### Heuristics Collection Principles
+User analytics collection MUST focus exclusively on improving product experience and 
+reducing workflow friction. Analytics data collection MUST explicitly exclude personal 
+identifiable information (PII), content data (shoot titles, costume notes, team member 
+names), and financial data (budget amounts, item costs).
+
+**Collected Heuristics** (approved for tracking):
+- Feature engagement: which screens users visit, feature adoption rates
+- Workflow abandonment: where users drop off in multi-step processes (e.g., shoot creation, costume tracking)
+- Error rates: which forms/features produce errors or validation failures
+- Performance metrics: page load times, interaction latency, API response times
+- Accessibility: keyboard navigation usage, screen reader detection
+
+**Explicitly NOT Collected**:
+- User or team names, email addresses, or contact information
+- Shoot titles, costume descriptions, budget amounts, or any content data
+- OAuth provider details or authentication method
+- Geolocation data (except aggregated venue popularity for Maps integration improvement)
+- Device identifiers or IP addresses (only anonymized metrics)
+
+### Analytics Data Retention & Opt-Out
+Analytics data MUST be retained for 90 days maximum before deletion. Raw event logs MUST 
+be aggregated into weekly and monthly statistics; granular events MUST be purged after 7 
+days. Users MUST be able to opt out of analytics collection via settings without affecting 
+core application functionality. Teams with paid plans MAY have analytics opt-out honored 
+as contractual commitment.
+
+### Analytics-to-Feature Translation
+Heuristics data MUST inform product prioritization but MUST NOT be the sole decision 
+driver. High abandonment rates flag workflow friction; feature engagement rates validate 
+user demand; error rates identify quality issues. Manual product review by maintainer 
+(during Phase 1-2) MUST validate that heuristics-identified changes align with core 
+principles (mobile-responsive, accessibility, real-time collaboration).
+
+**Rationale**: Ethical heuristics collection enables data-driven product improvement without 
+exploiting user data. Transparent opt-out and strict PII exclusion maintain user trust. 
+Analytics-to-prioritization process ensures features solve real problems rather than 
+chasing engagement metrics that drive friction (common in social platforms).
+
+## Sustainability Model & Feature Paywalls
+
+Cosplans MUST be economically sustainable through a freemium model that drives adoption 
+while enabling platform maintenance and team growth. Revenue comes from two sources: 
+**subscription tier differentiation** for team features and **commission on creator 
+marketplace transactions**.
+
+### Team Free Tier
+- **Storage**: 2 GB per team (shared across all shoots, costumes, props, reference images)
+- **Team members**: Unlimited team members per organization
+- **Shoots**: Unlimited shoot planning
+- **API requests**: 1,000 API calls per day (sufficient for typical team workflows)
+- **Crew management**: Manually create crew members, invite external crew to specific shoots
+- **Creator marketplace**: Search and book creators; pay creators through Cosplans (5% 
+  commission deducted from payment)
+- **Google integrations**: Calendar sync, Maps, Docs
+- **Basic email reminders**: Shoot dates, upcoming events
+- **Instagram integration**: Content calendar, draft creation, manual post scheduling, basic 
+  analytics (Phase 1.5+)
+- **Export**: Limited to 1 export per week
+
+### Team Paid Tier ($5/month)
+- All free tier features plus:
+- **Storage**: 20 GB per team
+- **Creator marketplace**: Book creators with 0% commission (platform absorbs cost as 
+  customer acquisition)
+- **Saved creator searches**: Save and organize favorite creators/searches for quick access
+- **Advanced crew management**: Bulk crew import, crew availability tracking, role templates, 
+  in-app messaging with crew
+- **Advanced email features**: Custom reminders, scheduled notifications, email digests
+- **Instagram integration**: Auto-scheduling (publish at optimal times), advanced analytics 
+  (trending hashtags, follower insights, competitor analysis)
+- **Inventory valuation**: Track costume/prop costs and lifecycle for insurance documentation
+- **Team budget & analytics**: Shared team bank account, payment tracking, spending insights, 
+  cost per shoot analysis
+- **Advanced shoot analytics**: Time tracking, ROI analysis, cost per photo metrics
+- **Priority support**: 48-hour response time
+
+### Creator Free Tier
+- **Public profile**: Roles, availability calendar, ratings
+- **Accept bookings**: Marketplace commissions 5% on payments received
+- **Basic booking management**: View invitations, accept/decline bookings
+- **Profile privacy**: Full control over personal info visibility; can use public username 
+  only
+
+### Creator Paid Tier ($5/month)
+- All free tier features plus:
+- **0% commission**: Creators receive 100% of agreed pay (platform absorbs commission)
+- **Advanced booking management**: Custom rate quotes, invoice generation, payment history
+- **Detailed shoot budgets**: View what team allocated for creator's specific role
+- **Professional communication**: In-app messaging with teams, scheduling assistance
+- **Booking analytics**: Track earnings, predict monthly income, export reports
+- **Calendar integration**: Sync bookings to Google Calendar/Outlook
+- **Portfolio management**: Upload portfolio samples to Cosplans profile
+- **Referral rewards program**: Earn commissions on referred creators/teams
+
+### Commission-Based Revenue Model
+- **Marketplace transactions**: 5% platform commission on all bookings for free tier users 
+  (both teams and creators)
+- **Free tier cap**: Max 50 transactions per month per user; users exceeding limit must 
+  upgrade to paid tier
+- **Paid tier creators**: 0% commission; platform absorbs fee as user acquisition strategy
+- **Paid tier teams**: 0% commission; encourages teams to book more creators (ecosystem growth)
+- **Break-even analysis**: Assuming avg $50 commission/month per active free tier user 
+  (5% fee on ~$1000 spend), platform reaches sustainability at ~200 active creators or 
+  100 teams + 50 creators in paid tier. Achievable in Year 1 with modest marketing.
+
+### Self-Hosting & Code Licensing
+Self-hosting is NOT supported in Phase 1. Codebase licensing MUST be decided before Phase 
+2: options under consideration are MIT (permissive, allows commercial use), AGPL (requires 
+open-source derivatives), or proprietary. Decision MUST balance user trust (open-source 
+visibility) against sustainability (preventing competitors from hosting free instances).
+
+If open-source licensing (MIT/AGPL) is chosen, self-hosting documentation MUST be provided 
+in separate repository. Self-hosted instances are NOT supported officially; security 
+updates and data privacy compliance are the administrator's responsibility.
+
+### Payment Processing
+- **Stripe integration** (deferred until paid tier feature set is locked): Manages team 
+  subscription billing and creator payment disbursements
+- **Escrow model**: Cosplans holds payment in transit until shoot marked complete and 
+  payments approved (protects both teams and creators)
+- **Payment frequency**: Weekly or on-demand creator payouts (via Stripe Connect or ACH)
+- **Payment visibility**: Both teams and creators see payment history, invoices, status 
+  in real-time
+
+### Infrastructure Cost Model
+Supabase infrastructure costs (database, storage, API calls) scale with user growth. Free 
+tier limits are calibrated to keep baseline monthly cost under $50 per team (achieved 
+through aggressive caching, image optimization, and API rate limiting). If infrastructure 
+costs exceed sustainability threshold (defined as 50% of paid tier + marketplace revenue), 
+pricing MAY be adjusted or storage limits MAY be reduced. Major pricing changes REQUIRE 
+90-day notice to affected users.
+
+If Cosplans becomes economically unsustainable (costs exceed available budget indefinitely), 
+service discontinuation MUST include 180-day data export window (backup downloads available 
+free to all users) and code repository open-sourcing under MIT license to prevent user 
+data trap.
+
+### Future Revenue Streams (Deferred)
+- **Referral rewards**: Earn commission for referring new users (Phase 2+ after marketplace 
+  stable)
+- **SMS reminders**: Optional paid add-on for SMS vs. email (Phase 2+)
+- **Advanced analytics**: Executive dashboards, trend analysis, forecasting (Phase 2+)
+- **B2B onboarding**: Consulting/training for large cosplay organizations (Phase 3+)
+- **Event partnerships**: Commission on Cosplans-sponsored convention integrations (Phase 3+)
+
+**Rationale**: Commission-based pricing (not membership required) enables any creator to 
+participate regardless of budget. Merit-based discovery prevents pay-to-play gatekeeping. 
+Paying teams 0% commission at paid tier saves money only after $100/month spend, creating 
+clear ROI. Revenue increases with platform adoption (more transactions = more commission); 
+no predatory pricing or surprise costs. Aligns incentives: teams want active creators 
+(better marketplace), creators want visibility (benefit from paid tier), platform wants 
+ecosystem growth (revenue from scaling). Deferred Stripe integration allows marketplace 
+to prove product-market fit on web before implementing complex payment flows.
+
+## Technical Architecture & Implementation Standards
+
+### Backend & API Design
+All backend APIs MUST be versioned (v1, v2, etc.) with clear deprecation timeline (minimum 
+6-month notice before endpoint removal). Database schema MUST follow normalization 
+principles (third normal form minimum) to prevent data anomalies. API documentation MUST 
+be auto-generated from OpenAPI/Swagger specification and kept in sync with implementation.
+
+**Data Consistency**: Real-time data synchronization MUST handle concurrent edits using 
+operational transformation (OT) or conflict-free replicated data types (CRDT). When users 
+make simultaneous edits to the same shoot/costume, the system MUST resolve conflicts 
+deterministically and notify both users of the resolution. Offline edits MUST be queued 
+locally and reconciled on reconnection; if conflicts exist, user MUST be prompted to 
+review and resolve rather than silently overwriting.
+
+**Rate Limiting & Quotas**: API rate limits MUST be enforced per tier: free tier (1,000 
+API calls/day), paid tier (unlimited). Requests exceeding quota MUST return HTTP 429 with 
+retry-after header. Quota usage MUST be visible in user settings. Teams approaching quota 
+limits MUST receive email warning at 80% and 95% utilization.
+
+**External API Resilience**: All external API calls (Google Maps, Google Calendar, Instagram, 
+email providers) MUST implement circuit breaker pattern with exponential backoff. Timeout 
+for external calls MUST be 60 seconds maximum. Failed integrations MUST NOT corrupt local 
+state; errors MUST be captured, logged, and surfaced to user with retry option. Calendar 
+sync failures MUST be queued for retry; failed email sends MUST not block shoot creation. 
+Instagram post scheduling failures MUST queue drafts locally for manual retry.
+
+**Request/Response Format**: APIs MUST use JSON exclusively. Response payloads MUST include 
+pagination metadata (page, total, limit) for collections. Error responses MUST include 
+error code, human-readable message, and reference to affected resource. API responses 
+MUST include cache headers (ETag, Last-Modified) to enable client-side caching.
+
+### Data & Media Storage
+Image uploads MUST be optimized: WebP format with quality 75 for web, fallback JPEG for 
+older browsers. Responsive image sizes MUST be generated at upload (320px, 640px, 1280px, 
+2560px) for efficient mobile delivery. Thumbnails MUST be auto-generated within 30 seconds 
+of upload for preview display.
+
+**Crew & Personnel Records**: Crew members are individuals who have worked on shoots and 
+MUST have a persistent record in the system (name, contact information). Multiple crew 
+members can be assigned to a single shoot with different roles. Crew role assignments are 
+stored per-shoot, not globally. Contact information (email, phone) MUST be stored separately 
+from shoot records and access-controlled (admins only). Crew records track collaboration 
+history across all shoots for team reference.
+
+**Media CDN**: Images MUST be served from CDN with 30-day cache expiration. Cache headers 
+MUST include ETag for invalidation if images are edited. Progressive image loading MUST 
+show low-resolution preview immediately, then load full resolution as image loads.
+
+**Database Backups**: Database backups MUST be automated daily. Weekly restoration tests 
+(full backup → restore to test database → verify data integrity) MUST be scheduled to 
+ensure backups are actually restorable. Backup retention MUST be 30 days minimum. Disaster 
+recovery procedure MUST have documented RTO (recovery time objective) of 4 hours and RPO 
+(recovery point objective) of 1 hour maximum data loss.
+
+**Encryption at Rest**: Sensitive data MUST be encrypted at field level in database: budget 
+amounts, personal notes, user contact information. Encryption keys MUST be rotated annually. 
+Master encryption key MUST be stored in secure key management service (not in code or 
+environment variables).
+
+### Real-Time Synchronization
+Offline edits MUST be queued locally with timestamp and user attribution. When connection 
+resumes, queue MUST be processed in order with conflict detection. If conflict exists 
+(server state differs from queue edit), both versions MUST be shown to user with 3-way 
+merge view (original, local edit, server edit). User MUST manually resolve conflict; 
+unresolved conflicts MUST block sync until resolved.
+
+**Sync Performance**: Real-time updates MUST propagate to all team members within 2 seconds 
+of edit submission. Sync MUST not block user from making additional edits (optimistic 
+updates). If server rejects edit, user MUST be notified with error reason and offered 
+conflict resolution.
+
+### Testing & Quality Assurance
+All new features MUST have accompanying unit tests (minimum 70% code coverage) and 
+integration tests. External API integrations MUST be mocked in tests to enable deterministic 
+testing without depending on Google services availability. Test database MUST be isolated 
+per test run (fresh database state, no test data leakage).
+
+**Performance Testing**: Web application MUST be load-tested before production deployment. 
+Performance benchmark: initial page load <3 seconds on simulated 3G network (1.6 Mbps 
+download, 750 kbps upload). Interaction latency <200ms for all UI interactions. Mobile 
+apps MUST be tested on actual iOS and Android devices, not emulators only.
+
+**End-to-End Testing**: Critical workflows (create shoot → add costumes → share with team 
+→ sync calendar) MUST have automated end-to-end tests using Playwright or equivalent. 
+Permission enforcement MUST be tested: verify that viewers cannot edit, that only admins 
+can delete shoots, that team members cannot access other teams' data.
+
+**Accessibility Testing**: All interfaces MUST meet WCAG 2.1 AA compliance. Keyboard 
+navigation MUST work for all interactive elements (no mouse-only workflows). Color contrast 
+MUST be 4.5:1 minimum for normal text. Screen reader testing MUST verify that images have 
+alt text and form inputs have labels. Accessibility tests MUST be automated where possible 
+(axe-core, Lighthouse).
+
+### Deployment & Operations
+Deployments MUST be automated via CI/CD pipeline. Code changes MUST pass all tests before 
+deployment proceeds. Staging environment MUST mirror production configuration; all 
+deployments MUST be validated in staging before production release. Database migrations 
+MUST include rollback procedures and be tested in staging first.
+
+**Environment Management**: All configuration (API keys, database URLs, feature flags) MUST 
+be managed via environment variables or secure vault service (not hardcoded). Separate 
+secrets MUST be used for dev, staging, and production environments.
+
+**Monitoring & Alerting**: Real-time error monitoring MUST track errors from all layers 
+(backend, frontend, integrations). Error rate >1% during 5-minute window MUST trigger 
+alert. API latency >1 second (p95) MUST trigger alert. Database query latency >500ms 
+MUST trigger alert. Monitoring dashboard MUST be accessible to maintainer with historical 
+trending (last 7 days, last 30 days).
+
+**Logging Standards**: All errors, API calls, and permission-sensitive operations MUST be 
+logged with timestamp, user ID, action, and result. Logs MUST be retained for 30 days 
+minimum. Sensitive data (passwords, tokens, personal info) MUST NEVER be logged. Log 
+levels (DEBUG, INFO, WARN, ERROR) MUST be configurable per environment.
+
+**Incident Response**: Critical incidents (data loss, authentication bypass, major 
+outage >30 minutes) MUST be documented with: incident description, timeline, root cause, 
+resolution, and preventive measures. Post-mortems MUST result in actionable fixes or 
+monitoring improvements.
+
+### State Management (Frontend)
+Client-side state MUST be managed consistently across web and mobile applications. Form 
+state MUST persist across navigation to prevent data loss. Component state (expanded/
+collapsed, sorted) MAY be ephemeral (lost on page reload) unless it's critical to workflow.
+
+**Client Caching**: API responses MUST be cached locally for 5 minutes before re-fetching. 
+Cache invalidation MUST happen on user action (create/edit/delete) or explicit refresh. 
+Stale cache MUST be displayed immediately while fresh data loads in background 
+(stale-while-revalidate pattern).
+
+**Undo/Redo**: Data mutations (create, edit, delete shoots/costumes) MUST support undo for 
+5 minutes after action. Undo history MUST NOT survive page reload. Undo MUST NOT revert 
+permission changes or role assignments (prevent accidental privilege escalation undo).
+
+### Internationalization & Accessibility
+Phase 1 MUST support English only. Phase 2 MAY add internationalization (i18n) framework 
+for future language support. All user-facing text MUST be extracted to translation files 
+to enable easy localization. Date/time formatting MUST be locale-aware (not hardcoded 
+MM/DD/YYYY).
+
+**Accessibility Scope**: Keyboard navigation MUST be fully functional (Tab, Shift+Tab, 
+Enter, Escape, Arrow keys). Screen reader support MUST be tested with NVDA (Windows) and 
+VoiceOver (macOS/iOS). Focus indicators MUST be visible (outline, background color). 
+Skip-to-main-content link MUST be present on every page.
+
+**Rationale**: Technical requirements provide guardrails for implementation decisions, 
+ensure consistency across platforms, and prevent common pitfalls (data loss on sync, 
+performance regressions, accessibility compliance). Clear standards enable faster 
+development and reduce rework when migrating features between web and mobile apps.
+
 ## Governance
 
 Constitution supersedes all feature decisions and architectural choices. All pull requests 
@@ -192,7 +802,11 @@ compliance, and role-based permission enforcement. Feature complexity beyond cor
 workflows MUST be justified against user adoption impact.
 
 **Amendment Process**: Constitution changes require documentation of impact on existing 
-integrations and mobile performance. Major principle changes require user feedback 
-validation.
+integrations, mobile performance, security/privacy posture, sustainability model, and 
+technical architecture. Manual conflict review occurs when implementation reveals tension 
+between principles; maintainer reviews conflict, documents decision rationale, and updates 
+constitution or implementation accordingly. Major principle changes (new core tenets, 
+removal of existing principles) require documented rationale and alignment with user 
+feedback.
 
-**Version**: 1.5.0 | **Ratified**: 2025-10-15 | **Last Amended**: 2025-10-15
+**Version**: 2.1.0 | **Ratified**: 2025-10-16 | **Last Amended**: 2025-10-16
