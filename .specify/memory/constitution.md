@@ -1,12 +1,12 @@
 <!--
 Sync Impact Report:
-- Version change: 2.1.0 → 2.2.0
-- Modified principles: None
-- Added sections: Recommended Technology Stack & Packages (vetted libraries for Phase 1 MVP)
+- Version change: 2.2.0 → 2.3.0
+- Modified principles: Added Principle IX (Bun Runtime Requirement)
+- Added sections: Bun Runtime Mandate (constitutional requirement for all projects)
 - Removed sections: None
 - Templates requiring updates:
-  * ✅ quickstart.md - update to recommend package installation
-  * ✅ README.md - add technology stack table with packages
+  * ✅ quickstart.md - update to require Bun runtime installation
+  * ✅ README.md - add Bun requirement to development setup
   * ⚠ data-model-v2.md - no changes needed (database layer unaffected)
   * ⚠ creator-community-marketplace-v1.md - no changes needed (Phase 1.5+)
 - Follow-up TODOs: None
@@ -208,6 +208,39 @@ their specific skills. Creator profiles are entirely optional; not all users nee
 participate in the marketplace. Teams planning shoots MUST be able to search for creators 
 by role, geographic proximity, availability, and community rating, making it easy to find 
 and book external collaborators.
+
+### IX. Bun Runtime Requirement
+All Cosplans development and deployment MUST use Bun runtime instead of Node.js. Bun MUST be 
+the official runtime for package management, development servers, build processes, and 
+production deployment. This constitutional requirement ensures performance consistency, 
+faster development iteration, and reduced resource usage across all environments.
+
+**Bun Usage Requirements**:
+- **Package Management**: All dependencies MUST be managed via `bun install`, `bun add`, 
+  `bun remove` (never npm, yarn, or pnpm)
+- **Development Server**: Local development MUST use `bun --bun run dev` for maximum 
+  performance (3x faster installs, 2x faster dev server vs Node.js)
+- **Build Process**: Production builds MUST use `bun run build` and related build commands
+- **Script Execution**: All package.json scripts MUST be executed via `bun run <script>`
+- **Production Runtime**: Deployment environments MUST run on Bun runtime where supported
+
+**Performance Mandate**: Bun provides measurable performance improvements that are 
+constitutional requirements:
+- Package installations MUST be 3x faster than npm equivalent
+- Development server startup MUST be 2x faster than Node.js equivalent
+- Memory usage MUST be 20% lower than Node.js equivalent during development
+- Build times MUST be equivalent or faster than Node.js equivalent
+
+**Migration Policy**: Any existing Node.js-based Cosplans installations MUST migrate to Bun 
+runtime. Migration guides MUST be provided for development environment setup. Legacy Node.js 
+support is deprecated and will be removed in future versions.
+
+**Rationale**: Bun's superior performance directly improves developer productivity and user 
+experience. Faster installs reduce onboarding friction; faster dev servers accelerate 
+iteration cycles; lower memory usage enables development on resource-constrained environments. 
+Constitutional requirement prevents regression to slower Node.js workflows and ensures all 
+contributors benefit from performance improvements. Standardizing on Bun eliminates runtime 
+inconsistencies and debugging issues across different developer environments.
 
 **Creator Profile Features**:
 - **Basic Info**: Public username (separate from real name, can hide real identity), 
@@ -858,4 +891,4 @@ constitution or implementation accordingly. Major principle changes (new core te
 removal of existing principles) require documented rationale and alignment with user 
 feedback.
 
-**Version**: 2.2.0 | **Ratified**: 2025-10-16 | **Last Amended**: 2025-10-16
+**Version**: 2.3.0 | **Ratified**: 2025-10-16 | **Last Amended**: 2025-10-16

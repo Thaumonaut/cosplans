@@ -6,38 +6,42 @@ This feature implements the core dashboard and specialized views system for Cosp
 
 ## Prerequisites
 
-- Node.js 18+ 
+- Bun 1.0+ (replaces Node.js for faster performance)
 - SvelteKit project setup
 - Supabase project configured
 - Required dependencies installed (see Installation)
 
 ## Installation
 
-Install the recommended technology stack packages:
+Install the recommended technology stack packages using Bun:
 
 ```bash
+# Install all dependencies at once with Bun
+bun install
+
+# Or install individual packages:
 # Core framework and UI
-npm install @sveltejs/kit tailwindcss @tailwindcss/typography
-npm install @shadcn/svelte lucide-svelte
+bun add @sveltejs/kit tailwindcss @tailwindcss/typography
+bun add shadcn-svelte lucide-svelte
 
 # Form handling and validation  
-npm install sveltekit-superforms zod
+bun add sveltekit-superforms zod
 
 # Real-time sync and conflict resolution
-npm install yjs y-protocols y-websocket
+bun add yjs y-protocols y-websocket
 
 # Authorization and permissions
-npm install @casl/ability
+bun add @casl/ability
 
 # Database and backend
-npm install @supabase/supabase-js sharp date-fns
+bun add @supabase/supabase-js sharp date-fns
 
 # Testing
-npm install --save-dev vitest @playwright/test @testing-library/svelte msw
+bun add -d vitest @playwright/test @testing-library/svelte msw
 
 # Development tools
-npm install --save-dev @typescript-eslint/eslint-plugin @typescript-eslint/parser
-npm install --save-dev prettier prettier-plugin-svelte
+bun add -d @typescript-eslint/eslint-plugin @typescript-eslint/parser
+bun add -d prettier prettier-plugin-svelte
 ```
 
 ## Project Structure

@@ -18,6 +18,7 @@ Implements comprehensive dashboard and specialized views system providing real-t
 -->
 
 **Language/Version**: TypeScript/JavaScript with SvelteKit  
+**Runtime**: Bun 1.0+ (faster than Node.js for development and production)  
 **Primary Dependencies**: SvelteKit, Tailwind CSS, Shadcn/svelte, Yjs, @casl/ability, Supabase  
 **Storage**: PostgreSQL via Supabase, image storage via Supabase Storage  
 **Testing**: Vitest, @playwright/test, @testing-library/svelte, MSW  
@@ -40,7 +41,8 @@ Implements comprehensive dashboard and specialized views system providing real-t
 ✅ **Principle VII (Team Roles & Permissions)**: @casl/ability for permission enforcement, crew management integration, role-based data access  
 ⚠️ **Principle VIII (Creator Community)**: Dashboard integrates with crew search but marketplace features are Phase 1.5+  
 ✅ **Analytics Compliance**: Event tracking for workflow optimization, no PII collection, optional analytics opt-out  
-✅ **Tech Stack Compliance**: Uses recommended SvelteKit + Tailwind + Shadcn/svelte + Yjs + @casl/ability stack
+✅ **Tech Stack Compliance**: Uses recommended SvelteKit + Tailwind + Shadcn/svelte + Yjs + @casl/ability stack  
+✅ **Runtime Performance**: Bun runtime for faster development server and build times
 
 ## Project Structure
 
