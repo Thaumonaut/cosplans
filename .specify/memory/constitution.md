@@ -718,6 +718,28 @@ development while maintaining code quality and architecture integrity:
 - Tailwind CSS (styling) - utility-first CSS framework
 - Shadcn/svelte (component library) - accessible, copy-paste components built on Radix UI
 - Lucide Svelte (icons) - clean SVG icon library
+  * **Icon Import Requirement**: When using Lucide icons in components, ALL icons MUST be explicitly imported in three places:
+    1. Import statement in `/src/lib/components/icons/LucideIcon.svelte` from 'lucide-svelte'
+    2. Added to the ICONS record in LucideIcon.svelte
+    3. Added to the `LucideIconName` type in `/src/lib/types/navigation.ts`
+  * Missing any of these three steps causes icons to render as default box icons instead of the intended icon
+  * **Rationale**: Lucide Svelte requires explicit icon registration; tree-shaking only includes imported icons in bundle
+
+**Theme System & Styling Requirements**:
+- **CSS Variable Requirement**: ALL component styling MUST use CSS custom properties (theme variables) instead of hardcoded Tailwind color classes. This ensures components automatically adapt to theme changes (light/dark mode, custom themes).
+- **Required Theme Variables**:
+  * `--theme-background`: Main background color for page content
+  * `--theme-foreground`: Primary text color
+  * `--theme-sidebar-bg`: Sidebar/navigation background
+  * `--theme-sidebar-border`: Border colors for sidebar and UI elements
+  * `--theme-sidebar-text`: Primary sidebar text color
+  * `--theme-sidebar-muted`: Secondary/muted text in sidebar
+  * `--theme-sidebar-accent`: Accent color for active/hover states
+  * `--theme-sidebar-hover`: Hover background color
+  * `--theme-sidebar-active`: Active item background color
+- **Forbidden Patterns**: Direct use of Tailwind color classes (e.g., `text-slate-900`, `bg-white`, `border-blue-500`) is PROHIBITED in components that should adapt to theme changes. Use `text-[var(--theme-foreground)]`, `bg-[var(--theme-background)]`, `border-[var(--theme-sidebar-border)]` instead.
+- **Exception Cases**: Marketing/landing pages and public documentation MAY use direct Tailwind colors if they have fixed branding requirements independent of user theme preferences.
+- **Rationale**: Theme variables enable seamless dark mode, custom themes, and accessibility (high contrast modes) without rewriting component styles. Hardcoded colors break when users switch themes and create visual inconsistency. CSS variables add minimal bundle size (~2KB) while providing dynamic theming capabilities essential for user customization and accessibility compliance.
 
 **Routing & Navigation**:
 - SvelteKit file-based router (built-in, zero-overhead) - MUST be used exclusively for all navigation
@@ -898,4 +920,4 @@ constitution or implementation accordingly. Major principle changes (new core te
 removal of existing principles) require documented rationale and alignment with user 
 feedback.
 
-**Version**: 2.3.1 | **Ratified**: 2025-10-16 | **Last Amended**: 2025-10-16 (Routing guidance added)
+**Version**: 2.3.2 | **Ratified**: 2025-10-16 | **Last Amended**: 2025-10-16 (Theme system styling requirements added)

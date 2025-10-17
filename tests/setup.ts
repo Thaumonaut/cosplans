@@ -1,5 +1,14 @@
-import { vi } from 'vitest';
-import '@testing-library/jest-dom';
+import { expect, vi } from 'vitest';
+import * as matchers from '@testing-library/jest-dom/matchers';
+
+expect.extend(matchers);
+
+vi.mock('$app/environment', () => ({
+  browser: true,
+  dev: true,
+  building: false,
+  version: 'test'
+}));
 
 // Mock environment variables
 vi.mock('$env/static/private', () => ({
