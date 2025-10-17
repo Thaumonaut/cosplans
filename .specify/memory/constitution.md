@@ -714,10 +714,17 @@ The implementation MUST use the following vetted libraries and frameworks to acc
 development while maintaining code quality and architecture integrity:
 
 **Core Framework & UI**:
-- SvelteKit (web framework) - built-in server-side rendering, API routes, and SSG
+- SvelteKit (web framework) - built-in server-side rendering, API routes, file-based routing, and SSG
 - Tailwind CSS (styling) - utility-first CSS framework
 - Shadcn/svelte (component library) - accessible, copy-paste components built on Radix UI
 - Lucide Svelte (icons) - clean SVG icon library
+
+**Routing & Navigation**:
+- SvelteKit file-based router (built-in, zero-overhead) - MUST be used exclusively for all navigation
+- Navigation APIs: `goto()` for programmatic navigation, `beforeNavigate()` for guards/confirmations, `afterNavigate()` for state updates, `$page` store for current route
+- Third-party routing libraries MUST NOT be used (adds bundle size, bypasses SvelteKit optimizations)
+- Route structure MUST support: authenticated routes (dashboard, team context), public routes (landing, about, help, contact), auth routes (/login, /signup)
+- **Rationale**: SvelteKit's file-based router provides optimal performance (automatic code splitting, preloading, streaming SSR) with zero configuration. Native APIs integrate seamlessly with layouts, load functions, and form actions. No third-party router can match this performance while maintaining SvelteKit's developer experience.
 
 **Form Handling & Validation**:
 - Sveltekit-Superforms (form state management) - server-first validation, CSRF protection, progressive enhancement
@@ -891,4 +898,4 @@ constitution or implementation accordingly. Major principle changes (new core te
 removal of existing principles) require documented rationale and alignment with user 
 feedback.
 
-**Version**: 2.3.0 | **Ratified**: 2025-10-16 | **Last Amended**: 2025-10-16
+**Version**: 2.3.1 | **Ratified**: 2025-10-16 | **Last Amended**: 2025-10-16 (Routing guidance added)

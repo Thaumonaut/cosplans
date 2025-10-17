@@ -108,11 +108,59 @@ The Cosplans application needs a professional sidebar navigation system that pro
 
 ---
 
+## Clarifications
+
+### Session: 2025-10-16
+
+**Q1: Navigation Items Definition**  
+**Answer**: Navigation structure organized as follows:
+- **Team Switcher** (dropdown at top)
+- **Main Section**: Dashboard, Calendar, Gallery, Tasks, Messages, Community Profile
+- **Resources Section**: Characters/Costumes, Props, Crew, Locations, Equipment, Budgeting
+- **Settings Section** (at bottom): User Account, Team Settings, Other Settings
+- **Header Actions** (persistent): Theme Toggle, Quick Options (Sign Out, etc.)
+
+**Impact**: Defines exact navigation hierarchy with 3 main sections (Main, Resources, Settings) plus team switcher and header actions. Total of 12 main navigation items plus settings group.
+
+**Q2: Icon Set Selection**  
+**Answer**: Lucide Icons (lucide-svelte package)
+
+**Impact**: Tree-shakeable modern icon library compatible with shadcn/svelte stack. Consistent 2px stroke width, ~1KB per icon. Provides all needed icons: Home, Calendar, Image, CheckSquare, MessageSquare, User, Shirt, Box, Users, MapPin, Wrench, DollarSign, Settings, Sun/Moon, LogOut, etc.
+
+**Q3: Theme Toggle Behavior**  
+**Answer**: Dropdown menu with multiple theme style options - different variants of light and dark themes with different color schemes, plus a "Custom Theme" option
+
+**Impact**: Requires theme system with multiple variants (e.g., "Light Default", "Light Warm", "Light Cool", "Dark Default", "Dark Purple", "Dark Blue", etc.). Dropdown in header shows current theme icon/name, expands to show all options with preview swatches. Stores theme preference in localStorage/user profile. Custom theme option will link to theme customization interface (may require separate spec for theme builder/editor feature).
+
+**Q4: Mobile Sidebar Behavior**  
+**Answer**: Overlay pattern - sidebar slides over content with dimmed backdrop, closes on backdrop click
+
+**Impact**: Sidebar will use fixed positioning on mobile with z-index above content. Semi-transparent backdrop (rgba black/white ~40% opacity) dims content when sidebar open. Closes via backdrop click, swipe-left gesture, or navigation. Focus trap active when open. No content reflow needed = better performance.
+
+**Q5: Team Switcher Interaction**  
+**Answer**: Smart redirect (stay on same route if valid for new team, otherwise redirect to dashboard) + confirmation modal on pages with forms/unsaved changes
+
+**Impact**: Team switch logic must check: 1) Does current route exist/have permissions for new team? If yes, stay and reload data. If no, redirect to dashboard. 2) Before switching, check for unsaved form changes (e.g., on details/edit pages). If found, show confirmation modal: "You have unsaved changes. Switch teams anyway?" with Cancel/Switch buttons. Requires form dirty state tracking across the app.
+
+**Q6: Archive Section (Post-Session Addition)**  
+**Answer**: Add "Archive" section in Resources group for accessing previous/completed shoots
+
+**Impact**: Navigation structure updated to include Archive as 7th Resources item. Total navigation items: 18 (Main: 6, Resources: 7, Settings: 3, Header Actions: 2+). Archive page will show historical shoots with filters for date ranges, team members, events.
+
+**Q7: Routing Implementation (Post-Session Addition)**  
+**Answer**: Use SvelteKit's built-in file-based router exclusively (no third-party routing libraries)
+
+**Impact**: Navigation will use native SvelteKit APIs: `goto()` for programmatic navigation, `beforeNavigate()` for unsaved changes guard, `afterNavigate()` for active state updates, `$page` store for current route. Ensures optimal performance with zero-overhead routing, automatic code splitting, and built-in preloading. No additional routing dependencies needed.
+
+**Route Structure**: Sidebar navigation supports both authenticated routes (dashboard, calendar, gallery, etc.) and public routes. Public routes (landing page, about, help, contact, features) are accessible without authentication but are NOT included in the sidebar navigation (sidebar only appears for authenticated users). Public pages use separate layout without sidebar.
+
+---
+
 ## Requirements
 
 ### Navigation Structure
-- **REQ-001**: Sidebar must display primary navigation menu with at least 8-10 main sections
-- **REQ-002**: Navigation items must be organized into logical groups (Planning, Content, Team, Settings, Admin)
+- **REQ-001**: Sidebar must display navigation menu with 12 main items across 3 sections: Main (6 items), Resources (6 items), Settings (3 items)
+- **REQ-002**: Navigation items must be organized into logical groups: Team Switcher (top), Main Section, Resources Section, Settings Section (bottom), Header Actions (persistent)
 - **REQ-003**: Each navigation section must have a consistent icon (16-24px)
 - **REQ-004**: Current page must be visually distinguished (highlight/background color)
 - **REQ-005**: Navigation must remain persistent across page navigation (sticky/fixed position)
@@ -121,22 +169,26 @@ The Cosplans application needs a professional sidebar navigation system that pro
 ### Team Context & Switcher
 - **REQ-007**: Team name and logo must be displayed at top of sidebar
 - **REQ-008**: Team switcher dropdown must show all teams user is member of
-- **REQ-009**: Switching teams must update all context-dependent content without full reload
-- **REQ-010**: User avatar and name must be displayed in sidebar footer
-- **REQ-011**: Clicking user avatar must open profile/settings menu
+- **REQ-009**: Switching teams must use smart redirect: stay on current route if it exists/is permitted for new team, otherwise redirect to dashboard
+- **REQ-009a**: If current page has unsaved form changes, show confirmation modal before team switch
+- **REQ-010**: Switching teams must update all context-dependent content without full page reload (except when redirecting)
+- **REQ-011**: User avatar and name must be displayed in sidebar footer
+- **REQ-012**: Clicking user avatar must open profile/settings menu
 
 ### Responsiveness
-- **REQ-012**: On screens <768px, sidebar should collapse to icon-only view
+- **REQ-012**: On screens <768px, sidebar should be hidden by default (not icon-only)
 - **REQ-013**: Mobile view should show hamburger menu to toggle sidebar visibility
-- **REQ-014**: When sidebar is toggled on mobile, main content area should adjust
-- **REQ-015**: Sidebar must not overlap critical content on any breakpoint
+- **REQ-014**: When sidebar is toggled on mobile, it overlays content with dimmed backdrop (no content reflow)
+- **REQ-015**: Sidebar overlay must be dismissible via backdrop click, swipe-left gesture, or navigation
 - **REQ-016**: Touch targets must be minimum 44x44px for mobile accessibility
+- **REQ-017**: Focus must be trapped within sidebar when open on mobile, restored to trigger on close
 
 ### Visual Design
 - **REQ-017**: Sidebar must use consistent color scheme (background, text, hover states)
 - **REQ-018**: Navigation items must have hover effects for visual feedback
 - **REQ-019**: Active state must use distinct color (different from hover)
-- **REQ-020**: Sidebar must support light and dark themes
+- **REQ-020**: Sidebar must support multiple theme variants (light and dark with different color options)
+- **REQ-020a**: Header must include theme dropdown menu showing all available theme options with visual previews
 
 ### Notifications & Status
 - **REQ-021**: Notification badge must appear on relevant navigation items
@@ -180,7 +232,7 @@ interface NavigationItem {
   label: string;
   href: string;
   icon: string; // icon name or SVG path
-  group: 'planning' | 'content' | 'team' | 'settings' | 'admin';
+  group: 'main' | 'resources' | 'settings' | 'header-actions';
   badge?: {
     count: number;
     type: 'error' | 'warning' | 'info';
@@ -189,6 +241,12 @@ interface NavigationItem {
   isCollapsible?: boolean;
   children?: NavigationItem[];
 }
+
+// Specific navigation items (12 main + 3 settings + 2+ header actions):
+// Main: Dashboard, Calendar, Gallery, Tasks, Messages, Community Profile
+// Resources: Characters/Costumes, Props, Crew, Locations, Equipment, Budgeting, Archive
+// Settings: User Account, Team Settings, Other Settings
+// Header Actions: Theme Toggle, Sign Out
 ```
 
 ### SidebarState
@@ -283,9 +341,11 @@ interface SidebarState {
 ## Technology Stack
 
 - **Frontend**: SvelteKit, Tailwind CSS
+- **Routing**: SvelteKit file-based router (built-in, no third-party libraries)
+- **Navigation APIs**: `goto()`, `beforeNavigate()`, `afterNavigate()`, `$page` store
 - **State Management**: Svelte stores (sidebar state, notifications)
 - **Real-time**: WebSocket for notification updates
-- **Icons**: Heroicons or similar consistent icon set
+- **Icons**: Lucide Icons (lucide-svelte) - tree-shakeable, 2px stroke, ~1KB per icon
 - **Animation**: CSS transitions (smooth collapse/expand)
 
 ---
@@ -303,20 +363,33 @@ interface SidebarState {
 
 ## Implementation Notes
 
-- Use sticky positioning for sidebar (easier than fixed for content reflow)
-- Implement responsive breakpoint at 768px for mobile adaptation
+- Use sticky positioning for sidebar on desktop (easier than fixed for content reflow)
+- Use fixed positioning with overlay on mobile (<768px breakpoint)
 - Use Svelte stores for sidebar state to allow updates from any component
-- Consider collapsible sections (Planning, Content, etc.) if navigation grows beyond 12 items
+- Navigation sections: Main (6 items), Resources (7 items including Archive), Settings (3 items)
 - Lazy load team avatars using IntersectionObserver
 - Use keyboard event listeners for arrow key navigation
+- Install lucide-svelte package for icons (tree-shakeable)
+- Implement theme dropdown with multiple light/dark variants + custom theme option
+- Track form dirty state globally for team switch confirmation
+- Team switch: check route permissions → stay if valid → dashboard if not → confirm if unsaved changes
+- Mobile: overlay with backdrop, swipe-left to close, focus trap when open
+- Use SvelteKit's native routing APIs exclusively: `goto()` for navigation, `beforeNavigate()` for guards, `$page` for active route
+- No third-party routing libraries needed - file-based routing provides optimal performance
 
 ---
 
 ## Related Files
 
 - `src/lib/components/layout/Sidebar.svelte` (to be created)
-- `src/lib/stores/navigation.ts` (to be created)
+- `src/lib/components/layout/TeamSwitcher.svelte` (to be created)
+- `src/lib/components/layout/ThemeDropdown.svelte` (to be created)
+- `src/lib/components/layout/UserMenu.svelte` (to be created)
+- `src/lib/stores/navigation.ts` (to be created - sidebar state, active item)
+- `src/lib/stores/theme.ts` (to be created - theme variants, custom themes)
+- `src/lib/stores/forms.ts` (to be created - track dirty state for unsaved changes)
 - `src/lib/types/navigation.ts` (to be created)
 - `src/routes/+layout.svelte` (to be updated to include sidebar)
-- `tailwind.config.js` (custom breakpoints if needed)
+- `tailwind.config.js` (add theme variants)
+- `package.json` (add lucide-svelte dependency)
 
