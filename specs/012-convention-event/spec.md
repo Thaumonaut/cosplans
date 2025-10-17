@@ -1,138 +1,172 @@
-# Feature Specification: Convention & Event Integration
+# Feature Specification: AI-Powered Backdrop and Location Suggestions
 
-**Feature Branch**: `012-012-convention-event`  
+**Feature Branch**: `003-generate-backdrop-or`  
 **Created**: 2025-10-15  
 **Status**: Draft  
-**Input**: Link shoots to conventions, track convention schedules, photoshoot meetups, venue maps, badge/ticket integration
+**Input**: User description: "Generate backdrop or location ideas. I want a feature to use AI to help me come up with backdrops I could make for a certain character or help me find a location that would work well for a certain character"
 
 ## User Scenarios & Testing *(mandatory)*
 
-### User Story 1 - Link Shoots to Conventions (Priority: P1)
+### User Story 1 - AI Backdrop Suggestions for DIY Creation (Priority: P1)
 
-As a convention-goer planning shoots, I want to link my shoots to specific conventions (e.g., "Anime Expo 2025") so that I can see all my convention shoots grouped together and manage them alongside the event schedule.
+A cosplayer planning a shoot for a specific character (e.g., Spiderman) needs creative backdrop ideas they can build themselves and wants AI to suggest practical DIY backdrops that match the character's aesthetic and story (e.g., "NYC rooftop at night", "alleyway with brick walls and fire escape").
 
-**Why this priority**: Core convention context - helps organize shoots that happen at events vs standalone locations.
+**Why this priority**: This is the core functionality enabling cosplayers to overcome creative blocks and get actionable backdrop ideas they can build in their space, which is essential for home or studio shoots.
 
-**Independent Test**: User can create/select convention, link shoots to it, view convention dashboard with all linked shoots.
+**Independent Test**: Can be fully tested by entering a character name, receiving 5-10 backdrop suggestions with descriptions and difficulty ratings, and verifying suggestions are relevant to the character's setting and feasible to create.
 
 **Acceptance Scenarios**:
 
-1. **Given** I'm planning shoot at Anime Expo, **When** I create shoot and link to "Anime Expo 2025 - July 4-7", **Then** shoot displays convention badge and links to event
-2. **Given** I have 5 shoots at same convention, **When** I view convention dashboard, **Then** all 5 shoots display with dates/times in event context
-3. **Given** convention has location, **When** I link shoot to convention, **Then** convention venue auto-suggests as shoot location option
-4. **Given** I'm browsing my shoots, **When** I filter "Convention shoots only", **Then** only shoots linked to conventions display
+1. **Given** a user is planning a shoot with a character assigned (e.g., "Spiderman"), **When** the user selects "Get Backdrop Ideas" from the shoot location section, **Then** the system generates 5-10 creative backdrop suggestions with titles, detailed descriptions, materials needed, and difficulty levels (easy/medium/hard).
+
+2. **Given** a user receives backdrop suggestions, **When** the user selects one or more suggestions they like, **Then** the system saves the selected backdrop ideas to the shoot with tags for DIY/handmade backdrops.
+
+3. **Given** a user requests backdrop ideas, **When** the AI generation fails or takes longer than expected, **Then** the system displays an error message with retry option and doesn't block other shoot planning activities.
 
 ---
 
-### User Story 2 - Import Convention Schedule (Priority: P2)
+### User Story 2 - Real Location Discovery with Map Integration (Priority: P2)
 
-As a convention attendee, I want to import or manually add convention event schedule (panels, contests, meetups) so that I can plan shoots around my other convention activities and avoid conflicts.
+A cosplayer wants to find actual physical locations near them that would work for their character shoot (e.g., industrial areas for a cyberpunk character, parks for fantasy characters) and wants AI to suggest location types that can then be searched on Google Maps.
 
-**Why this priority**: Prevents scheduling conflicts. Builds on P1 convention linking with schedule awareness.
+**Why this priority**: Real location scouting is important but requires the foundational backdrop suggestion system first, and integrates with existing Google Maps functionality.
 
-**Independent Test**: User can add convention events, system warns about shoot/event time conflicts.
+**Independent Test**: Can be tested independently by requesting location ideas for a character, receiving location type suggestions (e.g., "abandoned warehouse district", "Japanese garden"), and verifying Google Maps search integration works for finding nearby matches.
 
 **Acceptance Scenarios**:
 
-1. **Given** convention is July 5-7, **When** I add event "Cosplay Contest - July 6, 2pm-4pm", **Then** event appears in convention schedule
-2. **Given** I plan shoot at 3pm July 6, **When** I have contest at 2pm-4pm, **Then** system warns "Conflicts with Cosplay Contest"
-3. **Given** convention publishes schedule, **When** I import via URL or file, **Then** all events populate automatically
-4. **Given** I'm viewing convention day, **When** I see timeline, **Then** shoots and events display together showing full day schedule
+1. **Given** a user is planning a shoot and selects "Find Real Locations", **When** the user provides a character and optionally their current location, **Then** the system generates 5-7 location type suggestions with descriptions of why they fit the character.
+
+2. **Given** a user receives location type suggestions, **When** the user selects a suggestion (e.g., "rooftop with city skyline"), **Then** the system opens Google Maps search with that location type query and the user's current location to show nearby options.
+
+3. **Given** a user finds a suitable location via the map search, **When** the user selects a location from the map, **Then** the system saves that location to the shoot with reference to the AI suggestion that led to it.
 
 ---
 
-### User Story 3 - Photoshoot Meetup Discovery (Priority: P3)
+### User Story 3 - Visual Backdrop Reference Generation (Priority: P3)
 
-As a cosplayer looking for groups, I want to discover and join public photoshoot meetups at conventions (e.g., "Genshin Impact group shoot, Sat 10am, East Garden") so that I can participate in community shoots.
+A cosplayer wants to visualize backdrop ideas before building them by generating AI reference images of suggested backdrops, helping them understand the aesthetic and plan construction.
 
-**Why this priority**: Community feature that adds social value. Builds on P1-P2 with public shoot visibility.
+**Why this priority**: Visual references enhance the backdrop suggestions but require the base suggestion feature to be working first, and builds on existing AI generation capabilities.
 
-**Independent Test**: User can mark shoot as "Public Meetup", others can discover and RSVP, organizer sees attendee list.
+**Independent Test**: Can be tested independently by selecting a backdrop suggestion, requesting a visual reference, and verifying an AI-generated image of that backdrop is created and added to shoot references.
 
 **Acceptance Scenarios**:
 
-1. **Given** I'm organizing group shoot, **When** I toggle "Public Meetup" and add details, **Then** shoot appears in convention's public meetup list
-2. **Given** I'm attending convention, **When** I browse meetups and filter "Genshin Impact", **Then** I see all public Genshin shoots with time/location
-3. **Given** I find interesting meetup, **When** I click "RSVP", **Then** I'm added to attendee list and organizer notified
-4. **Given** I organized meetup, **When** viewing shoot, **Then** I see "12 attendees" with names/characters/roles
+1. **Given** a user has received backdrop suggestions, **When** the user selects "Generate Visual Reference" for a specific backdrop idea, **Then** the system creates an AI-generated image showing what that backdrop might look like.
+
+2. **Given** a visual backdrop reference is generated, **When** the user reviews it, **Then** the system saves it to the shoot's reference gallery tagged with the backdrop description and marked as an AI-generated backdrop reference.
 
 ---
 
-### User Story 4 - Venue Maps & Navigation (Priority: P4)
+### User Story 4 - Backdrop Building Instructions and Tips (Priority: P4)
 
-As a convention photographer, I want to see venue map with marked photo locations and navigate between meetup spots so that I don't waste time finding shooting locations in large convention centers.
+A cosplayer who selected a DIY backdrop idea wants step-by-step guidance on how to build it, including materials list, estimated cost, construction steps, and tips for lighting and photography.
 
-**Why this priority**: Convenience feature for large venues. Nice-to-have but shoots work without maps.
+**Why this priority**: This adds significant value but is not essential for the MVP since users can research building techniques independently once they have the backdrop idea.
 
-**Independent Test**: User can view convention venue map, pin shoot locations, get directions between pins.
+**Independent Test**: Can be tested independently by selecting a saved backdrop idea, requesting building instructions, and verifying detailed guidance is provided with actionable steps.
 
 **Acceptance Scenarios**:
 
-1. **Given** convention has uploaded venue map, **When** I view convention, **Then** map displays with labeled halls/gardens/photo spots
-2. **Given** I'm planning shoot at "East Garden", **When** I select location, **Then** map shows pin with location name
-3. **Given** I have 3 shoots at different spots, **When** I view day schedule, **Then** map shows all 3 pins with numbered route
-4. **Given** I'm at convention, **When** I need directions to next shoot, **Then** map highlights walking path from current location
+1. **Given** a user has saved a backdrop idea to their shoot, **When** the user selects "Get Building Guide" for that backdrop, **Then** the system generates detailed instructions including materials list with estimated costs, construction steps, lighting tips, and photography angles.
+
+2. **Given** building instructions are generated, **When** the user reviews them, **Then** the system saves the instructions as a document attached to that backdrop within the shoot for easy reference during construction.
 
 ---
 
 ### Edge Cases
 
-- What happens when convention dates change? (Update all linked shoots, notify users of date changes)
-- How to handle multi-day conventions with shoots on different days? (Group by date, show daily sub-schedules)
-- What if user RSVPs to meetup then can't attend? (Allow canceling RSVP, notify organizer)
-- Should there be convention database vs user-created? (Both: verified convention list + custom events)
-- How to handle private shoots at conventions? (Default private, opt-in to public meetup listing)
-- What about badge/ticket verification? (Link to external ticketing, don't replicate badge systems)
-- Should meetups have capacity limits? (Optional max attendees, waitlist when full)
-- How to prevent spam/inappropriate meetups? (Report system, organizer reputation, moderation)
+- What happens when a user requests backdrop ideas for an extremely obscure character with no clear canonical setting?
+- How does the system handle requests for location types that may not exist in certain geographic areas (e.g., "snowy mountain" in Florida)?
+- What happens when generated backdrop suggestions are too complex or expensive for typical cosplayers to build?
+- How does the system handle characters that could work with multiple very different backdrop styles (e.g., modern AU vs canonical setting)?
+- What happens when a user is planning multiple shoots with different characters and wants to find one backdrop that works for several?
+- How does the system handle privacy when accessing user's location for nearby real location searches?
+- What happens when Google Maps integration fails or returns no results for a suggested location type?
+- How does the system handle backdrop suggestions that might require permits or access to restricted locations?
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
-- **FR-001**: System MUST allow creating convention entries with name, dates, location/venue, website URL
-- **FR-002**: System MUST support linking shoots to conventions with optional visibility (private/public meetup)
-- **FR-003**: System MUST display convention dashboard showing all linked shoots grouped by date
-- **FR-004**: System MUST provide "Convention shoots" filter in main shoots list
-- **FR-005**: System MUST allow adding convention schedule events (name, date/time, location, type: panel/contest/meetup/other)
-- **FR-006**: System MUST detect and warn about time conflicts between shoots and convention events
-- **FR-007**: System MUST support importing convention schedule from URL or file (iCal, CSV)
-- **FR-008**: System MUST display unified timeline showing shoots and convention events together
-- **FR-009**: System MUST allow marking shoot as "Public Meetup" visible in convention's public meetup list
-- **FR-010**: System MUST provide meetup discovery interface with search/filter by series, character, time
-- **FR-011**: System MUST support RSVP to public meetups with attendee list visible to organizer
-- **FR-012**: System MUST notify meetup organizer when someone RSVPs
-- **FR-013**: System MUST allow canceling RSVP with organizer notification
-- **FR-014**: System MUST support optional max attendee capacity with waitlist
-- **FR-015**: System MUST display attendee list with character/role info for meetup planning
-- **FR-016**: System MUST support uploading or linking to convention venue maps (image or interactive)
-- **FR-017**: System MUST allow pinning shoot locations on venue map
-- **FR-018**: System MUST display route between multiple pinned locations on map
-- **FR-019**: System MUST provide verified convention database (major cons) plus custom convention creation
-- **FR-020**: System MUST support reporting inappropriate public meetups with moderation queue
-- **FR-021**: System MUST notify users when linked convention dates change
+- **FR-001**: Users MUST be able to request AI backdrop suggestions from the shoot detail page by providing a character name and optionally additional context (indoor/outdoor preference, available space, budget level).
+
+- **FR-002**: System MUST generate 5-10 DIY backdrop suggestions per request, each including: descriptive title, detailed description, estimated difficulty (easy/medium/hard), rough materials list, and why it fits the character.
+
+- **FR-003**: Users MUST be able to select and save one or more backdrop suggestions to their shoot, with options to mark them as planned, in-progress, or completed.
+
+- **FR-004**: System MUST tag all AI-generated backdrop suggestions with metadata including generation date, character context, and suggestion source (AI-generated).
+
+- **FR-005**: Users MUST be able to request real location type suggestions that provide searchable location categories (e.g., "urban rooftop", "forest clearing", "industrial warehouse").
+
+- **FR-006**: System MUST generate 5-7 location type suggestions per request with descriptions of the location aesthetic and why it suits the character's setting.
+
+- **FR-007**: System MUST integrate location type suggestions with Google Maps by opening map search with the location type query and user's current location (with permission).
+
+- **FR-008**: Users MUST be able to save selected locations from Google Maps to the shoot with reference to the AI suggestion that led to the discovery.
+
+- **FR-009**: System MUST handle location permission as optional with manual location entry fallback, allowing users to either grant location access for nearby suggestions or manually enter their city/area for location searches.
+
+- **FR-010**: Users MUST be able to manually enter their location (city, neighborhood, or general area) when requesting real location suggestions if they choose not to grant location permission or want to search a different area.
+
+- **FR-011**: Users MUST be able to generate visual references for saved backdrop ideas using AI image generation, creating reference images that show the suggested backdrop aesthetic.
+
+- **FR-012**: System MUST provide progress indication during backdrop/location suggestion generation (expected 5-15 seconds) and visual reference generation (expected 10-30 seconds).
+
+- **FR-013**: System MUST handle AI generation failures gracefully with clear error messages and retry options, without blocking other shoot planning features.
+
+- **FR-014**: Users MUST be able to request building instructions for saved DIY backdrop ideas, receiving detailed guidance on construction, materials, and photography tips.
+
+- **FR-015**: System MUST show all difficulty levels (easy/medium/hard) in backdrop suggestions with clear visual difficulty indicators, allowing users to self-select appropriate complexity based on their skills and resources.
+
+- **FR-016**: System MUST organize saved backdrop/location ideas within the shoot, allowing users to view, edit notes, mark status, and associate reference images.
+
+- **FR-017**: System MUST handle offline scenarios by queueing backdrop/location suggestion requests for processing when connection is restored.
+
+- **FR-018**: Users MUST be able to view suggestion history showing previously generated backdrop and location ideas across their shoots for reuse and inspiration.
 
 ### Key Entities
 
-- **Convention**: Event hosting shoots. Attributes: name, start date, end date, location, venue name, website URL, venue map image/URL, is verified (official vs user-created), created by user ID
-- **ConventionEvent**: Scheduled event at convention. Attributes: convention ID, event name, event date/time, location within venue, event type (panel/contest/meetup/other), duration
-- **ShootConventionLink**: Links shoot to convention. Attributes: shoot ID, convention ID, is public meetup, RSVP count, max capacity (optional)
-- **MeetupRSVP**: RSVP to public meetup. Attributes: shoot ID, user ID, character name, role (photographer/cosplayer/assistant), RSVP timestamp, status (attending/waitlist/canceled)
-- **VenueMapPin**: Location marker on map. Attributes: convention ID, shoot ID (optional), pin name, coordinates (x, y or lat/long), description
-- **MeetupReport**: Report inappropriate meetup. Attributes: shoot ID, reporter user ID, reason, report timestamp, resolution status
+- **Backdrop Suggestion**: An AI-generated DIY backdrop idea with title, description, difficulty level, materials list, character context, and generation timestamp.
+
+- **Location Suggestion**: An AI-generated real location type recommendation with location category, description, search query for maps, and character context.
+
+- **Saved Backdrop/Location**: User-selected backdrop or location idea saved to a shoot with status (planned/in-progress/completed), custom notes, and associated reference images.
+
+- **Building Guide**: Detailed construction instructions for a DIY backdrop including materials with costs, step-by-step process, lighting recommendations, and photography tips.
+
+- **Suggestion History**: Archive of all backdrop and location suggestions generated across shoots, allowing users to browse and reuse previous ideas.
 
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
 
-- **SC-001**: Users can link shoot to convention in under 30 seconds
-- **SC-002**: Convention dashboard loads all linked shoots in under 2 seconds
-- **SC-003**: Schedule conflict detection triggers within 1 second of date/time change
-- **SC-004**: iCal/CSV schedule import processes 50+ events in under 5 seconds
-- **SC-005**: Public meetup listing loads with filters in under 1 second on 3G
-- **SC-006**: RSVP notification delivers to organizer within 30 seconds
-- **SC-007**: Venue map with 10 pins renders in under 2 seconds
-- **SC-008**: 60% of convention-goers use convention linking feature (indicates value)
-- **SC-009**: Public meetups average 5+ RSVPs (indicates community engagement)
-- **SC-010**: Reported meetups resolved within 24 hours (moderation responsiveness)
+- **SC-001**: Users can generate and review backdrop/location suggestions from request to displayed results in under 20 seconds.
 
+- **SC-002**: 85% of generated backdrop suggestions are rated as relevant and feasible by users who request them.
+
+- **SC-003**: Users who use the location suggestion feature successfully find and save a suitable real location within 5 minutes for 70% of requests.
+
+- **SC-004**: Users can generate visual references for backdrop ideas and have them appear in their reference gallery within 40 seconds.
+
+- **SC-005**: Users reuse previously generated backdrop/location suggestions for new shoots 30% of the time, reducing redundant AI generations.
+
+- **SC-006**: Mobile users can successfully generate and save backdrop/location suggestions with the same success rate as desktop users (within 5% variance).
+
+- **SC-007**: 90% of saved backdrop ideas that users mark as "in-progress" or "completed" indicate the suggestions were practical enough to actually build or scout.
+
+## Assumptions
+
+- Backdrop suggestions focus on practical DIY options that typical cosplayers can create with commonly available materials and reasonable effort.
+- Location suggestions are general types/categories rather than specific addresses, requiring users to use Google Maps to find actual locations.
+- Visual reference generation leverages existing AI image generation capabilities (same system as reference pose generation).
+- Building instructions for backdrops are generated using AI with practical guidance, not professional construction documentation.
+- Users understand that backdrop/location suggestions are creative starting points and may need adaptation to their specific situation.
+- Character context provided by users is sufficient for AI to understand the aesthetic (e.g., character name alone for well-known characters, or brief description for OCs).
+- Location permission is optional with manual location entry as fallback, ensuring all users can access the feature regardless of permission choices.
+- Google Maps integration uses existing Google Maps functionality in the app without requiring separate API implementation.
+- All backdrop difficulty levels are shown with clear indicators, allowing users to choose based on their skill level and available resources.
+- The feature is accessible from the shoot detail page's location section where users plan shoot settings.
+- Generated suggestions are stored for history/reuse but do not count against AI generation quotas (they're text-based suggestions, not image generation).
+- Manual location entry accepts city names, neighborhoods, or general area descriptions for Google Maps searches.

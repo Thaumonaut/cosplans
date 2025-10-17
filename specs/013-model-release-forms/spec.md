@@ -1,138 +1,125 @@
-# Feature Specification: Model Release Forms
+# Feature Specification: Trending Audio Integration for Reel Planning
 
-**Feature Branch**: `013-model-release-forms`  
+**Feature Branch**: `005-005-trending-audio`  
 **Created**: 2025-10-15  
 **Status**: Draft  
-**Input**: Digital model release form templates, e-signature, track signing status per person/shoot, photo usage rights documentation
+**Input**: Browse/save trending audio from Instagram/TikTok, attach to shoots, mark audio beats, calculate shot timing
 
 ## User Scenarios & Testing *(mandatory)*
 
-### User Story 1 - Send Digital Release Forms (Priority: P1)
+### User Story 1 - Browse & Save Trending Audio (Priority: P1)
 
-As a photographer, I want to send digital model release forms to models/cosplayers via email or link so that I can get legal permission to use photos without dealing with paper forms.
+As a content creator, I want to browse currently trending audio clips from Instagram Reels and TikTok so that I can plan shoots around popular sounds that will increase engagement.
 
-**Why this priority**: Core legal protection - essential for photographers selling or publishing work commercially.
+**Why this priority**: Core discovery functionality that delivers immediate value - users can find trending audio and save it to their library without any additional features.
 
-**Independent Test**: User can select form template, send to model, model receives email with form link.
+**Independent Test**: User can view a feed of trending audio with playback, see metadata (title, artist, trending rank, usage count), and save favorites to their library.
 
 **Acceptance Scenarios**:
 
-1. **Given** I'm planning shoot with model, **When** I select "Standard Model Release" template and enter model's email, **Then** model receives email with secure form link
-2. **Given** model receives form link, **When** they open it, **Then** form displays with shoot details, photographer name, usage terms
-3. **Given** I sent 3 forms, **When** I view shoot, **Then** I see "Release forms: 1 signed, 2 pending"
-4. **Given** model doesn't have account, **When** they receive form, **Then** they can view and sign without creating account
+1. **Given** I'm on the Audio Library page, **When** I select "Trending" tab, **Then** I see top 50 trending audio clips from Instagram/TikTok with play buttons and metadata
+2. **Given** I'm browsing trending audio, **When** I click play on audio clip, **Then** 15-30 second preview plays with waveform visualization
+3. **Given** I'm listening to trending audio, **When** I click "Save to Library", **Then** audio saves to my collection and shows "Saved ✓" indicator
+4. **Given** I'm viewing a trending audio, **When** I see usage stats showing "1.2M uses" and trending rank "#5 this week", **Then** I can assess popularity for planning
+5. **Given** trending data is 24+ hours old, **When** I pull to refresh, **Then** system fetches latest trending rankings
 
 ---
 
-### User Story 2 - E-Signature & Completion (Priority: P2)
+### User Story 2 - Attach Audio to Shoots (Priority: P2)
 
-As a model/cosplayer, I want to review and electronically sign release forms so that I understand usage rights and can provide consent quickly from my phone.
+As a shoot planner, I want to attach a specific audio clip to a shoot so that the team knows which sound we're choreographing content for.
 
-**Why this priority**: Makes P1 forms actually usable - without signing capability, forms are just documents.
+**Why this priority**: Connects audio discovery to actual shoot planning workflow. Requires P1 library but enables team coordination.
 
-**Independent Test**: Model can read form, draw signature, submit, photographer receives signed copy with timestamp.
+**Independent Test**: User can attach saved audio to a shoot, all team members see the audio and can play it from shoot details.
 
 **Acceptance Scenarios**:
 
-1. **Given** I open release form, **When** I scroll through terms, **Then** "Sign" button enables only after scrolling to bottom
-2. **Given** form is ready to sign, **When** I draw signature with finger/mouse and click "Submit", **Then** signature saves with timestamp
-3. **Given** I submitted form, **When** photographer views it, **Then** they see my signature, sign date, and IP address for verification
-4. **Given** form requires witness, **When** I sign, **Then** system prompts for witness name and signature before submission
+1. **Given** I'm editing a shoot, **When** I click "Add Audio" and select from my saved library, **Then** audio attaches to shoot and displays in shoot header
+2. **Given** a shoot has attached audio, **When** any team member views the shoot, **Then** they see audio player with title/artist and can play it
+3. **Given** I'm planning multiple shoots, **When** I attach the same trending audio to 3 different shoots, **Then** each shoot references the audio independently
+4. **Given** audio is attached to shoot, **When** I create shot list (feature 004), **Then** shots can reference the same audio for timing calculations
 
 ---
 
-### User Story 3 - Custom Form Templates (Priority: P3)
+### User Story 3 - Mark Audio Beats & Timing (Priority: P3)
 
-As a professional photographer, I want to create custom release form templates with my branding, specific usage terms, and compensation clauses so that forms match my business needs.
+As a choreographer/editor, I want to mark important beats and transitions in the audio so that I can plan shot transitions and choreography to sync with the music.
 
-**Why this priority**: Flexibility for business users. Basic template works for many, but pros need customization.
+**Why this priority**: Adds precision timing tools for professional content creation. Builds on P2 audio attachment with detailed timing markers.
 
-**Independent Test**: User can create custom template, add/remove fields, save as reusable template, use for multiple shoots.
-
-**Acceptance Scenarios**:
-
-1. **Given** I need custom terms, **When** I create new template and add field "Compensation: $__", **Then** field appears in form editor
-2. **Given** I want my branding, **When** I upload logo and set brand colors, **Then** form displays with my visual identity
-3. **Given** I created template, **When** I save as "Commercial Shoots v2", **Then** template appears in my library for future use
-4. **Given** I have 5 templates, **When** sending form, **Then** I select which template to use for this shoot
-
----
-
-### User Story 4 - Signed Form Archive & Export (Priority: P4)
-
-As a photographer managing legal documents, I want to download signed release forms as PDFs and maintain searchable archive so that I can provide proof of release if questioned years later.
-
-**Why this priority**: Long-term record keeping. Important for liability but not needed until forms are being signed.
-
-**Independent Test**: User can download individual signed form as PDF, export all forms for shoot, search archive by model name/date.
+**Independent Test**: User can play audio, tap to mark beats, see waveform with beat markers, and get timestamp references for each beat.
 
 **Acceptance Scenarios**:
 
-1. **Given** model signed form, **When** I click "Download PDF", **Then** PDF generates with signature, timestamp, all form data
-2. **Given** shoot has 8 signed forms, **When** I click "Export all", **Then** ZIP file downloads with 8 PDFs named by model
-3. **Given** I need to find old release, **When** I search "Sarah Smith", **Then** all releases she signed appear with shoot context
-4. **Given** form was signed 2 years ago, **When** I view it, **Then** original signature and data display exactly as signed (immutable)
+1. **Given** I'm viewing attached audio for a shoot, **When** I enter "Mark Beats" mode and tap along with the music, **Then** beat markers appear on waveform at each tap timestamp
+2. **Given** I've marked 8 beats, **When** I label beat #3 as "Drop" and beat #6 as "Chorus start", **Then** markers show labels and timestamps (e.g., "Drop - 0:12.5")
+3. **Given** audio has marked beats, **When** I export beat sheet, **Then** I get timestamped list suitable for shot planning
+4. **Given** I marked beats imperfectly, **When** I drag marker left/right on waveform, **Then** timestamp adjusts with precise control (+/- 0.1s)
+5. **Given** I'm on mobile during shoot, **When** I view beat markers, **Then** visual metronome highlights current beat as audio plays
 
 ---
 
 ### Edge Cases
 
-- What if model wants to revoke release after signing? (No revocation in system, contact photographer directly, note this in terms)
-- How to handle minors requiring parent/guardian signature? (Add guardian consent field, require DOB verification)
-- What about international laws (GDPR, CCPA)? (Privacy policy link, data retention settings, export/delete capabilities)
-- Should there be form expiration dates? (Optional expiration, auto-remind to renew)
-- How to handle disputes about what was signed? (Immutable record with signature hash, audit log)
-- What if photographer's email bounces? (Allow sharing via unique link without email requirement)
-- Should models get copy of signed form? (Auto-send PDF copy to model's email after signing)
-- How to prevent form tampering? (Digital signature with hash verification, detect modifications)
+- What happens when Instagram/TikTok API changes or rate limits are hit? (Cached trending data, graceful degradation with last known results, user notification)
+- How to handle audio that becomes unavailable/removed from platform? (Keep saved reference with "Audio unavailable" status, retain beat markers and metadata)
+- What if user saves 500+ audio clips to library? (Search/filter by date saved, trending rank, or custom tags; pagination)
+- How does beat marking work for audio with irregular tempo or ambient sounds? (Manual tap marking works for any rhythm; optional auto-detect for clear beats with user verification)
+- What happens if two users mark beats differently for the same audio? (Per-shoot beat markers, not global; each shoot has independent beat configuration)
+- Should audio files be stored locally or streamed? (Stream from platform APIs when available, cache preview for offline viewing with user-configurable limits, respect platform terms of service)
+- How to handle copyright concerns? (Clear indication audio is for reference only, links to official platform sources, respect platform API usage terms)
+- What if beat markers are created on one device and viewed on another? (Sync beat markers with shoot data across all devices)
+- How to handle very long audio clips (5+ minutes)? (Support full length but optimize waveform rendering and playback controls)
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
-- **FR-001**: System MUST provide default model release form templates (Standard, Commercial, Social Media Only, Event/Convention)
-- **FR-002**: System MUST allow photographer to send release form via email to model
-- **FR-003**: System MUST generate unique, secure form link valid for 30 days (configurable)
-- **FR-004**: System MUST allow models to view and complete form without account login
-- **FR-005**: System MUST display form with shoot details, photographer info, usage terms
-- **FR-006**: System MUST track signing status per person: Pending, Viewed, Signed, Declined
-- **FR-007**: System MUST require scrolling to bottom of form before enabling "Sign" button
-- **FR-008**: System MUST support touch/mouse signature drawing with "Clear and retry" option
-- **FR-009**: System MUST capture signature, sign timestamp, model name, IP address for verification
-- **FR-010**: System MUST support optional witness signature field
-- **FR-011**: System MUST send signed form confirmation email to both model and photographer
-- **FR-012**: System MUST allow creating custom form templates with text fields, checkboxes, signature fields
-- **FR-013**: System MUST support adding photographer logo and brand colors to forms
-- **FR-014**: System MUST save custom templates for reuse across shoots
-- **FR-015**: System MUST allow editing template content (terms, fields) with version tracking
-- **FR-016**: System MUST generate signed form as PDF with signature, timestamp, all data
-- **FR-017**: System MUST provide bulk export of all signed forms per shoot as ZIP
-- **FR-018**: System MUST maintain searchable archive of signed forms by model name, shoot, date range
-- **FR-019**: System MUST make signed forms immutable (cannot edit after submission)
-- **FR-020**: System MUST generate signature hash for tamper detection
-- **FR-021**: System MUST support minor consent with parent/guardian signature requirement
-- **FR-022**: System MUST allow configuring form expiration and auto-renewal reminders
+- **FR-001**: System MUST integrate with Instagram and TikTok APIs to fetch trending audio data (title, artist, preview URL, usage count, trending rank)
+- **FR-002**: System MUST refresh trending audio feed at minimum every 24 hours with pull-to-refresh capability
+- **FR-003**: System MUST display top 50 trending audio clips with play/pause controls and 15-30 second preview playback
+- **FR-004**: System MUST show audio metadata: title, artist, usage count (e.g., "1.2M uses"), trending rank, and duration
+- **FR-005**: System MUST provide waveform visualization during audio playback
+- **FR-006**: System MUST allow users to save audio clips to personal library with "Save" button and visual confirmation
+- **FR-007**: System MUST persist saved audio library per user account and sync across all user devices
+- **FR-008**: System MUST handle API rate limits gracefully by caching trending data and displaying last successful fetch timestamp
+- **FR-009**: System MUST handle unavailable/removed audio by retaining metadata with "Audio no longer available" status
+- **FR-010**: System MUST allow attaching one audio clip to a shoot from user's saved library
+- **FR-011**: System MUST display attached audio in shoot details with inline player accessible to all team members
+- **FR-012**: System MUST allow removing/replacing attached audio from shoot
+- **FR-013**: System MUST support same audio clip being attached to multiple shoots independently
+- **FR-014**: System MUST provide "Mark Beats" mode with tap-to-mark beat timing on waveform
+- **FR-015**: System MUST display beat markers on waveform with timestamps (to 0.1s precision)
+- **FR-016**: System MUST allow adding text labels to beat markers (e.g., "Drop", "Chorus start", "Transition")
+- **FR-017**: System MUST support drag-to-adjust beat marker positions on waveform
+- **FR-018**: System MUST provide visual metronome during playback highlighting current beat marker
+- **FR-019**: System MUST store beat markers per-shoot (not globally) so different shoots can have different beat configurations for same audio
+- **FR-020**: System MUST provide search/filter in audio library by date saved, title/artist, or trending rank
+- **FR-021**: System MUST respect platform API terms of service and clearly indicate audio is for reference/planning only
+- **FR-022**: System MUST cache audio previews for offline playback with user-configurable cache settings (number of audios, storage size, expiration days)
 
 ### Key Entities
 
-- **ReleaseFormTemplate**: Form design. Attributes: template name, creator user ID, is default template, content (HTML/JSON), required fields, logo image path, brand colors, version number, created date, last modified date
-- **ReleaseFormInstance**: Specific form sent for shoot. Attributes: shoot ID, template ID, recipient email, recipient name, unique secure link token, expiration date, sent timestamp, viewed timestamp (optional), signed timestamp (optional), status (pending/viewed/signed/declined)
-- **FormSignature**: Captured signature. Attributes: form instance ID, signature image data, signer name, signer IP address, sign timestamp, signature hash, witness name (optional), witness signature (optional)
-- **FormFieldData**: Captured form data. Attributes: form instance ID, field name, field value, field type
-- **FormAuditLog**: Tamper detection. Attributes: form instance ID, event type (sent/viewed/signed/modified), event timestamp, event data
+- **TrendingAudio**: Represents audio clip from Instagram/TikTok. Attributes: platform (Instagram/TikTok), external audio ID, title, artist, preview URL, duration, usage count, trending rank, last fetched timestamp, availability status
+- **SavedAudio**: User's saved audio library entry. Attributes: user ID, trending audio reference, date saved, custom tags/notes
+- **ShootAudio**: Link between shoot and audio. Attributes: shoot ID, saved audio ID, attached date
+- **BeatMarker**: Timing marker on audio track. Attributes: shoot audio ID, timestamp (milliseconds), label (optional), sequence order
+- **Shoot**: Parent entity (already exists). Extended with: attached audio reference (optional)
+- **Shot**: From feature 004. Can reference same audio via parent shoot for timing calculations
 
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
 
-- **SC-001**: Users can send release form in under 1 minute
-- **SC-002**: Form email delivers to recipient within 2 minutes
-- **SC-003**: Models can complete and sign form in under 3 minutes on mobile
-- **SC-004**: PDF generation completes within 5 seconds for signed form
-- **SC-005**: Signature hash verification detects 100% of tampering attempts
-- **SC-006**: 95% of sent forms are viewed within 48 hours (indicates good email delivery)
-- **SC-007**: 80% of viewed forms are signed within 7 days (indicates form usability)
-- **SC-008**: Professional photographers using custom templates report 60% time savings vs paper forms (measured via survey)
-- **SC-009**: Zero legal disputes due to invalid/missing signatures (indicates form validity)
-- **SC-010**: Signed forms remain accessible and valid for 10+ years (long-term archival reliability)
+- **SC-001**: Trending audio feed loads within 2 seconds on 3G connection
+- **SC-002**: Audio preview plays within 1 second of clicking play button
+- **SC-003**: Users can save audio to library with single click and immediate visual feedback (< 500ms)
+- **SC-004**: Beat marking interface allows tap-to-mark with < 50ms latency for rhythm accuracy
+- **SC-005**: System successfully handles Instagram/TikTok API rate limits with < 5 minute cache refresh
+- **SC-006**: 95% of saved audio remains playable after 30 days (accounting for platform removals)
+- **SC-007**: Mobile waveform and beat marker interface operates smoothly at 60fps
+- **SC-008**: 80% of users who attach audio also create beat markers (indicates feature adoption)
+- **SC-009**: Shoots with attached audio and beat markers have 30% higher completion rate (indicates planning effectiveness)
+- **SC-010**: Audio library syncs across devices within 5 seconds of save action
 

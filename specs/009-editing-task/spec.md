@@ -1,138 +1,139 @@
-# Feature Specification: Editing Task Assignment
+# Feature Specification: Reference Pose Library
 
-**Feature Branch**: `009-009-editing-task`  
+**Feature Branch**: `010-reference-pose-library`  
 **Created**: 2025-10-15  
 **Status**: Draft  
-**Input**: Assign photos to editors, track editing status, annotation tools, version history, approval workflow
+**Input**: Save/organize reference images from any source, tag by character/difficulty/location, quick linking, community sharing
 
 ## User Scenarios & Testing *(mandatory)*
 
-### User Story 1 - Assign Photos to Editors (Priority: P1)
+### User Story 1 - Save References from Any Source (Priority: P1)
 
-As a photographer/lead, I want to assign specific photos from a shoot to editors so that editing work is distributed clearly and progress can be tracked.
+As a cosplayer planning shoots, I want to save reference images from my camera roll, web URLs, or other apps into an organized library so that I have all my inspiration in one searchable place instead of scattered across devices.
 
-**Why this priority**: Core task assignment - the foundation for all editing coordination and workflow management.
+**Why this priority**: Core reference collection - the foundation of the library. Solves "where did I save that pose?" problem.
 
-**Independent Test**: User can select photos, assign to editors, editors see their assigned photos with download/edit capabilities.
+**Independent Test**: User can import images from multiple sources, see them in unified library view, search/browse later.
 
 **Acceptance Scenarios**:
 
-1. **Given** shoot has 50 uploaded photos, **When** I select 10 photos and assign to "@editor_sarah", **Then** Sarah sees 10 assigned photos in her editing queue
-2. **Given** I'm assigning photos, **When** I select multiple editors, **Then** same photos can be assigned to multiple people (e.g., primary and backup editor)
-3. **Given** editor receives assignment, **When** they view their queue, **Then** photos display with shoot context (shoot name, date, character details)
-4. **Given** assignments are made, **When** I view shoot overview, **Then** I see "15 photos assigned to Sarah, 20 to Mike, 15 unassigned"
+1. **Given** I find inspiring pose on Pinterest, **When** I paste URL into reference importer, **Then** image saves to my library with source attribution
+2. **Given** I have pose photos in camera roll, **When** I select 5 images and import, **Then** all 5 appear in my reference library
+3. **Given** I'm using feature 002 (AI poses), **When** I click "Save to library" on generated pose, **Then** pose saves with "AI Generated" tag
+4. **Given** I have 100+ references, **When** I scroll library, **Then** images load smoothly with infinite scroll/pagination
 
 ---
 
-### User Story 2 - Track Editing Status (Priority: P2)
+### User Story 2 - Tag & Organize References (Priority: P2)
 
-As an editor, I want to mark photos as "Not Started", "In Progress", "Ready for Review", or "Approved" so that the team knows editing progress in real-time.
+As a library curator, I want to tag references with character name, pose difficulty, location type, and custom tags so that I can quickly find the right reference for each shoot.
 
-**Why this priority**: Status visibility enables coordination. Builds on P1 assignments with progress tracking.
+**Why this priority**: Makes P1 library searchable and useful. Without tags, large libraries become unmanageable.
 
-**Independent Test**: Editor can update status per photo, photographer sees real-time status updates and filtering options.
+**Independent Test**: User can add tags to references, filter by tags, see tag suggestions based on past usage.
 
 **Acceptance Scenarios**:
 
-1. **Given** I have 10 assigned photos, **When** I start editing photo #1, I mark it "In Progress", **Then** status updates for whole team with timestamp
-2. **Given** I finish editing photo #1, **When** I mark "Ready for Review", **Then** photographer receives notification and photo appears in their review queue
-3. **Given** photographer reviews photo, **When** they mark "Approved", **Then** photo moves to finals collection and I see confirmation
-4. **Given** shoot has mixed statuses, **When** viewing overview, **Then** progress shows "5 approved, 3 ready for review, 4 in progress, 3 not started"
+1. **Given** I'm saving a reference, **When** I add tags "Sailor Moon, standing pose, easy difficulty, urban location", **Then** tags save and appear as filterable chips
+2. **Given** I have tagged references, **When** I click "easy difficulty" tag, **Then** library filters to show only easy poses
+3. **Given** I'm tagging new reference, **When** I start typing "Sai...", **Then** system suggests "Sailor Moon" from my previous tags
+4. **Given** I view tag cloud, **When** I see most used tags, **Then** "Sailor Moon (25)", "Genshin (18)", "easy (40)" show usage counts
 
 ---
 
-### User Story 3 - Add Editing Notes & Annotations (Priority: P3)
+### User Story 3 - Quick Link to Shoots & Shots (Priority: P3)
 
-As a photographer providing feedback, I want to add text notes or visual annotations (arrows, circles, comments) to photos so that editors understand exactly what changes are needed.
+As a shoot planner, I want to quickly attach library references to shoots or specific shots (from feature 004) so that I don't have to re-upload the same reference images multiple times.
 
-**Why this priority**: Improves communication quality. Works with P2 review workflow to clarify editing direction.
+**Why this priority**: Integration benefit - connects library to planning workflow. Requires P1 library and feature 004.
 
-**Independent Test**: User can add text notes and draw annotations on photos, annotations save and display for assigned editor.
+**Independent Test**: User can browse library while planning shot, attach reference with one click, reference links to both library and shot.
 
 **Acceptance Scenarios**:
 
-1. **Given** photo is "Ready for Review", **When** I add note "Please brighten face by +0.5 stops", **Then** note appears with photo for editor and me
-2. **Given** I'm reviewing photo, **When** I use annotation tool to circle area and add "Remove photobomber here", **Then** arrow/circle saves as layer on image preview
-3. **Given** editor views photo with annotations, **When** they click annotation marker, **Then** full note and annotation display clearly
-4. **Given** photo has multiple rounds of feedback, **When** viewing note history, **Then** all previous notes show with timestamps and authors
+1. **Given** I'm planning shot #3, **When** I click "Add reference from library", **Then** library modal opens with search/filter
+2. **Given** library modal is open, **When** I select 2 poses and click "Attach", **Then** both link to shot #3 and modal closes
+3. **Given** reference is linked to multiple shots, **When** I view reference in library, **Then** I see "Used in: Shoot A shot #3, Shoot B shot #7"
+4. **Given** I update library reference tags, **When** viewing linked shot, **Then** reference shows updated tags (linked, not copied)
 
 ---
 
-### User Story 4 - Version History (Priority: P4)
+### User Story 4 - Community Sharing (Optional) (Priority: P4)
 
-As an editor, I want to upload multiple versions of an edited photo so that we can compare edits and revert if needed without losing work.
+As an advanced user, I want to optionally share my reference library (or collections within it) with the community so that others can benefit from my curated inspiration, and I can discover others' libraries.
 
-**Why this priority**: Protects work and enables iteration. Valuable for professional workflows but basic editing works without versions.
+**Why this priority**: Social feature that adds value but isn't essential. Requires moderation and privacy considerations.
 
-**Independent Test**: User can upload v1, v2, v3 of same photo, switch between versions, compare side-by-side.
+**Independent Test**: User can mark collection as "Public", browse community collections, save references from others' collections to their library.
 
 **Acceptance Scenarios**:
 
-1. **Given** I edited photo and marked "Ready for Review", **When** I upload new version after feedback, **Then** system stores v1 and displays v2 as current
-2. **Given** photo has 3 versions, **When** photographer views it, **Then** version dropdown shows "v1 (Oct 12), v2 (Oct 13), v3 (Oct 14 - current)"
-3. **Given** I want to compare versions, **When** I select "Compare v1 and v3", **Then** side-by-side view displays both with swipe/toggle
-4. **Given** v2 was better than v3, **When** photographer marks "Use v2 as final", **Then** v2 becomes approved version and v3 remains in history
+1. **Given** I have "Dynamic Action Poses" collection, **When** I toggle "Make Public", **Then** collection appears in community browse with my username
+2. **Given** I'm browsing community, **When** I filter "Genshin Impact" tag, **Then** I see public collections from other users with that tag
+3. **Given** I find useful reference in public collection, **When** I click "Save to my library", **Then** reference copies with attribution "Originally shared by @username"
+4. **Given** privacy concerns, **When** I toggle "Make Private", **Then** collection immediately hidden from community and only visible to me
 
 ---
 
 ### Edge Cases
 
-- What happens when editor downloads photo for offline editing? (Track download but don't block other assignments, allow manual upload of edited version)
-- How to handle very large RAW files (50MB+)? (Support but provide thumbnail previews, full res download on demand)
-- What if photographer wants to reassign photo mid-edit? (Allow reassignment, notify original editor, preserve work/status)
-- Should there be edit deadlines per photo? (Optional deadline field with reminders 24hrs before)
-- How to handle batch status updates? (Select multiple, update status all at once)
-- What if annotation tools are used on mobile? (Support basic touch annotations, full tools on desktop)
-- Should approved photos be locked from further edits? (Soft lock with "Reopen editing" option requiring photographer approval)
-- How to handle color profile/calibration differences? (Display profile metadata, warn if mismatched)
+- What happens when web URL image is deleted/broken? (Store copy locally, show "Source unavailable" if original link breaks)
+- How to handle very large images (10MB+ high-res art)? (Compress for preview, keep original if under size limit, or link only for oversized)
+- What if user imports duplicate images? (Detect duplicates via hash, offer "Already in library" with link to existing)
+- Should references have version history like editing? (Not initially, but track source updates if URL-based)
+- How to handle NSFW content in community sharing? (Content reporting, moderation queue, user preference filters)
+- What if tags become inconsistent (sailor-moon vs Sailor Moon vs sailormoon)? (Tag normalization, suggest existing similar tags)
+- Should there be collection limits? (Free: 500 refs, Pro: 5000, Team: unlimited?)
+- How to handle copyright concerns with community sharing? (Clear terms: personal use only, DMCA takedown process)
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
-- **FR-001**: System MUST allow selecting one or more photos from shoot and assigning to one or more editors
-- **FR-002**: System MUST display assigned photos in editor's personal editing queue with shoot context
-- **FR-003**: System MUST show assignment overview per shoot: assigned count per editor, unassigned count
-- **FR-004**: System MUST support photo statuses: Not Started, In Progress, Ready for Review, Approved
-- **FR-005**: System MUST allow editors to update photo status with real-time sync (< 2 seconds) to all team members
-- **FR-006**: System MUST notify photographer when photo marked "Ready for Review"
-- **FR-007**: System MUST display shoot-wide progress summary with counts per status
-- **FR-008**: System MUST support filtering photos by status and assigned editor
-- **FR-009**: System MUST allow adding text notes to photos (max 1000 characters per note)
-- **FR-010**: System MUST support visual annotations on photos: arrows, circles, rectangles, freehand drawing, text boxes
-- **FR-011**: System MUST save annotations as non-destructive layer overlay on image preview
-- **FR-012**: System MUST display all notes and annotations to photo owner and assigned editors
-- **FR-013**: System MUST preserve note history with timestamp and author for each note
-- **FR-014**: System MUST support uploading multiple versions of same photo (v1, v2, v3...)
-- **FR-015**: System MUST display version history with upload date and version number
-- **FR-016**: System MUST allow selecting which version is "current" for review
-- **FR-017**: System MUST provide side-by-side version comparison view
-- **FR-018**: System MUST support high-resolution image display (RAW, PNG, JPG up to 50MB)
-- **FR-019**: System MUST generate thumbnail previews for fast loading (< 1 second on 3G)
-- **FR-020**: System MUST allow reassigning photos with notification to original and new editor
-- **FR-021**: System MUST support optional deadline per photo with 24-hour reminder notifications
-- **FR-022**: System MUST support batch operations: assign multiple photos at once, update status for multiple at once
+- **FR-001**: System MUST allow importing reference images from: camera roll upload, web URL, AI pose generation (feature 002), file upload (JPG/PNG/WebP)
+- **FR-002**: System MUST store imported images locally (not just links) with source attribution metadata
+- **FR-003**: System MUST display reference library in grid view with thumbnail previews (< 1 second load on 3G)
+- **FR-004**: System MUST support infinite scroll or pagination for libraries with 100+ references
+- **FR-005**: System MUST allow adding multiple tags per reference: character name, difficulty (easy/medium/hard), location type, custom tags
+- **FR-006**: System MUST provide tag autocomplete based on user's previous tags
+- **FR-007**: System MUST support filtering library by any combination of tags (AND logic)
+- **FR-008**: System MUST display tag cloud showing most used tags with usage counts
+- **FR-009**: System MUST support search by tag name or reference title
+- **FR-010**: System MUST allow creating named collections to group related references
+- **FR-011**: System MUST support quick-attach from library when planning shots (feature 004 integration)
+- **FR-012**: System MUST display "Used in" information showing which shoots/shots link to reference
+- **FR-013**: System MUST maintain references as linked (not copied) so tag updates reflect everywhere
+- **FR-014**: System MUST detect duplicate images via perceptual hash and offer "Already exists" warning
+- **FR-015**: System MUST compress large images for preview while preserving original (if under size limit)
+- **FR-016**: System MUST handle broken source URLs gracefully with "Source unavailable" indicator
+- **FR-017**: System MUST support optional community sharing toggle per collection
+- **FR-018**: System MUST provide community browse/search interface with tag filtering
+- **FR-019**: System MUST attribute community references to original sharer
+- **FR-020**: System MUST support reporting inappropriate community content
+- **FR-021**: System MUST allow users to make collections private (remove from community)
+- **FR-022**: System MUST implement storage limits per tier: Free (500 refs), Pro (5000 refs), Team (unlimited)
 
 ### Key Entities
 
-- **PhotoAssignment**: Links photo to editor. Attributes: photo ID, shoot ID, assigned editor user ID, assigned date, status (Not Started/In Progress/Ready for Review/Approved), deadline (optional), status updated timestamp
-- **EditingNote**: Feedback on photo. Attributes: photo ID, author user ID, note text, created timestamp
-- **PhotoAnnotation**: Visual markup on photo. Attributes: photo ID, annotation type (arrow/circle/rectangle/freehand/textbox), coordinates/path data, label text, author user ID, created timestamp
-- **PhotoVersion**: Multiple versions of edited photo. Attributes: photo ID, version number, file path, uploaded by user ID, upload timestamp, is current version (boolean)
-- **Photo**: From existing system. Extended with: current status, version count, assignment references
+- **ReferenceImage**: Stored reference photo. Attributes: image file path, thumbnail path, source type (upload/URL/AI), source URL, original filename, dimensions, file size, uploader user ID, upload timestamp, view count
+- **ReferenceTag**: Tag on reference. Attributes: reference ID, tag text (normalized), tag type (character/difficulty/location/custom), created timestamp
+- **ReferenceCollection**: Grouped references. Attributes: collection name, owner user ID, is public, created date, last modified date
+- **CollectionMembership**: Links references to collections. Attributes: collection ID, reference ID, added timestamp, added by user ID
+- **ShotReferenceLink**: Links library reference to shot. Attributes: shot ID (from feature 004), reference ID, linked timestamp
+- **CommunityReport**: Report inappropriate content. Attributes: reference or collection ID, reporter user ID, reason, report timestamp, resolution status
 
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
 
-- **SC-001**: Users can assign 20 photos to an editor in under 1 minute
-- **SC-002**: Status updates sync to all team members within 2 seconds
-- **SC-003**: Editor receives "Ready for Review" notification within 30 seconds of status change
-- **SC-004**: Photo thumbnails load in under 1 second on 3G connection
-- **SC-005**: Full-resolution photo (up to 50MB) downloads in under 10 seconds on broadband
-- **SC-006**: Annotation tools respond with < 100ms latency for smooth drawing
-- **SC-007**: Version comparison view loads both images in under 3 seconds
-- **SC-008**: 80% of assigned photos reach "Approved" status (indicates workflow completion)
-- **SC-009**: Shoots using editing workflow complete post-production 30% faster than without (measured by time from shoot to final delivery)
-- **SC-010**: Photographers using annotation tools report 50% fewer clarification questions from editors (measured via survey)
+- **SC-001**: Users can import 10 references in under 2 minutes
+- **SC-002**: Library grid loads with visible thumbnails in under 1 second on 3G
+- **SC-003**: Tag autocomplete suggestions appear in under 200ms
+- **SC-004**: Duplicate detection identifies identical images with 95%+ accuracy
+- **SC-005**: Quick-attach modal opens and displays library in under 1 second
+- **SC-006**: 80% of users with 10+ references use tags (indicates feature adoption)
+- **SC-007**: Users with organized libraries (5+ tags used) create shoots 20% faster (measured by time from shoot creation to first shot planned)
+- **SC-008**: Community collections receive 500+ views in first month (indicates sharing value)
+- **SC-009**: Reported content resolved within 48 hours (moderation responsiveness)
+- **SC-010**: Zero broken image links for locally stored references (100% reliability)
 
