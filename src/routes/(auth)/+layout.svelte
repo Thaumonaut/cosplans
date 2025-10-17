@@ -35,7 +35,17 @@
 	}
 </script>
 
-<div class={`flex min-h-screen text-[var(--theme-foreground)] transition-all duration-200 ease-in-out`} style="background-color: var(--theme-background); background-image: var(--theme-background-pattern); background-attachment: fixed;">
+<div class={`flex min-h-screen text-[var(--theme-foreground)] transition-all duration-200 ease-in-out relative`} style="background-color: var(--theme-background);">
+	<!-- Background pattern overlay layer -->
+	<div 
+		class="fixed inset-0 pointer-events-none z-0" 
+		style="
+			background-image: var(--theme-background-pattern); 
+			background-attachment: fixed;
+			mix-blend-mode: var(--theme-background-blend, normal);
+			opacity: var(--theme-background-pattern-opacity, 1);
+		"
+	></div>
 
 	<div
 		class={`fixed inset-y-0 left-0 z-40 transform transition-transform duration-200 ease-in-out md:sticky md:top-0 md:h-[100dvh] md:overflow-y-auto md:transform-none md:translate-x-0 ${
@@ -92,7 +102,7 @@
 				</button>
 			</div>
 		</header>
-		<main class="flex-1 p-4 md:p-10" style="background-color: var(--theme-background); background-image: var(--theme-background-pattern); background-attachment: fixed;">
+		<main class="flex-1 p-4 md:p-10 relative z-10">
 			<slot />
 		</main>
 	</div>

@@ -142,9 +142,9 @@
   }
 </script>
 
-<div class="min-h-screen" style="background: var(--theme-background);">
+<div class="min-h-screen">
   <!-- Header -->
-  <header class="sticky top-0 z-10 backdrop-blur-md" style="background: var(--theme-sidebar-hover); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); border-bottom: 2px solid var(--theme-sidebar-border);">
+  <header class="sticky top-0 z-10 backdrop-blur-md" style="background: var(--theme-sidebar-hover); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); border-bottom: 2px solid var(--theme-sidebar-accent);">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
         <div class="flex items-center gap-4">

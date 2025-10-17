@@ -16,7 +16,7 @@ export const THEME_VARIANTS: ThemeVariant[] = [
 		},
 		cssVars: {
 			'--theme-background': '#f8fafc',           // Base layer (lightest neutral)
-			'--theme-background-pattern': 'radial-gradient(circle at 20% 50%, rgba(22, 163, 74, 0.06) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(22, 163, 74, 0.05) 0%, transparent 50%), radial-gradient(circle at 50% 80%, rgba(22, 163, 74, 0.04) 0%, transparent 50%)',
+			'--theme-background-pattern': 'radial-gradient(circle at 20% 50%, rgba(22, 163, 74, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(22, 163, 74, 0.12) 0%, transparent 50%), radial-gradient(circle at 50% 80%, rgba(22, 163, 74, 0.1) 0%, transparent 50%), radial-gradient(circle at 40% 30%, rgba(34, 197, 94, 0.08) 0%, transparent 40%)',
 			'--theme-foreground': '#0f172a',            // Primary text (dark slate)
 			
 			// Sidebar (neutral grays with green accent)
@@ -87,8 +87,10 @@ export const THEME_VARIANTS: ThemeVariant[] = [
 			background: '#ecfeff'
 		},
 		cssVars: {
-			'--theme-background': '#ecfeff',            // Cool cyan (lightest)
-			'--theme-background-pattern': 'radial-gradient(ellipse 800px 400px at top, rgba(6, 182, 212, 0.08) 0%, transparent 50%), radial-gradient(ellipse 800px 400px at bottom, rgba(6, 182, 212, 0.08) 0%, transparent 50%)',
+			'--theme-background': '#91dff1',            // Light cyan-blue
+			'--theme-background-pattern': 'url(/caustics.svg)',
+			'--theme-background-blend': 'overlay',       // Overlay blend mode
+			'--theme-background-pattern-opacity': '1',   // Full opacity for caustics
 			'--theme-foreground': '#0c4a6e',             // Deep blue (8.12:1 contrast)
 			
 			// Sidebar (neutral with cool accent and better contrast)
@@ -113,108 +115,108 @@ export const THEME_VARIANTS: ThemeVariant[] = [
 	},
 	{
 		id: 'dark-default',
-		label: 'Forbidden Forest',
-		description: 'Deep mysterious woods with ethereal green glow.',
+		label: 'Rolling Storm',
+		description: 'Dramatic stormy skies with electric lightning strikes.',
 		mode: 'dark',
 		preview: {
-			primary: '#22c55e',
-			accent: '#4ade80',
-			muted: '#94a3b8',
-			background: '#0f172a'
+			primary: '#eab308',
+			accent: '#fbbf24',
+			muted: '#64748b',
+			background: '#1e293b'
 		},
 		cssVars: {
-			'--theme-background': '#0a0f1a',            // Deep neutral dark (almost black)
-			'--theme-background-pattern': 'radial-gradient(circle 3px at 20% 30%, rgba(34, 197, 94, 0.25) 0%, transparent 100%), radial-gradient(circle 2px at 60% 70%, rgba(34, 197, 94, 0.2) 0%, transparent 100%), radial-gradient(circle 2px at 50% 50%, rgba(34, 197, 94, 0.18) 0%, transparent 100%), radial-gradient(circle 2px at 80% 10%, rgba(34, 197, 94, 0.15) 0%, transparent 100%), radial-gradient(circle 3px at 10% 80%, rgba(34, 197, 94, 0.22) 0%, transparent 100%), radial-gradient(circle 2px at 33% 90%, rgba(34, 197, 94, 0.18) 0%, transparent 100%), radial-gradient(circle 2px at 90% 60%, rgba(34, 197, 94, 0.15) 0%, transparent 100%), radial-gradient(circle 2px at 70% 40%, rgba(34, 197, 94, 0.2) 0%, transparent 100%)',
-			'--theme-foreground': '#f8fafc',             // Light text (excellent contrast)
+			'--theme-background': '#0f172a',            // Deep slate storm
+			'--theme-background-pattern': 'radial-gradient(ellipse 1200px 400px at 40% 20%, rgba(251, 191, 36, 0.02) 0%, transparent 50%), radial-gradient(ellipse 1000px 350px at 70% 40%, rgba(234, 179, 8, 0.025) 0%, transparent 45%), radial-gradient(ellipse 800px 300px at 30% 70%, rgba(202, 138, 4, 0.015) 0%, transparent 40%), repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(71, 85, 105, 0.02) 2px, rgba(71, 85, 105, 0.02) 4px), repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(51, 65, 85, 0.015) 2px, rgba(51, 65, 85, 0.015) 4px), radial-gradient(circle 2px at 25% 15%, rgba(250, 204, 21, 0.3) 0%, transparent 100%), radial-gradient(circle 1px at 75% 30%, rgba(234, 179, 8, 0.25) 0%, transparent 100%), radial-gradient(circle 3px at 15% 60%, rgba(251, 191, 36, 0.22) 0%, transparent 100%), radial-gradient(circle 1px at 85% 75%, rgba(250, 204, 21, 0.18) 0%, transparent 100%), radial-gradient(circle 2px at 45% 85%, rgba(234, 179, 8, 0.28) 0%, transparent 100%), radial-gradient(circle 1px at 55% 45%, rgba(251, 191, 36, 0.24) 0%, transparent 100%)',
+			'--theme-foreground': '#f1f5f9',             // Light slate text
 			
-			// Sidebar (neutral grays with green accent)
-			'--theme-sidebar-bg': '#1a1f2e',             // Elevated neutral dark gray
-			'--theme-sidebar-text': '#f8fafc',           // Light text (excellent contrast)
-			'--theme-sidebar-muted': '#94a3b8',          // Neutral muted gray (7.5:1 contrast - WCAG AAA)
-			'--theme-sidebar-accent': '#22c55e',         // Fresh green accent
-			'--theme-sidebar-hover': '#242938',          // Subtle hover (slightly lighter)
-			'--theme-sidebar-active': '#1e3a2a',         // Very subtle green tint
-			'--theme-sidebar-border': '#2d3748',         // Neutral border
+			// Sidebar (storm gray with yellow accent)
+			'--theme-sidebar-bg': '#0a0f1a',             // Very deep slate
+			'--theme-sidebar-text': '#f1f5f9',           // Light slate text
+			'--theme-sidebar-muted': '#cbd5e1',          // Slate muted (good contrast)
+			'--theme-sidebar-accent': '#eab308',         // Yellow lightning accent
+			'--theme-sidebar-hover': '#1e293b',          // Subtle storm hover
+			'--theme-sidebar-active': '#334155',         // Slate active
+			'--theme-sidebar-border': '#475569',         // Storm border
 			'--theme-sidebar-shadow': '0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.4)', // Dark shadow
 			
-			// Action Bar (neutral dark gray)
-			'--theme-header-bg': '#1a1f2e',              // Same as sidebar for continuity
-			'--theme-header-text': '#f8fafc',            // Light text
-			'--theme-header-muted': '#94a3b8',           // Neutral muted
-			'--theme-header-hover': '#242938',           // Subtle hover
-			'--theme-header-active': '#2d3748',          // Neutral active
+			// Action Bar (storm clouds)
+			'--theme-header-bg': '#1e293b',              // Storm slate
+			'--theme-header-text': '#fef3c7',            // Warm light text
+			'--theme-header-muted': '#fbbf24',           // Amber muted
+			'--theme-header-hover': '#334155',           // Darker slate hover
+			'--theme-header-active': '#475569',          // Slate active
 			'--theme-header-shadow': '0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.4)' // Same as sidebar
 		},
 		source: 'built-in'
 	},
 	{
 		id: 'dark-purple',
-		label: 'Neon City Nights',
-		description: 'Cyberpunk purple glow and electric grid patterns.',
+		label: 'Cozy Burrow',
+		description: 'Hobbiton warmth with earthy greens and cottage garden charm.',
 		mode: 'dark',
 		preview: {
-			primary: '#a855f7',
-			accent: '#c084fc',
-			muted: '#a78bfa',
-			background: '#0f0a1e'
+			primary: '#84cc16',
+			accent: '#65a30d',
+			muted: '#a16207',
+			background: '#1a1410'
 		},
 		cssVars: {
-			'--theme-background': '#0f0a1e',            // Very dark purple-black (much darker)
-			'--theme-background-pattern': 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(168, 85, 247, 0.03) 2px, rgba(168, 85, 247, 0.03) 4px), repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(168, 85, 247, 0.03) 2px, rgba(168, 85, 247, 0.03) 4px), radial-gradient(circle at 20% 30%, rgba(236, 72, 153, 0.15) 0%, transparent 20%), radial-gradient(circle at 80% 70%, rgba(168, 85, 247, 0.15) 0%, transparent 20%), radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.08) 0%, transparent 30%)',
-			'--theme-foreground': '#f5f3ff',             // Very light purple (excellent contrast)
+			'--theme-background': '#1a1410',            // Deep warm earth brown
+			'--theme-background-pattern': 'radial-gradient(ellipse 1000px 600px at 35% 45%, rgba(132, 204, 22, 0.06) 0%, transparent 50%), radial-gradient(ellipse 800px 500px at 65% 60%, rgba(101, 163, 13, 0.05) 0%, transparent 45%), radial-gradient(circle 400px at 20% 80%, rgba(161, 98, 7, 0.04) 0%, transparent 40%), repeating-linear-gradient(135deg, transparent, transparent 100px, rgba(74, 57, 29, 0.03) 100px, rgba(74, 57, 29, 0.03) 200px), repeating-linear-gradient(45deg, transparent, transparent 120px, rgba(82, 69, 37, 0.02) 120px, rgba(82, 69, 37, 0.02) 240px)',
+			'--theme-foreground': '#fef3c7',             // Warm cream text
 			
-			// Sidebar (neutral with purple accent)
-			'--theme-sidebar-bg': '#1a0f2e',             // Dark elevated purple-gray (darker)
-			'--theme-sidebar-text': '#f5f3ff',           // Light text (excellent contrast)
-			'--theme-sidebar-muted': '#d1d5db',          // Neutral muted (8.59:1 contrast - WCAG AAA)
-			'--theme-sidebar-accent': '#fbbf24',         // Warm yellow-gold accent (complementary to purple)
-			'--theme-sidebar-hover': '#241540',          // Subtle hover
-			'--theme-sidebar-active': '#2e1555',         // Purple tint active
-			'--theme-sidebar-border': '#2e1555',         // Minimal borders (for fallback)
-			'--theme-sidebar-shadow': '0 1px 3px 0 rgb(0 0 0 / 0.5), 0 1px 2px -1px rgb(0 0 0 / 0.5)', // Deeper shadow
+			// Sidebar (earthy brown with green accent)
+			'--theme-sidebar-bg': '#2a2218',             // Dark warm earth
+			'--theme-sidebar-text': '#fef3c7',           // Warm cream text
+			'--theme-sidebar-muted': '#bda87a',          // Soft tan muted
+			'--theme-sidebar-accent': '#84cc16',         // Lime green accent (hobbit door)
+			'--theme-sidebar-hover': '#352b20',          // Subtle earth hover
+			'--theme-sidebar-active': '#3f3426',         // Earth brown active
+			'--theme-sidebar-border': '#4a3a2c',         // Dark earth border
+			'--theme-sidebar-shadow': '0 1px 3px 0 rgb(0 0 0 / 0.5), 0 1px 2px -1px rgb(0 0 0 / 0.5)', // Deep shadow
 			
-			// Action Bar (subtle purple tint)
-			'--theme-header-bg': '#2e1555',              // Deep purple (darker, more subtle)
-			'--theme-header-text': '#e9d5ff',            // Light purple text
-			'--theme-header-muted': '#c4b5fd',           // Muted purple
-			'--theme-header-hover': '#3b1d6b',           // Slightly lighter hover
-			'--theme-header-active': '#4c1d95',          // More saturated active
+			// Action Bar (warm earth with green hints)
+			'--theme-header-bg': '#352b20',              // Medium earth brown
+			'--theme-header-text': '#d9f99d',            // Light lime text
+			'--theme-header-muted': '#a3e635',           // Lime muted
+			'--theme-header-hover': '#3f3426',           // Darker earth hover
+			'--theme-header-active': '#4a5d23',          // Olive green active
 			'--theme-header-shadow': '0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.4)' // Same as sidebar
 		},
 		source: 'built-in'
 	},
 	{
 		id: 'dark-blue',
-		label: 'Starlit Depths',
-		description: 'Deep ocean blues under a cosmic night sky.',
+		label: 'Galactic Sea',
+		description: 'Aurora-lit void blending electric blue, purple, and pink.',
 		mode: 'dark',
 		preview: {
-			primary: '#0ea5e9',
-			accent: '#38bdf8',
-			muted: '#7dd3fc',
-			background: '#03131f'
+			primary: '#14b8a6',
+			accent: '#f0abfc',
+			muted: '#818cf8',
+			background: '#0a0514'
 		},
 		cssVars: {
-			'--theme-background': '#03131f',            // Very dark blue-black (much darker)
-			'--theme-background-pattern': 'radial-gradient(circle 2px at 20% 30%, rgba(255, 255, 255, 0.8) 0%, transparent 100%), radial-gradient(circle 1px at 60% 70%, rgba(255, 255, 255, 0.6) 0%, transparent 100%), radial-gradient(circle 3px at 50% 50%, rgba(255, 255, 255, 0.9) 0%, transparent 100%), radial-gradient(circle 1px at 80% 10%, rgba(255, 255, 255, 0.7) 0%, transparent 100%), radial-gradient(circle 2px at 10% 80%, rgba(255, 255, 255, 0.5) 0%, transparent 100%), radial-gradient(circle 1px at 90% 60%, rgba(255, 255, 255, 0.4) 0%, transparent 100%), radial-gradient(circle 2px at 33% 20%, rgba(255, 255, 255, 0.6) 0%, transparent 100%), radial-gradient(circle 1px at 70% 40%, rgba(255, 255, 255, 0.8) 0%, transparent 100%), radial-gradient(circle 1px at 15% 60%, rgba(255, 255, 255, 0.5) 0%, transparent 100%)',
-			'--theme-foreground': '#f0f9ff',             // Very light blue (excellent contrast)
+			'--theme-background': '#0a0514',            // Much darker deep indigo navy
+			'--theme-background-pattern': 'url(/aurora.svg), radial-gradient(circle 1px at 15% 20%, rgba(186, 230, 253, 0.9) 1px, transparent 1px), radial-gradient(circle 1px at 45% 35%, rgba(196, 181, 253, 0.85) 1px, transparent 1px), radial-gradient(circle 2px at 75% 15%, rgba(165, 243, 252, 0.9) 2px, transparent 2px), radial-gradient(circle 1px at 25% 60%, rgba(251, 207, 232, 0.8) 1px, transparent 1px), radial-gradient(circle 2px at 85% 70%, rgba(167, 139, 250, 0.9) 2px, transparent 2px), radial-gradient(circle 1px at 55% 80%, rgba(94, 234, 212, 0.75) 1px, transparent 1px), radial-gradient(circle 3px at 10% 90%, rgba(186, 230, 253, 0.85) 3px, transparent 3px), radial-gradient(circle 1px at 65% 50%, rgba(232, 121, 249, 0.8) 1px, transparent 1px), radial-gradient(circle 2px at 90% 25%, rgba(165, 243, 252, 0.85) 2px, transparent 2px), radial-gradient(circle 1px at 35% 45%, rgba(244, 114, 182, 0.7) 1px, transparent 1px), radial-gradient(circle 2px at 20% 75%, rgba(129, 140, 248, 0.9) 2px, transparent 2px), radial-gradient(circle 1px at 70% 85%, rgba(94, 234, 212, 0.75) 1px, transparent 1px), radial-gradient(circle 3px at 40% 10%, rgba(186, 230, 253, 0.9) 3px, transparent 3px), radial-gradient(circle 1px at 80% 55%, rgba(251, 207, 232, 0.8) 1px, transparent 1px), radial-gradient(circle 2px at 50% 65%, rgba(216, 180, 254, 0.85) 2px, transparent 2px), radial-gradient(circle 1px at 95% 40%, rgba(165, 243, 252, 0.8) 1px, transparent 1px), radial-gradient(circle 2px at 30% 30%, rgba(240, 171, 252, 0.75) 2px, transparent 2px), radial-gradient(circle 1px at 60% 20%, rgba(94, 234, 212, 0.7) 1px, transparent 1px), radial-gradient(circle 3px at 5% 50%, rgba(167, 139, 250, 0.85) 3px, transparent 3px), radial-gradient(circle 1px at 85% 90%, rgba(244, 114, 182, 0.75) 1px, transparent 1px), radial-gradient(circle 2px at 15% 65%, rgba(129, 140, 248, 0.8) 2px, transparent 2px), radial-gradient(circle 1px at 45% 85%, rgba(186, 230, 253, 0.7) 1px, transparent 1px), radial-gradient(circle 2px at 75% 45%, rgba(251, 207, 232, 0.9) 2px, transparent 2px), radial-gradient(circle 1px at 25% 15%, rgba(94, 234, 212, 0.75) 1px, transparent 1px), radial-gradient(circle 3px at 55% 35%, rgba(196, 181, 253, 0.85) 3px, transparent 3px), radial-gradient(circle 1px at 90% 10%, rgba(165, 243, 252, 0.7) 1px, transparent 1px), radial-gradient(circle 2px at 35% 70%, rgba(240, 171, 252, 0.85) 2px, transparent 2px), radial-gradient(circle 1px at 65% 95%, rgba(244, 114, 182, 0.75) 1px, transparent 1px), radial-gradient(circle 2px at 10% 30%, rgba(129, 140, 248, 0.8) 2px, transparent 2px), radial-gradient(circle 1px at 50% 55%, rgba(94, 234, 212, 0.65) 1px, transparent 1px), radial-gradient(circle 3px at 80% 75%, rgba(167, 139, 250, 0.9) 3px, transparent 3px), radial-gradient(ellipse 1200px 800px at 30% 40%, rgba(94, 234, 212, 0.08) 0%, rgba(99, 102, 241, 0.06) 30%, transparent 50%), radial-gradient(ellipse 1000px 700px at 70% 60%, rgba(129, 140, 248, 0.09) 0%, rgba(236, 72, 153, 0.05) 30%, transparent 45%), radial-gradient(ellipse 800px 600px at 50% 80%, rgba(139, 92, 246, 0.08) 0%, rgba(94, 234, 212, 0.04) 25%, transparent 40%)',
+			'--theme-foreground': '#e0e7ff',             // Light periwinkle text (Moon palette)
 			
-			// Sidebar (neutral with blue accent)
-			'--theme-sidebar-bg': '#051e2e',             // Dark elevated blue-gray (darker)
-			'--theme-sidebar-text': '#f0f9ff',           // Light text (excellent contrast)
-			'--theme-sidebar-muted': '#bae6fd',          // Sky blue muted (7.89:1 contrast - WCAG AAA)
-			'--theme-sidebar-accent': '#fbbf24',         // Warm amber accent (warm complement to cool blue)
-			'--theme-sidebar-hover': '#082a42',          // Subtle hover
-			'--theme-sidebar-active': '#0a3855',         // Blue tint active
-			'--theme-sidebar-border': '#0a3855',         // Minimal borders (for fallback)
+			// Sidebar (much darker navy with darker teal accent)
+			'--theme-sidebar-bg': '#0f172a',             // Much darker blue-gray
+			'--theme-sidebar-text': '#ddd6fe',           // Light lavender text (Astro)
+			'--theme-sidebar-muted': '#a5f3fc',          // Light cyan muted (Luna of Gale)
+			'--theme-sidebar-accent': '#14b8a6',         // Darker teal accent (better contrast)
+			'--theme-sidebar-hover': '#1e293b',          // Much darker hover
+			'--theme-sidebar-active': '#1e1b4b',         // Deep indigo active
+			'--theme-sidebar-border': '#6366f1',         // Indigo border (Night Sky/Astro mix)
 			'--theme-sidebar-shadow': '0 1px 3px 0 rgb(0 0 0 / 0.5), 0 1px 2px -1px rgb(0 0 0 / 0.5)', // Deep shadow
 			
-			// Action Bar (subtle blue tint)
-			'--theme-header-bg': '#0a3855',              // Deep ocean blue (darker, more subtle)
-			'--theme-header-text': '#bae6fd',            // Light blue text
-			'--theme-header-muted': '#7dd3fc',           // Muted sky blue
-			'--theme-header-hover': '#0c4a6e',           // Slightly lighter hover
-			'--theme-header-active': '#0e5a80',          // More saturated active
+			// Action Bar (much darker purple-pink gradient)
+			'--theme-header-bg': '#1e1b4b',              // Much darker rich indigo
+			'--theme-header-text': '#f5d0fe',            // Light pink text (Astro)
+			'--theme-header-muted': '#f0abfc',           // Fuchsia pink accent (Astro)
+			'--theme-header-hover': '#312e81',           // Darker purple hover
+			'--theme-header-active': '#4338ca',          // Purple active
 			'--theme-header-shadow': '0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.4)' // Same as sidebar
 		},
 		source: 'built-in'
