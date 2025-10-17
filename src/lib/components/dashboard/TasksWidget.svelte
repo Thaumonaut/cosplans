@@ -151,11 +151,11 @@
   {#if loading}
     <div class="space-y-2">
       {#each Array(4) as _}
-        <div class="animate-pulse flex items-center space-x-3 p-3 bg-gray-100 rounded-md">
-          <div class="w-4 h-4 bg-gray-300 rounded"></div>
+        <div class="animate-pulse flex items-center space-x-3 p-3 rounded-md" style="background: var(--theme-sidebar-hover);">
+          <div class="w-4 h-4 rounded" style="background: var(--theme-sidebar-border);"></div>
           <div class="flex-1 space-y-1">
-            <div class="h-3 bg-gray-300 rounded w-3/4"></div>
-            <div class="h-2 bg-gray-300 rounded w-1/2"></div>
+            <div class="h-3 rounded w-3/4" style="background: var(--theme-sidebar-border);"></div>
+            <div class="h-2 rounded w-1/2" style="background: var(--theme-sidebar-border);"></div>
           </div>
         </div>
       {/each}
@@ -163,52 +163,53 @@
 
   {:else if error}
     <div class="text-center py-4">
-      <div class="text-red-500 mb-2">
+      <div class="mb-2" style="color: var(--theme-sidebar-accent);">
         <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                 d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
       </div>
-      <p class="text-sm text-red-600">{error}</p>
+      <p class="text-sm" style="color: var(--theme-sidebar-text);">{error}</p>
     </div>
 
   {:else if tasks.length === 0}
     <div class="text-center py-6">
-      <div class="text-green-500 mb-2">
+      <div class="mb-2" style="color: var(--theme-sidebar-accent);">
         <svg class="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
       </div>
-      <p class="text-sm text-green-600 font-medium">All tasks complete!</p>
-      <p class="text-xs text-gray-500 mt-1">No pending tasks for props or costumes</p>
+      <p class="text-sm font-medium" style="color: var(--theme-sidebar-accent);">All tasks complete!</p>
+      <p class="text-xs mt-1" style="color: var(--theme-sidebar-text); opacity: 0.6;">No pending tasks for props or costumes</p>
     </div>
 
   {:else}
     {#if urgentTasks.length > 0}
       <div>
         <div class="flex items-center gap-2 mb-2">
-          <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-4 h-4" style="color: var(--theme-sidebar-accent);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                   d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
           </svg>
-          <span class="text-xs font-semibold text-red-700 uppercase">Urgent ({urgentTasks.length})</span>
+          <span class="text-xs font-semibold uppercase" style="color: var(--theme-sidebar-accent);">Urgent ({urgentTasks.length})</span>
         </div>
         
         <div class="space-y-2">
           {#each urgentTasks as task (task.id)}
-            <div class="group flex items-start gap-3 p-3 bg-red-50 border border-red-100 rounded-lg hover:shadow-sm transition">
+            <div class="group flex items-start gap-3 p-3 rounded-lg hover:shadow-sm transition" style="background: var(--theme-sidebar-hover); border: 1px solid var(--theme-sidebar-border);">
               <input
                 type="checkbox"
                 checked={task.completed}
                 on:change={() => toggleTask(task.id)}
-                class="mt-0.5 w-4 h-4 text-red-600 border-red-300 rounded focus:ring-red-500"
+                class="mt-0.5 w-4 h-4 rounded"
+                style="accent-color: var(--theme-sidebar-accent);"
               />
               
               <div class="flex-1 min-w-0">
                 <div class="flex items-start justify-between gap-2">
                   <div class="flex-1">
-                    <p class="text-sm font-medium text-gray-900">{task.title}</p>
+                    <p class="text-sm font-medium" style="color: var(--theme-foreground);">{task.title}</p>
                     <div class="flex items-center gap-2 mt-1">
                       <span class={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${getCategoryColor(task.category)}`}>
                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -217,7 +218,7 @@
                         </svg>
                         {task.category}
                       </span>
-                      <span class="text-xs text-gray-600">{task.shoot_title}</span>
+                      <span class="text-xs" style="color: var(--theme-sidebar-text); opacity: 0.8;">{task.shoot_title}</span>
                     </div>
                   </div>
                   
@@ -226,7 +227,7 @@
                       {formatDueDate(task.due_date)}
                     </span>
                     {#if task.assigned_to}
-                      <span class="text-xs text-gray-500">@{task.assigned_to.split(' ')[0]}</span>
+                      <span class="text-xs" style="color: var(--theme-sidebar-text); opacity: 0.6;">@{task.assigned_to.split(' ')[0]}</span>
                     {/if}
                   </div>
                 </div>
@@ -240,27 +241,28 @@
     {#if upcomingTasks.length > 0}
       <div>
         <div class="flex items-center gap-2 mb-2">
-          <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-4 h-4" style="color: var(--theme-sidebar-accent);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                   d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
           </svg>
-          <span class="text-xs font-semibold text-gray-700 uppercase">Upcoming ({upcomingTasks.length})</span>
+          <span class="text-xs font-semibold uppercase" style="color: var(--theme-foreground); opacity: 0.9;">Upcoming ({upcomingTasks.length})</span>
         </div>
         
         <div class="space-y-2">
           {#each upcomingTasks.slice(0, 3) as task (task.id)}
-            <div class="group flex items-start gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:border-blue-300 hover:shadow-sm transition">
+            <div class="group flex items-start gap-3 p-3 rounded-lg hover:shadow-sm transition" style="background: var(--theme-sidebar-bg); border: 1px solid var(--theme-sidebar-border);">
               <input
                 type="checkbox"
                 checked={task.completed}
                 on:change={() => toggleTask(task.id)}
-                class="mt-0.5 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                class="mt-0.5 w-4 h-4 rounded"
+                style="accent-color: var(--theme-sidebar-accent);"
               />
               
               <div class="flex-1 min-w-0">
                 <div class="flex items-start justify-between gap-2">
                   <div class="flex-1">
-                    <p class="text-sm font-medium text-gray-900">{task.title}</p>
+                    <p class="text-sm font-medium" style="color: var(--theme-foreground);">{task.title}</p>
                     <div class="flex items-center gap-2 mt-1">
                       <span class={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${getCategoryColor(task.category)}`}>
                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -269,7 +271,7 @@
                         </svg>
                         {task.category}
                       </span>
-                      <span class="text-xs text-gray-600">{task.shoot_title}</span>
+                      <span class="text-xs" style="color: var(--theme-sidebar-text); opacity: 0.8;">{task.shoot_title}</span>
                     </div>
                   </div>
                   
@@ -278,7 +280,7 @@
                       {formatDueDate(task.due_date)}
                     </span>
                     {#if task.assigned_to}
-                      <span class="text-xs text-gray-500">@{task.assigned_to.split(' ')[0]}</span>
+                      <span class="text-xs" style="color: var(--theme-sidebar-text); opacity: 0.6;">@{task.assigned_to.split(' ')[0]}</span>
                     {/if}
                   </div>
                 </div>
@@ -289,8 +291,8 @@
       </div>
     {/if}
 
-    <div class="pt-2 border-t">
-      <a href="/tasks" class="text-xs text-blue-600 hover:text-blue-800 font-medium">
+    <div class="pt-2" style="border-top: 1px solid var(--theme-sidebar-border);">
+      <a href="/tasks" class="text-xs font-medium" style="color: var(--theme-sidebar-accent);">
         View all tasks →
       </a>
     </div>

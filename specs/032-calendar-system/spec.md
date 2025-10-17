@@ -43,6 +43,26 @@ Users need to integrate their professional calendars (Google Calendar, Outlook, 
 
 ---
 
+### User Story 2.1 - Display Team Members' External Events (Priority: P1)
+
+Team leads and coordinators need to see when team members have external commitments (work meetings, personal appointments, travel) so they can avoid scheduling conflicts and respect team members' other obligations.
+
+**Why this priority**: Essential for effective team coordination; prevents double-booking and ensures realistic scheduling that respects team members' full calendars.
+
+**Independent Test**: Can be fully tested by connecting team members' external calendars, verifying their external events appear in team calendar view with proper visual distinction from shoots, and confirming events are labeled by owner.
+
+**Acceptance Scenarios**:
+
+1. **Given** team members have synced their external calendars, **When** a coordinator views the team calendar, **Then** external events (meetings, appointments) from team members appear alongside shoots with clear visual distinction
+2. **Given** multiple team members have external events on the same day, **When** viewing calendar, **Then** each event is clearly labeled with the team member's name who owns the event
+3. **Given** an external event is marked as "busy" or "out of office", **When** viewing team calendar, **Then** the event displays with appropriate indicators showing the team member's availability status
+4. **Given** team members have personal vs. work external calendars synced, **When** viewing events, **Then** events are visually distinguished by type (shoot vs. external) with different colors or icons
+5. **Given** a week view displays multiple events per day, **When** there are more than 3 events on a single day, **Then** calendar shows a "+X more" indicator and allows expanding to see all events
+6. **Given** external events have time information, **When** viewing calendar, **Then** events display time alongside title in a compact, readable format
+7. **Given** calendar shows both shoots and external events, **When** hovering or clicking an event, **Then** user can see full details including event type icon (camera for shoots, calendar for external events)
+
+---
+
 ### User Story 3 - Manage Availability and Block Time (Priority: P2)
 
 Users need to block time for personal obligations, travel, or non-negotiable commitments so the team knows when they're unavailable.
@@ -124,7 +144,33 @@ Team leads and coordinators need to see when all team members are available and 
 - **FR-014**: System MUST support dragging events to reschedule them directly from calendar view
 - **FR-015**: System MUST show event conflict indicators when a user is double-booked or an event conflicts with availability blocks
 - **FR-016**: System MUST maintain calendar event history (who created, when modified, what changed) for audit purposes
-- **FR-017**: System MUST handle permissions so only authorized users can see sensitive calendar details
+- **FR-017**: Provide ICS file export for external calendar import
+- Users can export shoots as ICS files
+- ICS exports include event details (title, date, time, location, description)
+- Exports work with standard calendar applications (Google, Outlook, Apple)
+
+**FR-018**: Display external calendar events in team calendar views
+- Team calendar views show both internal shoots and external events from team members' synced calendars
+- External events include metadata: owner (team member name), calendar type (personal/work), all-day flag
+- Week view displays events in calendar format with day cells showing events for that date
+- Each day cell displays up to 3 events with scrollable list if needed
+- Events exceeding display limit show "+X more" indicator
+- Empty days show "No events" placeholder
+- Event display includes time (HH:MM format) and title with text truncation for long titles
+
+**FR-019**: Provide visual distinction between event types
+- Shoots display with accent color background, white text, and camera icon
+- External calendar events display with border color background, sidebar text color, and calendar icon
+- Icon appears before time/title in event list items
+- Color coding and icons make event type immediately recognizable at a glance
+- Visual hierarchy ensures shoots (primary content) are more prominent than external events (context)
+
+**FR-020**: Support week navigation for event browsing
+- Week view spans Sunday through Saturday of the current week
+- Navigation arrows allow moving to previous/next weeks
+- Week label displays "This Week", "Last Week", "Next Week", or date range for other weeks
+- Week offset calculation maintains proper Sunday-Saturday structure regardless of current day
+- Navigation state persists during session for consistent user experience
 
 ### Key Entities
 
@@ -146,6 +192,9 @@ Team leads and coordinators need to see when all team members are available and 
 - **SC-006**: Calendar sync failures are detected within 5 minutes and users are notified with resolution options
 - **SC-007**: Double-booking conflicts are reduced by 80% after calendar implementation
 - **SC-008**: Users spend 50% less time searching for team member availability with calendar view compared to manual checking
+- **SC-009**: External calendar events from team members display correctly in team views with proper owner labels and type distinction (shoot vs. external)
+- **SC-010**: Week view maintains proper Sunday-Saturday structure with functional navigation, accurately displaying all events for the selected week
+- **SC-011**: Days with more than 3 events display correctly with "+X more" indicator, and layout does not break with high event counts
 
 ## Assumptions
 

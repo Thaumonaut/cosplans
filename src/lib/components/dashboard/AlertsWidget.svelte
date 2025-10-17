@@ -167,11 +167,11 @@
     <!-- Loading State -->
     <div class="space-y-2">
       {#each Array(3) as _}
-        <div class="animate-pulse flex items-start space-x-3 p-3 bg-gray-100 rounded-md">
-          <div class="w-4 h-4 bg-gray-300 rounded-full flex-shrink-0"></div>
+        <div class="animate-pulse flex items-start space-x-3 p-3 rounded-md" style="background: var(--theme-sidebar-hover);">
+          <div class="w-4 h-4 rounded-full flex-shrink-0" style="background: var(--theme-sidebar-border);"></div>
           <div class="flex-1 space-y-1">
-            <div class="h-3 bg-gray-300 rounded w-3/4"></div>
-            <div class="h-3 bg-gray-300 rounded w-1/2"></div>
+            <div class="h-3 rounded w-3/4" style="background: var(--theme-sidebar-border);"></div>
+            <div class="h-3 rounded w-1/2" style="background: var(--theme-sidebar-border);"></div>
           </div>
         </div>
       {/each}
@@ -180,33 +180,33 @@
   {:else if error}
     <!-- Error State -->
     <div class="text-center py-4">
-      <div class="text-red-500 mb-2">
+      <div class="mb-2" style="color: var(--theme-sidebar-accent);">
         <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                 d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
       </div>
-      <p class="text-sm text-red-600">{error}</p>
+      <p class="text-sm" style="color: var(--theme-sidebar-text);">{error}</p>
     </div>
 
   {:else if alerts.length === 0}
     <!-- Empty State -->
     <div class="text-center py-6">
-      <div class="text-green-500 mb-2">
+      <div class="mb-2" style="color: var(--theme-sidebar-accent);">
         <svg class="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
       </div>
-      <p class="text-sm text-green-600 font-medium">All caught up!</p>
-      <p class="text-xs text-gray-500 mt-1">No alerts requiring your attention</p>
+      <p class="text-sm font-medium" style="color: var(--theme-sidebar-accent);">All caught up!</p>
+      <p class="text-xs mt-1" style="color: var(--theme-sidebar-text); opacity: 0.6;">No alerts requiring your attention</p>
     </div>
 
   {:else}
     <!-- Alerts List -->
     <div class="space-y-2">
       {#each alerts as alert (alert.id)}
-        <div class={`flex items-start space-x-3 p-3 rounded-md ${getPriorityColor(alert.priority)}`}>
+        <div class={`flex items-start space-x-3 p-3 rounded-md ${getPriorityColor(alert.priority)}`} style="background: var(--theme-sidebar-hover); border: 1px solid var(--theme-sidebar-border);">
           <div class="flex-shrink-0 mt-0.5">
             <svg class="w-4 h-4 {alert.priority === 'high' ? 'text-red-400' : alert.priority === 'medium' ? 'text-yellow-400' : 'text-blue-400'}" 
                  fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -218,22 +218,22 @@
           <div class="flex-1 min-w-0">
             <div class="flex items-start justify-between">
               <div class="flex-1">
-                <p class="text-sm font-medium {alert.priority === 'high' ? 'text-red-800' : alert.priority === 'medium' ? 'text-yellow-800' : 'text-blue-800'}">
+                <p class="text-sm font-medium" style="color: var(--theme-foreground);">
                   {alert.title}
                 </p>
-                <p class="text-xs {alert.priority === 'high' ? 'text-red-600' : alert.priority === 'medium' ? 'text-yellow-600' : 'text-blue-600'} mt-0.5">
+                <p class="text-xs mt-0.5" style="color: var(--theme-sidebar-text); opacity: 0.8;">
                   {alert.message}
                 </p>
                 
                 <!-- Additional context based on alert type -->
                 {#if alert.due_date}
-                  <p class="text-xs {alert.priority === 'high' ? 'text-red-500' : alert.priority === 'medium' ? 'text-yellow-500' : 'text-blue-500'} mt-1">
+                  <p class="text-xs mt-1" style="color: var(--theme-sidebar-accent);">
                     {formatDaysUntil(alert.due_date)}
                   </p>
                 {/if}
                 
                 {#if alert.type === 'budget' && alert.current_value}
-                  <p class="text-xs {alert.priority === 'high' ? 'text-red-500' : alert.priority === 'medium' ? 'text-yellow-500' : 'text-blue-500'} mt-1">
+                  <p class="text-xs mt-1" style="color: var(--theme-sidebar-accent);">
                     ${alert.current_value} / ${alert.max_value}
                   </p>
                 {/if}
@@ -244,7 +244,8 @@
                 {#if alert.actionable}
                   <button 
                     on:click={() => handleAlertAction(alert)}
-                    class="text-xs {alert.priority === 'high' ? 'text-red-600 hover:text-red-800' : alert.priority === 'medium' ? 'text-yellow-600 hover:text-yellow-800' : 'text-blue-600 hover:text-blue-800'} underline"
+                    class="text-xs underline"
+                    style="color: var(--theme-sidebar-accent);"
                     title="Take action"
                   >
                     Act
@@ -253,7 +254,8 @@
                 
                 <button 
                   on:click={() => dismissAlert(alert.id)}
-                  class="text-xs text-gray-400 hover:text-gray-600"
+                  class="text-xs"
+                  style="color: var(--theme-sidebar-text); opacity: 0.5;"
                   title="Dismiss alert"
                 >
                   ✕
@@ -266,8 +268,8 @@
     </div>
 
     <!-- View More Link -->
-    <div class="pt-2 border-t">
-      <a href="/alerts" class="text-xs text-blue-600 hover:text-blue-800 font-medium">
+    <div class="pt-2" style="border-top: 1px solid var(--theme-sidebar-border);">
+      <a href="/alerts" class="text-xs font-medium" style="color: var(--theme-sidebar-accent);">
         View all alerts →
       </a>
     </div>

@@ -44,12 +44,12 @@
     },
     {
       id: '2',
-      type: 'alerts',
+      type: 'recent_activity',
       user_id: userId,
       template: 'detailed',
       position: 1,
       visible: true,
-      settings: { priority: 'high' },
+      settings: { limit: 10 },
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     },
@@ -112,6 +112,7 @@
       upcoming_shoots: 'Upcoming Shoots',
       progress: 'Progress Overview',
       alerts: 'Alerts & Notifications',
+      recent_activity: 'Recent Activity',
       tasks: 'Tasks & Action Items',
       budget: 'Budget Summary',
       weather: 'Weather Updates',
@@ -141,13 +142,13 @@
   }
 </script>
 
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
+<div class="min-h-screen" style="background: var(--theme-background);">
   <!-- Header -->
-  <header class="bg-white/90 shadow-sm border-b sticky top-0 z-10 backdrop-blur">
+  <header class="sticky top-0 z-10 backdrop-blur-md" style="background: var(--theme-sidebar-hover); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); border-bottom: 2px solid var(--theme-sidebar-border);">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
         <div class="flex items-center gap-4">
-          <h1 class="text-2xl font-bold text-gray-900 tracking-tight">Dashboard</h1>
+          <h1 class="text-2xl font-bold tracking-tight" style="color: var(--theme-foreground);">Dashboard</h1>
           <!-- Real-time status indicator -->
           <Badge className={`flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${getConnectionStatusClass($connectionStatus)}`}
             variant="outline">
@@ -157,12 +158,13 @@
         </div>
         <!-- Template Selector -->
         <div class="flex items-center gap-2">
-          <label for="template-select" class="text-sm font-medium text-gray-700">View:</label>
+          <label for="template-select" class="text-sm font-medium" style="color: var(--theme-sidebar-muted);">View:</label>
           <select
             id="template-select"
             value={$currentTemplate}
             on:change={handleTemplateChange}
-            class="block w-40 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-white/80 hover:bg-blue-50 transition"
+            class="block w-40 rounded-lg pl-3 pr-8 py-2 text-sm font-medium transition-colors hover:bg-[var(--theme-sidebar-hover)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-sidebar-accent)]"
+            style="background: var(--theme-sidebar-bg); color: var(--theme-sidebar-text); border: 1px solid var(--theme-sidebar-border);"
           >
             {#each templates as template}
               <option value={template.value}>{template.label}</option>
@@ -178,21 +180,21 @@
     {#if $isLoading}
       <!-- Loading State -->
       <div class="flex items-center justify-center h-64">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2" style="border-color: var(--theme-sidebar-accent);"></div>
       </div>
     {:else}
       <!-- Primary Section: Upcoming Shoots (Full Width Focus) -->
       <div class="mb-6">
-        <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-          <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
-            <h2 class="text-lg font-semibold text-white flex items-center gap-2">
+        <div class="rounded-lg overflow-hidden" style="background: var(--theme-sidebar-bg); border: 1px solid var(--theme-sidebar-border); box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);">
+          <div class="px-6 py-4" style="background: var(--theme-header-bg);">
+            <h2 class="text-lg font-semibold flex items-center gap-2" style="color: var(--theme-header-text);">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                       d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
               </svg>
               Upcoming Shoots
             </h2>
-            <p class="text-blue-100 text-sm mt-1">Your scheduled shoots and team assignments</p>
+            <p class="text-sm mt-1" style="color: var(--theme-header-text); opacity: 0.8;">Your scheduled shoots and team assignments</p>
           </div>
           <div class="p-6">
             {#if $widgetsByTemplate.length > 0}
@@ -204,23 +206,24 @@
         </div>
       </div>
 
-      <!-- Action Items Grid: Alerts + Tasks -->
-      <div class="mb-6 grid gap-6 grid-cols-1 lg:grid-cols-2">
-        <!-- Alerts Widget -->
-        {#each $widgetsByTemplate.filter(w => w.type === 'alerts') as widget (widget.id)}
+      <!-- Action Items Grid: Recent Activity + Tasks -->
+      <div class="mb-6 grid gap-6 grid-cols-1 xl:grid-cols-2">
+        <!-- Recent Activity Widget -->
+        {#each $widgetsByTemplate.filter(w => w.type === 'recent_activity') as widget (widget.id)}
           <Card className="transition-shadow hover:shadow-lg focus-within:shadow-lg">
-            <CardHeader className="flex flex-row items-center justify-between pb-2 bg-red-50/50 border-b border-red-100">
-              <CardTitle className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-lg font-semibold flex items-center gap-2" style="color: var(--theme-foreground);">
+                <svg class="w-5 h-5" style="color: var(--theme-sidebar-accent);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
                 {getWidgetTitle(widget.type)}
               </CardTitle>
               <Button
                 size="icon"
                 variant="ghost"
-                className="text-gray-400 hover:text-red-600 focus:ring-2 focus:ring-red-400"
+                className="hover:opacity-70 focus:ring-2"
+                style="color: var(--theme-sidebar-muted);"
                 aria-label={widget.visible ? 'Hide widget' : 'Show widget'}
                 on:click={() => dashboardActions.toggleWidget(widget.id)}
               >
@@ -231,7 +234,10 @@
               </Button>
             </CardHeader>
             <CardContent className="space-y-4 pt-4">
-              <AlertsWidget {widget} {teamId} />
+              <!-- RecentActivityWidget will go here -->
+              <div class="text-center py-6" style="color: var(--theme-sidebar-muted);">
+                <p class="text-sm">Recent Activity widget coming soon</p>
+              </div>
             </CardContent>
           </Card>
         {/each}
@@ -239,9 +245,9 @@
         <!-- Tasks Widget -->
         {#each $widgetsByTemplate.filter(w => w.type === 'tasks') as widget (widget.id)}
           <Card className="transition-shadow hover:shadow-lg focus-within:shadow-lg">
-            <CardHeader className="flex flex-row items-center justify-between pb-2 bg-blue-50/50 border-b border-blue-100">
-              <CardTitle className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-lg font-semibold flex items-center gap-2" style="color: var(--theme-foreground);">
+                <svg class="w-5 h-5" style="color: var(--theme-sidebar-accent);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                         d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
                 </svg>
@@ -250,7 +256,8 @@
               <Button
                 size="icon"
                 variant="ghost"
-                className="text-gray-400 hover:text-blue-600 focus:ring-2 focus:ring-blue-400"
+                className="hover:opacity-70 focus:ring-2"
+                style="color: var(--theme-sidebar-muted);"
                 aria-label={widget.visible ? 'Hide widget' : 'Show widget'}
                 on:click={() => dashboardActions.toggleWidget(widget.id)}
               >
@@ -269,7 +276,7 @@
 
       <!-- Progress Overview (Context-Aware) -->
       <div class="mb-6">
-        <h3 class="text-sm font-semibold text-gray-700 mb-4 uppercase tracking-wide flex items-center gap-2">
+        <h3 class="text-sm font-semibold mb-4 uppercase tracking-wide flex items-center gap-2" style="color: var(--theme-foreground); opacity: 0.7;">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                   d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
@@ -280,13 +287,14 @@
           {#each $widgetsByTemplate.filter(w => w.type === 'progress') as widget (widget.id)}
             <Card className="transition-shadow hover:shadow-lg focus-within:shadow-lg">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-lg font-semibold text-gray-900 flex-1">
+                <CardTitle className="text-lg font-semibold flex-1" style="color: var(--theme-foreground);">
                   {getWidgetTitle(widget.type)}
                 </CardTitle>
                 <Button
                   size="icon"
                   variant="ghost"
-                  className="text-gray-400 hover:text-blue-600 focus:ring-2 focus:ring-blue-400"
+                  className="hover:opacity-70 focus:ring-2"
+                  style="color: var(--theme-sidebar-muted);"
                   aria-label={widget.visible ? 'Hide widget' : 'Show widget'}
                   on:click={() => dashboardActions.toggleWidget(widget.id)}
                 >
@@ -305,7 +313,7 @@
           <!-- Empty State if No Widgets -->
           {#if $widgetsByTemplate.filter(w => w.type === 'progress').length === 0}
             <div class="col-span-full">
-              <div class="text-center text-gray-500 py-8">
+              <div class="text-center py-8" style="color: var(--theme-sidebar-muted);">
                 <p class="text-sm">No progress widgets configured</p>
               </div>
             </div>

@@ -35,7 +35,8 @@
 	}
 </script>
 
-<div class={`flex min-h-screen bg-[var(--theme-background)] text-[var(--theme-foreground)] transition-all duration-200 ease-in-out`}>
+<div class={`flex min-h-screen text-[var(--theme-foreground)] transition-all duration-200 ease-in-out`} style="background-color: var(--theme-background); background-image: var(--theme-background-pattern); background-attachment: fixed;">
+
 	<div
 		class={`fixed inset-y-0 left-0 z-40 transform transition-transform duration-200 ease-in-out md:sticky md:top-0 md:h-[100dvh] md:overflow-y-auto md:transform-none md:translate-x-0 ${
 			$navigationStore.isCollapsed ? 'w-20' : 'w-72'
@@ -91,7 +92,7 @@
 				</button>
 			</div>
 		</header>
-		<main class="flex-1 bg-[var(--theme-background)] p-4 md:p-10">
+		<main class="flex-1 p-4 md:p-10" style="background-color: var(--theme-background); background-image: var(--theme-background-pattern); background-attachment: fixed;">
 			<slot />
 		</main>
 	</div>

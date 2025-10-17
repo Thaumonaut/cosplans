@@ -76,14 +76,21 @@
 		{/if}
 		<a 
 			href="/" 
-			class={`flex items-center gap-3 flex-1 min-w-0 transition-colors hover:text-[var(--theme-sidebar-accent)] ${$navigationStore.isCollapsed ? 'justify-center' : ''}`}
+			class={`flex items-center gap-3 flex-1 min-w-0 transition-colors group ${$navigationStore.isCollapsed ? 'justify-center' : ''}`}
 			title="Return to home page"
+			style="color: var(--theme-sidebar-text);"
 		>
-			<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 text-white flex-shrink-0">
-				<LucideIcon name="Sparkles" size={18} strokeWidth={2.5} />
+			<div class="flex h-9 w-9 items-center justify-center rounded-lg flex-shrink-0 transition-all group-hover:scale-110" style="border: 2px solid var(--theme-sidebar-accent); background: var(--theme-sidebar-hover);">
+				<svg class="w-5 h-5" style="color: var(--theme-sidebar-accent);" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+					<!-- Camera icon with sparkles -->
+					<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+					<circle cx="12" cy="13" r="4"/>
+					<!-- Sparkle accent -->
+					<path d="M12 2v2M12 20v2M20 12h2M2 12h2" opacity="0.6" stroke-width="2"/>
+				</svg>
 			</div>
 			{#if !$navigationStore.isCollapsed}
-				<span class="text-lg font-bold tracking-tight">Cosplans</span>
+				<span class="text-lg font-bold tracking-tight transition-colors group-hover:text-[var(--theme-sidebar-accent)]">Cosplans</span>
 			{/if}
 		</a>
 	</header>

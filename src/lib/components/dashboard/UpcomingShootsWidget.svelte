@@ -23,7 +23,8 @@
       characters: ['Sailor Moon', 'Tuxedo Mask'],
       photographer: 'Alex Chen',
       teamMembers: 4,
-      costumeImage: null // Will use placeholder
+      costumeImage: null, // Will use placeholder
+      type: 'shoot'
     },
     {
       id: '2', 
@@ -35,7 +36,8 @@
       characters: ['Asuka Langley'],
       photographer: 'Sarah Kim',
       teamMembers: 6,
-      costumeImage: null
+      costumeImage: null,
+      type: 'shoot'
     },
     {
       id: '3',
@@ -47,25 +49,105 @@
       characters: ['Nezuko', 'Tanjiro'],
       photographer: 'Mike Rodriguez',
       teamMembers: 3,
-      costumeImage: null
+      costumeImage: null,
+      type: 'shoot'
     }
   ];
+
+  // Mock external calendar events (synced from team members)
+  const mockExternalEvents = [
+    {
+      id: 'ext-1',
+      title: 'Family Dinner',
+      date: '2025-10-18',
+      time: '18:00',
+      type: 'external',
+      owner: 'Sarah Kim',
+      calendar: 'personal'
+    },
+    {
+      id: 'ext-2',
+      title: 'Dentist Appointment',
+      date: '2025-10-19',
+      time: '14:30',
+      type: 'external',
+      owner: 'Alex Chen',
+      calendar: 'personal'
+    },
+    {
+      id: 'ext-3',
+      title: 'Team Meeting',
+      date: '2025-10-21',
+      time: '10:00',
+      type: 'external',
+      owner: 'Mike Rodriguez',
+      calendar: 'work'
+    },
+    {
+      id: 'ext-4',
+      title: 'Out of Town',
+      date: '2025-10-22',
+      time: '00:00',
+      type: 'external',
+      owner: 'Jordan Lee',
+      calendar: 'personal',
+      allDay: true
+    }
+  ];
+
+  // Combine all events
+  $: allEvents = [...shoots, ...mockExternalEvents];
 
   // Get next upcoming shoot
   $: nextShoot = shoots.length > 0 ? shoots[0] : null;
   
-  // Get week view data (7 days from today)
+  // Current week offset (0 = current week, -1 = previous week, +1 = next week)
+  let weekOffset = 0;
+  
+  // Get week view data (Sunday through Saturday of the current week + offset)
   $: weekDays = Array.from({ length: 7 }, (_, i) => {
-    const date = new Date();
-    date.setDate(date.getDate() + i);
+    const today = new Date();
+    // Get the Sunday of the current week
+    const currentDayOfWeek = today.getDay(); // 0 = Sunday, 6 = Saturday
+    const sunday = new Date(today);
+    sunday.setDate(today.getDate() - currentDayOfWeek + (weekOffset * 7));
+    
+    // Calculate each day from Sunday
+    const date = new Date(sunday);
+    date.setDate(sunday.getDate() + i);
+    const dateStr = date.toISOString().split('T')[0];
+    
+    // Get all events for this day
+    const dayEvents = allEvents.filter(e => e.date === dateStr);
+    const dayShootCount = dayEvents.filter(e => e.type === 'shoot').length;
+    const dayExternalCount = dayEvents.filter(e => e.type === 'external').length;
+    
     return {
       date,
-      dateStr: date.toISOString().split('T')[0],
+      dateStr,
       dayName: date.toLocaleDateString('en-US', { weekday: 'short' }),
       dayNum: date.getDate(),
-      shootCount: shoots.filter(s => s.date === date.toISOString().split('T')[0]).length
+      monthName: date.toLocaleDateString('en-US', { month: 'short' }),
+      events: dayEvents.slice(0, 3), // Limit to 3 events shown per day
+      shootCount: dayShootCount,
+      externalCount: dayExternalCount,
+      totalEvents: dayEvents.length,
+      hasMore: dayEvents.length > 3
     };
   });
+  
+  // Get current week label
+  $: currentWeekLabel = (() => {
+    if (weekOffset === 0) return 'This Week';
+    if (weekOffset === -1) return 'Last Week';
+    if (weekOffset === 1) return 'Next Week';
+    const startDate = weekDays[0].date;
+    return startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  })();
+  
+  function navigateWeek(direction: number) {
+    weekOffset += direction;
+  }
 
   onMount(async () => {
     try {
@@ -140,10 +222,10 @@
     <!-- Loading State -->
     <div class="space-y-4">
       <div class="animate-pulse">
-        <div class="h-20 bg-gray-200 rounded-lg mb-4"></div>
+        <div class="h-20 rounded-lg mb-4" style="background: var(--theme-sidebar-hover);"></div>
         <div class="flex space-x-2">
           {#each Array(7) as _}
-            <div class="h-16 bg-gray-200 rounded flex-1"></div>
+            <div class="h-16 rounded flex-1" style="background: var(--theme-sidebar-hover);"></div>
           {/each}
         </div>
       </div>
@@ -152,16 +234,17 @@
   {:else if error}
     <!-- Error State -->
     <div class="text-center py-6">
-      <div class="text-red-500 mb-2">
+      <div class="mb-2" style="color: var(--theme-sidebar-accent);">
         <svg class="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                 d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
       </div>
-      <p class="text-sm text-red-600">{error}</p>
+      <p class="text-sm" style="color: var(--theme-sidebar-text);">{error}</p>
       <button 
         on:click={() => window.location.reload()}
-        class="mt-2 text-xs text-blue-600 hover:text-blue-800"
+        class="mt-2 text-xs"
+        style="color: var(--theme-sidebar-accent);"
       >
         Retry
       </button>
@@ -170,73 +253,161 @@
   {:else if shoots.length === 0}
     <!-- Empty State -->
     <div class="text-center py-12">
-      <div class="text-gray-400 mb-3">
+      <div class="mb-3" style="color: var(--theme-sidebar-text); opacity: 0.4;">
         <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                 d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 4h4m-4 4h4m-8 4h8a2 2 0 002-2V7a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
         </svg>
       </div>
-      <p class="text-sm font-medium text-gray-700 mb-1">No shoots scheduled</p>
-      <p class="text-xs text-gray-500">Your calendar is clear. Schedule your first shoot to get started!</p>
+      <p class="text-sm font-medium mb-1" style="color: var(--theme-foreground);">No shoots scheduled</p>
+      <p class="text-xs" style="color: var(--theme-sidebar-text); opacity: 0.6;">Your calendar is clear. Schedule your first shoot to get started!</p>
     </div>
   
   {:else}
     <!-- Next Shoot Notification Bar -->
     {#if nextShoot}
-      <div class="bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-lg p-4">
+      <div class="rounded-lg p-5 shadow-lg" style="background: var(--theme-sidebar-accent); color: white; border: 2px solid var(--theme-sidebar-accent);">
         <div class="flex items-center justify-between">
-          <div>
-            <p class="text-xs font-medium text-blue-600 uppercase tracking-wide mb-1">Next Scheduled Shoot</p>
-            <p class="text-lg font-semibold text-gray-900">{nextShoot.title}</p>
-            <p class="text-sm text-gray-700 mt-1">
+          <div class="flex-1">
+            <p class="text-xs font-bold uppercase tracking-wider mb-2" style="opacity: 0.9;">Next Scheduled Shoot</p>
+            <p class="text-2xl font-bold mb-1">{nextShoot.title}</p>
+            <p class="text-sm" style="opacity: 0.9;">
               {formatDate(nextShoot.date)} at {formatTime(nextShoot.time)}
             </p>
           </div>
-          <span class={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(nextShoot.status)}`}>
+          <span class="inline-flex items-center px-4 py-2 rounded-lg text-xs font-bold bg-white shadow-md" style="color: var(--theme-sidebar-accent);">
             {nextShoot.status.charAt(0).toUpperCase() + nextShoot.status.slice(1)}
           </span>
         </div>
       </div>
     {/if}
 
-    <!-- Week View Calendar (Simple) -->
+    <!-- Week View Calendar (Full Width with Navigation) -->
     <div>
-      <p class="text-xs font-medium text-gray-600 uppercase tracking-wide mb-3">This Week</p>
-      <div class="flex gap-2 overflow-x-auto pb-2">
+      <div class="flex items-center justify-between mb-4">
+        <p class="text-sm font-bold uppercase tracking-wide" style="color: var(--theme-foreground); opacity: 0.9;">
+          {currentWeekLabel}
+        </p>
+        <div class="flex items-center gap-2">
+          <button
+            on:click={() => navigateWeek(-1)}
+            class="p-1.5 rounded-lg transition-all hover:opacity-70"
+            style="color: var(--theme-sidebar-text); background: var(--theme-sidebar-hover);"
+            aria-label="Previous week"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+          </button>
+          <button
+            on:click={() => navigateWeek(1)}
+            class="p-1.5 rounded-lg transition-all hover:opacity-70"
+            style="color: var(--theme-sidebar-text); background: var(--theme-sidebar-hover);"
+            aria-label="Next week"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3">
         {#each weekDays as day (day.dateStr)}
-          <div class={`flex-shrink-0 w-16 p-3 rounded-lg text-center transition-all ${
-            isToday(day.dateStr) 
-              ? 'bg-blue-600 text-white shadow-md' 
-              : day.shootCount > 0 
-                ? 'bg-blue-100 border-2 border-blue-400 text-gray-900' 
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-          }`}>
-            <p class="text-xs font-semibold">{day.dayName}</p>
-            <p class="text-lg font-bold mt-1">{day.dayNum}</p>
-            {#if day.shootCount > 0}
-              <p class="text-xs font-medium mt-1">{day.shootCount} shoot{day.shootCount > 1 ? 's' : ''}</p>
-            {/if}
+          <div 
+            class="rounded-lg overflow-hidden transition-all cursor-pointer min-h-[160px] flex flex-col"
+            style={isToday(day.dateStr) 
+              ? 'background: var(--theme-sidebar-hover); border: 2px solid var(--theme-sidebar-accent); box-shadow: 0 4px 12px rgba(0,0,0,0.15);' 
+              : 'background: var(--theme-sidebar-hover); border: 1px solid var(--theme-sidebar-border);'
+            }>
+            <!-- Compact Day Header -->
+            <div class="px-2.5 py-1.5 flex items-center justify-between" style={isToday(day.dateStr) ? 'background: var(--theme-sidebar-accent); color: white;' : 'color: var(--theme-sidebar-text); opacity: 0.5;'}>
+              <span class="text-[10px] font-semibold uppercase tracking-wide">{day.dayName}</span>
+              <span class="text-sm font-bold">{day.dayNum}</span>
+            </div>
+            
+            <!-- Events List (More Space) -->
+            <div class="flex-1 p-2 space-y-2 overflow-y-auto">
+              {#each day.events as event (event.id)}
+                <div 
+                  class="px-3 py-2.5 rounded-lg text-xs transition-all cursor-pointer"
+                  style={event.type === 'shoot' 
+                    ? 'background: var(--theme-sidebar-accent); color: white; box-shadow: 0 2px 8px rgba(0,0,0,0.2); font-weight: 600;' 
+                    : 'background: var(--theme-sidebar-border); color: var(--theme-sidebar-text); opacity: 0.7; font-weight: 400;'
+                  }
+                  title="{event.title} {event.time ? `at ${event.time}` : ''}{event.owner ? ` (${event.owner})` : ''}"
+                >
+                  <div class="flex items-start gap-2">
+                    {#if event.type === 'shoot'}
+                      <svg class="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" 
+                              d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                      </svg>
+                    {:else}
+                      <svg class="w-3 h-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" 
+                              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                      </svg>
+                    {/if}
+                    <div class="flex-1 min-w-0">
+                      {#if event.time && event.time !== '00:00'}
+                        <p class="font-bold leading-tight text-sm mb-0.5">{event.time.slice(0,5)}</p>
+                      {/if}
+                      <p class="leading-snug {event.time && event.time !== '00:00' ? 'text-xs' : 'font-bold text-sm'}" style="word-break: break-word;">{event.title}</p>
+                      {#if event.owner}
+                        <p class="text-[10px] mt-1" style="opacity: 0.75;">{event.owner}</p>
+                      {/if}
+                    </div>
+                  </div>
+                </div>
+              {/each}
+              
+              {#if day.hasMore}
+                <button 
+                  class="w-full px-2 py-2 text-xs font-semibold text-center rounded-lg cursor-pointer transition-all hover:opacity-80"
+                  style="color: var(--theme-sidebar-accent); background: var(--theme-sidebar-border);"
+                >
+                  +{day.totalEvents - 3} more
+                </button>
+              {/if}
+              
+              {#if day.events.length === 0}
+                <div class="h-full flex items-center justify-center">
+                  <p class="text-[11px]" style="color: var(--theme-sidebar-text); opacity: 0.3;">No events</p>
+                </div>
+              {/if}
+            </div>
           </div>
         {/each}
       </div>
     </div>
 
+    <!-- Section Divider -->
+    <div class="pt-6 pb-2">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-base font-bold uppercase tracking-wide" style="color: var(--theme-foreground);">All Upcoming Shoots</h3>
+        <span class="text-xs font-semibold px-3 py-1 rounded-full" style="background: var(--theme-sidebar-border); color: var(--theme-sidebar-text);">
+          {shoots.length} {shoots.length === 1 ? 'Shoot' : 'Shoots'}
+        </span>
+      </div>
+      <div class="h-px mb-4" style="background: var(--theme-sidebar-border); opacity: 0.5;"></div>
+    </div>
+
     <!-- Shoots List with Images -->
-    <div class="space-y-3">
+    <div class="space-y-4">
       {#each shoots as shoot (shoot.id)}
-        <div class="group overflow-hidden bg-white rounded-lg border border-gray-200 hover:border-blue-400 transition-all hover:shadow-md">
-          <div class="flex gap-4 p-4">
+        <div class="group overflow-hidden rounded-lg transition-all hover:shadow-xl" style="background: var(--theme-sidebar-hover); border: 2px solid var(--theme-sidebar-border); box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+          <div class="flex gap-4 p-5">
             <!-- Image Container (Left) -->
-            <div class="flex-shrink-0 w-32 h-32 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg overflow-hidden border border-gray-300 flex items-center justify-center">
+            <div class="flex-shrink-0 w-32 h-32 rounded-lg overflow-hidden flex items-center justify-center" style="background: rgba(255, 255, 255, 0.05); border: 3px solid var(--theme-sidebar-border);">
               {#if getCostumeImage(shoot)}
                 <img src={getCostumeImage(shoot)} alt={shoot.characters.join(', ')} class="w-full h-full object-cover" />
               {:else}
                 <div class="text-center">
-                  <svg class="w-8 h-8 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-10 h-10 mx-auto mb-2" style="color: var(--theme-sidebar-text); opacity: 0.3;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                           d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                   </svg>
-                  <p class="text-xs text-gray-500">No image</p>
+                  <p class="text-xs font-medium" style="color: var(--theme-sidebar-text); opacity: 0.4;">No image</p>
                 </div>
               {/if}
             </div>
@@ -244,30 +415,30 @@
             <!-- Details Container (Right) -->
             <div class="flex-1 flex flex-col justify-between">
               <div>
-                <div class="flex items-start justify-between gap-2 mb-2">
+                <div class="flex items-start justify-between gap-2 mb-3">
                   <div>
-                    <h3 class="text-sm font-semibold text-gray-900">{shoot.title}</h3>
+                    <h3 class="text-lg font-bold mb-1" style="color: var(--theme-foreground);">{shoot.title}</h3>
                     {#if shoot.characters.length > 0}
-                      <p class="text-xs text-gray-600 mt-0.5">
+                      <p class="text-sm font-medium" style="color: var(--theme-sidebar-text); opacity: 0.8;">
                         {shoot.characters.join(', ')}
                       </p>
                     {/if}
                   </div>
-                  <span class={`inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold flex-shrink-0 ${getStatusColor(shoot.status)}`}>
+                  <span class={`inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-bold flex-shrink-0 ${getStatusColor(shoot.status)}`}>
                     {shoot.status.charAt(0).toUpperCase() + shoot.status.slice(1)}
                   </span>
                 </div>
 
-                <div class="space-y-1">
-                  <div class="flex items-center gap-2 text-xs text-gray-700">
-                    <svg class="w-3.5 h-3.5 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="space-y-2">
+                  <div class="flex items-center gap-2 text-sm font-medium" style="color: var(--theme-sidebar-text);">
+                    <svg class="w-4 h-4 flex-shrink-0" style="color: var(--theme-sidebar-accent);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                            d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 4v10a2 2 0 002 2h4a2 2 0 002-2V11M8 7h8"/>
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                     </svg>
                     <span>{formatDate(shoot.date)} at {formatTime(shoot.time)}</span>
                   </div>
-                  <div class="flex items-start gap-2 text-xs text-gray-700">
-                    <svg class="w-3.5 h-3.5 text-gray-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div class="flex items-start gap-2 text-sm" style="color: var(--theme-sidebar-text); opacity: 0.8;">
+                    <svg class="w-4 h-4 flex-shrink-0 mt-0.5" style="color: var(--theme-sidebar-text); opacity: 0.6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                             d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                     </svg>
@@ -276,10 +447,10 @@
                 </div>
               </div>
 
-              <div class="flex items-center justify-between pt-2 border-t border-gray-100">
+              <div class="flex items-center justify-between pt-2" style="border-top: 1px solid var(--theme-sidebar-border);">
                 {#if shoot.photographer}
-                  <div class="flex items-center gap-1 text-xs text-gray-600">
-                    <svg class="w-3 h-3 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div class="flex items-center gap-1 text-xs" style="color: var(--theme-sidebar-text); opacity: 0.7;">
+                    <svg class="w-3 h-3 flex-shrink-0" style="color: var(--theme-sidebar-text); opacity: 0.6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                             d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0118.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
                     </svg>
@@ -289,8 +460,8 @@
                   <div></div>
                 {/if}
                 
-                <div class="flex items-center gap-1 text-xs text-gray-600">
-                  <svg class="w-3 h-3 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="flex items-center gap-2 text-sm font-medium" style="color: var(--theme-sidebar-text); opacity: 0.7;">
+                  <svg class="w-4 h-4 flex-shrink-0" style="color: var(--theme-sidebar-text); opacity: 0.6;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                           d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
                   </svg>
@@ -305,9 +476,9 @@
 
     <!-- View More Link -->
     {#if shoots.length >= (widget.settings.limit || 5)}
-      <div class="pt-2">
-        <a href="/shoots" class="text-xs text-blue-600 hover:text-blue-800 font-medium">
-          View all upcoming shoots →
+      <div class="pt-4 text-center">
+        <a href="/shoots" class="inline-block text-sm font-bold px-6 py-2.5 rounded-lg transition-all hover:opacity-80" style="background: var(--theme-sidebar-accent); color: white;">
+          View All Upcoming Shoots →
         </a>
       </div>
     {/if}
