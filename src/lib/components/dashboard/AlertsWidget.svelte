@@ -206,7 +206,7 @@
     <!-- Alerts List -->
     <div class="space-y-2">
       {#each alerts as alert (alert.id)}
-        <div class={`flex items-start space-x-3 p-3 rounded-md ${getPriorityColor(alert.priority)}`} style="background: var(--theme-sidebar-hover); border: 1px solid var(--theme-sidebar-border);">
+        <div class={`flex items-start space-x-3 p-3 rounded-md transition-all duration-200 hover:scale-[1.02] hover:shadow-lg hover:z-10 ${getPriorityColor(alert.priority)}`} style="background: var(--theme-sidebar-hover); border: 1px solid var(--theme-sidebar-border);">
           <div class="flex-shrink-0 mt-0.5">
             <svg class="w-4 h-4 {alert.priority === 'high' ? 'text-red-400' : alert.priority === 'medium' ? 'text-yellow-400' : 'text-blue-400'}" 
                  fill="none" stroke="currentColor" viewBox="0 0 24 24">

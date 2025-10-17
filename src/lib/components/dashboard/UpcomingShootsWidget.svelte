@@ -267,7 +267,7 @@
     <!-- Next Shoot Notification Bar -->
     {#if nextShoot}
       <div class="rounded-lg p-5 shadow-lg" style="background: var(--theme-sidebar-accent); color: white; border: 2px solid var(--theme-sidebar-accent);">
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between gap-4">
           <div class="flex-1">
             <p class="text-xs font-bold uppercase tracking-wider mb-2" style="opacity: 0.9;">Next Scheduled Shoot</p>
             <p class="text-2xl font-bold mb-1">{nextShoot.title}</p>
@@ -275,9 +275,16 @@
               {formatDate(nextShoot.date)} at {formatTime(nextShoot.time)}
             </p>
           </div>
-          <span class="inline-flex items-center px-4 py-2 rounded-lg text-xs font-bold bg-white shadow-md" style="color: var(--theme-sidebar-accent);">
-            {nextShoot.status.charAt(0).toUpperCase() + nextShoot.status.slice(1)}
-          </span>
+          <a 
+            href="/shoots/{nextShoot.id}"
+            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-bold bg-white shadow-md transition-all duration-150 hover:scale-105 hover:shadow-lg"
+            style="color: var(--theme-sidebar-accent);"
+          >
+            <span>View Details</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </a>
         </div>
       </div>
     {/if}
@@ -313,8 +320,9 @@
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3">
         {#each weekDays as day (day.dateStr)}
-          <div 
-            class="rounded-lg overflow-hidden transition-all cursor-pointer min-h-[160px] flex flex-col"
+          <a
+            href="/calendar?date={day.dateStr}"
+            class="rounded-lg overflow-hidden transition-all duration-200 cursor-pointer min-h-[160px] flex flex-col hover:scale-105 hover:shadow-lg hover:z-10"
             style={isToday(day.dateStr) 
               ? 'background: var(--theme-sidebar-hover); border: 2px solid var(--theme-sidebar-accent); box-shadow: 0 4px 12px rgba(0,0,0,0.15);' 
               : 'background: var(--theme-sidebar-hover); border: 1px solid var(--theme-sidebar-border);'
@@ -329,7 +337,7 @@
             <div class="flex-1 p-2 space-y-2 overflow-y-auto">
               {#each day.events as event (event.id)}
                 <div 
-                  class="px-3 py-2.5 rounded-lg text-xs transition-all cursor-pointer"
+                  class="px-3 py-2.5 rounded-lg text-xs transition-all duration-150 cursor-pointer hover:scale-105 hover:shadow-md hover:z-10"
                   style={event.type === 'shoot' 
                     ? 'background: var(--theme-sidebar-accent); color: white; box-shadow: 0 2px 8px rgba(0,0,0,0.2); font-weight: 600;' 
                     : 'background: var(--theme-sidebar-border); color: var(--theme-sidebar-text); opacity: 0.7; font-weight: 400;'
@@ -363,7 +371,7 @@
               
               {#if day.hasMore}
                 <button 
-                  class="w-full px-2 py-2 text-xs font-semibold text-center rounded-lg cursor-pointer transition-all hover:opacity-80"
+                  class="w-full px-2 py-2 text-xs font-semibold text-center rounded-lg cursor-pointer transition-all duration-150 hover:scale-105 hover:shadow-sm hover:opacity-90"
                   style="color: var(--theme-sidebar-accent); background: var(--theme-sidebar-border);"
                 >
                   +{day.totalEvents - 3} more
@@ -376,7 +384,7 @@
                 </div>
               {/if}
             </div>
-          </div>
+          </a>
         {/each}
       </div>
     </div>
@@ -395,7 +403,11 @@
     <!-- Shoots List with Images -->
     <div class="space-y-4">
       {#each shoots as shoot (shoot.id)}
-        <div class="group overflow-hidden rounded-lg transition-all hover:shadow-xl" style="background: var(--theme-sidebar-hover); border: 2px solid var(--theme-sidebar-border); box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <a 
+          href="/shoots/{shoot.id}"
+          class="group block overflow-hidden rounded-lg transition-all duration-200 hover:scale-[1.02] hover:shadow-2xl hover:z-10" 
+          style="background: var(--theme-sidebar-hover); border: 2px solid var(--theme-sidebar-border); box-shadow: 0 2px 8px rgba(0,0,0,0.1);"
+        >
           <div class="flex gap-4 p-5">
             <!-- Image Container (Left) -->
             <div class="flex-shrink-0 w-32 h-32 rounded-lg overflow-hidden flex items-center justify-center" style="background: rgba(255, 255, 255, 0.05); border: 3px solid var(--theme-sidebar-border);">
@@ -470,7 +482,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </a>
       {/each}
     </div>
 

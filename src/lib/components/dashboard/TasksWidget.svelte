@@ -197,13 +197,18 @@
         
         <div class="space-y-2">
           {#each urgentTasks as task (task.id)}
-            <div class="group flex items-start gap-3 p-3 rounded-lg hover:shadow-sm transition" style="background: var(--theme-sidebar-hover); border: 1px solid var(--theme-sidebar-border);">
+            <a 
+              href="/shoots/{task.shoot_id}/tasks/{task.id}"
+              class="group flex items-start gap-3 p-3 rounded-lg transition-all duration-200 hover:scale-[1.02] hover:shadow-lg hover:z-10" 
+              style="background: var(--theme-sidebar-hover); border: 1.5px solid var(--theme-alert-color);"
+            >
               <input
                 type="checkbox"
                 checked={task.completed}
+                on:click|stopPropagation
                 on:change={() => toggleTask(task.id)}
                 class="mt-0.5 w-4 h-4 rounded"
-                style="accent-color: var(--theme-sidebar-accent);"
+                style="accent-color: var(--theme-alert-color);"
               />
               
               <div class="flex-1 min-w-0">
@@ -232,7 +237,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </a>
           {/each}
         </div>
       </div>
@@ -250,10 +255,15 @@
         
         <div class="space-y-2">
           {#each upcomingTasks.slice(0, 3) as task (task.id)}
-            <div class="group flex items-start gap-3 p-3 rounded-lg hover:shadow-sm transition" style="background: var(--theme-sidebar-bg); border: 1px solid var(--theme-sidebar-border);">
+            <a 
+              href="/shoots/{task.shoot_id}/tasks/{task.id}"
+              class="group flex items-start gap-3 p-3 rounded-lg transition-all duration-200 hover:scale-[1.02] hover:shadow-md hover:z-10" 
+              style="background: var(--theme-sidebar-hover); border: 1px solid var(--theme-sidebar-border);"
+            >
               <input
                 type="checkbox"
                 checked={task.completed}
+                on:click|stopPropagation
                 on:change={() => toggleTask(task.id)}
                 class="mt-0.5 w-4 h-4 rounded"
                 style="accent-color: var(--theme-sidebar-accent);"
@@ -285,7 +295,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </a>
           {/each}
         </div>
       </div>

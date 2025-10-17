@@ -31,6 +31,7 @@ export const THEME_VARIANTS: ThemeVariant[] = [
 			'--theme-sidebar-active': '#f0fdf4',        // Very light green tint
 			'--theme-sidebar-border': '#e2e8f0',        // Neutral border
 			'--theme-sidebar-shadow': '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)', // Subtle shadow
+			'--theme-alert-color': '#dc2626',           // Red alert color for urgent items
 			
 			// Action Bar (neutral with subtle green hint)
 			'--theme-header-bg': '#f8fafc',             // Neutral light gray
@@ -70,6 +71,7 @@ export const THEME_VARIANTS: ThemeVariant[] = [
 			'--theme-sidebar-active': '#fed7aa',         // Warm peach tint
 			'--theme-sidebar-border': '#e7d4b5',         // Visible borders
 			'--theme-sidebar-shadow': '0 1px 3px 0 rgb(124 45 18 / 0.1), 0 1px 2px -1px rgb(124 45 18 / 0.1)', // Warm shadow
+			'--theme-alert-color': '#dc2626',            // Red alert color for urgent items
 			
 			// Action Bar (subtle warm tint instead of bold orange)
 			'--theme-header-bg': '#fed7aa',              // Soft peach (subtle, not bold)
@@ -111,6 +113,7 @@ export const THEME_VARIANTS: ThemeVariant[] = [
 			'--theme-sidebar-active': '#bae6fd',         // Cool cyan tint
 			'--theme-sidebar-border': '#7dd3fc',         // Visible borders
 			'--theme-sidebar-shadow': '0 1px 3px 0 rgb(8 51 68 / 0.1), 0 1px 2px -1px rgb(8 51 68 / 0.1)', // Cool shadow
+			'--theme-alert-color': '#dc2626',            // Red alert color for urgent items
 			
 			// Action Bar (subtle cool tint instead of bold cyan)
 			'--theme-header-bg': '#bae6fd',              // Soft sky blue (subtle, not bold)
@@ -150,6 +153,7 @@ export const THEME_VARIANTS: ThemeVariant[] = [
 			'--theme-sidebar-active': '#334155',         // Slate active
 			'--theme-sidebar-border': '#475569',         // Storm border
 			'--theme-sidebar-shadow': '0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.4)', // Dark shadow
+			'--theme-alert-color': '#fbbf24',            // Amber/yellow alert color for urgent items (lightning)
 			
 			// Action Bar (storm clouds)
 			'--theme-header-bg': '#1e293b',              // Storm slate
@@ -189,6 +193,7 @@ export const THEME_VARIANTS: ThemeVariant[] = [
 			'--theme-sidebar-active': '#3f3426',         // Earth brown active
 			'--theme-sidebar-border': '#4a3a2c',         // Dark earth border
 			'--theme-sidebar-shadow': '0 1px 3px 0 rgb(0 0 0 / 0.5), 0 1px 2px -1px rgb(0 0 0 / 0.5)', // Deep shadow
+			'--theme-alert-color': '#f59e0b',            // Warm amber alert color for urgent items
 			
 			// Action Bar (warm earth with green hints)
 			'--theme-header-bg': '#352b20',              // Medium earth brown
@@ -228,6 +233,7 @@ export const THEME_VARIANTS: ThemeVariant[] = [
 			'--theme-sidebar-active': '#1e1b4b',         // Deep indigo active
 			'--theme-sidebar-border': '#6366f1',         // Indigo border (Night Sky/Astro mix)
 			'--theme-sidebar-shadow': '0 1px 3px 0 rgb(0 0 0 / 0.5), 0 1px 2px -1px rgb(0 0 0 / 0.5)', // Deep shadow
+			'--theme-alert-color': '#f472b6',            // Pink alert color for urgent items (matches pink stars)
 			
 			// Action Bar (much darker purple-pink gradient)
 			'--theme-header-bg': '#1e1b4b',              // Much darker rich indigo
