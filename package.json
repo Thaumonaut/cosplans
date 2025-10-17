@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "build": "vite build",
-    "dev": "vite dev",
-    "preview": "vite preview",
+    "build": "bun --bun vite build",
+    "dev": "bun --bun vite dev",
+    "preview": "bun --bun vite preview",
     "test": "bun run test:integration && bun run test:unit",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",

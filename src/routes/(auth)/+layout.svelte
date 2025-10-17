@@ -37,15 +37,20 @@
 
 <div class={`flex min-h-screen text-[var(--theme-foreground)] transition-all duration-200 ease-in-out relative`} style="background-color: var(--theme-background);">
 	<!-- Background pattern overlay layer -->
-	<div 
-		class="fixed inset-0 pointer-events-none z-0" 
-		style="
-			background-image: var(--theme-background-pattern); 
-			background-attachment: fixed;
-			mix-blend-mode: var(--theme-background-blend, normal);
-			opacity: var(--theme-background-pattern-opacity, 1);
-		"
-	></div>
+	{#key $theme.activeId}
+		<div 
+			class="fixed inset-0 pointer-events-none z-0" 
+			style="
+				background-image: var(--theme-background-pattern); 
+				background-attachment: fixed;
+				background-size: var(--theme-background-size, cover);
+				background-position: var(--theme-background-position, center);
+				background-repeat: var(--theme-background-repeat, no-repeat);
+				mix-blend-mode: var(--theme-background-blend, normal);
+				opacity: var(--theme-background-pattern-opacity, 1);
+			"
+		></div>
+	{/key}
 
 	<div
 		class={`fixed inset-y-0 left-0 z-40 transform transition-transform duration-200 ease-in-out md:sticky md:top-0 md:h-[100dvh] md:overflow-y-auto md:transform-none md:translate-x-0 ${

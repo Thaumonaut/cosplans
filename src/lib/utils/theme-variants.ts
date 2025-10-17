@@ -17,6 +17,9 @@ export const THEME_VARIANTS: ThemeVariant[] = [
 		cssVars: {
 			'--theme-background': '#f8fafc',           // Base layer (lightest neutral)
 			'--theme-background-pattern': 'radial-gradient(circle at 20% 50%, rgba(22, 163, 74, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(22, 163, 74, 0.12) 0%, transparent 50%), radial-gradient(circle at 50% 80%, rgba(22, 163, 74, 0.1) 0%, transparent 50%), radial-gradient(circle at 40% 30%, rgba(34, 197, 94, 0.08) 0%, transparent 40%)',
+			'--theme-background-size': 'auto',
+			'--theme-background-position': '0 0',
+			'--theme-background-repeat': 'no-repeat',
 			'--theme-foreground': '#0f172a',            // Primary text (dark slate)
 			
 			// Sidebar (neutral grays with green accent)
@@ -53,6 +56,9 @@ export const THEME_VARIANTS: ThemeVariant[] = [
 		cssVars: {
 			'--theme-background': '#fef7ee',            // Warm cream (lightest)
 			'--theme-background-pattern': 'repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(234, 88, 12, 0.04) 40px, rgba(234, 88, 12, 0.04) 80px), repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(234, 88, 12, 0.03) 40px, rgba(234, 88, 12, 0.03) 80px)',
+			'--theme-background-size': 'auto',
+			'--theme-background-position': '0 0',
+			'--theme-background-repeat': 'repeat',
 			'--theme-foreground': '#1c1917',             // Dark stone (13.61:1 contrast)
 			
 			// Sidebar (neutral with warm accent and better contrast)
@@ -89,6 +95,9 @@ export const THEME_VARIANTS: ThemeVariant[] = [
 		cssVars: {
 			'--theme-background': '#91dff1',            // Light cyan-blue
 			'--theme-background-pattern': 'url(/caustics.svg)',
+			'--theme-background-size': 'cover',
+			'--theme-background-position': 'center',
+			'--theme-background-repeat': 'no-repeat',
 			'--theme-background-blend': 'overlay',       // Overlay blend mode
 			'--theme-background-pattern-opacity': '1',   // Full opacity for caustics
 			'--theme-foreground': '#0c4a6e',             // Deep blue (8.12:1 contrast)
@@ -127,6 +136,9 @@ export const THEME_VARIANTS: ThemeVariant[] = [
 		cssVars: {
 			'--theme-background': '#0f172a',            // Deep slate storm
 			'--theme-background-pattern': 'radial-gradient(ellipse 1200px 400px at 40% 20%, rgba(251, 191, 36, 0.02) 0%, transparent 50%), radial-gradient(ellipse 1000px 350px at 70% 40%, rgba(234, 179, 8, 0.025) 0%, transparent 45%), radial-gradient(ellipse 800px 300px at 30% 70%, rgba(202, 138, 4, 0.015) 0%, transparent 40%), repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(71, 85, 105, 0.02) 2px, rgba(71, 85, 105, 0.02) 4px), repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(51, 65, 85, 0.015) 2px, rgba(51, 65, 85, 0.015) 4px), radial-gradient(circle 2px at 25% 15%, rgba(250, 204, 21, 0.3) 0%, transparent 100%), radial-gradient(circle 1px at 75% 30%, rgba(234, 179, 8, 0.25) 0%, transparent 100%), radial-gradient(circle 3px at 15% 60%, rgba(251, 191, 36, 0.22) 0%, transparent 100%), radial-gradient(circle 1px at 85% 75%, rgba(250, 204, 21, 0.18) 0%, transparent 100%), radial-gradient(circle 2px at 45% 85%, rgba(234, 179, 8, 0.28) 0%, transparent 100%), radial-gradient(circle 1px at 55% 45%, rgba(251, 191, 36, 0.24) 0%, transparent 100%)',
+			'--theme-background-size': 'auto',
+			'--theme-background-position': '0 0',
+			'--theme-background-repeat': 'no-repeat',
 			'--theme-foreground': '#f1f5f9',             // Light slate text
 			
 			// Sidebar (storm gray with yellow accent)
@@ -163,6 +175,9 @@ export const THEME_VARIANTS: ThemeVariant[] = [
 		cssVars: {
 			'--theme-background': '#1a1410',            // Deep warm earth brown
 			'--theme-background-pattern': 'radial-gradient(ellipse 1000px 600px at 35% 45%, rgba(132, 204, 22, 0.06) 0%, transparent 50%), radial-gradient(ellipse 800px 500px at 65% 60%, rgba(101, 163, 13, 0.05) 0%, transparent 45%), radial-gradient(circle 400px at 20% 80%, rgba(161, 98, 7, 0.04) 0%, transparent 40%), repeating-linear-gradient(135deg, transparent, transparent 100px, rgba(74, 57, 29, 0.03) 100px, rgba(74, 57, 29, 0.03) 200px), repeating-linear-gradient(45deg, transparent, transparent 120px, rgba(82, 69, 37, 0.02) 120px, rgba(82, 69, 37, 0.02) 240px)',
+			'--theme-background-size': 'auto',
+			'--theme-background-position': '0 0',
+			'--theme-background-repeat': 'no-repeat',
 			'--theme-foreground': '#fef3c7',             // Warm cream text
 			
 			// Sidebar (earthy brown with green accent)
@@ -199,6 +214,9 @@ export const THEME_VARIANTS: ThemeVariant[] = [
 		cssVars: {
 			'--theme-background': '#0a0514',            // Much darker deep indigo navy
 			'--theme-background-pattern': 'url(/aurora.svg), radial-gradient(circle 1px at 15% 20%, rgba(186, 230, 253, 0.9) 1px, transparent 1px), radial-gradient(circle 1px at 45% 35%, rgba(196, 181, 253, 0.85) 1px, transparent 1px), radial-gradient(circle 2px at 75% 15%, rgba(165, 243, 252, 0.9) 2px, transparent 2px), radial-gradient(circle 1px at 25% 60%, rgba(251, 207, 232, 0.8) 1px, transparent 1px), radial-gradient(circle 2px at 85% 70%, rgba(167, 139, 250, 0.9) 2px, transparent 2px), radial-gradient(circle 1px at 55% 80%, rgba(94, 234, 212, 0.75) 1px, transparent 1px), radial-gradient(circle 3px at 10% 90%, rgba(186, 230, 253, 0.85) 3px, transparent 3px), radial-gradient(circle 1px at 65% 50%, rgba(232, 121, 249, 0.8) 1px, transparent 1px), radial-gradient(circle 2px at 90% 25%, rgba(165, 243, 252, 0.85) 2px, transparent 2px), radial-gradient(circle 1px at 35% 45%, rgba(244, 114, 182, 0.7) 1px, transparent 1px), radial-gradient(circle 2px at 20% 75%, rgba(129, 140, 248, 0.9) 2px, transparent 2px), radial-gradient(circle 1px at 70% 85%, rgba(94, 234, 212, 0.75) 1px, transparent 1px), radial-gradient(circle 3px at 40% 10%, rgba(186, 230, 253, 0.9) 3px, transparent 3px), radial-gradient(circle 1px at 80% 55%, rgba(251, 207, 232, 0.8) 1px, transparent 1px), radial-gradient(circle 2px at 50% 65%, rgba(216, 180, 254, 0.85) 2px, transparent 2px), radial-gradient(circle 1px at 95% 40%, rgba(165, 243, 252, 0.8) 1px, transparent 1px), radial-gradient(circle 2px at 30% 30%, rgba(240, 171, 252, 0.75) 2px, transparent 2px), radial-gradient(circle 1px at 60% 20%, rgba(94, 234, 212, 0.7) 1px, transparent 1px), radial-gradient(circle 3px at 5% 50%, rgba(167, 139, 250, 0.85) 3px, transparent 3px), radial-gradient(circle 1px at 85% 90%, rgba(244, 114, 182, 0.75) 1px, transparent 1px), radial-gradient(circle 2px at 15% 65%, rgba(129, 140, 248, 0.8) 2px, transparent 2px), radial-gradient(circle 1px at 45% 85%, rgba(186, 230, 253, 0.7) 1px, transparent 1px), radial-gradient(circle 2px at 75% 45%, rgba(251, 207, 232, 0.9) 2px, transparent 2px), radial-gradient(circle 1px at 25% 15%, rgba(94, 234, 212, 0.75) 1px, transparent 1px), radial-gradient(circle 3px at 55% 35%, rgba(196, 181, 253, 0.85) 3px, transparent 3px), radial-gradient(circle 1px at 90% 10%, rgba(165, 243, 252, 0.7) 1px, transparent 1px), radial-gradient(circle 2px at 35% 70%, rgba(240, 171, 252, 0.85) 2px, transparent 2px), radial-gradient(circle 1px at 65% 95%, rgba(244, 114, 182, 0.75) 1px, transparent 1px), radial-gradient(circle 2px at 10% 30%, rgba(129, 140, 248, 0.8) 2px, transparent 2px), radial-gradient(circle 1px at 50% 55%, rgba(94, 234, 212, 0.65) 1px, transparent 1px), radial-gradient(circle 3px at 80% 75%, rgba(167, 139, 250, 0.9) 3px, transparent 3px), radial-gradient(ellipse 1200px 800px at 30% 40%, rgba(94, 234, 212, 0.08) 0%, rgba(99, 102, 241, 0.06) 30%, transparent 50%), radial-gradient(ellipse 1000px 700px at 70% 60%, rgba(129, 140, 248, 0.09) 0%, rgba(236, 72, 153, 0.05) 30%, transparent 45%), radial-gradient(ellipse 800px 600px at 50% 80%, rgba(139, 92, 246, 0.08) 0%, rgba(94, 234, 212, 0.04) 25%, transparent 40%)',
+			'--theme-background-size': 'cover, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto',
+			'--theme-background-position': 'center, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0',
+			'--theme-background-repeat': 'no-repeat',
 			'--theme-foreground': '#e0e7ff',             // Light periwinkle text (Moon palette)
 			
 			// Sidebar (much darker navy with darker teal accent)
