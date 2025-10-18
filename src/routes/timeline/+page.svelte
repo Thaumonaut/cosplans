@@ -1,17 +1,29 @@
 <script lang="ts">
-  // Timeline placeholder - P2 implementation
+  import TimelineGanttView from '$lib/components/timeline/TimelineGanttView.svelte';
+
+  // TODO: Get from auth context
+  const teamId = 'demo-team-456';
 </script>
 
 <svelte:head>
   <title>Timeline & Gantt - Cosplans</title>
+  <meta name="description" content="Visual timeline and Gantt chart for shoot scheduling" />
 </svelte:head>
 
-<div class="min-h-screen bg-gray-50">
-  <header class="bg-white shadow-sm border-b">
+<div class="min-h-screen" style="background: var(--theme-bg);">
+  <header
+    class="sticky top-0 z-10 backdrop-blur-md"
+    style="background: var(--theme-sidebar-hover); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); border-bottom: 2px solid var(--theme-sidebar-accent);"
+  >
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
-        <div class="flex items-center space-x-4">
-          <a href="/dashboard" class="text-gray-500 hover:text-gray-700" title="Back to Dashboard">
+        <div class="flex items-center gap-4">
+          <a
+            href="/dashboard"
+            class="p-2 rounded-lg hover:bg-opacity-10 transition-colors"
+            style="color: var(--theme-foreground);"
+            title="Back to Dashboard"
+          >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"
@@ -21,43 +33,20 @@
               />
             </svg>
           </a>
-          <h1 class="text-xl font-semibold text-gray-900">Timeline & Gantt View</h1>
+          <div>
+            <h1 class="text-2xl font-bold tracking-tight" style="color: var(--theme-foreground);">
+              Timeline & Gantt View
+            </h1>
+            <p class="text-sm mt-0.5" style="color: var(--theme-sidebar-muted);">
+              Schedule shoots and track costume builds
+            </p>
+          </div>
         </div>
       </div>
     </div>
   </header>
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="text-center py-16">
-      <div class="text-gray-400 mb-4">
-        <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-          />
-        </svg>
-      </div>
-      <h2 class="text-2xl font-bold text-gray-900 mb-4">Timeline & Gantt View</h2>
-      <p class="text-lg text-gray-600 mb-6">
-        Interactive timeline with scheduling, dependencies, and milestone management
-      </p>
-      <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 max-w-md mx-auto">
-        <p class="text-sm text-yellow-800">
-          🚧 <strong>Priority 2 Feature</strong><br />
-          Implementation scheduled after P1 features are complete
-        </p>
-      </div>
-
-      <div class="mt-8">
-        <a
-          href="/dashboard"
-          class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
-        >
-          Return to Dashboard
-        </a>
-      </div>
-    </div>
+    <TimelineGanttView {teamId} />
   </main>
 </div>
