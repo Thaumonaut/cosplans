@@ -31,29 +31,32 @@ a7586ba - feat: add 10 missing specs (031-040) to complete core infrastructure
 
 ## Total Project Coverage
 
-| Category | Count | Status |
-|----------|-------|--------|
-| **Total Specs** | 40 | ✅ Complete |
-| **User Stories** | 200+ | ✅ All prioritized |
-| **Requirements** | 600+ | ✅ All testable |
-| **Success Criteria** | 300+ | ✅ All measurable |
-| **Quality Checklists** | 40 | ✅ All passed |
+| Category               | Count | Status             |
+| ---------------------- | ----- | ------------------ |
+| **Total Specs**        | 40    | ✅ Complete        |
+| **User Stories**       | 200+  | ✅ All prioritized |
+| **Requirements**       | 600+  | ✅ All testable    |
+| **Success Criteria**   | 300+  | ✅ All measurable  |
+| **Quality Checklists** | 40    | ✅ All passed      |
 
 ## How to Use Each Spec
 
 ### 1. Review the Specification
+
 ```bash
 # Open any spec to review
 cat specs/031-notification-system/spec.md
 ```
 
 ### 2. Run Clarification (if needed)
+
 ```bash
 # For any ambiguities with stakeholders
 /speckit.clarify "031-notification-system"
 ```
 
 ### 3. Create Planning Branch When Ready to Implement
+
 ```bash
 # When you're ready to implement a feature:
 git checkout -b implement/031-notification-system
@@ -62,7 +65,9 @@ git checkout -b implement/031-notification-system
 ```
 
 ### 4. Use as Technical Reference
+
 Each spec includes:
+
 - **5+ user stories** - understand what users need
 - **15-20 requirements** - know what to build
 - **Edge cases** - prevent bugs
@@ -72,6 +77,7 @@ Each spec includes:
 ## File Organization
 
 All specs follow this structure:
+
 ```
 specs/
 ├── 031-notification-system/
@@ -95,38 +101,35 @@ specs/
 ## Recommended Implementation Order
 
 **Foundation (MUST DO FIRST)**
+
 1. 020-user-authentication
-2. 021-shoots-teams-creation  
+2. 021-shoots-teams-creation
 3. 022-permissions-access-control
 4. 023-photo-management-storage
 
-**Core App (DO NEXT)**
-5. 001-dashboard-views
-6. 002-shot-by-shot
-7. 004-team-communication
-8. 006-gear-checklist
+**Core App (DO NEXT)** 5. 001-dashboard-views 6. 002-shot-by-shot 7. 004-team-communication 8. 006-gear-checklist
 
-**Infrastructure (DO DURING CORE)**
-9. 024-realtime-sync-offline
-10. 031-notification-system
-11. 032-calendar-system
+**Infrastructure (DO DURING CORE)** 9. 024-realtime-sync-offline 10. 031-notification-system 11. 032-calendar-system
 
 **Then everything else** in any order (with dependencies respected)
 
 ## What to Do Now
 
 ### Option 1: Create Implementation Branch
+
 ```bash
 git checkout -b implement/031-notification-system
 # Then run /speckit.plan to break into tasks
 ```
 
 ### Option 2: Review Specifications
+
 - Read through specs to understand full scope
 - Check dependencies between features
 - Plan which specs to implement first
 
 ### Option 3: Ask Clarifying Questions
+
 ```bash
 # If anything is unclear, use:
 /speckit.clarify "spec-name"
@@ -137,6 +140,7 @@ git checkout -b implement/031-notification-system
 🎉 **Your Cosplans project now has complete, production-ready specifications for all 40 features**
 
 Each spec is:
+
 - Detailed enough to build from
 - Clear enough for stakeholders to understand
 - Independent enough to implement in any order (respecting dependencies)

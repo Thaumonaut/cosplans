@@ -5,12 +5,14 @@
 This project uses Bun instead of Node.js for the following benefits:
 
 ### Performance Improvements
+
 - **Faster package installation**: ~3x faster than npm
 - **Quicker development server startup**: ~2x faster than Node.js
 - **Enhanced build times**: Optimized bundling and compilation
 - **Better memory usage**: Lower memory footprint during development
 
 ### Development Experience
+
 - **Built-in TypeScript support**: No additional transpilation needed
 - **ESM-first**: Native ES modules support
 - **Better error messages**: Enhanced debugging experience
@@ -22,7 +24,7 @@ This project uses Bun instead of Node.js for the following benefits:
 # Install dependencies
 bun install
 
-# Development server  
+# Development server
 bun run dev
 
 # Build for production
@@ -59,8 +61,9 @@ The project has been successfully migrated from npm to Bun:
 ## Performance Impact
 
 Expected improvements with Bun:
+
 - **Development server start**: ~2x faster
-- **Package installation**: ~3x faster  
+- **Package installation**: ~3x faster
 - **Hot reload**: ~1.5x faster
 - **Build times**: ~1.2x faster
 - **Memory usage**: ~20% reduction
@@ -68,6 +71,7 @@ Expected improvements with Bun:
 ## Compatibility
 
 Bun is fully compatible with:
+
 - ✅ SvelteKit and Vite
 - ✅ All existing npm packages
 - ✅ TypeScript compilation

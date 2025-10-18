@@ -1,5 +1,5 @@
 <script>
-  import '../app.css';
+  import "../app.css";
 </script>
 
 <main class="min-h-screen bg-gray-50">

@@ -181,24 +181,24 @@ npm list | grep -E "(svelte|zod|yjs|superforms|supabase|vitest|playwright)"
 ### 1. SvelteKit Configuration (svelte.config.js)
 
 ```javascript
-import adapter from '@sveltejs/adapter-auto';
-import { vitePreprocess } from '@sveltejs/kit/vite';
+import adapter from "@sveltejs/adapter-auto";
+import { vitePreprocess } from "@sveltejs/kit/vite";
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-	// Consult https://kit.svelte.dev/docs/integrations#preprocessors
-	// for more information about preprocessors
-	preprocess: vitePreprocess(),
+  // Consult https://kit.svelte.dev/docs/integrations#preprocessors
+  // for more information about preprocessors
+  preprocess: vitePreprocess(),
 
-	kit: {
-		// adapter-auto only supports some environments, see https://kit.svelte.dev/docs/adapter-auto for a list.
-		// If your environment is not supported or you settled on a specific environment, switch out the adapter.
-		// See https://kit.svelte.dev/docs/adapters for more information about adapters.
-		adapter: adapter(),
-		paths: {
-			base: process.env.BASE_PATH || ''
-		}
-	}
+  kit: {
+    // adapter-auto only supports some environments, see https://kit.svelte.dev/docs/adapter-auto for a list.
+    // If your environment is not supported or you settled on a specific environment, switch out the adapter.
+    // See https://kit.svelte.dev/docs/adapters for more information about adapters.
+    adapter: adapter(),
+    paths: {
+      base: process.env.BASE_PATH || "",
+    },
+  },
 };
 
 export default config;
@@ -209,13 +209,13 @@ export default config;
 ```javascript
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./src/**/*.{html,js,svelte,ts}'],
+  content: ["./src/**/*.{html,js,svelte,ts}"],
   theme: {
     extend: {
       colors: {
-        primary: '#6366f1', // Indigo
-        secondary: '#ec4899', // Pink
-        accent: '#f59e0b', // Amber
+        primary: "#6366f1", // Indigo
+        secondary: "#ec4899", // Pink
+        accent: "#f59e0b", // Amber
       },
     },
   },
@@ -246,7 +246,7 @@ body {
 
 ```svelte
 <script>
-  import '../app.css';
+  import "../app.css";
 </script>
 
 <div class="flex flex-col min-h-screen">
@@ -290,101 +290,101 @@ VITE_LOG_LEVEL=debug
 
 ```json
 {
-	"compilerOptions": {
-		"moduleResolution": "bundler",
-		"lib": ["ES2020", "DOM", "DOM.Iterable"],
-		"target": "ES2020",
-		"module": "ESNext",
-		"resolveJsonModule": true,
-		"allowJs": true,
-		"checkJs": true,
-		"sourceMap": true,
-		"strict": true,
-		"noImplicitAny": true,
-		"strictNullChecks": true,
-		"forceConsistentCasingInFileNames": true,
-		"baseUrl": ".",
-		"paths": {
-			"$lib": ["src/lib"],
-			"$lib/*": ["src/lib/*"],
-			"$models": ["src/models"],
-			"$services": ["src/services"],
-			"$stores": ["src/stores"],
-			"$types": ["src/types"]
-		}
-	},
-	"include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.svelte"]
+  "compilerOptions": {
+    "moduleResolution": "bundler",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "target": "ES2020",
+    "module": "ESNext",
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "checkJs": true,
+    "sourceMap": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "$lib": ["src/lib"],
+      "$lib/*": ["src/lib/*"],
+      "$models": ["src/models"],
+      "$services": ["src/services"],
+      "$stores": ["src/stores"],
+      "$types": ["src/types"]
+    }
+  },
+  "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.svelte"]
 }
 ```
 
 ### 7. Vitest Configuration (vitest.config.ts)
 
 ```typescript
-import { defineConfig } from 'vitest/config';
-import { resolve } from 'path';
+import { defineConfig } from "vitest/config";
+import { resolve } from "path";
 
 export default defineConfig({
-	test: {
-		globals: true,
-		environment: 'happy-dom',
-		coverage: {
-			provider: 'v8',
-			reporter: ['text', 'json', 'html'],
-			statements: 70,
-			branches: 70,
-			functions: 70,
-			lines: 70,
-		},
-	},
-	resolve: {
-		alias: {
-			$lib: resolve('./src/lib'),
-			$models: resolve('./src/models'),
-			$services: resolve('./src/services'),
-			$stores: resolve('./src/stores'),
-			$types: resolve('./src/types'),
-		},
-	},
+  test: {
+    globals: true,
+    environment: "happy-dom",
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "json", "html"],
+      statements: 70,
+      branches: 70,
+      functions: 70,
+      lines: 70,
+    },
+  },
+  resolve: {
+    alias: {
+      $lib: resolve("./src/lib"),
+      $models: resolve("./src/models"),
+      $services: resolve("./src/services"),
+      $stores: resolve("./src/stores"),
+      $types: resolve("./src/types"),
+    },
+  },
 });
 ```
 
 ### 8. Playwright Configuration (playwright.config.ts)
 
 ```typescript
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
-	testDir: './tests/e2e',
-	fullyParallel: true,
-	forbidOnly: !!process.env.CI,
-	retries: process.env.CI ? 2 : 0,
-	workers: process.env.CI ? 1 : undefined,
-	reporter: 'html',
-	use: {
-		baseURL: 'http://localhost:5173',
-		trace: 'on-first-retry',
-	},
+  testDir: "./tests/e2e",
+  fullyParallel: true,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 1 : undefined,
+  reporter: "html",
+  use: {
+    baseURL: "http://localhost:5173",
+    trace: "on-first-retry",
+  },
 
-	projects: [
-		{
-			name: 'chromium',
-			use: { ...devices['Desktop Chrome'] },
-		},
-		{
-			name: 'firefox',
-			use: { ...devices['Desktop Firefox'] },
-		},
-		{
-			name: 'webkit',
-			use: { ...devices['Desktop Safari'] },
-		},
-	],
+  projects: [
+    {
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
+    },
+    {
+      name: "firefox",
+      use: { ...devices["Desktop Firefox"] },
+    },
+    {
+      name: "webkit",
+      use: { ...devices["Desktop Safari"] },
+    },
+  ],
 
-	webServer: {
-		command: 'npm run dev',
-		url: 'http://localhost:5173',
-		reuseExistingServer: !process.env.CI,
-	},
+  webServer: {
+    command: "npm run dev",
+    url: "http://localhost:5173",
+    reuseExistingServer: !process.env.CI,
+  },
 });
 ```
 
@@ -399,6 +399,7 @@ npm run dev
 ```
 
 **Expected Output**:
+
 ```
   ➜  Local:   http://localhost:5173/
 ```
@@ -517,10 +518,10 @@ cosplans/
 **1. Create Zod Schema** (`src/lib/utils/validation.ts`):
 
 ```typescript
-import { z } from 'zod';
+import { z } from "zod";
 
 export const shootSchema = z.object({
-  title: z.string().min(1, 'Title required').max(100),
+  title: z.string().min(1, "Title required").max(100),
   description: z.string().optional(),
   scheduled_date: z.string().refine((date) => new Date(date) > new Date()),
   location: z.string().optional(),
@@ -534,9 +535,9 @@ export type ShootFormData = z.infer<typeof shootSchema>;
 
 ```svelte
 <script lang="ts">
-  import { superForm } from 'sveltekit-superforms/client';
-  import { shootSchema } from '$lib/utils/validation';
-  import SuperDebug, { SuperDebugSerialized } from 'sveltekit-superforms/client/SuperDebug.svelte';
+  import { superForm } from "sveltekit-superforms/client";
+  import { shootSchema } from "$lib/utils/validation";
+  import SuperDebug, { SuperDebugSerialized } from "sveltekit-superforms/client/SuperDebug.svelte";
 
   export let data;
 
@@ -580,7 +581,7 @@ export type ShootFormData = z.infer<typeof shootSchema>;
     disabled={$submitting}
     class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 disabled:opacity-50"
   >
-    {$submitting ? 'Creating...' : 'Create Shoot'}
+    {$submitting ? "Creating..." : "Create Shoot"}
   </button>
 </form>
 ```
@@ -588,10 +589,10 @@ export type ShootFormData = z.infer<typeof shootSchema>;
 **3. Create API Route** (`src/routes/api/shoots/+server.ts`):
 
 ```typescript
-import { json, error } from '@sveltejs/kit';
-import type { RequestHandler } from './$types';
-import { shootSchema } from '$lib/utils/validation';
-import { createSupabaseClient } from '$lib/services/supabase';
+import { json, error } from "@sveltejs/kit";
+import type { RequestHandler } from "./$types";
+import { shootSchema } from "$lib/utils/validation";
+import { createSupabaseClient } from "$lib/services/supabase";
 
 export const POST: RequestHandler = async ({ request, locals }) => {
   const data = await request.json();
@@ -599,19 +600,19 @@ export const POST: RequestHandler = async ({ request, locals }) => {
   // Validate with Zod
   const parsed = shootSchema.safeParse(data);
   if (!parsed.success) {
-    return error(400, { message: 'Validation failed', errors: parsed.error.flatten() });
+    return error(400, { message: "Validation failed", errors: parsed.error.flatten() });
   }
 
   // Create shoot in database
   const supabase = createSupabaseClient();
   const { data: shoot, error: dbError } = await supabase
-    .from('shoots')
+    .from("shoots")
     .insert([parsed.data])
     .select()
     .single();
 
   if (dbError) {
-    return error(500, { message: 'Database error', details: dbError.message });
+    return error(500, { message: "Database error", details: dbError.message });
   }
 
   return json({ shoot }, { status: 201 });
@@ -622,8 +623,8 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
 ```svelte
 <script lang="ts">
-  import { superForm } from 'sveltekit-superforms/client';
-  import ShootForm from '$lib/components/forms/ShootForm.svelte';
+  import { superForm } from "sveltekit-superforms/client";
+  import ShootForm from "$lib/components/forms/ShootForm.svelte";
 
   export let data;
 </script>
@@ -654,23 +655,23 @@ npm run test:watch
 
 ```typescript
 // src/lib/services/sync.ts
-import * as Y from 'yjs';
-import { WebsocketProvider } from 'y-websocket';
+import * as Y from "yjs";
+import { WebsocketProvider } from "y-websocket";
 
 export function initializeSync(docName: string, awareness?: Map<string, unknown>) {
   // Create shared document
   const ydoc = new Y.Doc();
-  
+
   // Create WebSocket connection
   const provider = new WebsocketProvider(
-    import.meta.env.PUBLIC_WEBSOCKET_URL || 'ws://localhost:1234',
+    import.meta.env.PUBLIC_WEBSOCKET_URL || "ws://localhost:1234",
     docName,
     ydoc,
     { awareness }
   );
 
   // Map for storing shared data
-  const ymap = ydoc.getMap('shared-data');
+  const ymap = ydoc.getMap("shared-data");
 
   return {
     ydoc,
@@ -688,29 +689,29 @@ export function initializeSync(docName: string, awareness?: Map<string, unknown>
 
 ```typescript
 // src/lib/services/image.ts
-import sharp from 'sharp';
-import path from 'path';
+import sharp from "sharp";
+import path from "path";
 
 export async function optimizeImage(filePath: string, outputDir: string) {
   const filename = path.basename(filePath, path.extname(filePath));
 
   // WebP for modern browsers
   await sharp(filePath)
-    .resize(1280, 1280, { fit: 'inside', withoutEnlargement: true })
+    .resize(1280, 1280, { fit: "inside", withoutEnlargement: true })
     .webp({ quality: 75 })
     .toFile(path.join(outputDir, `${filename}-1280.webp`));
 
   // Responsive sizes
   for (const size of [320, 640, 2560]) {
     await sharp(filePath)
-      .resize(size, size, { fit: 'inside', withoutEnlargement: true })
+      .resize(size, size, { fit: "inside", withoutEnlargement: true })
       .webp({ quality: 75 })
       .toFile(path.join(outputDir, `${filename}-${size}.webp`));
   }
 
   // JPEG fallback
   await sharp(filePath)
-    .resize(1280, 1280, { fit: 'inside', withoutEnlargement: true })
+    .resize(1280, 1280, { fit: "inside", withoutEnlargement: true })
     .jpeg({ quality: 75 })
     .toFile(path.join(outputDir, `${filename}.jpg`));
 }
@@ -724,14 +725,14 @@ export async function optimizeImage(filePath: string, outputDir: string) {
 
 ```typescript
 // tests/unit/utils.test.ts
-import { describe, it, expect } from 'vitest';
-import { formatDate } from '$lib/utils/date';
+import { describe, it, expect } from "vitest";
+import { formatDate } from "$lib/utils/date";
 
-describe('Date utilities', () => {
-  it('should format date correctly', () => {
-    const date = new Date('2025-10-16');
+describe("Date utilities", () => {
+  it("should format date correctly", () => {
+    const date = new Date("2025-10-16");
     const result = formatDate(date);
-    expect(result).toBe('16 Oct 2025');
+    expect(result).toBe("16 Oct 2025");
   });
 });
 ```
@@ -740,21 +741,21 @@ describe('Date utilities', () => {
 
 ```typescript
 // tests/e2e/shoots.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test('create a new shoot', async ({ page }) => {
+test("create a new shoot", async ({ page }) => {
   // Navigate to shoots page
-  await page.goto('/shoots/create');
+  await page.goto("/shoots/create");
 
   // Fill form
-  await page.fill('input[name="title"]', 'My Cosplay Shoot');
-  await page.fill('input[type="datetime-local"]', '2025-12-20T14:00');
+  await page.fill('input[name="title"]', "My Cosplay Shoot");
+  await page.fill('input[type="datetime-local"]', "2025-12-20T14:00");
 
   // Submit form
   await page.click('button[type="submit"]');
 
   // Wait for success message
-  await expect(page.locator('text=Shoot created successfully')).toBeVisible();
+  await expect(page.locator("text=Shoot created successfully")).toBeVisible();
 });
 ```
 
@@ -825,6 +826,7 @@ npm run deploy:production
 #### Issue: `npm install` fails with package conflicts
 
 **Solution**:
+
 ```bash
 npm cache clean --force
 rm -rf node_modules package-lock.json
@@ -834,6 +836,7 @@ npm install
 #### Issue: SvelteKit dev server won't start
 
 **Solution**:
+
 ```bash
 # Kill any existing process on port 5173
 lsof -ti:5173 | xargs kill -9  # macOS/Linux
@@ -846,6 +849,7 @@ npm run dev
 #### Issue: Supabase connection timeout
 
 **Solution**:
+
 ```bash
 # Check .env.local has correct Supabase credentials
 # Verify Supabase project is running
@@ -863,6 +867,7 @@ client.auth.getSession().then(console.log).catch(console.error);
 #### Issue: Yjs real-time sync not working
 
 **Solution**:
+
 ```bash
 # Ensure WebSocket server is running
 # Check y-websocket is installed
@@ -875,6 +880,7 @@ npm list y-websocket
 #### Issue: Tests failing in CI but passing locally
 
 **Solution**:
+
 ```bash
 # Run tests with CI environment variables
 CI=true npm run test:e2e
@@ -921,6 +927,7 @@ After completing setup:
 ## Getting Help
 
 **Resources**:
+
 - Constitution v2.2.0: `.specify/memory/constitution.md`
 - Data Model: `.specify/plans/data-model-v2.md`
 - Social Media Spec: `.specify/plans/social-media-integration-v2.md`
@@ -928,6 +935,7 @@ After completing setup:
 - Copilot Context: `.github/copilot-context.md`
 
 **Common Questions**:
+
 - Q: Why Sveltekit-Superforms instead of manual form handling?
   - A: Server-first validation, CSRF protection, 10-15 days saved
 - Q: Why Yjs instead of custom OT algorithm?

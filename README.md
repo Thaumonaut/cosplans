@@ -110,7 +110,7 @@ bun run build
 With Bun runtime optimizations:
 
 - **Dev server start**: ~2x faster than Node.js
-- **Package installation**: ~3x faster than npm  
+- **Package installation**: ~3x faster than npm
 - **Hot reload**: ~1.5x faster updates
 - **Memory usage**: ~20% reduction
 
@@ -138,7 +138,7 @@ Run the SQL migration in `database/001-dashboard-views.sql` in your Supabase SQL
 Visit the dashboard at `http://localhost:5173` to see:
 
 1. **Interactive Dashboard** with working widgets
-2. **Real-time Status** indicator 
+2. **Real-time Status** indicator
 3. **Template Switching** between layout modes
 4. **Responsive Design** (resize browser to test)
 5. **Navigation** to placeholder feature pages
@@ -154,7 +154,7 @@ Visit the dashboard at `http://localhost:5173` to see:
 This project follows the constitutional principles defined in the specs:
 
 - Web-first mobile-responsive design
-- Real-time collaboration capabilities  
+- Real-time collaboration capabilities
 - External API integration support
 - Test-driven development approach
 - Performance-focused implementation

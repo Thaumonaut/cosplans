@@ -9,9 +9,11 @@
 ## What Was Just Completed
 
 ### 1. Constitution v2.1.0 ✅
+
 **File**: `.specify/memory/constitution.md`
 
 **Key Updates**:
+
 - ✅ Added **Principle VIII: Creator Community & Discovery Marketplace**
   - Opt-in creator profiles with public usernames
   - Merit-based discovery (role, location, rating filtering)
@@ -43,9 +45,11 @@
 ---
 
 ### 2. Creator Community Marketplace Specification ✅
+
 **File**: `.specify/plans/creator-community-marketplace-v1.md`
 
 **Comprehensive Specification** (~8,000 lines):
+
 - Executive summary with design principles
 - Feature Categories (6 major sections):
   1. Creator Profiles & Discovery
@@ -66,9 +70,11 @@
 ---
 
 ### 3. Constitution Update Summary ✅
+
 **File**: `.specify/plans/constitution-v2-1-summary.md`
 
 **Team Communication Document** (~2,000 lines):
+
 - Changelog: What changed from v2.0.0 → v2.1.0
 - Detailed explanation by section
 - Data model implications
@@ -85,9 +91,11 @@
 ---
 
 ### 4. Feature Architecture Overview ✅
+
 **File**: `.specify/plans/FEATURE-ARCHITECTURE-v2-1-0.md`
 
 **Visual & Interactive Document** (~2,000 lines):
+
 - High-level ecosystem map (ASCII diagrams)
 - Revenue flow architecture
 - Data flow: Crew assignment & booking workflow
@@ -103,9 +111,11 @@
 ---
 
 ### 5. Update Summary ✅
+
 **File**: `.specify/plans/UPDATE-SUMMARY-v2-1-0.md`
 
 **Implementation Roadmap** (~2,500 lines):
+
 - Files created/modified overview
 - Core additions in v2.1.0
 - Feature table (profiles, discovery, bookings, payments, reviews, etc.)
@@ -120,9 +130,11 @@
 ---
 
 ### 6. README Update ✅
+
 **File**: `.specify/plans/README.md`
 
 **Project Documentation Updated**:
+
 - Version: 2.0.0 → 2.1.0
 - Added Creator Marketplace specification reference
 - Updated Phase 1 status: "READY TO START" → "COMPLETE & SPECIFICATION FINALIZED"
@@ -135,39 +147,41 @@
 
 ## What's New in This Marketplace Feature
 
-| Category | Feature | Details |
-|----------|---------|---------|
-| **Profiles** | Creator Profiles | Public username, bio, photo, roles, rates, portfolio links |
-| | Verification Badge | Automatic award: 90+ days, 4.5+ rating, 5+ monthly bookings |
-| | Privacy Controls | Optional public profile, hide real name, set travel distance, out-of-range exceptions |
-| **Discovery** | Marketplace Search | Filter by role, location (configurable distance), date availability, rating |
-| | Auto-Suggest | ML algorithm suggests nearby creators matching shoot needs |
-| | Saved Searches | Teams can save frequent searches (paid tier feature) |
-| **Bookings** | Crew Invitations | One-click email invitations with 7-day response window |
-| | External Crew | Creators can view shoot details & accept without joining team |
-| | Availability Calendar | Creators mark available/booked/unavailable dates |
-| **Payments** | Commission Model | 5% free tier, 0% paid tier (Stripe integration) |
-| | Team Budgets | Shared pool of funds for crew payments |
-| | Creator Payouts | Weekly or on-demand transfers to creator bank accounts |
-| **Reviews** | Bidirectional Reviews | Teams rate creators, creators rate teams (5-star, anonymous) |
-| | Review Display | Shown on profiles, prevents fake/manipulation (only verified bookings count) |
-| **Moderation** | Report System | Users report fake profiles, harassment, quality issues |
-| | Admin Actions | Review reports → issue warnings, suspend, or terminate violators |
-| | Badge Revocation | Verification badge removed if multiple complaints substantiated |
-| **Showcase** | Community Gallery | Verified creators submit projects; displayed chronologically, no algorithmic curation |
-| **Analytics** | Creator Dashboard | Earnings, conversion rate, repeat clients, booking trends (paid tier only) |
+| Category       | Feature               | Details                                                                               |
+| -------------- | --------------------- | ------------------------------------------------------------------------------------- |
+| **Profiles**   | Creator Profiles      | Public username, bio, photo, roles, rates, portfolio links                            |
+|                | Verification Badge    | Automatic award: 90+ days, 4.5+ rating, 5+ monthly bookings                           |
+|                | Privacy Controls      | Optional public profile, hide real name, set travel distance, out-of-range exceptions |
+| **Discovery**  | Marketplace Search    | Filter by role, location (configurable distance), date availability, rating           |
+|                | Auto-Suggest          | ML algorithm suggests nearby creators matching shoot needs                            |
+|                | Saved Searches        | Teams can save frequent searches (paid tier feature)                                  |
+| **Bookings**   | Crew Invitations      | One-click email invitations with 7-day response window                                |
+|                | External Crew         | Creators can view shoot details & accept without joining team                         |
+|                | Availability Calendar | Creators mark available/booked/unavailable dates                                      |
+| **Payments**   | Commission Model      | 5% free tier, 0% paid tier (Stripe integration)                                       |
+|                | Team Budgets          | Shared pool of funds for crew payments                                                |
+|                | Creator Payouts       | Weekly or on-demand transfers to creator bank accounts                                |
+| **Reviews**    | Bidirectional Reviews | Teams rate creators, creators rate teams (5-star, anonymous)                          |
+|                | Review Display        | Shown on profiles, prevents fake/manipulation (only verified bookings count)          |
+| **Moderation** | Report System         | Users report fake profiles, harassment, quality issues                                |
+|                | Admin Actions         | Review reports → issue warnings, suspend, or terminate violators                      |
+|                | Badge Revocation      | Verification badge removed if multiple complaints substantiated                       |
+| **Showcase**   | Community Gallery     | Verified creators submit projects; displayed chronologically, no algorithmic curation |
+| **Analytics**  | Creator Dashboard     | Earnings, conversion rate, repeat clients, booking trends (paid tier only)            |
 
 ---
 
 ## Revenue Model (Updated)
 
 ### Old Model (v2.0.0)
+
 - Storage-based pricing (2GB free, 20GB paid)
 - Fixed subscription: $5/month per team
 - Infrastructure-focused cost model
 - No creator monetization
 
 ### New Model (v2.1.0)
+
 - Commission-based pricing (5% free tier, 0% paid tier)
 - Transaction-based revenue (grows with platform adoption)
 - Aligns platform incentives with creator success
@@ -175,9 +189,11 @@
 - Sustainable without predatory pricing
 
 ### Economics Example
+
 **Scenario**: 200 creators, 100 teams in Year 1
+
 - Free tier creators: $50/month × 5% commission = $50/month
-- Paid tier creators ($5/month): $100 × $5 = $500/month  
+- Paid tier creators ($5/month): $100 × $5 = $500/month
 - Free tier teams: $50/month × 5% commission = $50/month
 - Paid tier teams ($5/month): 50 × $5 = $250/month
 - **Total**: $850/month → Profitable at Year 1 end
@@ -194,7 +210,7 @@ PHASE 1 (12-16 weeks): Core Web App
 ├─ Google integrations, Instagram planning
 └─ Specification: ✅ COMPLETE
 
-PHASE 1.5 (8 weeks): Creator Marketplace + Instagram Enhancements  
+PHASE 1.5 (8 weeks): Creator Marketplace + Instagram Enhancements
 ├─ Creator profiles, Search, Invitations
 ├─ Payments, Reviews, Moderation
 ├─ Community showcase, Analytics
@@ -219,16 +235,19 @@ PHASE 3: Advanced Features
 ## Next Steps for the Team
 
 ### This Week
+
 - [ ] Review Constitution v2.1.0
 - [ ] Read marketplace specification (creator-community-marketplace-v1.md)
 - [ ] Team kickoff meeting to discuss vision
 
 ### Week 2
+
 - [ ] Set up GitHub project board for Phase 1
 - [ ] Assign Phase 1 implementation lead
 - [ ] Create Supabase project & run migrations
 
 ### Week 3-4
+
 - [ ] Set up development environment (SvelteKit, Vitest, Playwright)
 - [ ] Configure Stripe account
 - [ ] Establish CI/CD pipeline
@@ -239,6 +258,7 @@ PHASE 3: Advanced Features
 ## Quality Assurance
 
 ### Specification Quality Checklist ✅
+
 - [x] Constitutional alignment verified
 - [x] Data model complete with relationships
 - [x] API contracts defined with examples
@@ -249,6 +269,7 @@ PHASE 3: Advanced Features
 - [x] Implementation timeline realistic
 
 ### Documentation Quality Checklist ✅
+
 - [x] Constitution updated & ratified
 - [x] Specifications cross-referenced
 - [x] Data model with SQL schema included
@@ -262,49 +283,59 @@ PHASE 3: Advanced Features
 
 ## Key Decisions Made
 
-| Decision | Rationale | Alternative |
-|----------|-----------|-------------|
-| **Phase 1.5 for marketplace** | Allows core features to stabilize before two-sided market | Launch simultaneously with Phase 1 (riskier) |
-| **5% commission model** | Sustainable, aligns incentives, less extractive than alternatives | 10-20% (less competitive), membership fees (less adoption) |
-| **Opt-in creator profiles** | Respects privacy, prevents spam marketplace | Mandatory for all users (invasive) |
-| **Email invitations** | Low friction, async, works offline | In-app only (requires login) |
-| **Stripe Connect** | Industry standard, reduces payment complexity | Custom payment logic (complex, risky) |
-| **Review after completion** | Prevents fake reviews, real experience-based | Review immediately (could be inaccurate) |
-| **Verification badges** | Community reputation system, not money-based | Featured listings or ads (pay-to-play) |
-| **Deferred Stripe** | Allows marketplace validation before payment complexity | Implement immediately (premature) |
+| Decision                      | Rationale                                                         | Alternative                                                |
+| ----------------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------- |
+| **Phase 1.5 for marketplace** | Allows core features to stabilize before two-sided market         | Launch simultaneously with Phase 1 (riskier)               |
+| **5% commission model**       | Sustainable, aligns incentives, less extractive than alternatives | 10-20% (less competitive), membership fees (less adoption) |
+| **Opt-in creator profiles**   | Respects privacy, prevents spam marketplace                       | Mandatory for all users (invasive)                         |
+| **Email invitations**         | Low friction, async, works offline                                | In-app only (requires login)                               |
+| **Stripe Connect**            | Industry standard, reduces payment complexity                     | Custom payment logic (complex, risky)                      |
+| **Review after completion**   | Prevents fake reviews, real experience-based                      | Review immediately (could be inaccurate)                   |
+| **Verification badges**       | Community reputation system, not money-based                      | Featured listings or ads (pay-to-play)                     |
+| **Deferred Stripe**           | Allows marketplace validation before payment complexity           | Implement immediately (premature)                          |
 
 ---
 
 ## Alignment with User Request
 
 ✅ **"Each person could create a public profile"**
+
 - Creator profiles with public username, bio, roles, rates, portfolio links
 
 ✅ **"Teams could search to find photographers near them"**
+
 - Marketplace search with geographic filtering (configurable distance)
 
 ✅ **"Search by role (makeup artist, prop modelers, etc.)"**
+
 - Multi-role filtering (photographer, makeup artist, cosplayer, etc.)
 
 ✅ **"Integration in shoot planning"**
+
 - Auto-suggest creators, one-click invitations, inline booking workflow
 
 ✅ **"Model could search to find photographers near them"**
+
 - Creators can list themselves; teams discover via search
 
 ✅ **"Ratings system for community members"**
+
 - 5-star bidirectional reviews, community showcase
 
 ✅ **"Verified accounts for people... active and doing well"**
+
 - Verification badge: 90+ days, 4.5+ rating, 5+ monthly bookings
 
 ✅ **"Revenue model: 5-10% commission on free tier"**
+
 - Specified as 5% commission on free tier bookings
 
 ✅ **"Payment processing & team budget"**
+
 - Stripe integration, team budget management, creator payouts
 
 ✅ **"Phase 1.5 so it can be best on the web first"**
+
 - Marketplace scheduled for Phase 1.5 (after Phase 1 web validation)
 
 ---
@@ -325,16 +356,19 @@ PHASE 3: Advanced Features
 ## Files Created/Modified
 
 ### Created (4 new files)
+
 - ✅ `creator-community-marketplace-v1.md` (8,000 lines)
 - ✅ `constitution-v2-1-summary.md` (2,000 lines)
 - ✅ `FEATURE-ARCHITECTURE-v2-1-0.md` (2,000 lines)
 - ✅ `UPDATE-SUMMARY-v2-1-0.md` (2,500 lines)
 
 ### Modified (2 files)
+
 - ✅ `constitution.md` (v2.0.0 → v2.1.0, +2,700 lines)
 - ✅ `README.md` (updated roadmap, document index, version)
 
 ### Total Documentation
+
 - **14,200+ lines** of new/updated specification
 - **All files cross-referenced** and internally consistent
 - **Ready for developer implementation** with sufficient detail
@@ -344,6 +378,7 @@ PHASE 3: Advanced Features
 ## Success Looks Like
 
 ### Phase 1 Complete ✅
+
 - Core team collaboration features working reliably
 - 70%+ test coverage
 - <3s page load on 3G
@@ -352,6 +387,7 @@ PHASE 3: Advanced Features
 - Instagram content calendar functional
 
 ### Phase 1.5 Marketplace Launch ✅
+
 - 50+ verified creators registered
 - 20+ successful paid bookings
 - 4.5+ average creator rating
@@ -360,6 +396,7 @@ PHASE 3: Advanced Features
 - Review/moderation system preventing abuse
 
 ### Year 1 Break-Even ✅
+
 - 200-300 creators actively using platform
 - 100-150 teams collaborating regularly
 - $2,000-5,000/month revenue

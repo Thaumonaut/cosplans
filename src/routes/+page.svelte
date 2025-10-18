@@ -1,14 +1,16 @@
-<script lang="ts">
-  import { page } from '$app/stores';
-</script>
+<script lang="ts"></script>
 
 <svelte:head>
   <title>Cosplans</title>
   <meta name="description" content="Cosplans collaborative planning platform" />
 </svelte:head>
 
-<div class="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-100 via-white to-purple-100">
-  <div class="rounded-3xl border border-blue-200 bg-white/90 p-12 text-center shadow-xl backdrop-blur">
+<div
+  class="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-100 via-white to-purple-100"
+>
+  <div
+    class="rounded-3xl border border-blue-200 bg-white/90 p-12 text-center shadow-xl backdrop-blur"
+  >
     <p class="mb-4 text-xs font-semibold uppercase tracking-[0.35em] text-blue-500">Coming Soon</p>
     <h1 class="text-3xl font-bold text-slate-900">Cosplans Public Landing Page</h1>
     <p class="mt-4 text-base text-slate-600">

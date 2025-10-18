@@ -118,17 +118,19 @@ DashboardLayout
 ### Quick Stats Cards
 
 #### Card 1: Active Shoots (Blue)
+
 ```
 Background: from-blue-500 to-blue-600
 Text: text-white
 Icon Background: bg-white/20
-Format: 
+Format:
   Label: text-blue-100 text-sm font-medium
   Number: text-3xl font-bold
   Meta: text-blue-100 text-xs
 ```
 
 #### Card 2: Team Members (Purple)
+
 ```
 Background: from-purple-500 to-purple-600
 Text: text-white
@@ -137,6 +139,7 @@ Format: Same as Blue card
 ```
 
 #### Card 3: Portfolio Items (Green)
+
 ```
 Background: from-green-500 to-green-600
 Text: text-white
@@ -145,6 +148,7 @@ Format: Same as Blue card
 ```
 
 #### Card 4: Next Shoot (Orange)
+
 ```
 Background: from-orange-500 to-orange-600
 Text: text-white
@@ -177,7 +181,7 @@ Label: text-sm font-semibold text-gray-900 mb-4 uppercase tracking-wide
 
 Grid:
   gap-6 grid-cols-1 md:grid-cols-2
-  
+
 Cards: Use existing Card component
   - transition-shadow hover:shadow-lg focus-within:shadow-lg
   - Standard CardHeader, CardTitle, CardContent structure
@@ -188,6 +192,7 @@ Cards: Use existing Card component
 ## Responsive Behavior
 
 ### Desktop (≥1024px)
+
 ```
 Quick Stats:    4 cards in row
 Shoots:         Full width
@@ -196,6 +201,7 @@ Layout:         Max width 7xl, centered
 ```
 
 ### Tablet (768px - 1023px)
+
 ```
 Quick Stats:    2 cards per row (2×2 grid)
 Shoots:         Full width
@@ -204,6 +210,7 @@ Layout:         Full width with padding
 ```
 
 ### Mobile (<768px)
+
 ```
 Quick Stats:    1 card per row (stacks vertically)
 Shoots:         Full width, shoot cards adapt to narrower space
@@ -217,11 +224,13 @@ Sidebar:        (To be added) Collapses to hamburger
 ## Layout CSS Classes
 
 ### Quick Stats Grid
+
 ```
 grid grid-cols-1 md:grid-cols-4 gap-4 mb-8
 ```
 
 ### Stat Cards
+
 ```
 bg-gradient-to-br from-{color}-500 to-{color}-600
 rounded-lg p-6 text-white shadow-lg
@@ -229,17 +238,20 @@ flex items-center justify-between
 ```
 
 ### Primary Widget Container
+
 ```
 mb-8
 bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden
 ```
 
 ### Primary Widget Header
+
 ```
 bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4
 ```
 
 ### Secondary Metrics Grid
+
 ```
 grid gap-6 grid-cols-1 md:grid-cols-2
 ```
@@ -251,6 +263,7 @@ grid gap-6 grid-cols-1 md:grid-cols-2
 Each shoot card now has better visual organization:
 
 ### Header Section (No Truncation)
+
 ```
 ┌─────────────────────────────────┬──────────────┐
 │ Convention Shoot                │  [upcoming]  │
@@ -259,6 +272,7 @@ Each shoot card now has better visual organization:
 ```
 
 ### Details Section
+
 ```
 ┌─────────────────────────────────────────────────┐
 │ 📅 Oct 25, 2025        ⏰ 2:00 PM              │
@@ -267,6 +281,7 @@ Each shoot card now has better visual organization:
 ```
 
 ### Footer Section
+
 ```
 ┌────────────────────────────────────────────────┐
 │ 📸 Alex Chen          👥 4 team members        │
@@ -304,6 +319,7 @@ Each shoot card now has better visual organization:
    - Still scannable and accessible
 
 ### Attention Flow
+
 ```
 User arrives → Eyes drawn to colorful stats (1st)
            → Scans down to blue "Upcoming Shoots" (2nd)
@@ -331,6 +347,7 @@ When sidebar is added, layout will be:
 ```
 
 Sidebar will add:
+
 - Left navigation (250-280px on desktop, 64px collapsed on mobile)
 - Team context at top
 - User menu at bottom
@@ -341,6 +358,7 @@ Sidebar will add:
 ## Tailwind Classes Used
 
 ### Colors
+
 - `from-blue-500 to-blue-600` - Primary (shoots)
 - `from-purple-500 to-purple-600` - Team
 - `from-green-500 to-green-600` - Content
@@ -348,6 +366,7 @@ Sidebar will add:
 - `bg-white/20` - Overlay tint
 
 ### Spacing
+
 - `gap-4` - Stat card gaps (16px)
 - `gap-6` - Widget gaps (24px)
 - `p-6` - Card padding (24px)
@@ -355,12 +374,14 @@ Sidebar will add:
 - `mb-8` - Section margins (32px)
 
 ### Typography
+
 - `text-3xl font-bold` - Stat numbers
 - `text-sm font-medium` - Stat labels
 - `text-lg font-semibold` - Widget titles
 - `text-xs` - Supporting text
 
 ### Layout
+
 - `grid-cols-1 md:grid-cols-4` - Stats responsive
 - `grid-cols-1 md:grid-cols-2` - Secondary widgets
 - `max-w-7xl mx-auto` - Container max width
@@ -376,7 +397,7 @@ Sidebar will add:
    - Will integrate with real Supabase data when auth is implemented
    - Same structure applies to Quick Stats (mock for now)
 
-3. **Real-time Updates**: 
+3. **Real-time Updates**:
    - Connection status badge already updates via store
    - Quick stats will need reactive computation from real data
    - Shoots widget already has mock real-time setup
@@ -392,4 +413,3 @@ Sidebar will add:
    - Icons paired with text labels
    - Good color contrast ratios
    - Ready for screen reader support
-

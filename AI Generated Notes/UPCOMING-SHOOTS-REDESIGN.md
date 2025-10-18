@@ -1,17 +1,20 @@
 # Upcoming Shoots Widget Redesign - Complete
 
 ## Overview
+
 The `UpcomingShootsWidget.svelte` has been redesigned to provide a better visual hierarchy and user experience. The widget now showcases costume/character images prominently while maintaining all essential shoot information.
 
 ## Key Changes
 
 ### 1. **New Layout Structure**
+
 The widget now displays three distinct sections:
 
 #### A. Next Shoot Notification Bar
+
 - **Location**: Top of widget when shoots exist
 - **Style**: Blue gradient background (from-blue-50 to-blue-100)
-- **Content**: 
+- **Content**:
   - "Next Scheduled Shoot" label
   - Shoot title
   - Date and time
@@ -19,6 +22,7 @@ The widget now displays three distinct sections:
 - **Purpose**: Quickly highlights the user's immediate next commitment
 
 #### B. Week View Calendar
+
 - **Location**: Below next shoot notification
 - **Structure**: 7-column grid showing Mon-Sun
 - **Features per day**:
@@ -32,6 +36,7 @@ The widget now displays three distinct sections:
 - **Purpose**: Visual overview of the week's schedule
 
 #### C. Shoots List with Image Showcase
+
 - **Location**: Below week calendar
 - **Card Layout**: Horizontal flex layout
   - **Left side** (132×132px): Costume/character image
@@ -46,12 +51,15 @@ The widget now displays three distinct sections:
 ### 2. **Data Structure Updates**
 
 #### Mock Data Enhancement
+
 All mock shoots now include:
+
 ```typescript
-costumeImage: null  // URL or null for placeholder
+costumeImage: null; // URL or null for placeholder
 ```
 
 #### Computed Properties Added
+
 ```typescript
 // Next shoot reference
 $: nextShoot = shoots.length > 0 ? shoots[0] : null;
@@ -62,49 +70,52 @@ $: weekDays = Array.from({ length: 7 }, (_, i) => {
   date.setDate(date.getDate() + i);
   return {
     date,
-    dateStr: date.toISOString().split('T')[0],
-    dayName: date.toLocaleDateString('en-US', { weekday: 'short' }),
+    dateStr: date.toISOString().split("T")[0],
+    dayName: date.toLocaleDateString("en-US", { weekday: "short" }),
     dayNum: date.getDate(),
-    shootCount: shoots.filter(s => s.date === dateStr).length
+    shootCount: shoots.filter((s) => s.date === dateStr).length,
   };
 });
 ```
 
 #### Helper Functions
+
 ```typescript
 // Returns image URL or empty string for placeholder fallback
 function getCostumeImage(shoot: any): string {
-  return shoot.costumeImage || '';
+  return shoot.costumeImage || "";
 }
 
 // Checks if a date is today
 function isToday(dateStr: string): boolean {
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toISOString().split("T")[0];
   return dateStr === today;
 }
 ```
 
 ### 3. **Visual Improvements**
 
-| Aspect | Before | After |
-|--------|--------|-------|
-| Layout | Vertical card stack | Horizontal image + details |
-| Images | None | 132×132px costume display |
-| Hierarchy | Flat card design | 3-tier (next → week → list) |
-| Focus | All shoots equal | Next shoot highlighted |
-| Spacing | Compact | Better breathing room |
-| Status | In-card badge | Top-right corner |
-| Metadata | Grouped together | Organized into rows |
+| Aspect    | Before              | After                       |
+| --------- | ------------------- | --------------------------- |
+| Layout    | Vertical card stack | Horizontal image + details  |
+| Images    | None                | 132×132px costume display   |
+| Hierarchy | Flat card design    | 3-tier (next → week → list) |
+| Focus     | All shoots equal    | Next shoot highlighted      |
+| Spacing   | Compact             | Better breathing room       |
+| Status    | In-card badge       | Top-right corner            |
+| Metadata  | Grouped together    | Organized into rows         |
 
 ### 4. **Styling Details**
 
 **Next Shoot Bar**:
+
 - Gradient: `from-blue-50 to-blue-100`
 - Border: `border-blue-200`
 - Padding: `p-4`
 - Rounded: `rounded-lg`
 
 **Week Calendar Days**:
+
 - Width: `w-16` (64px each)
 - Padding: `p-3`
 - Today: `bg-blue-600 text-white shadow-md`
@@ -112,6 +123,7 @@ function isToday(dateStr: string): boolean {
 - Empty: `bg-gray-100`
 
 **Shoot Cards**:
+
 - Background: White
 - Border: Gray-200, hover blue-400
 - Layout: `flex gap-4 p-4`
@@ -131,12 +143,14 @@ function isToday(dateStr: string): boolean {
 ## Component Dependencies
 
 **Uses Existing**:
+
 - `getStatusColor()` function for badge styling
 - `formatDate()` and `formatTime()` utilities
 - Tailwind CSS classes for styling
 - Svelte reactive declarations
 
 **Icons Used**:
+
 - Calendar/document (shoot date)
 - Location pin (shoot location)
 - Camera (image placeholder)
@@ -146,6 +160,7 @@ function isToday(dateStr: string): boolean {
 ## Future Integration Points
 
 ### Ready for Implementation
+
 1. **Image Upload**: Replace `costumeImage: null` with actual URLs
 2. **Calendar Feature** (Spec 032): Full calendar integration with this week view
 3. **Shoot Filters**: Use week view to filter by date range
@@ -153,6 +168,7 @@ function isToday(dateStr: string): boolean {
 5. **Responsive Design**: Adjust image size on mobile (currently 132×132px)
 
 ### Data Flow
+
 ```
 Supabase Shoots Table
     ↓
@@ -188,7 +204,7 @@ UpcomingShootsWidget
 
 - **File**: `/src/lib/components/dashboard/UpcomingShootsWidget.svelte`
 - **Lines**: 315 (up from 275)
-- **New Elements**: 
+- **New Elements**:
   - 1 Next shoot notification bar
   - 1 Week calendar grid
   - 1 Shoot card redesign (horizontal layout)
