@@ -1,0 +1,275 @@
+openapi: 3.1.0
+info:
+  title: Cosplans Service Reliability API
+  version: 1.0.0
+  description: Endpoints that manage service connection profiles, diagnostics, and health reporting.
+servers:
+  - url: https://app.cosplans.com/api
+paths:
+  /service-connections:
+    get:
+      summary: List service connections for the authenticated team
+      tags: [ServiceConnections]
+      parameters:
+        - name: serviceType
+          in: query
+          schema:
+            type: string
+            enum: [supabase, google_calendar, google_maps, email]
+        - name: environment
+          in: query
+          schema:
+            type: string
+            enum: [development, staging, production]
+      responses:
+        '200':
+          description: Connection list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ServiceConnectionProfile'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+    post:
+      summary: Create or update a service connection profile
+      tags: [ServiceConnections]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceConnectionUpsert'
+      responses:
+        '201':
+          description: Connection created or updated pending verification
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceConnectionProfile'
+        '400':
+          description: Validation error
+  /service-connections/{id}/test:
+    post:
+      summary: Run connection verification for a configured service
+      tags: [ServiceConnections]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Test result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectionTestResult'
+        '409':
+          description: Connection locked by another verification job
+  /diagnostics/runs:
+    post:
+      summary: Trigger automated diagnostics for a service connection
+      tags: [Diagnostics]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [serviceConnectionId, scenarios, trigger]
+              properties:
+                serviceConnectionId:
+                  type: string
+                  format: uuid
+                scenarios:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/DiagnosticScenario'
+                trigger:
+                  type: string
+                  enum: [manual, scheduled]
+      responses:
+        '202':
+          description: Diagnostics queued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiagnosticRun'
+  /diagnostics/runs/{id}:
+    get:
+      summary: Retrieve diagnostics run details
+      tags: [Diagnostics]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Diagnostic run detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiagnosticRun'
+        '404':
+          description: Run not found
+  /health/snapshots:
+    get:
+      summary: Fetch aggregated health status for active service connections
+      tags: [Health]
+      responses:
+        '200':
+          description: Aggregated health data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/HealthSnapshot'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+        size:
+          type: integer
+        total:
+          type: integer
+    ServiceConnectionUpsert:
+      type: object
+      required: [serviceType, environment, credentials]
+      properties:
+        serviceType:
+          type: string
+          enum: [supabase, google_calendar, google_maps, email]
+        environment:
+          type: string
+          enum: [development, staging, production]
+        credentials:
+          type: object
+          required: [encryptedPayload]
+          properties:
+            encryptedPayload:
+              type: string
+              description: Encrypted bundle containing service role keys or OAuth tokens.
+        connectionMetadata:
+          type: object
+          additionalProperties: true
+    ServiceConnectionProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        teamId:
+          type: string
+          format: uuid
+        serviceType:
+          type: string
+        environment:
+          type: string
+        status:
+          type: string
+          enum: [inactive, pending_verification, active, error]
+        lastVerifiedAt:
+          type: string
+          format: date-time
+          nullable: true
+        connectionMetadata:
+          type: object
+          additionalProperties: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    ConnectionTestResult:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [pass, fail]
+        checkedAt:
+          type: string
+          format: date-time
+        correlationId:
+          type: string
+        details:
+          type: object
+          additionalProperties: true
+    DiagnosticScenario:
+      type: string
+      enum: [latency_spike, timeout, malformed_payload, permission_denied, upstream_outage, other]
+    DiagnosticRun:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        serviceConnectionId:
+          type: string
+          format: uuid
+        scenarios:
+          type: array
+          items:
+            $ref: '#/components/schemas/DiagnosticScenario'
+        status:
+          type: string
+          enum: [queued, running, pass, fail, blocked]
+        startedAt:
+          type: string
+          format: date-time
+          nullable: true
+        completedAt:
+          type: string
+          format: date-time
+          nullable: true
+        durationMs:
+          type: integer
+          nullable: true
+        evidenceUrl:
+          type: string
+          nullable: true
+    HealthSnapshot:
+      type: object
+      properties:
+        serviceConnectionId:
+          type: string
+          format: uuid
+        currentStatus:
+          type: string
+          enum: [active, degraded, error]
+        uptimePercent24h:
+          type: number
+          format: float
+        recentFailures:
+          type: integer
+        lastHeartbeatAt:
+          type: string
+          format: date-time
+        lastErrorEventId:
+          type: string
+          format: uuid
+          nullable: true
+security:
+  - bearerAuth: []

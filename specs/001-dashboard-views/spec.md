@@ -129,8 +129,8 @@ Users can view and manage the lifecycle of costumes and props directly from the 
 - **FR-002**: System MUST show "Upcoming Shoots" widget with shoot cards displaying date, title, character/series, status badge, and days until shoot with color coding (< 7 days = red, 7-14 = yellow, > 14 = green)
 - **FR-003**: System MUST show "Ideas to Plan" widget with shoot idea cards displaying character, series, thumbnail (if uploaded), last updated date, and "Start Planning" quick action button
 - **FR-004**: System MUST display alerts panel highlighting urgent items: weather warnings, budget overruns, incomplete checklists (< 48hrs before shoot), pending editing tasks, unsettled expenses
-- **FR-005**: System MUST update all dashboard widgets in real-time (< 2 seconds) when team members make changes (add expense, complete checklist item, reschedule shoot)
-- **FR-006**: System MUST allow users to customize dashboard layout by showing/hiding widgets, reordering via drag-and-drop, and saving preferences per user
+- **FR-005**: System MUST update all dashboard widgets via Server-Sent Events (< 2 seconds) when team members make changes (add expense, complete checklist item, reschedule shoot), with polling fallback every 30 seconds for browsers without SSE support
+- **FR-006**: System MUST provide predefined dashboard layout templates (Compact, Detailed, Timeline-Focus) with users able to select preferred template and show/hide individual widgets within chosen template, saving preferences per user
 - **FR-007**: System MUST load dashboard in under 2 seconds on 3G connection with progressive rendering (critical widgets first, secondary widgets lazy load)
 
 #### Timeline/Gantt View (FR-008 to FR-014)
@@ -138,7 +138,7 @@ Users can view and manage the lifecycle of costumes and props directly from the 
 - **FR-008**: System MUST display timeline view showing all shoots as horizontal bars across time axis with configurable zoom levels (day/week/month/quarter)
 - **FR-009**: System MUST show costume build phases within shoot bars using color-coded sub-bars (planning/building/complete) with start/end dates visible on hover
 - **FR-010**: System MUST display dependency arrows between shoots showing which shoots depend on others (costume sharing, sequential planning) with critical path highlighting (red) if timing is tight (< 3 days buffer)
-- **FR-011**: System MUST allow users to drag shoot bars to reschedule with automatic dependent shoot date adjustment, team notification, and Google Calendar sync within 2 seconds
+- **FR-011**: System MUST allow users to drag shoot bars to reschedule using event sourcing to track all timeline changes, enabling automatic dependent shoot date adjustment, team notification, and Google Calendar sync within 2 seconds with full rollback capability
 - **FR-012**: System MUST support milestone markers on timeline (convention dates, costume deadlines, location bookings) with vertical lines and labels
 - **FR-013**: System MUST collapse timeline to overview mode when date range > 6 months, showing shoot count per day with expandable drill-down on click
 - **FR-014**: System MUST allow filtering timeline by team member, shoot status, character/series, and custom tags with real-time filter application (< 500ms)
@@ -158,7 +158,7 @@ Users can view and manage the lifecycle of costumes and props directly from the 
 - **FR-022**: System MUST track costume inventory status per character with fields: status (owned/sold/rented/damaged/lost), purchase date, sale date, storage location, condition notes
 - **FR-023**: System MUST show "Costume Status: Sold" alert when planning new shoot with previously sold costume, offering "Build New Costume" or "Rent Costume" quick action buttons
 - **FR-024**: System MUST display series pages showing completion tracking with grid view: shot characters (color photos) vs unshot characters (greyscale placeholders from series database)
-- **FR-025**: System MUST calculate series completion percentage by comparing shot characters to total character count from series database (e.g., "5/10 MHA characters = 50% complete")
+- **FR-025**: System MUST calculate series completion percentage by comparing shot characters to total character count from integrated character database (external anime/game APIs supplemented by community-driven user contributions) with fallback to manual series definition (e.g., "5/10 MHA characters = 50% complete")
 - **FR-026**: System MUST allow filtering character view by cosplayer, series, costume status, and date range with saved filter presets
 
 #### Team Budget Overview (FR-027 to FR-032)
@@ -166,7 +166,7 @@ Users can view and manage the lifecycle of costumes and props directly from the 
 - **FR-027**: System MUST display team budget overview dashboard aggregating all shoot budgets with total allocated, total spent, remaining budget, and percentage used with color-coded progress bar
 - **FR-028**: System MUST show spending breakdown by category with donut chart displaying percentage distribution (Costumes, Props, Location, Equipment, Travel, Other) and click-to-filter functionality
 - **FR-029**: System MUST display spending breakdown by shoot with bar chart showing per-shoot expenses sorted by amount (highest first) and budget status (under/over budget)
-- **FR-030**: System MUST track per-member expense contributions with "You owe" / "Owed to you" settlement calculations showing who owes whom with amount breakdown and "Mark as Paid" buttons
+- **FR-030**: System MUST track per-member expense contributions with "You owe" / "Owed to you" settlement calculations showing who owes whom with amount breakdown and "Mark as Paid" buttons requiring manual confirmation by both parties, with optional receipt upload for verification and dispute resolution
 - **FR-031**: System MUST generate monthly spending trend graph (line chart) showing burn rate over 6-12 months with convention dates highlighted and average monthly spend annotation
 - **FR-032**: System MUST allow exporting team budget report as PDF including all charts, shoot breakdowns, settlement status, and expense line items with date range selector
 
@@ -179,6 +179,16 @@ Users can view and manage the lifecycle of costumes and props directly from the 
 - **CostumeInventoryItem**: Costume record with status (owned/sold/rented/damaged), dates, location, condition, associated character/shoots
 - **SeriesCompletion**: Series tracking with total character count, shot character list, completion percentage, unshot character suggestions
 - **TeamBudget**: Aggregated budget data with total allocated/spent, category breakdown, per-member contributions, settlement calculations
+
+## Clarifications
+
+### Session 2025-10-16
+
+- Q: Real-time update mechanism → A: Server-Sent Events (SSE) with polling fallback for updates
+- Q: Dashboard widget customization scope → A: Predefined layout templates with minimal customization
+- Q: Timeline view data persistence strategy → A: Event sourcing for timeline changes with full audit trail
+- Q: Character/series database integration → A: Mix of external APIs and community-driven contributions
+- Q: Team budget settlement mechanism → A: Manual confirmation with optional receipt uploads
 
 ## Success Criteria *(mandatory)*
 

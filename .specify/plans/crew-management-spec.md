@@ -10,11 +10,13 @@
 Cosplans now implements a **two-tier role system**:
 
 ### 1. Team-Level Permissions (app-wide access control)
+
 - **Admin**: Can create/edit/delete shoots, manage team, manage crew assignments
 - **Member**: Can edit shoots and their content, view crew assignments
 - **Viewer**: Can view shoots and crew assignments (read-only)
 
 ### 2. Crew Roles (per-shoot, informational only)
+
 - **Photographer, Cosplayer, Makeup Artist, Prop Master, Hair Stylist, Assistant, Custom**
 - One crew member can have multiple roles on a single shoot (e.g., photographer + assistant)
 - Crew roles do NOT affect permissions
@@ -27,6 +29,7 @@ Cosplans now implements a **two-tier role system**:
 ### New Tables
 
 #### Crew (Personnel Master)
+
 ```sql
 CREATE TABLE crew (
   id UUID,
@@ -45,6 +48,7 @@ CREATE TABLE crew (
 **Purpose**: Persistent record of individuals who have worked with the team, including work history and contact information.
 
 #### Shoot Crew Assignment (Junction Table)
+
 ```sql
 CREATE TABLE shoot_crew (
   id UUID,
@@ -61,22 +65,24 @@ CREATE TABLE shoot_crew (
 
 ### Key Differences from Previous Model
 
-| Concept | Previous | New |
-|---------|----------|-----|
-| **Crew Assignment** | Stored in shoots table | Separate shoot_crew junction table |
-| **Crew Roles** | Team-level global roles | Per-shoot informational roles |
-| **Crew Records** | Implicit (no dedicated table) | Explicit crew table with history |
-| **Contact Access** | No control | Role-based (admins only) |
-| **Collaboration History** | Not tracked | Tracked via shoot_crew |
+| Concept                   | Previous                      | New                                |
+| ------------------------- | ----------------------------- | ---------------------------------- |
+| **Crew Assignment**       | Stored in shoots table        | Separate shoot_crew junction table |
+| **Crew Roles**            | Team-level global roles       | Per-shoot informational roles      |
+| **Crew Records**          | Implicit (no dedicated table) | Explicit crew table with history   |
+| **Contact Access**        | No control                    | Role-based (admins only)           |
+| **Collaboration History** | Not tracked                   | Tracked via shoot_crew             |
 
 ---
 
 ## User Interfaces
 
 ### 1. Crew Management Page
+
 **Purpose**: Team-wide personnel administration and history tracking
 
 **Features**:
+
 - List all crew members who have worked with team
 - View work history (which shoots, roles assigned)
 - Add new crew members (manually or from previous shoots)
@@ -85,15 +91,18 @@ CREATE TABLE shoot_crew (
 - Search/filter crew by name, email, or role
 
 **Visibility**:
+
 - Owner: Can see names, emails, phones, work history
 - Admin: Can see names, emails, phones, work history
 - Member: Can see names, emails, phones, work history (cannot edit)
 - Viewer: Can see names, emails, phones, work history (cannot edit)
 
 ### 2. Shoot Detail View (Crew Section)
+
 **Purpose**: Inline crew management while planning/editing shoot
 
 **Features**:
+
 - Display current crew assignments for shoot
 - Add crew members inline (quick selection from team crew list)
 - Edit crew roles for each person
@@ -101,13 +110,16 @@ CREATE TABLE shoot_crew (
 - Assign multiple roles per crew member (checkboxes for each role)
 
 **Visibility**:
+
 - Owner: Can see all crew info, edit assignments
 - Admin: Can see all crew info, edit assignments
 - Member: Can see crew names/roles/contact (cannot edit assignments)
 - Viewer: Can see crew names/roles/contact (read-only)
 
 ### 3. Inline Resource Management
+
 **As mentioned**: Shoot detail view should also support editing:
+
 - ✅ Costumes (add, edit, remove)
 - ✅ Props (add, edit, remove)
 - ✅ Crew (add, edit, remove) ← Implemented with new crew tables
@@ -170,6 +182,7 @@ Contact information endpoints (email, phone) require `can_view_crew_contact` per
 ## Access Control Examples
 
 ### Example 1: Team Member Views Shoot
+
 ```
 User Role: member
 Sees: Crew names, roles (photographer, cosplayer, etc.), contact info (email, phone)
@@ -177,6 +190,7 @@ Blocked: Cannot edit crew assignments
 ```
 
 ### Example 2: Admin Edits Crew
+
 ```
 User Role: admin
 Sees: Full crew info (names, emails, phones)
@@ -184,6 +198,7 @@ Can: Add crew, edit contact info, assign to shoots, remove from shoots
 ```
 
 ### Example 3: Owner Has Full Control
+
 ```
 User Role: owner
 Sees: Full crew info (names, emails, phones)
@@ -191,6 +206,7 @@ Can: All admin actions + team settings, member management, analytics access
 ```
 
 ### Example 4: Viewer Inspects Shoot
+
 ```
 User Role: viewer
 Sees: Crew names, roles, contact info (read-only)
@@ -215,6 +231,7 @@ Blocked: Cannot edit permissions, cannot manage crew
 ## Testing Scenarios
 
 ### Scenario 1: Admin Assigns Multiple Roles
+
 1. Admin opens shoot detail view
 2. Clicks "Add Crew"
 3. Selects "Alice" from crew list
@@ -223,6 +240,7 @@ Blocked: Cannot edit permissions, cannot manage crew
 6. ✅ shoot_crew row created: {shoot_id, crew_id, roles: ['photographer', 'assistant']}
 
 ### Scenario 2: Member Views Crew
+
 1. Member opens shoot detail view
 2. Sees crew section: "Alice (photographer, assistant)"
 3. Clicks to see more → navigates to crew management page
@@ -230,6 +248,7 @@ Blocked: Cannot edit permissions, cannot manage crew
 5. ✅ Crew contact info blocked (no email, phone visible)
 
 ### Scenario 3: Admin Views Crew History
+
 1. Admin opens crew management page
 2. Searches for "Alice"
 3. Clicks on Alice → sees work history
@@ -237,6 +256,7 @@ Blocked: Cannot edit permissions, cannot manage crew
 5. ✅ shoot_crew records queried and displayed chronologically
 
 ### Scenario 4: Viewer Limitation
+
 1. Viewer opens shoot detail
 2. Sees crew names and roles
 3. Clicks "Manage Crew" button
@@ -247,6 +267,7 @@ Blocked: Cannot edit permissions, cannot manage crew
 ## Constitution Alignment
 
 ✅ **Principle VII (Updated)**: Teams support two distinct role systems:
+
 - Team-level permissions (global app access): admin, member, viewer
 - Crew roles (per-shoot, informational): photographer, cosplayer, makeup artist, etc.
 

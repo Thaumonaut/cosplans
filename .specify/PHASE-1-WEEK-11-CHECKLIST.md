@@ -184,20 +184,24 @@
 ## 🔗 Constitution References
 
 **Principle VI (TDD - Test-Driven Development)**
+
 - [ ] 70%+ code coverage across all modules
 - [ ] Tests for all critical paths (auth, permissions, sync)
 - [ ] Regression testing before each merge
 
 **Principle I (Web-First, Mobile-Responsive)**
+
 - [ ] Performance targets: <3s page load on 3G
 - [ ] Responsive images: lazy loading, WebP/JPEG
 - [ ] Mobile browser compatibility: iOS Safari, Chrome Android
 
 **Principle VII (Security & Privacy)**
+
 - [ ] No sensitive data in logs/errors
 - [ ] Accessibility for users with disabilities
 
 **Technology Stack (Constitution v2.2.0)**
+
 - [ ] Vitest for unit/integration tests
 - [ ] Playwright for E2E tests
 - [ ] axe-core for accessibility audits
@@ -208,6 +212,7 @@
 ## 📦 Deliverables
 
 ### Tests
+
 - [ ] Additional unit tests to reach 70%
 - [ ] Additional integration tests
 - [ ] Additional E2E tests
@@ -215,6 +220,7 @@
 - [ ] Performance baselines (Lighthouse runs)
 
 ### Performance Improvements
+
 - [ ] Bundle size reduction (if needed)
 - [ ] Database indexes added
 - [ ] Image optimization verified
@@ -222,6 +228,7 @@
 - [ ] Caching headers configured
 
 ### Documentation
+
 - [ ] Test guide
 - [ ] Accessibility guide
 - [ ] Performance guide
@@ -232,28 +239,31 @@
 
 ## ⚠️ Known Considerations
 
-| Item | Impact | Resolution |
-|------|--------|-----------|
-| **Load Testing** | Resource-intensive | Optional stretch goal; can use synthetic metrics instead |
-| **Browser Polyfills** | Increases bundle size | Use only for critical APIs; leverage modern browsers |
-| **Accessibility Violations** | May not achieve 100% AA | Document any exceptions with reasoning |
+| Item                         | Impact                  | Resolution                                               |
+| ---------------------------- | ----------------------- | -------------------------------------------------------- |
+| **Load Testing**             | Resource-intensive      | Optional stretch goal; can use synthetic metrics instead |
+| **Browser Polyfills**        | Increases bundle size   | Use only for critical APIs; leverage modern browsers     |
+| **Accessibility Violations** | May not achieve 100% AA | Document any exceptions with reasoning                   |
 
 ---
 
 ## 📋 Daily Breakdown
 
 **Days 1-2**: Identify coverage gaps + fix critical gaps
+
 - Run coverage report
 - Add tests for uncovered paths
 - Focus on auth, permissions, sync modules
 
 **Days 3-4**: Accessibility improvements
+
 - Keyboard navigation audit
 - Screen reader testing
 - Color contrast fixes
 - Alt text verification
 
 **Days 5**: Performance optimization + documentation
+
 - Page load time optimization
 - API response time optimization
 - Database index analysis
@@ -264,6 +274,7 @@
 ## ✅ Sign-Off Criteria
 
 **Week 11 COMPLETE when**:
+
 1. ✅ 70%+ code coverage
 2. ✅ WCAG 2.1 Level AA compliance (or documented exceptions)
 3. ✅ Page load <3s on 3G (Lighthouse score >80)

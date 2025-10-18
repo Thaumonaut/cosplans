@@ -34,6 +34,7 @@ The Creator Community Marketplace transforms Cosplans from a team collaboration 
 #### 1.1 Creator Profile Setup
 
 **Data Model**:
+
 ```sql
 -- New table: creator_profiles
 CREATE TABLE creator_profiles (
@@ -44,24 +45,24 @@ CREATE TABLE creator_profiles (
   bio TEXT,
   profile_photo_url VARCHAR(255),
   roles_offered VARCHAR[] NOT NULL, -- e.g., ['photographer', 'makeup_artist']
-  
+
   -- Location & Travel
   zip_code VARCHAR(10),
   travel_distance_miles INT DEFAULT 25, -- min willing to travel
   show_outside_range BOOLEAN DEFAULT false, -- allow bookings outside range?
-  
+
   -- Rates & Availability
   rates_visible BOOLEAN DEFAULT false, -- show rates publicly?
-  
+
   -- Verification & Status
   verification_badge BOOLEAN DEFAULT false,
   is_private BOOLEAN DEFAULT false, -- hidden from marketplace search
   is_suspended BOOLEAN DEFAULT false,
   paused_until TIMESTAMP,
-  
+
   -- Portfolio
   portfolio_links VARCHAR[] DEFAULT ARRAY[]::VARCHAR[],
-  
+
   -- Timestamps
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP DEFAULT NOW(),
@@ -91,6 +92,7 @@ CREATE TABLE creator_availability (
 ```
 
 **Profile Fields**:
+
 - **Public Username**: Required, unique, used in profile URLs (e.g., @jane_photography)
 - **Real Name Visibility**: Toggle (checkbox) to show/hide real name
 - **Bio/About**: Optional text (max 500 chars) describing experience, specialties
@@ -104,6 +106,7 @@ CREATE TABLE creator_availability (
 - **Verification Badge**: Display only (earned automatically, not editable)
 
 **UI Flow - Profile Setup**:
+
 1. User clicks "Set Up Creator Profile" (only visible after account created)
 2. Modal/page with sections: Basic Info, Roles, Rates, Location, Privacy
 3. Public preview on right side showing how profile will appear in marketplace
@@ -113,18 +116,21 @@ CREATE TABLE creator_availability (
 #### 1.2 Verification Badge Criteria
 
 **Automatically Awarded** when creator meets ALL criteria:
+
 - Account age: 90+ days
 - Community rating: 4.5+ stars average across all bookings
 - Bookings per month: 5+ completed, paid bookings in last 30 days
 - Reliability: <5% cancellation rate
 
 **Automatically Revoked** if creator falls below ANY criteria:
+
 - Rating drops below 4.0 stars
 - Multiple substantiated complaints (5+ reports in 30 days)
 - Fails to respond to 3+ booking invitations
 - Becomes inactive (no login) for 90+ days
 
-**Badge Display**: 
+**Badge Display**:
+
 - Creator profile: Gold badge with checkmark + tooltip ("Verified creator - 90+ days, 4.5+ rating, active bookings")
 - Search results: Verification badge displayed next to name
 - Booking invite: Badge shown to teams considering invite
@@ -132,6 +138,7 @@ CREATE TABLE creator_availability (
 #### 1.3 Search & Discovery
 
 **Search Interface**:
+
 - **Location**: Map or zip code input; defaults to user's current location
 - **Distance Radius**: Slider (5-500 miles); default 25
 - **Roles**: Multi-select checkboxes (photographer, makeup artist, etc.)
@@ -140,6 +147,7 @@ CREATE TABLE creator_availability (
 - **Verified Only**: Toggle (show only creators with verification badge)
 
 **Search Results Display**:
+
 - Grid layout (3 columns desktop, 1 mobile) with cards per creator
 - Card shows: Profile photo, name/username, primary role, distance, rating (e.g., "4.8 ★ 23 reviews"), verification badge
 - Expandable detail: Bio, all roles, rates, availability, portfolio links
@@ -147,6 +155,7 @@ CREATE TABLE creator_availability (
 - "Invite to Shoot" button → creates invitation (see section 2.3)
 
 **Results Sorting** (default by relevance):
+
 1. Distance (closest first)
 2. Availability match (available on requested dates)
 3. Rating (highest rated)
@@ -155,6 +164,7 @@ CREATE TABLE creator_availability (
 **Search Results Pagination**: 20 results per page
 
 **Saved Searches** (Paid Tier Only):
+
 - "Save This Search" button → saves search parameters (location, roles, date range)
 - Saved searches shown in sidebar with "Run Again" button
 - Quick access to frequently-used searches (e.g., "Photographers near me", "Available this weekend")
@@ -214,12 +224,14 @@ CREATE TABLE creator_availability (
 #### 1.5 Private vs. Public Profile
 
 **Private Profile** (default):
+
 - Not indexed in marketplace search
 - Only team members who invited creator to specific shoot can see profile
 - Creator still visible in team's crew history (if they worked on a shoot)
 - Can be toggled to public at any time
 
 **Public Profile** (marketplace participant):
+
 - Indexed in search and visible to all users
 - Appears in marketplace search results
 - Can be toggled to private at any time
@@ -234,11 +246,13 @@ CREATE TABLE creator_availability (
 **When Adding Crew to Shoot** (existing feature enhanced):
 
 Current flow:
+
 1. Click "Add Crew" on shoot detail page
 2. Option A: Create new crew member manually
 3. Option B: Search previous crew from team history
 
 **Enhanced flow (Phase 1.5)**:
+
 1. Click "Add Crew" on shoot detail page
 2. Option A: Create new crew member manually
 3. Option B: Search previous crew from team history
@@ -250,6 +264,7 @@ Current flow:
 
 **Suggestion Algorithm**:
 When team opens "Add Crew" dialog:
+
 1. Extract shoot date, location (zip code)
 2. Query creators who:
    - Match role needed (role multi-select on shoot)
@@ -260,6 +275,7 @@ When team opens "Add Crew" dialog:
 4. Display top 5-10 suggestions
 
 **UI Display**:
+
 ```
 [Add Crew Dialog]
 
@@ -280,12 +296,12 @@ Pre-populated suggestions based on shoot details
   📷 Photographer
   "Available outside normal 25-mile range"
   [Invite] button
-  
+
 - Mike Styles (4.7 ★, 12 miles, available)
   💄 Makeup Artist
   $75/hr
   [Invite] button
-  
+
 - Sarah Cosplay (4.5 ★, 22 miles, available)
   👗 Cosplayer, Assistant
   [Invite] button
@@ -294,6 +310,7 @@ Pre-populated suggestions based on shoot details
 #### 2.3 Invitation System
 
 **One-Click Invite**:
+
 1. Team member clicks "Invite" on suggested creator
 2. Invitation details auto-populated:
    - Shoot date/time
@@ -316,6 +333,7 @@ Pre-populated suggestions based on shoot details
    - Link expires in 7 days
 
 **External Crew Member Onboarding** (Creator Accepts):
+
 1. Creator clicks email link or logs into Cosplans
 2. Sees invitation in "Pending Invitations" section
 3. Can view shoot detail page (public view):
@@ -336,6 +354,7 @@ Pre-populated suggestions based on shoot details
 #### 2.4 External Crew Access Control
 
 **External Crew Can**:
+
 - View public shoot detail page (dates, location, visual references, description)
 - View team contact information (email, phone if provided)
 - See other external crew members assigned to same shoot
@@ -344,6 +363,7 @@ Pre-populated suggestions based on shoot details
 - Upload completion notes after shoot (optional)
 
 **External Crew Cannot**:
+
 - View other team shoots (only their assigned shoot)
 - Modify shoot details (dates, location, references)
 - Access team member list beyond those on this shoot
@@ -351,12 +371,13 @@ Pre-populated suggestions based on shoot details
 - Access team settings or integrations
 
 **Data Access Layer** (RLS):
+
 ```sql
 -- External crew can view shoots they're invited to
 CREATE POLICY external_crew_view_shoots ON shoots
   USING (
     id IN (
-      SELECT shoot_id FROM shoot_crew 
+      SELECT shoot_id FROM shoot_crew
       WHERE crew_id IN (SELECT id FROM crew WHERE user_id = auth.uid())
     )
   );
@@ -369,10 +390,10 @@ CREATE POLICY external_crew_view_shoots ON shoots
 #### 3.1 Payment Model
 
 **Commission Structure**:
+
 - **Free Tier Creators**: Cosplans charges 5% commission on booking payments
   - Creator receives: 95% of agreed rate
   - Example: $100 rate → creator gets $95, Cosplans keeps $5
-  
 - **Paid Tier Creators** ($5/month): 0% commission (Cosplans absorbs fee)
   - Creator receives: 100% of agreed rate
   - Business model: Subscription revenue offsets lost commissions
@@ -385,6 +406,7 @@ CREATE POLICY external_crew_view_shoots ON shoots
   - Team pays: exact agreed rate (no platform fee)
 
 **Free Tier Transaction Cap**:
+
 - Free tier users capped at 50 transactions per month
 - If user exceeds 50 transactions, prompted to upgrade to paid tier
 - Cap prevents free tier abuse by commercial operations
@@ -392,12 +414,14 @@ CREATE POLICY external_crew_view_shoots ON shoots
 #### 3.2 Team Budget & Payment Management
 
 **Team Bank Account** (New Feature):
+
 - Shared pool of funds managed by team owner/admins
 - Team members can contribute funds (personal → team bank)
 - When paying creators, funds deducted from team bank
 - Balance visible to all team members (transparency)
 
 **Data Model**:
+
 ```sql
 -- Team bank account
 CREATE TABLE team_budgets (
@@ -440,6 +464,7 @@ CREATE TABLE creator_payments (
 ```
 
 **Workflow**:
+
 1. Team adds creator to shoot with rate (e.g., $150 for photographer)
 2. Shoot marked "complete" by team
 3. Creator notified: "Shoot marked complete. Your $150 payment will be processed within 48 hours"
@@ -456,6 +481,7 @@ CREATE TABLE creator_payments (
 #### 3.3 Creator Earnings & Payout Management
 
 **Creator Dashboard - Earnings Section** (New):
+
 - **Total Earned (All Time)**: $2,450.00
 - **This Month**: $380.00 (3 bookings)
 - **Pending Payouts**: $150.00 (1 approved, awaiting transfer)
@@ -469,12 +495,14 @@ CREATE TABLE creator_payments (
 | 10/01 | Portfolio | Assist | $50 | -$2.50 | $47.50 | ✓ Paid |
 
 **Payout Options** (Paid Tier Only):
+
 - Weekly automatic payouts (every Monday)
 - On-demand payout (withdraw whenever)
 - Minimum payout threshold: $20
 - Payout methods: Stripe Connect (fastest), ACH transfer, PayPal
 
 **Tax Reporting** (Phase 2):
+
 - Annual 1099 generation if earnings > $20k
 - CSV export of all transactions for tax prep
 - Quarterly tax estimate calculator
@@ -486,15 +514,18 @@ CREATE TABLE creator_payments (
 #### 4.1 Review System
 
 **When Reviews Are Created**:
+
 - After shoot status → "complete"
 - After payment marked "paid" (escrow released)
 - Both team and creator can review each other
 
 **Review Prompts**:
+
 - "Rate your experience with [Creator Name]" (for teams reviewing creators)
 - "Rate your experience with [Team Name]" (for creators reviewing teams)
 
 **Review Form**:
+
 ```
 Rating (required):
 [1⭐] [2⭐] [3⭐] [4⭐] [5⭐]
@@ -513,12 +544,14 @@ Comments (optional, max 500 chars):
 ```
 
 **Public Review Display**:
+
 - Shown on creator profile and team profile (if applicable)
 - Anonymous by default (shows only rating + comment, not reviewer name)
 - Newest reviews first
 - Ability to report inappropriate reviews
 
 **Handling Dispute**:
+
 - If creator disputes review (within 7 days), both parties can add context comment
 - Admin review for inappropriate content (harassment, slurs, misinformation)
 - Reviews can be flagged for removal by admins
@@ -526,6 +559,7 @@ Comments (optional, max 500 chars):
 #### 4.2 Report System
 
 **What Can Be Reported**:
+
 - Fake profile (not a real creator)
 - Harassment or discriminatory language in profile or messages
 - Quality issues (paid for photography, got blurry shots)
@@ -534,6 +568,7 @@ Comments (optional, max 500 chars):
 - Other (free-text description)
 
 **Report Flow**:
+
 1. User clicks [Report] on creator profile or in review
 2. Modal opens with options (listed above)
 3. User provides evidence (screenshot, message excerpt, context)
@@ -541,6 +576,7 @@ Comments (optional, max 500 chars):
 5. Confirmation: "Report received. We'll review within 48 hours."
 
 **Admin Review Process**:
+
 1. Reports go to admin queue with creator name, report reason, evidence
 2. Admin assesses: validated vs. invalid
 3. Actions if validated:
@@ -552,6 +588,7 @@ Comments (optional, max 500 chars):
    - Reporter: "Review complete. Action taken: [summary, no details]"
 
 **Verification Badge Revocation**:
+
 - Substantiated report with pattern of violations → badge removed
 - Creator notified: "Your verification badge has been removed due to [reason]"
 - Can be re-earned after 60 days clean
@@ -561,12 +598,14 @@ Comments (optional, max 500 chars):
 **Purpose**: Celebrate verified creators and recent projects; inspire community
 
 **How It Works**:
+
 - Verified creators (or their teams) can submit recent project highlights
 - Submission includes: Instagram post link, photo, project name, brief description
 - Displayed in chronological order (newest first, no algorithmic ranking)
 - Gallery view: Grid layout with cards, each showing project photo + creator name + link
 
 **Submission Flow** (for Creators):
+
 1. Creator clicks "Submit to Community Showcase"
 2. Modal with form:
    - Project name (required)
@@ -578,6 +617,7 @@ Comments (optional, max 500 chars):
 5. If approved, added to showcase gallery
 
 **Community Showcase Page**:
+
 ```
 [Community Showcase]
 "Recent cosplay work from verified creators"
@@ -606,6 +646,7 @@ Can be filtered by:
 #### 5.1 Privacy Controls
 
 **Creator Profile Settings**:
+
 - **Make Profile Private**: Toggle (removes from marketplace search, visible only to invited crews)
 - **Hide Real Name**: Toggle (show only username)
 - **Hide Exact Location**: Option to show only region or state (vs. zip code)
@@ -615,6 +656,7 @@ Can be filtered by:
 - **Show Rates**: Toggle (public vs. "contact for rates")
 
 **What's Always Private**:
+
 - Personal notes
 - Message history (encrypted)
 - Bank account details
@@ -623,6 +665,7 @@ Can be filtered by:
 #### 5.2 Data Retention & Deletion
 
 **Account Deletion**:
+
 - If creator deletes account:
   - Profile removed from marketplace search
   - Reviews remain (anonymized)
@@ -630,6 +673,7 @@ Can be filtered by:
   - Earnings data archived for 7 years (tax requirements)
 
 **Leaving Marketplace** (without deleting account):
+
 - "Pause Profile" button → profile hidden, can resume anytime
 - Data preserved; re-enable at any point
 
@@ -638,6 +682,7 @@ Can be filtered by:
 ### 6. Creator Performance Analytics
 
 **Creator Dashboard - Analytics Section** (Paid Tier Only):
+
 - **Profile Views**: 245 views this month
 - **Booking Requests**: 12 invitations received
 - **Conversion Rate**: 75% (9 accepted / 12 invited)
@@ -645,12 +690,14 @@ Can be filtered by:
 - **Search Impressions**: Appeared in X search results
 
 **Charts** (30-day, 90-day, all-time views):
+
 - Profile views over time (line chart)
 - Booking conversion funnel (invites → accepted → completed)
 - Revenue trend (total earned, commission paid)
 - Repeat client rate (% of teams booking 2+ times)
 
 **Notifications**:
+
 - Alert when rating drops below 4.5
 - Alert when 7+ days without responding to invitations
 - Weekly digest: "You had 5 profile views this week"
@@ -671,34 +718,34 @@ CREATE TABLE creator_profiles (
   bio TEXT,
   profile_photo_url VARCHAR(255),
   roles_offered VARCHAR[] NOT NULL,
-  
+
   -- Location & Travel
   zip_code VARCHAR(10) NOT NULL,
   travel_distance_miles INT DEFAULT 25,
   show_outside_range BOOLEAN DEFAULT false,
-  
+
   -- Rates & Availability
   rates_visible BOOLEAN DEFAULT false,
-  
+
   -- Verification & Status
   verification_badge BOOLEAN DEFAULT false,
   is_private BOOLEAN DEFAULT false,
   is_suspended BOOLEAN DEFAULT false,
   paused_until TIMESTAMP,
-  
+
   -- Portfolio
   portfolio_links VARCHAR[] DEFAULT ARRAY[]::VARCHAR[],
-  
+
   -- Community Activity
   total_earnings DECIMAL(10, 2) DEFAULT 0,
   completed_bookings INT DEFAULT 0,
   average_rating DECIMAL(3, 2) DEFAULT 0,
-  
+
   -- Timestamps
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP DEFAULT NOW(),
   last_active_at TIMESTAMP DEFAULT NOW(),
-  
+
   -- Constraints
   CONSTRAINT valid_travel_distance CHECK (travel_distance_miles >= 1 AND travel_distance_miles <= 500),
   CONSTRAINT valid_rating CHECK (average_rating >= 0 AND average_rating <= 5)
@@ -859,6 +906,7 @@ CREATE TABLE marketplace_invitations (
 ### Updated Tables
 
 **shoot_crew** (existing, add fields):
+
 ```sql
 ALTER TABLE shoot_crew ADD COLUMN external_crew BOOLEAN DEFAULT false;
 ALTER TABLE shoot_crew ADD COLUMN creator_id UUID REFERENCES creator_profiles(id);
@@ -867,6 +915,7 @@ ALTER TABLE shoot_crew ADD COLUMN invite_accepted_at TIMESTAMP;
 ```
 
 **users** (existing, add fields):
+
 ```sql
 -- Support public usernames
 ALTER TABLE users ADD COLUMN public_username VARCHAR(50) UNIQUE;
@@ -879,94 +928,99 @@ ALTER TABLE users ADD COLUMN is_creator BOOLEAN DEFAULT false;
 
 ### Creator Profile Management
 
-| Method | Endpoint | Purpose | Auth |
-|--------|----------|---------|------|
-| POST | /api/v1/creator/profile | Create creator profile | User |
-| GET | /api/v1/creator/profile | Get own creator profile | Creator |
-| PUT | /api/v1/creator/profile | Update creator profile | Creator |
-| DELETE | /api/v1/creator/profile | Delete creator profile | Creator |
-| GET | /api/v1/creators/:id | Get public creator profile | Public |
-| POST | /api/v1/creator/profile/pause | Pause profile (temp hide) | Creator |
-| POST | /api/v1/creator/profile/resume | Resume paused profile | Creator |
+| Method | Endpoint                       | Purpose                    | Auth    |
+| ------ | ------------------------------ | -------------------------- | ------- |
+| POST   | /api/v1/creator/profile        | Create creator profile     | User    |
+| GET    | /api/v1/creator/profile        | Get own creator profile    | Creator |
+| PUT    | /api/v1/creator/profile        | Update creator profile     | Creator |
+| DELETE | /api/v1/creator/profile        | Delete creator profile     | Creator |
+| GET    | /api/v1/creators/:id           | Get public creator profile | Public  |
+| POST   | /api/v1/creator/profile/pause  | Pause profile (temp hide)  | Creator |
+| POST   | /api/v1/creator/profile/resume | Resume paused profile      | Creator |
 
 ### Creator Search & Discovery
 
-| Method | Endpoint | Purpose | Auth |
-|--------|----------|---------|------|
-| GET | /api/v1/creators/search | Search creators | Public |
-| GET | /api/v1/creators/suggest?shootId=X | Auto-suggest creators for shoot | Team |
-| POST | /api/v1/creator/searches/save | Save creator search | Paid Team |
-| GET | /api/v1/creator/searches/saved | Get saved searches | Paid Team |
+| Method | Endpoint                           | Purpose                         | Auth      |
+| ------ | ---------------------------------- | ------------------------------- | --------- |
+| GET    | /api/v1/creators/search            | Search creators                 | Public    |
+| GET    | /api/v1/creators/suggest?shootId=X | Auto-suggest creators for shoot | Team      |
+| POST   | /api/v1/creator/searches/save      | Save creator search             | Paid Team |
+| GET    | /api/v1/creator/searches/saved     | Get saved searches              | Paid Team |
 
 ### Invitations & Bookings
 
-| Method | Endpoint | Purpose | Auth |
-|--------|----------|---------|------|
-| POST | /api/v1/creator/invitations | Send marketplace invitation | Team |
-| GET | /api/v1/creator/invitations | Get pending invitations | Creator |
-| POST | /api/v1/creator/invitations/:id/accept | Accept invitation | Creator |
-| POST | /api/v1/creator/invitations/:id/decline | Decline invitation | Creator |
-| GET | /api/v1/crew/:id/invitation | Get invitation details (via email token) | Public |
+| Method | Endpoint                                | Purpose                                  | Auth    |
+| ------ | --------------------------------------- | ---------------------------------------- | ------- |
+| POST   | /api/v1/creator/invitations             | Send marketplace invitation              | Team    |
+| GET    | /api/v1/creator/invitations             | Get pending invitations                  | Creator |
+| POST   | /api/v1/creator/invitations/:id/accept  | Accept invitation                        | Creator |
+| POST   | /api/v1/creator/invitations/:id/decline | Decline invitation                       | Creator |
+| GET    | /api/v1/crew/:id/invitation             | Get invitation details (via email token) | Public  |
 
 ### Reviews & Ratings
 
-| Method | Endpoint | Purpose | Auth |
-|--------|----------|---------|------|
-| POST | /api/v1/creator/:id/reviews | Submit review of creator | Team |
-| GET | /api/v1/creator/:id/reviews | Get reviews for creator | Public |
-| POST | /api/v1/team/:id/reviews | Submit review of team | Creator |
-| GET | /api/v1/team/:id/reviews | Get reviews for team | Public |
+| Method | Endpoint                    | Purpose                  | Auth    |
+| ------ | --------------------------- | ------------------------ | ------- |
+| POST   | /api/v1/creator/:id/reviews | Submit review of creator | Team    |
+| GET    | /api/v1/creator/:id/reviews | Get reviews for creator  | Public  |
+| POST   | /api/v1/team/:id/reviews    | Submit review of team    | Creator |
+| GET    | /api/v1/team/:id/reviews    | Get reviews for team     | Public  |
 
 ### Payments & Earnings
 
-| Method | Endpoint | Purpose | Auth |
-|--------|----------|---------|------|
-| POST | /api/v1/bookings/:id/complete | Mark shoot complete, enable payments | Team |
-| POST | /api/v1/payments | Process payment to creator | Team |
-| GET | /api/v1/creator/earnings | Get creator earnings summary | Creator |
-| GET | /api/v1/creator/earnings/history | Get detailed earnings history | Creator |
-| GET | /api/v1/team/payments | Get team payment history | Team |
+| Method | Endpoint                         | Purpose                              | Auth    |
+| ------ | -------------------------------- | ------------------------------------ | ------- |
+| POST   | /api/v1/bookings/:id/complete    | Mark shoot complete, enable payments | Team    |
+| POST   | /api/v1/payments                 | Process payment to creator           | Team    |
+| GET    | /api/v1/creator/earnings         | Get creator earnings summary         | Creator |
+| GET    | /api/v1/creator/earnings/history | Get detailed earnings history        | Creator |
+| GET    | /api/v1/team/payments            | Get team payment history             | Team    |
 
 ### Moderation & Reports
 
-| Method | Endpoint | Purpose | Auth |
-|--------|----------|---------|------|
-| POST | /api/v1/reports | Submit community report | User |
-| GET | /api/v1/admin/reports | Get all reports | Admin |
-| PUT | /api/v1/admin/reports/:id | Review & action report | Admin |
+| Method | Endpoint                  | Purpose                 | Auth  |
+| ------ | ------------------------- | ----------------------- | ----- |
+| POST   | /api/v1/reports           | Submit community report | User  |
+| GET    | /api/v1/admin/reports     | Get all reports         | Admin |
+| PUT    | /api/v1/admin/reports/:id | Review & action report  | Admin |
 
 ### Community Showcase
 
-| Method | Endpoint | Purpose | Auth |
-|--------|----------|---------|------|
-| GET | /api/v1/showcase | Get showcase gallery | Public |
-| POST | /api/v1/showcase/submit | Submit project to showcase | Verified Creator |
-| GET | /api/v1/admin/showcase | Get pending submissions | Admin |
+| Method | Endpoint                | Purpose                    | Auth             |
+| ------ | ----------------------- | -------------------------- | ---------------- |
+| GET    | /api/v1/showcase        | Get showcase gallery       | Public           |
+| POST   | /api/v1/showcase/submit | Submit project to showcase | Verified Creator |
+| GET    | /api/v1/admin/showcase  | Get pending submissions    | Admin            |
 
 ---
 
 ## Testing Strategy
 
 ### Unit Tests
+
 - Creator profile validation (username uniqueness, zip code format, distance range)
 - Commission calculation (5% vs. 0%)
 - Verification badge criteria evaluation
 - Search algorithm (distance, rating, availability matching)
 
 ### Integration Tests
+
 - End-to-end invitation flow (team invites → email sent → creator accepts)
 - Payment flow (booking → completion → payment processing)
 - Review submission and rating recalculation
 - Report submission and admin action workflow
 
 ### E2E Tests (Playwright)
+
 **Scenario 1: Creator Marketplace Discovery**
+
 1. Team member searches for photographers within 25 miles
 2. Filters by date availability and 4.5+ rating
 3. Saves search as favorite
 4. Re-runs saved search next week
 
 **Scenario 2: Booking & Payment**
+
 1. Team creates shoot
 2. Auto-suggests nearby makeup artists
 3. Sends one-click invitation to creator
@@ -976,12 +1030,14 @@ ALTER TABLE users ADD COLUMN is_creator BOOLEAN DEFAULT false;
 7. Creator reviews team; team reviews creator
 
 **Scenario 3: Verification Badge**
+
 1. Creator account aged 90+ days
 2. Has 5+ completed bookings
 3. Rating 4.5+ stars
 4. Badge appears on profile
 
 **Scenario 4: Report & Moderation**
+
 1. Team reports creator for quality issues
 2. Admin receives report
 3. Admin contacts creator with warning
@@ -992,26 +1048,31 @@ ALTER TABLE users ADD COLUMN is_creator BOOLEAN DEFAULT false;
 ## Rollout Plan
 
 ### Phase 1.5a (Week 1-2)
+
 - Deploy creator profile creation UI
 - Basic search functionality (roles, location)
 - Database migrations
 
 ### Phase 1.5b (Week 3-4)
+
 - Invitation system (email, external crew links)
 - Creator availability calendar
 - External crew access control
 
 ### Phase 1.5c (Week 5-6)
+
 - Payment processing (Stripe integration)
 - Review system
 - Earnings dashboard
 
 ### Phase 1.5d (Week 7-8)
+
 - Report & moderation system
 - Community showcase
 - Creator analytics (paid tier)
 
 ### Phase 1.5e (Ongoing)
+
 - Saved searches (paid tier)
 - Performance monitoring
 - Community feedback integration
@@ -1020,15 +1081,15 @@ ALTER TABLE users ADD COLUMN is_creator BOOLEAN DEFAULT false;
 
 ## Success Metrics
 
-| Metric | Target | Timeline |
-|--------|--------|----------|
-| Creator profiles created | 50+ verified creators | End of Phase 1.5 |
-| Successful bookings | 20+ paid bookings | End of Phase 1.5 |
-| Creator retention (30-day) | 70%+ of creators remain active | Month 2 after launch |
-| Average creator rating | 4.5+ stars | Ongoing |
-| Commission revenue | $500+/month | Month 2 after launch |
-| User NPS (creator question) | 40+ | Month 3 after launch |
-| Report/moderation case resolution | <48 hours average | Ongoing |
+| Metric                            | Target                         | Timeline             |
+| --------------------------------- | ------------------------------ | -------------------- |
+| Creator profiles created          | 50+ verified creators          | End of Phase 1.5     |
+| Successful bookings               | 20+ paid bookings              | End of Phase 1.5     |
+| Creator retention (30-day)        | 70%+ of creators remain active | Month 2 after launch |
+| Average creator rating            | 4.5+ stars                     | Ongoing              |
+| Commission revenue                | $500+/month                    | Month 2 after launch |
+| User NPS (creator question)       | 40+                            | Month 3 after launch |
+| Report/moderation case resolution | <48 hours average              | Ongoing              |
 
 ---
 
