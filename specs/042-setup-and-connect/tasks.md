@@ -24,9 +24,9 @@
 
 - [x] T005 Scaffold Supabase SQL migrations for `service_connection_profiles`, `diagnostic_test_runs`, `error_events`, and `service_health_snapshots` in `database/migrations`
 - [x] T006 Define shared TypeScript types for `ServiceConnectionProfile`, `DiagnosticRun`, `ErrorEvent`, `HealthSnapshot` in `src/lib/types/service-connections.ts`
-- [ ] T007 Implement `CosplansError` translator and logger wrapper in `src/lib/utils/errors.ts`
-- [ ] T008 Create Supabase admin client factory with environment-aware credentials in `src/lib/server/supabase/admin-client.ts`
-- [ ] T009 Add configuration schema and safe loader for integration settings in `src/lib/server/config/service-connections.ts`
+- [x] T007 Implement `CosplansError` translator and logger wrapper in `src/lib/utils/errors.ts`
+- [x] T008 Create Supabase admin client factory with environment-aware credentials in `src/lib/server/supabase/admin-client.ts`
+- [x] T009 Add configuration schema and safe loader for integration settings in `src/lib/server/config/service-connections.ts`
 
 **Checkpoint**: Foundational layer complete — user stories may now proceed in parallel.
 
@@ -40,17 +40,17 @@
 
 ### Tests (write before implementation)
 
-- [ ] T010 [P] [US1] Add Vitest unit suite for connection config validation rules in `tests/unit/service-connections/config.test.ts`
-- [ ] T011 [P] [US1] Add Playwright flow covering successful and failed connection tests in `tests/e2e/service-connections/configuration.spec.ts`
+- [x] T010 [P] [US1] Add Vitest unit suite for connection config validation rules in `tests/unit/service-connections/config.test.ts`
+- [x] T011 [P] [US1] Add Playwright flow covering successful and failed connection tests in `tests/e2e/service-connections/configuration.spec.ts`
 
 ### Implementation
 
-- [ ] T012 [P] [US1] Create SvelteKit form actions and load functions in `src/routes/(auth)/settings/service-connections/+page.server.ts`
-- [ ] T013 [P] [US1] Design UI components for connection list, form, and status badges in `src/lib/components/service-connections/ConnectionList.svelte`
-- [ ] T014 [US1] Implement Supabase mutation to upsert `service_connection_profiles` and queue verification job in `src/lib/server/service-connections/mutations.ts`
-- [ ] T015 [US1] Implement connection verification worker (Supabase edge function mock or Bun job) in `src/lib/server/service-connections/verify.ts`
-- [ ] T016 [US1] Persist verification results and update `last_verified_at` in repository layer `src/lib/server/service-connections/repository.ts`
-- [ ] T017 [US1] Ensure UI surfaces precise failure reasons using `CosplansError` translator in `src/lib/components/service-connections/ConnectionForm.svelte`
+- [x] T012 [P] [US1] Create SvelteKit form actions and load functions in `src/routes/(auth)/settings/service-connections/+page.server.ts`
+- [x] T013 [P] [US1] Design UI components for connection list, form, and status badges in `src/lib/components/service-connections/ConnectionList.svelte`
+- [x] T014 [US1] Implement Supabase mutation to upsert `service_connection_profiles` and queue verification job in `src/lib/server/service-connections/mutations.ts`
+- [x] T015 [US1] Implement connection verification worker (Supabase edge function mock or Bun job) in `src/lib/server/service-connections/verify.ts`
+- [x] T016 [US1] Persist verification results and update `last_verified_at` in repository layer `src/lib/server/service-connections/repository.ts`
+- [x] T017 [US1] Ensure UI surfaces precise failure reasons using `CosplansError` translator in `src/lib/components/service-connections/ConnectionForm.svelte`
 
 **Checkpoint**: User Story 1 independently testable (configuration + verification loop).
 

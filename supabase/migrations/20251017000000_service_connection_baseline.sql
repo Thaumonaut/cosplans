@@ -69,6 +69,16 @@ create table if not exists public.service_connection_profiles (
     unique (team_id, service_type, environment)
 );
 
+create or replace function public.update_updated_at_column()
+returns trigger
+language plpgsql
+as $$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$$;
+
 create index if not exists service_connection_profiles_team_status_idx
   on public.service_connection_profiles (team_id, status);
 
