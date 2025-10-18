@@ -37,7 +37,7 @@ This task list is generated from the implementation plan. Check items off as the
 - [x] **Routing**: Move the existing dashboard route into the `(auth)` group.
 - [x] **State**: Wire up the `navigation.ts` store to manage the sidebar's open/closed state.
 - [x] **Accessibility**: Add keyboard navigation (Tab, Arrow keys, Enter, Escape).
-- [ ] **Component Test**: Write tests for `Sidebar.svelte` and `NavigationItem.svelte`.
+- [x] **Component Test**: Write tests for `Sidebar.svelte` and `NavigationItem.svelte`.
 - [ ] **E2E Test**: Write a basic test to verify navigation between two pages works.
 
 ---
