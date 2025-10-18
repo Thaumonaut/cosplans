@@ -5,17 +5,28 @@
   import MobileMenuToggle from "$lib/components/layout/MobileMenuToggle.svelte";
   import SidebarSection from "$lib/components/layout/SidebarSection.svelte";
   import TeamSwitcher from "$lib/components/layout/TeamSwitcher.svelte";
+  import UserMenu from "$lib/components/layout/UserMenu.svelte";
   import { navigation as navigationStore } from "$lib/stores/navigation";
   import {
     MAIN_NAV_ITEMS,
     NAVIGATION_SECTIONS,
     RESOURCE_NAV_ITEMS,
   } from "$lib/utils/navigation-items";
+  import { focusTrap } from "$lib/utils/focus-trap";
   import type { NavigationItem } from "$lib/types/navigation";
 
   export let showMobileToggle = true;
 
   const allNavigationItems: NavigationItem[] = [...MAIN_NAV_ITEMS, ...RESOURCE_NAV_ITEMS];
+
+  // Touch gesture state for swipe-to-close on mobile
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchCurrentX = 0;
+  let isSwiping = false;
+
+  // Determine if focus trap should be active (mobile + open)
+  $: isMobileFocusTrapActive = typeof window !== "undefined" && window.innerWidth < 768 && $navigationStore.isOpen;
 
   function matchRoute(pathname: string): NavigationItem | undefined {
     return allNavigationItems.find((item) => {
@@ -35,9 +46,63 @@
   function toggleMobile() {
     navigationStore.toggleMobile();
   }
+
+  function handleTouchStart(event: TouchEvent) {
+    if (window.innerWidth >= 768) return; // Only on mobile
+    touchStartX = event.touches[0].clientX;
+    touchStartY = event.touches[0].clientY;
+    isSwiping = false;
+  }
+
+  function handleTouchMove(event: TouchEvent) {
+    if (window.innerWidth >= 768 || !$navigationStore.isOpen) return;
+    
+    touchCurrentX = event.touches[0].clientX;
+    const touchCurrentY = event.touches[0].clientY;
+    
+    const deltaX = touchCurrentX - touchStartX;
+    const deltaY = Math.abs(touchCurrentY - touchStartY);
+    
+    // Only treat as swipe if horizontal movement > vertical (prevent conflict with scroll)
+    if (Math.abs(deltaX) > deltaY && Math.abs(deltaX) > 10) {
+      isSwiping = true;
+    }
+  }
+
+  function handleTouchEnd() {
+    if (window.innerWidth >= 768 || !$navigationStore.isOpen || !isSwiping) {
+      isSwiping = false;
+      return;
+    }
+    
+    const deltaX = touchCurrentX - touchStartX;
+    
+    // Swipe left (negative delta) closes sidebar
+    if (deltaX < -50) {
+      navigationStore.toggleMobile(false);
+    }
+    
+    isSwiping = false;
+    touchStartX = 0;
+    touchStartY = 0;
+    touchCurrentX = 0;
+  }
+
+  /**
+   * Handle keyboard navigation for sidebar
+   * Escape: Close mobile sidebar
+   * Arrow Up/Down: Navigate between items (handled by browser's natural tabbing)
+   */
+  function handleKeyDown(event: KeyboardEvent) {
+    // Escape closes mobile sidebar
+    if (event.key === "Escape" && window.innerWidth < 768 && $navigationStore.isOpen) {
+      event.preventDefault();
+      navigationStore.toggleMobile(false);
+    }
+  }
 </script>
 
-<svelte:window on:resize={() => navigationStore.toggleMobile(false)} />
+<svelte:window on:resize={() => navigationStore.toggleMobile(false)} on:keydown={handleKeyDown} />
 
 <aside
   class={`relative flex h-full flex-col transition-[width] duration-200 ease-in-out ${
@@ -45,6 +110,10 @@
   }`}
   style="background: var(--theme-sidebar-bg); color: var(--theme-sidebar-text); box-shadow: var(--theme-sidebar-shadow);"
   data-collapsed={$navigationStore.isCollapsed}
+  on:touchstart={handleTouchStart}
+  on:touchmove={handleTouchMove}
+  on:touchend={handleTouchEnd}
+  use:focusTrap={isMobileFocusTrapActive}
 >
   <header
     class="flex h-16 items-center justify-between gap-3 px-4"
@@ -113,40 +182,12 @@
   </div>
 
   <footer style="border-top: 1px solid var(--theme-sidebar-border);">
-    <a
-      href="/settings"
-      class={`block w-full px-4 py-4 transition-colors hover:bg-[var(--theme-sidebar-hover)] focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--theme-sidebar-accent)] ${$navigationStore.isCollapsed ? "flex justify-center" : "flex items-center gap-3"}`}
-      aria-label="Open settings"
-    >
-      <div class="flex-shrink-0">
-        {#if $navigationStore.user?.avatarUrl}
-          <img
-            src={$navigationStore.user.avatarUrl}
-            alt={$navigationStore.user?.name ?? "User"}
-            class="h-10 w-10 rounded-full object-cover"
-          />
-        {:else}
-          <div
-            class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-700"
-          >
-            <span class="text-sm font-semibold">
-              {($navigationStore.user?.name ?? "U").charAt(0).toUpperCase()}
-            </span>
-          </div>
-        {/if}
-      </div>
-
-      {#if !$navigationStore.isCollapsed}
-        <div class="flex-1 text-left">
-          <p class="text-sm font-medium text-[var(--theme-sidebar-text)]">
-            {$navigationStore.user?.name ?? "Guest User"}
-          </p>
-          <p class="text-xs text-[var(--theme-sidebar-muted)]">
-            {$navigationStore.user?.email ?? "guest@cosplans.app"}
-          </p>
-        </div>
-        <LucideIcon name="ChevronRight" size={16} class="text-[var(--theme-sidebar-muted)]" />
-      {/if}
-    </a>
+    <UserMenu 
+      collapsed={$navigationStore.isCollapsed} 
+      on:signOut={() => {
+        // TODO: Implement proper sign-out logic
+        console.log("Sign out requested");
+      }}
+    />
   </footer>
 </aside>
