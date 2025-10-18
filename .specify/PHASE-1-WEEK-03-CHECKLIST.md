@@ -10,6 +10,7 @@
 ## 🎯 Acceptance Criteria
 
 ### OAuth (Google) Authentication
+
 - [ ] **Google OAuth Configuration**
   - Google Cloud Console project created
   - OAuth 2.0 credentials (client ID, client secret)
@@ -30,6 +31,7 @@
   - JWT (with team IDs, role) created
 
 ### Email + Passkey Authentication
+
 - [ ] **Email Signup with Passkey**
   - User enters email → sent confirmation link
   - Link expires in 24 hours
@@ -50,6 +52,7 @@
   - Password reset via email link (15-minute expiration)
 
 ### Two-Factor Authentication (2FA)
+
 - [ ] **2FA Optional for All Users**
   - Settings page: "Enable 2FA" toggle
   - User clicks → generates TOTP secret
@@ -72,6 +75,7 @@
   - Test: backup codes work, consumed after use
 
 ### Session Management
+
 - [ ] **SvelteKit Load Hook** (`src/hooks.server.ts`)
   - Check for JWT in httpOnly cookie
   - Decode JWT: extract user ID, team IDs, role
@@ -92,6 +96,7 @@
   - User can switch between teams
 
 ### Account Recovery
+
 - [ ] **Forgot Password** (for email/password users)
   - "Forgot password?" link on login page
   - User enters email
@@ -108,6 +113,7 @@
   - Test: deleted user cannot log in
 
 ### Testing (70% coverage minimum)
+
 - [ ] **Unit Tests** (Vitest)
   - JWT encode/decode
   - Token expiration logic
@@ -137,6 +143,7 @@
   - Generate: `npm run test:coverage`
 
 ### Documentation
+
 - [ ] **Auth Flow Diagram** (OAuth, Passkey, 2FA)
   - Sequence diagram showing all three flows
   - File: `.specify/auth-flow.md`
@@ -154,12 +161,14 @@
 ## 🔗 Constitution References
 
 **Principle VII (Security & Privacy)**: Auth is foundation
+
 - [ ] No passwords stored in plaintext (hashed with bcrypt)
 - [ ] 2FA optional but strongly recommended for admins (future: required in Phase 2)
 - [ ] JWT tokens include team IDs for multi-team support
 - [ ] httpOnly cookies prevent XSS attacks
 
 **Technology Stack (Constitution v2.2.0)**
+
 - [ ] Supabase Auth (with OAuth support)
 - [ ] WebAuthn/Passkeys for passwordless auth
 - [ ] TOTP for 2FA
@@ -170,6 +179,7 @@
 ## 📦 Deliverables
 
 ### Code
+
 - [ ] `src/routes/auth/login/+page.svelte` (UI: Google, Passkey, Email/Password options)
 - [ ] `src/routes/auth/callback/+server.ts` (OAuth callback handler)
 - [ ] `src/routes/api/auth/signup/+server.ts` (Email signup)
@@ -181,12 +191,14 @@
 - [ ] Supabase Auth policies configured
 
 ### Tests
+
 - [ ] Unit tests: 15+
 - [ ] Integration tests: 15+
 - [ ] E2E tests: 6+
 - [ ] Coverage: 70%+
 
 ### Documentation
+
 - [ ] Auth flow diagram
 - [ ] Updated API spec with auth endpoints
 - [ ] Security considerations documented
@@ -195,17 +207,18 @@
 
 ## ⚠️ Known Blockers / Decisions Needed
 
-| Blocker | Impact | Resolution |
-|---------|--------|-----------|
-| **Google OAuth Secret** | Cannot test full OAuth without creds | Use mock endpoint for testing; real creds added in staging |
-| **Passkey Support** | Not all browsers support WebAuthn equally | Provide email/password fallback for 30 days |
-| **2FA Backup Codes** | Storing securely without encryption | Encrypt with master key from key management service (deferred to ops) |
+| Blocker                 | Impact                                    | Resolution                                                            |
+| ----------------------- | ----------------------------------------- | --------------------------------------------------------------------- |
+| **Google OAuth Secret** | Cannot test full OAuth without creds      | Use mock endpoint for testing; real creds added in staging            |
+| **Passkey Support**     | Not all browsers support WebAuthn equally | Provide email/password fallback for 30 days                           |
+| **2FA Backup Codes**    | Storing securely without encryption       | Encrypt with master key from key management service (deferred to ops) |
 
 ---
 
 ## ✅ Sign-Off Criteria
 
 **Week 3 COMPLETE when**:
+
 1. ✅ All three auth methods working (OAuth, Passkey, Email/Password)
 2. ✅ 2FA setup + login working
 3. ✅ Session management in load hook

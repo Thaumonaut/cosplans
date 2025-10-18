@@ -11,6 +11,7 @@
 ### Added Features
 
 **1. New Principle V.5: Social Media Workflow Integration** ✨
+
 - Instagram content planning, scheduling, and analytics
 - Content calendar synchronized with shoot schedule
 - Draft creation with templates and collaboration
@@ -18,11 +19,13 @@
 - Team approval workflow for posted content
 
 **2. Updated Principle III: External Integration Integrity**
+
 - Added Instagram (read/write) to core integrations
 - Added TikTok (Phase 2+) to roadmap
 - Updated rationale to emphasize social media's importance to cosplay community
 
 **3. Updated Feature Priority Order**
+
 - Moved social media planning up in Phase 1 priority
 - Positioned after Google integrations, before advanced views
 - TikTok integration deferred to Phase 2+
@@ -30,11 +33,13 @@
 ### Deferred Features (Noted for Future)
 
 **Stripe Payment Processing**: Deferred until paid tier features are solidly defined
+
 - Not blocking Phase 1 launch
 - Can use free-tier only during beta
 - Revisit when ready to monetize
 
 **SMS Reminders**: Deferred as paid-tier option (Phase 2+)
+
 - Cost concerns addressed by making it optional
 - Can implement email-only reminders in Phase 1
 - SMS as paid tier upsell later
@@ -45,20 +50,21 @@
 
 ### Core Capabilities
 
-| Feature | Phase 1 | Details |
-|---------|---------|---------|
-| **Account Connection** | ✅ | OAuth-based Business Account linking |
-| **Content Calendar** | ✅ | Shoots + posts on timeline |
-| **Draft Creation** | ✅ | Feed posts, Stories (Reels in Phase 2) |
-| **Templates** | ✅ | Caption & hashtag templates by content pillar |
-| **Manual Scheduling** | ✅ | Schedule posts with dates/times (free tier) |
-| **Analytics Sync** | ✅ | Hourly engagement metrics (likes, reach, saves) |
-| **Team Collaboration** | ✅ | Draft comments, approvals, @mentions |
-| **Auto-Scheduling** | 🔄 | Phase 1.5 if time permits |
+| Feature                | Phase 1 | Details                                         |
+| ---------------------- | ------- | ----------------------------------------------- |
+| **Account Connection** | ✅      | OAuth-based Business Account linking            |
+| **Content Calendar**   | ✅      | Shoots + posts on timeline                      |
+| **Draft Creation**     | ✅      | Feed posts, Stories (Reels in Phase 2)          |
+| **Templates**          | ✅      | Caption & hashtag templates by content pillar   |
+| **Manual Scheduling**  | ✅      | Schedule posts with dates/times (free tier)     |
+| **Analytics Sync**     | ✅      | Hourly engagement metrics (likes, reach, saves) |
+| **Team Collaboration** | ✅      | Draft comments, approvals, @mentions            |
+| **Auto-Scheduling**    | 🔄      | Phase 1.5 if time permits                       |
 
 ### Content Pillars
 
 Teams can categorize posts by type:
+
 - **BTS** (Behind-the-scenes): Getting ready, makeup, wig styling, studio setup
 - **Finished**: The final look, full photoshoot reveal, cosplay completed
 - **WIP** (Work-in-Progress): Armor painting, sewing, weathering, building
@@ -67,12 +73,12 @@ Teams can categorize posts by type:
 
 ### Permissions
 
-| Role | Can Draft | Can Approve | Can Publish | Can View Analytics |
-|------|-----------|-------------|-------------|-------------------|
-| Owner | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes |
-| Admin | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Yes |
-| Member | ✅ Yes | ❌ No | ✅ Own only | ✅ Yes |
-| Viewer | ❌ No | ❌ No | ❌ No | ❌ No |
+| Role   | Can Draft | Can Approve | Can Publish | Can View Analytics |
+| ------ | --------- | ----------- | ----------- | ------------------ |
+| Owner  | ✅ Yes    | ✅ Yes      | ✅ Yes      | ✅ Yes             |
+| Admin  | ✅ Yes    | ✅ Yes      | ✅ Yes      | ✅ Yes             |
+| Member | ✅ Yes    | ❌ No       | ✅ Own only | ✅ Yes             |
+| Viewer | ❌ No     | ❌ No       | ❌ No       | ❌ No              |
 
 ### Data Models
 
@@ -80,7 +86,7 @@ Teams can categorize posts by type:
 **Instagram Drafts**: Posts (pending, scheduled, published) with content and metadata  
 **Instagram Templates**: Reusable captions and hashtag sets  
 **Instagram Post Analytics**: Engagement tracking (hourly synced)  
-**Instagram Account Metrics**: Follower growth tracking (daily)  
+**Instagram Account Metrics**: Follower growth tracking (daily)
 
 ---
 
@@ -196,20 +202,20 @@ Hourly: Analytics sync (likes, comments, reach, saves)
 ✅ Audit logging: all posts, edits, approvals  
 ✅ Rate limiting: respect Instagram API limits  
 ✅ Privacy: drafts only visible to team members  
-✅ Immutability: posted content cannot be edited (prevents data sync issues)  
+✅ Immutability: posted content cannot be edited (prevents data sync issues)
 
 ---
 
 ## Future Expansion (Phase 2+)
 
-| Feature | Rationale |
-|---------|-----------|
-| **TikTok Integration** | Younger cosplay audience; vertical video format |
-| **Reels Support** | Instagram's prioritized format; video workflow |
-| **Stories Publishing** | Ephemeral content for behind-the-scenes |
-| **Auto-Scheduling** | Post at optimal times without manual trigger |
-| **Video Editing** | In-app trim, effects, transitions (Phase 3) |
-| **Influencer Collab Tools** | Track tag team members, link collaborators |
+| Feature                            | Rationale                                       |
+| ---------------------------------- | ----------------------------------------------- |
+| **TikTok Integration**             | Younger cosplay audience; vertical video format |
+| **Reels Support**                  | Instagram's prioritized format; video workflow  |
+| **Stories Publishing**             | Ephemeral content for behind-the-scenes         |
+| **Auto-Scheduling**                | Post at optimal times without manual trigger    |
+| **Video Editing**                  | In-app trim, effects, transitions (Phase 3)     |
+| **Influencer Collab Tools**        | Track tag team members, link collaborators      |
 | **Content Performance Benchmarks** | Compare team's metrics to cosplay community avg |
 
 ---
@@ -217,37 +223,40 @@ Hourly: Analytics sync (likes, comments, reach, saves)
 ## Deferred Decisions (Revisit Later)
 
 ### Stripe Payment Processing
+
 **Status**: Deferred until paid tier feature set solidified  
 **Next Steps**: Define what features justify paid tier, then implement Stripe  
-**Timeline**: Phase 1.5 or Phase 2  
+**Timeline**: Phase 1.5 or Phase 2
 
 ### SMS Reminders
+
 **Status**: Deferred as paid-tier option  
 **Reason**: Cost per SMS ($.005-0.02); email-only sufficient for Phase 1  
 **Alternative**: Email reminders + optional Twilio SMS as upsell  
-**Timeline**: Phase 2+ (if demand justifies)  
+**Timeline**: Phase 2+ (if demand justifies)
 
 ---
 
 ## Testing Scenarios
 
 ### Scenario 1: Anime Expo Convention Coverage
+
 ```
 Owner schedules: "Anime Expo Photoshoot - Saturday"
 Members create drafts:
   - BTS: "Makeup time!" (template: BTS captions + convention hashtags)
   - Finished: "The look complete!" (custom)
   - Convention: "Floor coverage" (template: convention captions)
-  
+
 Admin reviews all drafts:
   - Edits hashtags for consistency
   - Approves all three
-  
+
 Saturday during event:
   - BTS post scheduled to post at 3pm ✅
   - Finished post scheduled for 6pm ✅
   - Convention photos posted manually as available
-  
+
 Next week:
   - See analytics: Finished got 2.5K reach, 180 saves (high-performing)
   - Finished hashtags: #cosplay #animexpo trending among followers
@@ -255,6 +264,7 @@ Next week:
 ```
 
 ### Scenario 2: Cross-Team Collaboration
+
 ```
 Team A shoots with Team B
 Both teams linked to shared Instagram account
@@ -270,6 +280,7 @@ Both teams' members credited as collaborators
 ```
 
 ### Scenario 3: Mobile Viewing (Phase 1 responsive)
+
 ```
 Member opens Cosplans on mobile (during convention)
 Navigates to Content Calendar
@@ -291,7 +302,7 @@ Swipes back to calendar
 ✅ **Principle II**: Real-time collaboration (draft comments, approvals)  
 ✅ **Principle V**: Visual-first content (images from shoots integrated)  
 ✅ **Security & Privacy**: OAuth handling, token encryption, PII protection  
-✅ **Technical Architecture**: API resilience for Instagram failures, retry logic  
+✅ **Technical Architecture**: API resilience for Instagram failures, retry logic
 
 ---
 

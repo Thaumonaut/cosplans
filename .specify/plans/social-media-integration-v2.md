@@ -9,6 +9,7 @@
 ## Overview
 
 Cosplans integrates social media planning directly into shoot workflow, enabling teams to:
+
 1. Plan content alongside shoot logistics
 2. Schedule posts aligned with shoot timelines
 3. Manage captions and hashtags systematically
@@ -26,6 +27,7 @@ This prevents context-switching between Cosplans, Instagram Creator Studio, and 
 **Feature**: OAuth-based Instagram Business Account linking
 
 **Requirements**:
+
 - Teams can connect one or more Instagram Business Accounts (one per team admin/owner)
 - OAuth flow requests `instagram_business_account`, `instagram_graph_api` permissions
 - Store Instagram account ID, access token (encrypted), expiration, and refresh token
@@ -34,6 +36,7 @@ This prevents context-switching between Cosplans, Instagram Creator Studio, and 
 - Only owner/admin can disconnect or re-authenticate accounts
 
 **Data Storage**:
+
 ```sql
 CREATE TABLE instagram_accounts (
   id UUID PRIMARY KEY,
@@ -57,6 +60,7 @@ CREATE TABLE instagram_accounts (
 **Feature**: Visual calendar synchronized with shoot schedule
 
 **Requirements**:
+
 - Display shoots and planned Instagram posts on same timeline
 - View shoots in "Planning" state and link to Instagram draft posts
 - Color-code content pillars (BTS, finished costume, WIP, convention coverage)
@@ -65,12 +69,14 @@ CREATE TABLE instagram_accounts (
 - Batch view: see 7-day, 30-day posting plan
 
 **UI Components**:
+
 - Calendar view (week/month)
 - Timeline view (chronological list)
 - Grid view (by content pillar)
 - Detail view: shoot + planned posts
 
 **Example Calendar Entry**:
+
 ```
 Mon Oct 23: SHOOT (Pink Wig Convention)
 ├── BTS: "Getting ready" (scheduled 3pm)
@@ -86,6 +92,7 @@ Tue Oct 24: [no shoot]
 **Feature**: Create Instagram posts (feed, Reels, Stories) with templates
 
 **Requirements**:
+
 - Draft posts directly within Cosplans (no context-switching to Instagram)
 - Support feed posts, Reels, Stories, Carousel posts
 - Attach images from shoot library (reference images, progress photos)
@@ -97,37 +104,38 @@ Tue Oct 24: [no shoot]
 - Share draft with team for feedback (Reels only for Phase 2)
 
 **Draft Post Data Model**:
+
 ```sql
 CREATE TABLE instagram_drafts (
   id UUID PRIMARY KEY,
   team_id UUID REFERENCES teams(id),
   instagram_account_id UUID REFERENCES instagram_accounts(id),
   shoot_id UUID REFERENCES shoots(id), -- Optional: linked shoot
-  
+
   post_type TEXT NOT NULL, -- 'feed', 'reel', 'story', 'carousel'
-  
+
   -- Content
   caption TEXT,
   image_ids UUID[] DEFAULT ARRAY[]::UUID[], -- Linked images from Cosplans
   carousel_order INT[], -- Order of images in carousel
-  
+
   -- Metadata
   content_pillar TEXT, -- 'bts', 'finished', 'wip', 'convention', 'custom'
   location_tag TEXT, -- Optional location name
   hashtags TEXT[], -- Array of hashtags
-  
+
   -- Scheduling
   scheduled_for TIMESTAMP,
   posted_at TIMESTAMP,
   instagram_post_id TEXT, -- Set after posting
-  
+
   -- Collaboration
   created_by_id UUID REFERENCES users(id),
   approved_by_id UUID REFERENCES users(id), -- Admin/owner approval for team posting
-  
+
   status TEXT DEFAULT 'draft', -- 'draft', 'scheduled', 'posted', 'failed'
   error_message TEXT,
-  
+
   created_at TIMESTAMP,
   updated_at TIMESTAMP
 );
@@ -138,6 +146,7 @@ CREATE TABLE instagram_drafts (
 **Feature**: Reusable templates for consistent branding
 
 **Requirements**:
+
 - Teams can create caption templates with placeholders
 - Placeholder variables: `{shoot_name}`, `{character}`, `{location}`, `{date}`, `{hashtags}`
 - Templates organized by content pillar (BTS, finished, WIP, convention)
@@ -146,10 +155,11 @@ CREATE TABLE instagram_drafts (
 - One-click apply template to draft post
 
 **Template Example**:
+
 ```
 Caption Template (BTS):
-"Behind the scenes! 📸 Getting ready for {character} at {location}. 
-Costume by @[tag team members]. 
+"Behind the scenes! 📸 Getting ready for {character} at {location}.
+Costume by @[tag team members].
 #cosplay #cosplayer {hashtags}"
 
 Hashtag Set (Convention):
@@ -157,26 +167,27 @@ Hashtag Set (Convention):
 ```
 
 **Data Model**:
+
 ```sql
 CREATE TABLE instagram_templates (
   id UUID PRIMARY KEY,
   team_id UUID REFERENCES teams(id),
-  
+
   template_type TEXT NOT NULL, -- 'caption', 'hashtag_set'
   content_pillar TEXT, -- 'bts', 'finished', 'wip', 'convention'
-  
+
   name TEXT NOT NULL,
   description TEXT,
-  
+
   -- For captions
   template_text TEXT, -- Text with {placeholders}
-  
+
   -- For hashtag sets
   hashtags TEXT[],
-  
+
   created_by_id UUID REFERENCES users(id),
   usage_count INT DEFAULT 0, -- Track most popular templates
-  
+
   created_at TIMESTAMP,
   updated_at TIMESTAMP
 );
@@ -187,6 +198,7 @@ CREATE TABLE instagram_templates (
 **Feature**: Schedule posts for specific dates/times, with approval workflow
 
 **Requirements**:
+
 - Schedule posts for specific date/time (respect Instagram best times)
 - For free tier: manual scheduling (user must post within Cosplans at scheduled time)
 - For paid tier: automatic scheduling (Phase 1.5+) via Instagram Graph API
@@ -197,8 +209,9 @@ CREATE TABLE instagram_templates (
 - Track posting success/failure with error logging
 
 **Approval Workflow** (optional, configurable per team):
+
 ```
-Draft Created → Team feedback → Submitted for approval → 
+Draft Created → Team feedback → Submitted for approval →
 Admin reviews → Approved → Scheduled for posting → Auto-published
 ```
 
@@ -207,6 +220,7 @@ Admin reviews → Approved → Scheduled for posting → Auto-published
 **Feature**: View post performance directly in Cosplans
 
 **Requirements**:
+
 - Sync engagement metrics hourly: likes, comments, saves, shares, reach, impressions
 - Display per-post analytics: engagement rate, save rate, reach
 - Trending hashtags: show which hashtags drove most reach
@@ -216,6 +230,7 @@ Admin reviews → Approved → Scheduled for posting → Auto-published
 - Monthly analytics report (free tier: limited, paid tier: detailed)
 
 **Analytics Data Model**:
+
 ```sql
 CREATE TABLE instagram_post_analytics (
   id UUID PRIMARY KEY,
@@ -223,7 +238,7 @@ CREATE TABLE instagram_post_analytics (
   instagram_account_id UUID REFERENCES instagram_accounts(id),
   instagram_post_id TEXT NOT NULL,
   cosplans_draft_id UUID REFERENCES instagram_drafts(id),
-  
+
   -- Engagement metrics
   likes_count INT,
   comments_count INT,
@@ -232,13 +247,13 @@ CREATE TABLE instagram_post_analytics (
   reach INT,
   impressions INT,
   engagement_rate DECIMAL,
-  
+
   -- Hashtag performance
   top_hashtags TEXT[], -- Top 5 performing hashtags
-  
+
   -- Time data
   synced_at TIMESTAMP,
-  
+
   -- Historical tracking (daily snapshots)
   UNIQUE(instagram_post_id, synced_at)
 );
@@ -258,6 +273,7 @@ CREATE TABLE instagram_account_metrics (
 **Feature**: Multiple team members draft posts, owner/admin reviews
 
 **Requirements**:
+
 - Team members can see who created each draft
 - Comments/feedback on drafts (thread of discussion)
 - @mention team members to request feedback
@@ -271,6 +287,7 @@ CREATE TABLE instagram_account_metrics (
 ## Phase 2+: TikTok Integration
 
 **Planned Features** (not Phase 1):
+
 - TikTok Business Account connection
 - Cross-post from Instagram to TikTok (different editing for vertical format)
 - TikTok-specific analytics (watch time, completion rate)
@@ -359,19 +376,19 @@ GET /api/v1/teams/{teamId}/instagram/analytics/hashtags
 
 ## Permission Model
 
-| Action | Owner | Admin | Member | Viewer |
-|--------|-------|-------|--------|--------|
-| Connect Instagram account | ✅ | ✅ | ❌ | ❌ |
-| View connected accounts | ✅ | ✅ | ✅ | ❌ |
-| Create draft | ✅ | ✅ | ✅ | ❌ |
-| Edit own draft | ✅ | ✅ | ✅ | ❌ |
-| Edit team member's draft | ✅ | ✅ | ❌ | ❌ |
-| Approve draft for posting | ✅ | ✅ | ❌ | ❌ |
-| Publish/schedule post | ✅ | ✅ | ✅* | ❌ |
-| View analytics | ✅ | ✅ | ✅ | ❌ |
-| Manage templates | ✅ | ✅ | ❌ | ❌ |
+| Action                    | Owner | Admin | Member | Viewer |
+| ------------------------- | ----- | ----- | ------ | ------ |
+| Connect Instagram account | ✅    | ✅    | ❌     | ❌     |
+| View connected accounts   | ✅    | ✅    | ✅     | ❌     |
+| Create draft              | ✅    | ✅    | ✅     | ❌     |
+| Edit own draft            | ✅    | ✅    | ✅     | ❌     |
+| Edit team member's draft  | ✅    | ✅    | ❌     | ❌     |
+| Approve draft for posting | ✅    | ✅    | ❌     | ❌     |
+| Publish/schedule post     | ✅    | ✅    | ✅\*   | ❌     |
+| View analytics            | ✅    | ✅    | ✅     | ❌     |
+| Manage templates          | ✅    | ✅    | ❌     | ❌     |
 
-*Members can publish own drafts; owner/admin can publish any draft
+\*Members can publish own drafts; owner/admin can publish any draft
 
 ---
 
@@ -379,13 +396,13 @@ GET /api/v1/teams/{teamId}/instagram/analytics/hashtags
 
 ### Instagram API Failures
 
-| Error | Behavior |
-|-------|----------|
-| **Token expired** | Auto-refresh token; if refresh fails, prompt re-auth |
-| **Rate limited** | Queue request with exponential backoff; notify user |
-| **Post failed** | Store error message; move to "failed" status; suggest retry |
-| **Scheduling unavailable** | Fall back to manual scheduling for free tier |
-| **Account disconnected** | Alert team; prevent new posts until reconnected |
+| Error                      | Behavior                                                    |
+| -------------------------- | ----------------------------------------------------------- |
+| **Token expired**          | Auto-refresh token; if refresh fails, prompt re-auth        |
+| **Rate limited**           | Queue request with exponential backoff; notify user         |
+| **Post failed**            | Store error message; move to "failed" status; suggest retry |
+| **Scheduling unavailable** | Fall back to manual scheduling for free tier                |
+| **Account disconnected**   | Alert team; prevent new posts until reconnected             |
 
 ### Data Consistency
 
@@ -399,6 +416,7 @@ GET /api/v1/teams/{teamId}/instagram/analytics/hashtags
 ## Testing Scenarios
 
 ### Scenario 1: Team Plans Convention Coverage
+
 1. Owner schedules shoot: "Anime Expo 2025 - Saturday"
 2. Team drafts posts: "Getting ready" (BTS), "The look" (finished), "Time-lapse" (WIP)
 3. Member creates draft, tags as BTS, uses BTS caption template
@@ -408,6 +426,7 @@ GET /api/v1/teams/{teamId}/instagram/analytics/hashtags
 7. ✅ Analytics visible: 500 likes, 45 saves, 2.5K reach
 
 ### Scenario 2: Cross-Team Collaboration
+
 1. Two teams (Team A, Team B) collaborate on a shoot
 2. Both teams connected to same Instagram account
 3. Team A member creates draft
@@ -416,6 +435,7 @@ GET /api/v1/teams/{teamId}/instagram/analytics/hashtags
 6. ✅ Both teams see post in their analytics
 
 ### Scenario 3: Scheduling Workflow (Free Tier)
+
 1. Member creates draft, sets scheduled time
 2. Admin approves
 3. Scheduled time arrives
@@ -451,6 +471,7 @@ GET /api/v1/teams/{teamId}/instagram/analytics/hashtags
 9. 🔄 Advanced analytics (Phase 2)
 
 **Not Phase 1**:
+
 - Reels (complex, requires video processing)
 - Stories (requires frame-by-frame image handling)
 - Auto-editing (AI-powered effects, transitions)
@@ -461,6 +482,7 @@ GET /api/v1/teams/{teamId}/instagram/analytics/hashtags
 ## Migration Path (Future Multi-Account)
 
 Currently supports one Instagram account per team. Future expansion:
+
 - Multiple Instagram accounts per team (e.g., main account + brand account)
 - Account switching UI
 - Cross-post to multiple accounts simultaneously

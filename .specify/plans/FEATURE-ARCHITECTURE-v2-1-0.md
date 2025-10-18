@@ -64,7 +64,7 @@
 TEAM WORKFLOW                      CREATOR WORKFLOW
 ─────────────────────────────────────────────────────
 
-Team adds crew to shoot    
+Team adds crew to shoot
         │
         ▼
 Free Tier: Pays 5% commission
@@ -123,7 +123,7 @@ SCENARIO: Team assigns creator to shoot
                               - Availability check
                               - Rating filter
                               - Sort: distance, rating
-                              
+
         │            │            │
         └────────────┼────────────┘
                      │

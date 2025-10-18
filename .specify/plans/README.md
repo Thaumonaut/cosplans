@@ -9,9 +9,11 @@
 ## 📋 Core Documents
 
 ### 1. Constitution (v2.2.0) ⭐ LATEST
+
 **File**: `.specify/memory/constitution.md`
 
 **Contents**:
+
 - 10 Core Principles (Web-first architecture, real-time collab, external integrations, workflows, visual content, TDD, team roles/crew, Creator Marketplace, analytics, sustainability)
 - Principle V.5 - Social Media Workflow Integration (Instagram Phase 1)
 - **Principle VIII - Creator Community & Discovery Marketplace** (Phase 1.5)
@@ -25,6 +27,7 @@
 - Governance & Amendment Process
 
 **What's New in v2.2.0**:
+
 - ✅ **15 Vetted Packages** documented with rationale and time savings
 - ✅ **Technology Stack Finalized**: SvelteKit, Tailwind, Shadcn/svelte, Yjs (CRDT), Sveltekit-Superforms, Zod, Supabase, Sharp, Vitest, Playwright, MSW
 - ✅ **Time Savings Quantified**: 100-140 days saved (55% time reduction) from 180-220 → 60-80 working days
@@ -32,6 +35,7 @@
 - ✅ **Phase 1 Timeline**: 12 weeks with packages vs. 6-8 months without
 
 **Key Decisions**:
+
 - Added: Creator Marketplace (Phase 1.5) - connects teams with professional creators
 - Updated: Revenue model based on transaction commissions (5% free tier, 0% paid tier)
 - Updated: Authentication with public usernames for creator discoverability
@@ -47,9 +51,11 @@
 ## 🏗️ Technical Planning Documents
 
 ### 2. Phase 0 Research (Research & Unknowns)
+
 **File**: `.specify/plans/phase-0-research.md`
 
 **Covers**:
+
 - Image optimization pipeline (WebP + Sharp.js + Supabase Storage)
 - Email integration (SendGrid + Supabase Functions with retry queue)
 - Conflict resolution (Operational Transform algorithm)
@@ -58,9 +64,11 @@
 ---
 
 ### 3. Data Model v2 (Database Schema)
+
 **File**: `.specify/plans/data-model-v2.md`
 
 **Includes**:
+
 - 12 core tables (users, teams, shoots, costumes, props, crew, images, permissions, analytics)
 - **NEW**: Crew management tables (crew, shoot_crew)
 - **NEW**: Instagram integration tables (coming in next update)
@@ -71,9 +79,11 @@
 ---
 
 ### 4. Social Media Integration Spec (Phase 1 Instagram)
+
 **File**: `.specify/plans/social-media-integration-v2.md`
 
 **Details**:
+
 - Instagram content calendar (shoots + posts timeline)
 - Draft creation & editing (feed, Stories, Carousel)
 - Caption & hashtag templates (by content pillar)
@@ -88,9 +98,11 @@
 ---
 
 ### 5. Crew Management Spec (Per-Shoot Personnel)
+
 **File**: `.specify/plans/crew-management-spec.md`
 
 **Covers**:
+
 - Crew as persistent personnel records (with work history)
 - Per-shoot crew role assignments (photographer, cosplayer, makeup artist, etc.)
 - Dual crew management interfaces (dedicated page + shoot inline)
@@ -100,9 +112,11 @@
 ---
 
 ### 6. Permission Model Update (v1.9 → v2.0)
+
 **File**: `.specify/plans/permission-model-update-v1-9.md`
 
 **Changes**:
+
 - Added Owner role (full control, positioned for future expansion)
 - Updated crew contact visibility (all members can view)
 - Clarified team-level permissions vs. crew roles (informational)
@@ -111,9 +125,11 @@
 ---
 
 ### 7. Quickstart Guide (Developer Onboarding)
+
 **File**: `.specify/plans/quickstart.md`
 
 **Includes**:
+
 - Local development setup (PostgreSQL, migrations, seeds)
 - Project structure and code patterns
 - Real-time sync setup (Supabase Realtime)
@@ -128,9 +144,11 @@
 ## 🔧 API Specifications
 
 ### Contracts
+
 **Directory**: `.specify/plans/contracts/`
 
 **Files** (planned):
+
 - `shoots-api.openapi.yaml` - Shoots CRUD with conflict resolution
 - `crew-api.openapi.yaml` - Crew management endpoints
 - `images-api.openapi.yaml` - Image upload & optimization
@@ -141,9 +159,11 @@
 ## 📚 Supporting Documents
 
 ### 8. Copilot Context (AI Assistant Guidance)
+
 **File**: `.github/copilot-context.md`
 
 **Provides**:
+
 - Project overview and tech stack
 - Architecture patterns (real-time sync, image optimization, conflict resolution)
 - File structure reference
@@ -153,9 +173,11 @@
 ---
 
 ### 9. Constitution v2.0 Summary
+
 **File**: `.specify/plans/constitution-v2-0-summary.md`
 
 **Summary of**:
+
 - What changed in v2.0 (social media added, payments/SMS deferred)
 - Instagram integration scope and data models
 - Phase 1 implementation priorities
@@ -168,13 +190,16 @@
 ## 🚀 Implementation Roadmap
 
 ### Phase 0: Research ✅ COMPLETE
+
 - [x] Image optimization pipeline (Sharp.js + WebP)
 - [x] Email integration (SendGrid + retry queue)
 - [x] Conflict resolution (OT algorithm)
 - [x] Analytics framework (custom PostgreSQL)
 
 ### Phase 1: Core Web Application ✅ COMPLETE & SPECIFICATION FINALIZED
+
 **Implementation Priority Order**:
+
 1. Image optimization (Sharp.js resize, upload)
 2. Email reminders (SendGrid integration)
 3. Conflict resolution (OT engine + 3-way merge UI)
@@ -189,7 +214,9 @@
 **Phase 1 Status**: Specification complete (Constitution + Data Model + API specs) ✅ Ready for development
 
 ### Phase 1.5: Creator Community Marketplace & Instagram Enhancements 🎯 READY FOR IMPLEMENTATION
+
 **NEW: Creator Marketplace Features**:
+
 - Creator public profiles (photographers, makeup artists, prop modelers, etc.)
 - Geographic discovery (search nearby creators by role)
 - Verification badges (90+ days, 4.5+ rating, 5+ monthly bookings)
@@ -201,6 +228,7 @@
 - Community showcase gallery for verified creators
 
 **Instagram Enhancements**:
+
 - Auto-scheduling via Instagram Graph API
 - Reels support (video editing in-app)
 - Stories publishing
@@ -210,6 +238,7 @@
 **Specification**: See `creator-community-marketplace-v1.md` (8,000+ lines)
 
 ### Phase 2: Mobile Apps & TikTok 🚀 PLANNED
+
 - Flutter Android app (native performance, offline, camera integration)
 - Flutter iOS app (shared codebase with Android)
 - TikTok integration & creator features
@@ -218,6 +247,7 @@
 - Advanced creator analytics
 
 ### Phase 3: Advanced Features & Scaling
+
 - Influencer partnerships & sponsorship tools
 - Convention event integrations
 - B2B team onboarding & consulting
@@ -228,17 +258,20 @@
 ## 📊 Key Metrics & Targets
 
 ### Performance
+
 - Page load: <3s on 3G network
 - API response: <500ms (p95)
 - Real-time sync: <2s propagation
 - Image load: <1s for optimized sizes
 
 ### Testing
+
 - Code coverage: 70% minimum
 - End-to-end tests: All critical workflows
 - Accessibility: WCAG 2.1 AA compliance
 
 ### Sustainability & Growth
+
 - **Free Tier**: 2GB storage, unlimited team members, 1,000 API calls/day, 5% commission on creator bookings
 - **Paid Tier**: $5/month (20GB storage, 0% commission, advanced features)
 - **Creator Free Tier**: 5% commission on earnings, basic bookings
@@ -258,7 +291,7 @@
 ✅ No PII in analytics  
 ✅ No data selling or licensing  
 ✅ Incident response procedures  
-✅ Backup & disaster recovery (4-hour RTO, 1-hour RPO)  
+✅ Backup & disaster recovery (4-hour RTO, 1-hour RPO)
 
 ---
 
@@ -268,70 +301,73 @@
 
 ### Vetted Packages (15 Total)
 
-| Package | Version | Purpose | Time Saved | Phase |
-|---------|---------|---------|-----------|-------|
-| **SvelteKit** | ^2.0 | Web framework (SSR, API routes, performance) | Baseline | 1 |
-| **Tailwind CSS** | ^3.3 | Utility-first CSS, responsive design | Baseline | 1 |
-| **Shadcn/svelte** | ^0.x | Accessible UI components (Radix UI) | 20-30 days | 1 |
-| **Lucide Svelte** | ^0.x | Clean SVG icon library | Included | 1 |
-| **Sveltekit-Superforms** | ^2.0 | Server-first form validation, CSRF | 10-15 days | 1 |
-| **Zod** | ^3.x | TypeScript schema validation | Included above | 1 |
-| **Yjs** | ^13.x | CRDT conflict resolution (replaces OT) | 10-14 days | 1 |
-| **y-protocols** | ^1.x | WebSocket provider for Yjs | Included above | 1 |
-| **Supabase** | ^2.x | PostgreSQL + auth + realtime + RLS | Baseline | 1 |
-| **Sharp** | ^0.x | Image optimization (WebP, responsive) | Included | 1 |
-| **date-fns** | ^3.x | Modular date utilities | Included | 1 |
-| **@casl/ability** | ^6.x | Declarative permissions (server+client) | 3-5 days | 1 |
-| **Vitest** | ^1.x | Unit testing (Vite-native) | Included | 1 |
-| **@playwright/test** | ^1.x | E2E testing (browser automation) | Included | 1 |
-| **msw** | ^2.x | API mocking (Supabase, Google, SendGrid) | 5-7 days | 1 |
-| **@testing-library/svelte** | ^4.x | Component testing (behavior-focused) | Included | 1 |
+| Package                     | Version | Purpose                                      | Time Saved     | Phase |
+| --------------------------- | ------- | -------------------------------------------- | -------------- | ----- |
+| **SvelteKit**               | ^2.0    | Web framework (SSR, API routes, performance) | Baseline       | 1     |
+| **Tailwind CSS**            | ^3.3    | Utility-first CSS, responsive design         | Baseline       | 1     |
+| **Shadcn/svelte**           | ^0.x    | Accessible UI components (Radix UI)          | 20-30 days     | 1     |
+| **Lucide Svelte**           | ^0.x    | Clean SVG icon library                       | Included       | 1     |
+| **Sveltekit-Superforms**    | ^2.0    | Server-first form validation, CSRF           | 10-15 days     | 1     |
+| **Zod**                     | ^3.x    | TypeScript schema validation                 | Included above | 1     |
+| **Yjs**                     | ^13.x   | CRDT conflict resolution (replaces OT)       | 10-14 days     | 1     |
+| **y-protocols**             | ^1.x    | WebSocket provider for Yjs                   | Included above | 1     |
+| **Supabase**                | ^2.x    | PostgreSQL + auth + realtime + RLS           | Baseline       | 1     |
+| **Sharp**                   | ^0.x    | Image optimization (WebP, responsive)        | Included       | 1     |
+| **date-fns**                | ^3.x    | Modular date utilities                       | Included       | 1     |
+| **@casl/ability**           | ^6.x    | Declarative permissions (server+client)      | 3-5 days       | 1     |
+| **Vitest**                  | ^1.x    | Unit testing (Vite-native)                   | Included       | 1     |
+| **@playwright/test**        | ^1.x    | E2E testing (browser automation)             | Included       | 1     |
+| **msw**                     | ^2.x    | API mocking (Supabase, Google, SendGrid)     | 5-7 days       | 1     |
+| **@testing-library/svelte** | ^4.x    | Component testing (behavior-focused)         | Included       | 1     |
 
 **Total Implementation Time Savings**: **100-140 days** (55% time reduction)
+
 - **Before**: 180-220 working days (5.5-7 months solo)
 - **After**: 60-80 working days (2-3 months solo)
 
 ### Antipatterns (DO NOT USE)
 
-| Technology | Reason | Alternative |
-|-----------|--------|-------------|
-| Redux, Pinia, Zustand | State management overkill for SvelteKit | Use SvelteKit `load()` + writable stores |
-| Third-party analytics vendors | Privacy concerns, PII risk | Custom PostgreSQL analytics (Constitution Principle IX) |
-| Auth0, Okta | Vendor lock-in, unnecessary complexity | Supabase Auth (sufficient, decoupled) |
-| Material Design, Bootstrap | Heavy, less customizable | Shadcn/svelte (lightweight, accessible) |
-| Firebase | Real-time but vendor lock-in | Supabase (open-source PostgreSQL alternative) |
-| Socket.io | WebSocket alternative | Use Supabase Realtime directly (built-in to PostgreSQL subscriptions) |
+| Technology                    | Reason                                  | Alternative                                                           |
+| ----------------------------- | --------------------------------------- | --------------------------------------------------------------------- |
+| Redux, Pinia, Zustand         | State management overkill for SvelteKit | Use SvelteKit `load()` + writable stores                              |
+| Third-party analytics vendors | Privacy concerns, PII risk              | Custom PostgreSQL analytics (Constitution Principle IX)               |
+| Auth0, Okta                   | Vendor lock-in, unnecessary complexity  | Supabase Auth (sufficient, decoupled)                                 |
+| Material Design, Bootstrap    | Heavy, less customizable                | Shadcn/svelte (lightweight, accessible)                               |
+| Firebase                      | Real-time but vendor lock-in            | Supabase (open-source PostgreSQL alternative)                         |
+| Socket.io                     | WebSocket alternative                   | Use Supabase Realtime directly (built-in to PostgreSQL subscriptions) |
 
 ### Legacy Technology (Replaced in v2.2.0)
 
-| What Was | Reason for Change | Now Using |
-|----------|-------------------|-----------|
-| Manual OT Algorithm | Algorithmically complex (10-14 days dev) | Yjs CRDT (battle-tested, automatic) |
-| Redux/Pinia | Overkill for app state | SvelteKit built-in stores + load() |
-| Custom API mocking | Flaky external tests (5-7 days setup) | MSW (deterministic, no real API calls) |
-| Scattered permissions | Permission checks scattered in code | @casl/ability (centralized, declarative) |
-| Bootstrap/Material | Generic, heavy, less customizable | Shadcn/svelte (copy-paste, lightweight) |
+| What Was              | Reason for Change                        | Now Using                                |
+| --------------------- | ---------------------------------------- | ---------------------------------------- |
+| Manual OT Algorithm   | Algorithmically complex (10-14 days dev) | Yjs CRDT (battle-tested, automatic)      |
+| Redux/Pinia           | Overkill for app state                   | SvelteKit built-in stores + load()       |
+| Custom API mocking    | Flaky external tests (5-7 days setup)    | MSW (deterministic, no real API calls)   |
+| Scattered permissions | Permission checks scattered in code      | @casl/ability (centralized, declarative) |
+| Bootstrap/Material    | Generic, heavy, less customizable        | Shadcn/svelte (copy-paste, lightweight)  |
 
 ### Core Infrastructure
 
-| Component | Technology | Rationale |
-|-----------|-----------|-----------|
-| **Frontend** | SvelteKit | Built-in performance (SSR, ISR), no hydration lag |
-| **Backend** | Supabase (PostgreSQL) | EU region (GDPR), PostgREST API, RLS policies, real-time subscriptions |
-| **Real-time** | Yjs + Supabase Realtime | CRDT handles conflicts automatically, 2-second propagation |
-| **Images** | Sharp.js + Supabase Storage | WebP optimization, responsive sizes (320/640/1280/2560px) |
-| **Authentication** | OAuth + Passkeys | No passwords, multi-provider support (Google, Instagram, X) |
-| **Email** | SendGrid | Reliable delivery, webhook events, retry queue |
-| **Payment** | Stripe Connect | Creator disbursements, webhook sync (Phase 1.5+) |
+| Component          | Technology                  | Rationale                                                              |
+| ------------------ | --------------------------- | ---------------------------------------------------------------------- |
+| **Frontend**       | SvelteKit                   | Built-in performance (SSR, ISR), no hydration lag                      |
+| **Backend**        | Supabase (PostgreSQL)       | EU region (GDPR), PostgREST API, RLS policies, real-time subscriptions |
+| **Real-time**      | Yjs + Supabase Realtime     | CRDT handles conflicts automatically, 2-second propagation             |
+| **Images**         | Sharp.js + Supabase Storage | WebP optimization, responsive sizes (320/640/1280/2560px)              |
+| **Authentication** | OAuth + Passkeys            | No passwords, multi-provider support (Google, Instagram, X)            |
+| **Email**          | SendGrid                    | Reliable delivery, webhook events, retry queue                         |
+| **Payment**        | Stripe Connect              | Creator disbursements, webhook sync (Phase 1.5+)                       |
 
 ---
 
 ## 🚀 Implementation Timeline with v2.2.0 Packages
 
-### Phase 1: Core Web Application 
+### Phase 1: Core Web Application
+
 **Timeline**: **12 weeks** (with recommended packages) vs. 20-26 weeks without packages
 
 **Weekly Breakdown** (60-80 working days):
+
 - Week 1-2: Project setup, Supabase migrations, package initialization
 - Week 3-4: Image optimization pipeline (Sharp.js)
 - Week 5-6: Core CRUD (shoots, costumes, props) with Superforms
@@ -342,9 +378,11 @@
 **Confidence Level**: Medium-High (assuming team of 2-3 developers)
 
 ### Phase 1.5: Creator Marketplace & Instagram (After Phase 1 Validation)
+
 **Timeline**: 8 weeks (Creator profiles, discovery, booking, Stripe integration)
 
 ### Phase 2: Mobile Apps (Flutter Android + iOS)
+
 **Timeline**: 12-16 weeks (shared Flutter codebase, native performance)
 
 ---
@@ -352,17 +390,20 @@
 ## 📊 Key Metrics & Targets
 
 ### Performance
+
 - Page load: <3s on 3G network ✓
 - API response: <500ms (p95) ✓
 - Real-time sync: <2s propagation ✓
 - Image load: <1s for optimized sizes ✓
 
 ### Testing
+
 - Code coverage: 70% minimum ✓
 - End-to-end tests: All critical workflows ✓
 - Accessibility: WCAG 2.1 AA compliance ✓
 
 ### Sustainability & Growth
+
 - **Free Tier**: 2GB storage, unlimited team members, 1,000 API calls/day, 5% commission on creator bookings
 - **Paid Tier**: $5/month (20GB storage, 0% commission, advanced features)
 - **Creator Free Tier**: 5% commission on earnings, basic bookings
@@ -375,11 +416,13 @@
 ## 🎯 Next Actions
 
 ### Immediate (This Week)
+
 - [ ] Review Constitution v2.0 with stakeholders
 - [ ] Confirm social media scope and timeline
 - [ ] Allocate development resources
 
 ### Short-term (This Sprint)
+
 - [ ] Set up Supabase project with migrations
 - [ ] Create GitHub project board for Phase 1 tasks
 - [ ] Implement image optimization pipeline
@@ -387,6 +430,7 @@
 - [ ] Begin conflict resolution testing
 
 ### Medium-term (Next Sprint)
+
 - [ ] Complete core CRUD (shoots, costumes, props)
 - [ ] Implement crew management
 - [ ] Set up real-time sync
@@ -397,27 +441,28 @@
 
 ## � Document Versions & Status
 
-| Document | Version | Last Updated | Status |
-|----------|---------|--------------|--------|
-| Constitution | **2.2.0** | 2025-10-16 | ✅ **Tech Stack Finalized** |
-| Constitution v2.2.0 Validation Report | 1.0 | 2025-10-16 | ✅ **Complete** |
-| Constitution v2.1 Summary | 1.0 | 2025-10-16 | ✅ Archived |
-| Data Model | v2 | 2025-10-16 | ✅ Ready |
-| Social Media Spec | v2 | 2025-10-16 | ✅ Complete |
-| Creator Marketplace Spec | v1.0 | 2025-10-16 | ✅ Ready |
-| Crew Management | v2 | 2025-10-16 | ✅ Ready |
-| Permission Model | 1.9 | 2025-10-16 | ✅ Complete |
-| **Quickstart** | v1.0 | 2025-10-16 | 📋 **In Progress** |
-| Copilot Context | Complete | 2025-10-16 | ✅ Ready |
-| README | **2.2.0** | 2025-10-16 | ✅ **Updated** |
-| Phase 0 Research | Complete | 2025-10-16 | ✅ Archived |
-| Feature Architecture | v2.1.0 | 2025-10-16 | ✅ Complete |
+| Document                              | Version   | Last Updated | Status                      |
+| ------------------------------------- | --------- | ------------ | --------------------------- |
+| Constitution                          | **2.2.0** | 2025-10-16   | ✅ **Tech Stack Finalized** |
+| Constitution v2.2.0 Validation Report | 1.0       | 2025-10-16   | ✅ **Complete**             |
+| Constitution v2.1 Summary             | 1.0       | 2025-10-16   | ✅ Archived                 |
+| Data Model                            | v2        | 2025-10-16   | ✅ Ready                    |
+| Social Media Spec                     | v2        | 2025-10-16   | ✅ Complete                 |
+| Creator Marketplace Spec              | v1.0      | 2025-10-16   | ✅ Ready                    |
+| Crew Management                       | v2        | 2025-10-16   | ✅ Ready                    |
+| Permission Model                      | 1.9       | 2025-10-16   | ✅ Complete                 |
+| **Quickstart**                        | v1.0      | 2025-10-16   | 📋 **In Progress**          |
+| Copilot Context                       | Complete  | 2025-10-16   | ✅ Ready                    |
+| README                                | **2.2.0** | 2025-10-16   | ✅ **Updated**              |
+| Phase 0 Research                      | Complete  | 2025-10-16   | ✅ Archived                 |
+| Feature Architecture                  | v2.1.0    | 2025-10-16   | ✅ Complete                 |
 
 ---
 
 ## 📖 How to Use This Documentation
 
 **For New Developers**:
+
 1. Start with Constitution v2.2.0 (understanding + tech stack)
 2. Read Quickstart guide (setup with package installation)
 3. Review Data Model (schema)
@@ -425,6 +470,7 @@
 5. Reference Copilot context (patterns)
 
 **For Feature Implementation**:
+
 1. Find your feature in Constitution
 2. Check Social Media Spec (if Instagram-related)
 3. Check Data Model for affected tables
@@ -432,12 +478,14 @@
 5. Write tests first (TDD) per Principle VI
 
 **For Debugging/Questions**:
+
 1. Check Copilot context for architecture patterns
 2. Check Quickstart for common tasks
 3. Check relevant spec doc (data model, API, social media)
 4. Check Constitution for principles alignment
 
 **For Package/Dependency Questions**:
+
 1. Check Constitution v2.2.0 "Recommended Technology Stack & Packages" section
 2. Check Quickstart for package installation and configuration
 3. Refer to antipatterns (what NOT to use)
@@ -461,15 +509,16 @@
 ✅ **Social Media**: Instagram Phase 1, TikTok Phase 2+ (decided)  
 ✅ **Antipatterns**: Redux, Pinia, Auth0, Material Design (explicitly prohibited in Constitution)  
 🔄 **Payment**: Stripe (Phase 1.5+ for marketplace, deferred until creator features confirmed)  
-🔄 **SMS**: Deferred as paid tier option (Phase 2+)  
+🔄 **SMS**: Deferred as paid tier option (Phase 2+)
 
 ---
 
-## � Cosplans Constitution v2.2.0 - Ready for Phase 1 Implementation! 
+## � Cosplans Constitution v2.2.0 - Ready for Phase 1 Implementation!
 
 **Status**: ✅ **PRODUCTION READY**
 
 **What's New in v2.2.0**:
+
 - ✅ **Recommended Technology Stack & Packages** (15 packages with time/quality analysis)
 - ✅ **Implementation Timeline**: 12 weeks with packages vs. 20-26 weeks without
 - ✅ **Time Savings**: 100-140 days saved (55% reduction)
@@ -478,6 +527,7 @@
 - ✅ **Validation Complete**: Constitution v2.2.0 passes all speckit.constitution.prompt.md requirements
 
 **Previous v2.1.0 Features** (Retained):
+
 - ✅ Creator Community & Discovery Marketplace (Phase 1.5 ready)
 - ✅ Commission-based revenue model (sustainable, 5% free / 0% paid tier)
 - ✅ Comprehensive creator profile system with verification badges
@@ -488,6 +538,7 @@
 - ✅ Full privacy controls (optional public profile, location privacy, travel autonomy)
 
 **Ready to Start Phase 1**:
+
 1. ✅ Constitution v2.2.0 finalized (validation complete)
 2. ✅ Technology stack ratified (15 packages, time savings quantified)
 3. ✅ Data model finalized → Ready for Supabase migrations

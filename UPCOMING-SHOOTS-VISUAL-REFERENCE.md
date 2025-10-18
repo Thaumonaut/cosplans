@@ -88,6 +88,7 @@
 ## Card Detail Layout
 
 ### Shoot Card Anatomy
+
 ```
 ┌─ Card (flex, gap-4, p-4) ─────────────────────────────────┐
 │                                                            │
@@ -114,12 +115,14 @@
 ## Responsive Behavior
 
 ### Desktop (Current)
+
 - Image: 132×132px
 - Card: Full width container
 - Week calendar: 7 columns visible
 - Layout: Horizontal flex (image left, details right)
 
 ### Mobile (Future Enhancement)
+
 - Image: May reduce to 100×100px or 80×80px
 - Card: Stack option or smaller image
 - Week calendar: Scrollable horizontal
@@ -127,66 +130,69 @@
 
 ## Color Scheme
 
-| Element | Color Class | Usage |
-|---------|-------------|-------|
-| Next Shoot Bar | `from-blue-50 to-blue-100` | Gradient background |
-| Next Shoot Border | `border-blue-200` | Container border |
-| Today in Calendar | `bg-blue-600 text-white` | Current date highlight |
-| Days with Shoots | `bg-blue-100 border-blue-400` | Busy days |
-| Empty Days | `bg-gray-100 text-gray-600` | Free days |
-| Card Hover | `border-blue-400` | Interactive state |
-| Card Background | `bg-white` | Default |
-| Icon Color | `text-gray-500` | Info icons |
-| Label Text | `text-gray-600` | Category labels |
-| Detail Text | `text-gray-700` | Information |
+| Element           | Color Class                   | Usage                  |
+| ----------------- | ----------------------------- | ---------------------- |
+| Next Shoot Bar    | `from-blue-50 to-blue-100`    | Gradient background    |
+| Next Shoot Border | `border-blue-200`             | Container border       |
+| Today in Calendar | `bg-blue-600 text-white`      | Current date highlight |
+| Days with Shoots  | `bg-blue-100 border-blue-400` | Busy days              |
+| Empty Days        | `bg-gray-100 text-gray-600`   | Free days              |
+| Card Hover        | `border-blue-400`             | Interactive state      |
+| Card Background   | `bg-white`                    | Default                |
+| Icon Color        | `text-gray-500`               | Info icons             |
+| Label Text        | `text-gray-600`               | Category labels        |
+| Detail Text       | `text-gray-700`               | Information            |
 
 ## Typography
 
-| Element | Classes | Purpose |
-|---------|---------|---------|
-| Next Shoot Label | `text-xs font-medium uppercase tracking-wide` | Category label |
-| Next Shoot Title | `text-lg font-semibold` | Primary attention |
-| Week Label | `text-xs font-medium uppercase` | Section header |
-| Day Name | `text-xs font-semibold` | Calendar column header |
-| Day Number | `text-lg font-bold` | Calendar date |
-| Shoot Count | `text-xs font-medium` | Calendar info |
-| Card Title | `text-sm font-semibold` | Shoot name |
-| Character Names | `text-xs text-gray-600` | Supporting info |
-| Detail Text | `text-xs` | Date, location, people |
-| Link Text | `text-xs font-medium` | "View all" action |
+| Element          | Classes                                       | Purpose                |
+| ---------------- | --------------------------------------------- | ---------------------- |
+| Next Shoot Label | `text-xs font-medium uppercase tracking-wide` | Category label         |
+| Next Shoot Title | `text-lg font-semibold`                       | Primary attention      |
+| Week Label       | `text-xs font-medium uppercase`               | Section header         |
+| Day Name         | `text-xs font-semibold`                       | Calendar column header |
+| Day Number       | `text-lg font-bold`                           | Calendar date          |
+| Shoot Count      | `text-xs font-medium`                         | Calendar info          |
+| Card Title       | `text-sm font-semibold`                       | Shoot name             |
+| Character Names  | `text-xs text-gray-600`                       | Supporting info        |
+| Detail Text      | `text-xs`                                     | Date, location, people |
+| Link Text        | `text-xs font-medium`                         | "View all" action      |
 
 ## Interaction States
 
 ### Hover (Cards)
+
 - Border: Gray-200 → Blue-400
 - Shadow: `shadow-sm` → `shadow-md`
 - Transition: `transition-all`
 - Cursor: `cursor-pointer` removed (better semantics)
 
 ### Week Calendar Days
+
 - Hover empty day: `hover:bg-gray-200`
 - Today: Always highlighted blue
 - With shoots: Border emphasis
 
 ### Links
+
 - Color: `text-blue-600`
 - Hover: `hover:text-blue-800`
 - Underline on hover (browser default)
 
 ## Spacing
 
-| Element | Utility | Value |
-|---------|---------|-------|
-| Widget Container | `space-y-6` | 1.5rem between sections |
-| Cards List | `space-y-3` | 0.75rem between cards |
-| Card Padding | `p-4` | 1rem all sides |
-| Card Gap | `gap-4` | 1rem between image/details |
-| Week Calendar Gap | `gap-2` | 0.5rem between days |
-| Next Shoot Gap | `gap-4` within flex | 1rem sections |
-| Day Box Padding | `p-3` | 0.75rem |
-| Header Gap | `gap-2` | 0.5rem between title/badge |
-| Footer Gap | `gap-1` | 0.25rem between icon/text |
-| Border Top | `pt-2` | 0.5rem padding before divider |
+| Element           | Utility             | Value                         |
+| ----------------- | ------------------- | ----------------------------- |
+| Widget Container  | `space-y-6`         | 1.5rem between sections       |
+| Cards List        | `space-y-3`         | 0.75rem between cards         |
+| Card Padding      | `p-4`               | 1rem all sides                |
+| Card Gap          | `gap-4`             | 1rem between image/details    |
+| Week Calendar Gap | `gap-2`             | 0.5rem between days           |
+| Next Shoot Gap    | `gap-4` within flex | 1rem sections                 |
+| Day Box Padding   | `p-3`               | 0.75rem                       |
+| Header Gap        | `gap-2`             | 0.5rem between title/badge    |
+| Footer Gap        | `gap-1`             | 0.25rem between icon/text     |
+| Border Top        | `pt-2`              | 0.5rem padding before divider |
 
 ## Icons Used
 

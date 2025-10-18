@@ -189,22 +189,26 @@
 ## 🔗 Constitution References
 
 **Principle II (Real-Time Collaboration)**
+
 - [ ] Offline queue ensures no data loss
 - [ ] Real-time sync <100ms on LAN
 - [ ] CRDT (Yjs) automatically resolves conflicts
 - [ ] Presence indicators show who's editing
 
 **Principle VI (TDD)**
+
 - [ ] 70% test coverage includes conflict resolution scenarios
 - [ ] Integration tests verify offline → online → conflict flow
 - [ ] E2E tests with multiple users
 
 **Principle VII (Security & Privacy)**
+
 - [ ] Permissions checked before applying synced changes
 - [ ] Users can only sync their own offline queue
 - [ ] RLS policies enforced on Supabase tables
 
 **Technology Stack (Constitution v2.2.0)**
+
 - [ ] Yjs for CRDT conflict resolution
 - [ ] y-protocols for wire protocol
 - [ ] y-websocket for WebSocket transport
@@ -216,6 +220,7 @@
 ## 📦 Deliverables
 
 ### Code
+
 - [ ] `src/lib/services/yjs.ts` (Yjs document setup)
 - [ ] `src/lib/providers/WebsocketProvider.ts` (Supabase Realtime connection)
 - [ ] `src/lib/services/offlineQueue.ts` (IndexedDB queue management)
@@ -227,12 +232,14 @@
 - [ ] Database migrations: `sync_queue`, `state_snapshots`, `sync_status`, `presence`, `change_history` tables
 
 ### Tests
+
 - [ ] Unit tests: 15+
 - [ ] Integration tests: 15+
 - [ ] E2E tests: 6+ (with multiple browser instances)
 - [ ] Coverage: 70%+
 
 ### Documentation
+
 - [ ] CRDT architecture diagram
 - [ ] Offline sync flow diagram
 - [ ] Real-time sync flow diagram
@@ -243,39 +250,44 @@
 
 ## ⚠️ Known Blockers / Decisions Needed
 
-| Blocker | Impact | Resolution |
-|---------|--------|-----------|
-| **Peer-to-Peer Sync** | Not implementing (too complex for MVP) | All sync through server (SvelteKit hub model) |
-| **Offline Limit** | Max 500 pending changes | If exceeded, force sync or show warning |
-| **Conflict UI** | 3-way merge UI complex | Build minimal version: show remote + local, user picks one |
-| **Vector Clocks** | Complex to implement perfectly | Use wall-clock timestamps (simpler, 99% accurate) |
+| Blocker               | Impact                                 | Resolution                                                 |
+| --------------------- | -------------------------------------- | ---------------------------------------------------------- |
+| **Peer-to-Peer Sync** | Not implementing (too complex for MVP) | All sync through server (SvelteKit hub model)              |
+| **Offline Limit**     | Max 500 pending changes                | If exceeded, force sync or show warning                    |
+| **Conflict UI**       | 3-way merge UI complex                 | Build minimal version: show remote + local, user picks one |
+| **Vector Clocks**     | Complex to implement perfectly         | Use wall-clock timestamps (simpler, 99% accurate)          |
 
 ---
 
 ## 📋 Daily Breakdown
 
 **Days 1-2**: Yjs setup + document structure
+
 - Initialize Yjs doc
 - Create nested Y.Map/Y.Array structures
 - Test state encoding/decoding
 
 **Days 3-4**: Offline queue infrastructure
+
 - IndexedDB setup
 - Offline detection
 - Queue storage + serialization
 - Optimistic UI updates
 
 **Days 5-6**: Real-time sync from Supabase
+
 - Supabase Realtime subscriptions
 - Broadcast to clients
 - Update local Yjs doc
 
 **Days 7-8**: Conflict resolution
+
 - 3-way merge logic
 - Conflict detection during offline sync
 - Merge UI component
 
 **Days 9-10**: Testing + documentation
+
 - Unit + integration tests (CRDT, queue, merge)
 - E2E tests with multiple browsers
 - Diagram + flow documentation
@@ -285,6 +297,7 @@
 ## ✅ Sign-Off Criteria
 
 **Week 5-6 COMPLETE when**:
+
 1. ✅ Yjs CRDT setup working
 2. ✅ Offline queue storing changes in IndexedDB
 3. ✅ Optimistic UI updates working (pending badge)

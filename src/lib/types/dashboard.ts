@@ -3,12 +3,12 @@
 
 export interface DashboardWidget {
   id: string;
-  type: 'upcoming_shoots' | 'ideas' | 'alerts' | 'budget' | 'weather' | 'progress';
+  type: "upcoming_shoots" | "ideas" | "alerts" | "budget" | "weather" | "progress";
   user_id: string;
-  template: 'compact' | 'detailed' | 'timeline-focus';
+  template: "compact" | "detailed" | "timeline-focus";
   position: number;
   visible: boolean;
-  settings: Record<string, any>;
+  settings: Record<string, unknown>;
   created_at: string;
   updated_at: string;
 }
@@ -17,12 +17,12 @@ export interface TimelineView {
   id: string;
   user_id: string;
   team_id: string;
-  zoom_level: 'day' | 'week' | 'month' | 'quarter' | 'year';
+  zoom_level: "day" | "week" | "month" | "quarter" | "year";
   date_range_start: string;
   date_range_end: string;
   visible_shoots: string[];
-  filter_settings: Record<string, any>;
-  milestone_markers: Record<string, any>;
+  filter_settings: Record<string, unknown>;
+  milestone_markers: Record<string, unknown>;
   created_at: string;
   updated_at: string;
 }
@@ -50,13 +50,13 @@ export interface CharacterProfile {
   id: string;
   character_name: string;
   series_name: string;
-  character_type: 'main' | 'side' | 'original';
+  character_type: "main" | "side" | "original";
   team_id: string;
   gallery_images: Array<{
     id: string;
     url: string;
     caption?: string;
-    type: 'reference' | 'progress' | 'final';
+    type: "reference" | "progress" | "final";
   }>;
   costume_details: {
     complexity_rating: number; // 1-5
@@ -94,9 +94,9 @@ export interface BudgetOverview {
 export interface InventoryLifecycle {
   id: string;
   item_name: string;
-  item_type: 'costume' | 'prop' | 'accessory' | 'makeup';
+  item_type: "costume" | "prop" | "accessory" | "makeup";
   character_id: string;
-  current_status: 'planning' | 'sourcing' | 'construction' | 'completed';
+  current_status: "planning" | "sourcing" | "construction" | "completed";
   status_history: Array<{
     status: string;
     timestamp: string;
@@ -114,24 +114,24 @@ export interface InventoryLifecycle {
 export interface TimelineEvent {
   id: string;
   shoot_id: string;
-  event_type: 'reschedule' | 'dependency_add' | 'dependency_remove' | 'status_change';
-  event_data: Record<string, any>;
+  event_type: "reschedule" | "dependency_add" | "dependency_remove" | "status_change";
+  event_data: Record<string, unknown>;
   user_id: string;
   timestamp: string;
 }
 
 // Real-time update payloads
 export interface RealtimeUpdate {
-  type: 'widget_update' | 'progress_update' | 'timeline_change' | 'inventory_status';
+  type: "widget_update" | "progress_update" | "timeline_change" | "inventory_status";
   entity_id: string;
   user_id: string;
   timestamp: string;
-  data: any;
+  data: unknown;
 }
 
 // Dashboard layout configuration
 export interface DashboardLayout {
-  template: 'compact' | 'detailed' | 'timeline-focus';
+  template: "compact" | "detailed" | "timeline-focus";
   grid_columns: number;
   widget_positions: Array<{
     widget_id: string;

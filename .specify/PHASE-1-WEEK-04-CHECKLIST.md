@@ -163,21 +163,25 @@
 ## 🔗 Constitution References
 
 **Principle I (Web-First, Mobile-Responsive)**
+
 - [ ] Images optimized for mobile (responsive sizes: 320/640/1280/2560)
 - [ ] WebP with JPEG fallback for broad browser support
 - [ ] Lazy loading prevents page bloat
 
 **Principle V (Visual-First)**
+
 - [ ] Image upload central to user experience
 - [ ] Optimization transparent to user (automatic processing)
 - [ ] ImageViewer component reusable across app
 
 **Principle VII (Security & Privacy)**
+
 - [ ] RLS policies: users can only access own images
 - [ ] Signed URLs prevent unauthorized access
 - [ ] Email verification required before sending marketing emails
 
 **Technology Stack (Constitution v2.2.0)**
+
 - [ ] Sharp.js for image optimization
 - [ ] Supabase Storage for S3-compatible storage
 - [ ] SendGrid for email delivery
@@ -188,6 +192,7 @@
 ## 📦 Deliverables
 
 ### Code
+
 - [ ] `src/lib/services/imageUpload.ts` (Sharp pipeline)
 - [ ] `src/routes/api/images/upload/+server.ts` (upload endpoint)
 - [ ] `src/routes/api/images/[id]/+server.ts` (delete endpoint)
@@ -197,12 +202,14 @@
 - [ ] Database migrations: `images` table, `email_queue` table, `image_processing_queue` table
 
 ### Tests
+
 - [ ] Unit tests: 12+
 - [ ] Integration tests: 10+
 - [ ] E2E tests: 4+
 - [ ] Coverage: 70%+
 
 ### Documentation
+
 - [ ] Image upload guide
 - [ ] Email configuration guide
 - [ ] Updated API spec with image + email endpoints
@@ -211,17 +218,18 @@
 
 ## ⚠️ Known Blockers / Decisions Needed
 
-| Blocker | Impact | Resolution |
-|---------|--------|-----------|
-| **SendGrid API Key** | Cannot test real email without key | Use mock SendGrid endpoint in tests; real key in staging |
-| **S3 Bucket Permissions** | Must configure RLS policies | Document exact Supabase Storage policy JSON |
-| **Sharp Performance** | Large images (20MB) may timeout | Set 30-second timeout; queue for background processing |
+| Blocker                   | Impact                             | Resolution                                               |
+| ------------------------- | ---------------------------------- | -------------------------------------------------------- |
+| **SendGrid API Key**      | Cannot test real email without key | Use mock SendGrid endpoint in tests; real key in staging |
+| **S3 Bucket Permissions** | Must configure RLS policies        | Document exact Supabase Storage policy JSON              |
+| **Sharp Performance**     | Large images (20MB) may timeout    | Set 30-second timeout; queue for background processing   |
 
 ---
 
 ## ✅ Sign-Off Criteria
 
 **Week 4 COMPLETE when**:
+
 1. ✅ Image upload working, stored in S3
 2. ✅ Responsive optimization pipeline working (320/640/1280/2560)
 3. ✅ ImageViewer component displays images responsively

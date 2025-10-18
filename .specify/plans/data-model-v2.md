@@ -10,6 +10,7 @@
 ## Core Entities
 
 ### 1. User
+
 ```sql
 CREATE TABLE users (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -31,6 +32,7 @@ CREATE TABLE users (
 ```
 
 ### 2. Team
+
 ```sql
 CREATE TABLE teams (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -53,6 +55,7 @@ CREATE TABLE teams (
 ```
 
 ### 3. Team Member
+
 ```sql
 CREATE TABLE team_members (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -69,26 +72,27 @@ CREATE TABLE team_members (
 ```
 
 ### 4. Crew (Personnel Master)
+
 ```sql
 CREATE TABLE crew (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   team_id UUID REFERENCES teams(id) NOT NULL,
-  
+
   -- Personnel information
   name TEXT NOT NULL,
   email TEXT,
   phone TEXT,
-  
+
   -- External person indicator (not an app user)
   is_app_user BOOLEAN DEFAULT FALSE,
   app_user_id UUID REFERENCES users(id),
-  
+
   -- Contact info access control
   created_by_id UUID REFERENCES users(id) NOT NULL, -- Who added this crew member
-  
+
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP DEFAULT NOW(),
-  
+
   CONSTRAINT unique_crew_per_team UNIQUE(team_id, email)
 );
 
@@ -100,6 +104,7 @@ CREATE TABLE crew (
 ```
 
 ### 5. Shoot
+
 ```sql
 CREATE TABLE shoots (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -112,18 +117,18 @@ CREATE TABLE shoots (
   location_lon FLOAT,
   notes TEXT,
   budget_usd DECIMAL(10, 2),
-  
+
   -- Workflow state
   workflow_state TEXT DEFAULT 'idea', -- 'idea', 'planning', 'scheduled', 'editing', 'posted', 'complete'
-  
+
   -- Image references
   reference_image_ids UUID[] DEFAULT ARRAY[]::UUID[],
   progress_photo_ids UUID[] DEFAULT ARRAY[]::UUID[],
-  
+
   -- Real-time sync
   version INT DEFAULT 0, -- Incremented on edit, used for conflict detection
   last_modified_by_id UUID REFERENCES users(id),
-  
+
   created_by_id UUID REFERENCES users(id) NOT NULL,
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP DEFAULT NOW()
@@ -135,21 +140,22 @@ CREATE TABLE shoots (
 ```
 
 ### 6. Shoot Crew Assignment
+
 ```sql
 CREATE TABLE shoot_crew (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   shoot_id UUID REFERENCES shoots(id) NOT NULL,
   crew_id UUID REFERENCES crew(id) NOT NULL,
-  
+
   -- Multiple roles per crew member on a shoot
   roles TEXT[] NOT NULL, -- e.g., ARRAY['photographer', 'assistant']
   -- Valid roles: 'photographer', 'cosplayer', 'makeup_artist', 'prop_master', 'hair_stylist', 'assistant', 'custom'
-  
+
   notes TEXT, -- Role-specific notes (e.g., "Bringing camera equipment")
-  
+
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP DEFAULT NOW(),
-  
+
   UNIQUE(shoot_id, crew_id)
 );
 
@@ -160,56 +166,57 @@ CREATE TABLE shoot_crew (
 ```
 
 ### 7. Costume
+
 ```sql
 CREATE TABLE costumes (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   team_id UUID REFERENCES teams(id) NOT NULL,
   shoot_id UUID REFERENCES shoots(id),
-  
+
   name TEXT NOT NULL,
   character_name TEXT,
   source_material TEXT, -- 'anime', 'game', 'movie', 'original'
   description TEXT,
-  
+
   -- Lifecycle tracking (per Constitution §IV)
   lifecycle_state TEXT NOT NULL DEFAULT 'planned',
   -- States: planned, acquiring, in_progress, ready, owned,
   --         sold, damaged, rented, lost, stored, loaned
   lifecycle_history JSONB NOT NULL DEFAULT '[]', -- [{state, changed_at, changed_by_id, notes}]
-  
+
   -- Financial tracking
   estimated_cost_usd DECIMAL(10, 2),
   actual_cost_usd DECIMAL(10, 2),
   sale_price_usd DECIMAL(10, 2),
   sale_date DATE,
-  
+
   -- Damage/repair tracking
   damage_notes TEXT,
   repair_cost_usd DECIMAL(10, 2),
-  
+
   -- Rental tracking
   rental_start_date DATE,
   rental_end_date DATE,
   rental_cost_usd DECIMAL(10, 2),
   rental_borrower_name TEXT,
-  
+
   -- Storage/loan tracking
   storage_location TEXT,
   loaned_to_name TEXT,
   loan_return_date DATE,
-  
+
   -- Loss incident tracking
   lost_date DATE,
   loss_incident_description TEXT,
-  
+
   -- Media
   reference_image_ids UUID[] DEFAULT ARRAY[]::UUID[],
   progress_photo_ids UUID[] DEFAULT ARRAY[]::UUID[],
-  
+
   -- Real-time sync
   version INT DEFAULT 0,
   last_modified_by_id UUID REFERENCES users(id),
-  
+
   created_by_id UUID REFERENCES users(id) NOT NULL,
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP DEFAULT NOW()
@@ -221,33 +228,34 @@ CREATE TABLE costumes (
 ```
 
 ### 8. Prop
+
 ```sql
 CREATE TABLE props (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   team_id UUID REFERENCES teams(id) NOT NULL,
   shoot_id UUID REFERENCES shoots(id),
-  
+
   name TEXT NOT NULL,
   description TEXT,
   material TEXT,
-  
+
   -- Lifecycle tracking (same as costume)
   lifecycle_state TEXT NOT NULL DEFAULT 'planned',
   lifecycle_history JSONB NOT NULL DEFAULT '[]',
-  
+
   -- Financial tracking
   estimated_cost_usd DECIMAL(10, 2),
   actual_cost_usd DECIMAL(10, 2),
   sale_price_usd DECIMAL(10, 2),
-  
+
   -- Media
   reference_image_ids UUID[] DEFAULT ARRAY[]::UUID[],
   progress_photo_ids UUID[] DEFAULT ARRAY[]::UUID[],
-  
+
   -- Real-time sync
   version INT DEFAULT 0,
   last_modified_by_id UUID REFERENCES users(id),
-  
+
   created_by_id UUID REFERENCES users(id) NOT NULL,
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP DEFAULT NOW()
@@ -257,31 +265,32 @@ CREATE TABLE props (
 ```
 
 ### 9. Image
+
 ```sql
 CREATE TABLE images (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   team_id UUID REFERENCES teams(id) NOT NULL,
-  
+
   -- Original upload metadata
   original_filename TEXT NOT NULL,
   mime_type TEXT NOT NULL, -- 'image/webp', 'image/jpeg'
   original_size_bytes BIGINT NOT NULL,
-  
+
   -- Generated sizes
   sizes JSONB NOT NULL, -- {320: {url, size_bytes}, 640: {...}, 1280: {...}, 2560: {...}}
   thumbnail_url TEXT,
-  
+
   -- Storage location (Supabase Storage path)
   storage_path TEXT NOT NULL,
-  
+
   -- Linked entities
   shoot_id UUID REFERENCES shoots(id),
   costume_id UUID REFERENCES costumes(id),
   prop_id UUID REFERENCES props(id),
-  
+
   -- Usage tracking
   image_type TEXT NOT NULL, -- 'reference', 'progress', 'instagram_post'
-  
+
   uploaded_by_id UUID REFERENCES users(id) NOT NULL,
   created_at TIMESTAMP DEFAULT NOW()
 );
@@ -292,26 +301,27 @@ CREATE TABLE images (
 ```
 
 ### 10. Permission (Role-Based Access Control)
+
 ```sql
 CREATE TABLE role_permissions (
   id SERIAL PRIMARY KEY,
   role TEXT NOT NULL UNIQUE, -- 'owner', 'admin', 'member', 'viewer'
-  
+
   -- Shoot permissions
   can_create_shoot BOOLEAN DEFAULT FALSE,
   can_edit_shoot BOOLEAN DEFAULT FALSE,
   can_delete_shoot BOOLEAN DEFAULT FALSE,
   can_view_shoot BOOLEAN DEFAULT FALSE,
-  
+
   -- Costume/prop permissions
   can_create_costume BOOLEAN DEFAULT FALSE,
   can_edit_costume BOOLEAN DEFAULT FALSE,
   can_delete_costume BOOLEAN DEFAULT FALSE,
-  
+
   -- Crew permissions (team-level, not per-shoot)
   can_manage_crew BOOLEAN DEFAULT FALSE, -- Can add/edit/remove crew from shoots
   can_view_crew_contact BOOLEAN DEFAULT TRUE, -- All members can view contact info
-  
+
   -- Team permissions
   can_manage_team BOOLEAN DEFAULT FALSE,
   can_manage_members BOOLEAN DEFAULT FALSE,
@@ -319,8 +329,8 @@ CREATE TABLE role_permissions (
 );
 
 -- Seed data:
-INSERT INTO role_permissions (role, can_create_shoot, can_edit_shoot, can_delete_shoot, 
-  can_view_shoot, can_create_costume, can_edit_costume, can_delete_costume, 
+INSERT INTO role_permissions (role, can_create_shoot, can_edit_shoot, can_delete_shoot,
+  can_view_shoot, can_create_costume, can_edit_costume, can_delete_costume,
   can_manage_crew, can_view_crew_contact, can_manage_team, can_manage_members, can_view_analytics)
 VALUES
   ('owner', TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE),
@@ -335,6 +345,7 @@ VALUES
 ```
 
 ### 11. Analytics Events
+
 ```sql
 CREATE TABLE analytics_events (
   id BIGSERIAL PRIMARY KEY,
@@ -342,7 +353,7 @@ CREATE TABLE analytics_events (
   context JSONB NOT NULL, -- {page: 'shoot_create', step: 1}
   timestamp TIMESTAMP DEFAULT NOW(),
   team_id UUID REFERENCES teams(id), -- Anonymous if NULL
-  
+
   -- NO user_id, no PII, no content data
   CONSTRAINT no_pii_in_analytics CHECK (
     context::text NOT LIKE '%@%' AND -- No emails
@@ -356,6 +367,7 @@ CREATE TABLE analytics_events (
 ```
 
 ### 12. Analytics Metrics (Aggregated)
+
 ```sql
 CREATE TABLE analytics_metrics (
   id BIGSERIAL PRIMARY KEY,
@@ -404,23 +416,27 @@ Image (N) ──── (0..1) Prop
 ## Key Changes from Previous Model
 
 ### Added: Crew Table
+
 - Persistent record of individuals who have worked with team
 - Stores name, contact info (email, phone)
 - Tracks collaboration history across shoots
 - Supports both app users and external collaborators
 
 ### Added: Shoot Crew Assignment Table
+
 - Junction table: shoot (1) ──── (N) crew via shoot_crew
 - One row per crew member per shoot
 - Supports multiple roles per crew member (array of role strings)
 - Roles are purely informational (no permission enforcement)
 
 ### Modified: Team Members
+
 - Clarified that team_members stores app-level access control
 - Team roles (admin, member, viewer) do NOT translate to crew roles
 - Crew assignment is separate from team membership
 
 ### Modified: Role Permissions
+
 - Added `can_manage_crew` (add/edit/remove crew from shoots)
 - Added `can_view_crew_contact` (see email/phone)
 - Crew roles (photographer, cosplayer, etc.) NOT stored in role_permissions
@@ -430,16 +446,16 @@ Image (N) ──── (0..1) Prop
 
 ## Validation Rules
 
-| Entity | Field | Rule |
-|--------|-------|------|
-| **Shoot** | title | NOT NULL, min 3 chars, max 200 chars |
-| **Shoot** | scheduled_date | Must be >= TODAY for scheduled state |
-| **Costume** | lifecycle_state | Must be valid value (enum: planned, acquiring, etc.) |
-| **Crew** | name | NOT NULL, min 2 chars, max 100 chars |
-| **Crew** | email | Valid email format (if provided), unique per team |
-| **Shoot Crew** | roles | NOT NULL, array length >= 1, valid role values |
-| **Image** | mime_type | Must be 'image/webp' or 'image/jpeg' |
-| **Team** | api_calls_today | If >= api_call_limit, return HTTP 429 |
+| Entity         | Field           | Rule                                                 |
+| -------------- | --------------- | ---------------------------------------------------- |
+| **Shoot**      | title           | NOT NULL, min 3 chars, max 200 chars                 |
+| **Shoot**      | scheduled_date  | Must be >= TODAY for scheduled state                 |
+| **Costume**    | lifecycle_state | Must be valid value (enum: planned, acquiring, etc.) |
+| **Crew**       | name            | NOT NULL, min 2 chars, max 100 chars                 |
+| **Crew**       | email           | Valid email format (if provided), unique per team    |
+| **Shoot Crew** | roles           | NOT NULL, array length >= 1, valid role values       |
+| **Image**      | mime_type       | Must be 'image/webp' or 'image/jpeg'                 |
+| **Team**       | api_calls_today | If >= api_call_limit, return HTTP 429                |
 
 ---
 
@@ -478,32 +494,33 @@ CREATE INDEX idx_team_members_user_id_team_id ON team_members(user_id, team_id);
 
 ### Team-Level Permissions (app-wide)
 
-| Action | Owner | Admin | Member | Viewer | Notes |
-|--------|-------|-------|--------|--------|-------|
-| Create shoot | ✅ | ✅ | ❌ | ❌ | Owner & admin only |
-| Edit shoot | ✅ | ✅ | ✅ | ❌ | Members can edit own shoots |
-| Delete shoot | ✅ | ✅ | ❌ | ❌ | Owner & admin only |
-| View shoot | ✅ | ✅ | ✅ | ✅ | All team members |
-| View crew contact info | ✅ | ✅ | ✅ | ✅ | All members can view email/phone |
-| Add/remove crew from shoot | ✅ | ✅ | ❌ | ❌ | Owner & admin only |
-| Manage team settings | ✅ | ❌ | ❌ | ❌ | Owner only |
-| Manage team members | ✅ | ✅ | ❌ | ❌ | Owner & admin |
-| View analytics | ✅ | ✅ | ❌ | ❌ | Owner & admin only |
+| Action                     | Owner | Admin | Member | Viewer | Notes                            |
+| -------------------------- | ----- | ----- | ------ | ------ | -------------------------------- |
+| Create shoot               | ✅    | ✅    | ❌     | ❌     | Owner & admin only               |
+| Edit shoot                 | ✅    | ✅    | ✅     | ❌     | Members can edit own shoots      |
+| Delete shoot               | ✅    | ✅    | ❌     | ❌     | Owner & admin only               |
+| View shoot                 | ✅    | ✅    | ✅     | ✅     | All team members                 |
+| View crew contact info     | ✅    | ✅    | ✅     | ✅     | All members can view email/phone |
+| Add/remove crew from shoot | ✅    | ✅    | ❌     | ❌     | Owner & admin only               |
+| Manage team settings       | ✅    | ❌    | ❌     | ❌     | Owner only                       |
+| Manage team members        | ✅    | ✅    | ❌     | ❌     | Owner & admin                    |
+| View analytics             | ✅    | ✅    | ❌     | ❌     | Owner & admin only               |
 
 ### Crew Role Visibility
 
-| Who Can See | Names | Roles | Contact Info |
-|-------------|-------|-------|--------------|
-| **Owner** | ✅ All | ✅ All | ✅ Yes |
-| **Admin** | ✅ All | ✅ All | ✅ Yes |
-| **Member** | ✅ All | ✅ All | ✅ Yes |
-| **Viewer** | ✅ All | ✅ All | ✅ Yes |
+| Who Can See | Names  | Roles  | Contact Info |
+| ----------- | ------ | ------ | ------------ |
+| **Owner**   | ✅ All | ✅ All | ✅ Yes       |
+| **Admin**   | ✅ All | ✅ All | ✅ Yes       |
+| **Member**  | ✅ All | ✅ All | ✅ Yes       |
+| **Viewer**  | ✅ All | ✅ All | ✅ Yes       |
 
 ---
 
 ## Migration Strategy
 
 Phase 1 migrations (in order):
+
 1. Create users, teams, team_members tables
 2. Create shoots, costumes, props tables
 3. Create crew table (NEW)
@@ -513,6 +530,7 @@ Phase 1 migrations (in order):
 7. Create analytics_events, analytics_metrics tables
 
 Each migration includes:
+
 - Forward script (CREATE TABLE, CREATE INDEX)
 - Rollback script (DROP TABLE)
 - Data validation tests
@@ -523,8 +541,9 @@ Each migration includes:
 ## Example Queries
 
 ### List crew for a shoot
+
 ```sql
-SELECT 
+SELECT
   c.id, c.name, c.email, sc.roles
 FROM shoot_crew sc
 JOIN crew c ON sc.crew_id = c.id
@@ -533,8 +552,9 @@ ORDER BY c.name;
 ```
 
 ### Find shoots crew member participated in (history)
+
 ```sql
-SELECT 
+SELECT
   s.id, s.title, s.scheduled_date, sc.roles
 FROM shoot_crew sc
 JOIN shoots s ON sc.shoot_id = s.id
@@ -543,8 +563,9 @@ ORDER BY s.scheduled_date DESC;
 ```
 
 ### Count crew by role across all shoots
+
 ```sql
-SELECT 
+SELECT
   role, COUNT(*) as count
 FROM shoot_crew
 CROSS JOIN LATERAL unnest(roles) AS role
@@ -554,8 +575,9 @@ ORDER BY count DESC;
 ```
 
 ### Check if user can view crew contact info
+
 ```sql
-SELECT 
+SELECT
   rp.can_view_crew_contact
 FROM team_members tm
 JOIN role_permissions rp ON tm.role = rp.role
