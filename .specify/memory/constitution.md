@@ -1,16 +1,22 @@
 <!--
 Sync Impact Report:
-- Version change: 2.2.0 → 2.3.0
-- Modified principles: Added Principle IX (Bun Runtime Requirement)
-- Added sections: Bun Runtime Mandate (constitutional requirement for all projects)
+- Version change: 2.3.0 → 2.4.0
+- Modified principles: Added Principle VI.5 (Test Observability & Developer Experience)
+- Added sections: Test Dashboard Requirements, Visual Component Verification, Coverage Standards, Developer Productivity
 - Removed sections: None
+- New spec created: 043-dev-testing-dashboard (test visualization and component showcase)
 - Templates requiring updates:
-  * ✅ quickstart.md - update to require Bun runtime installation
-  * ✅ README.md - add Bun requirement to development setup
-  * ⚠ data-model-v2.md - no changes needed (database layer unaffected)
-  * ⚠ creator-community-marketplace-v1.md - no changes needed (Phase 1.5+)
-- Follow-up TODOs: None
+  * ⚠ quickstart.md - add instructions for accessing /dev/tests dashboard
+  * ⚠ README.md - add developer testing section with dashboard link
+  * ✅ spec-template.md - already supports test requirements
+  * ✅ tasks-template.md - already supports test tasks
+- Follow-up TODOs:
+  * Implement spec 043 to provide test dashboard functionality
+  * Update existing specs to include *.stories.ts files for components
+  * Configure Vitest for JSON coverage output
+  * Set up MSW mock management interface
 -->
+
 
 # Cosplans Constitution
 
@@ -153,6 +159,56 @@ is defined as passing tests, not just code existence.
 provides living documentation of expected behavior, catches regressions early, and enables
 confident refactoring. Without tests, feature quality degrades over time and bugs propagate
 undetected.
+
+### VI.5. Test Observability & Developer Experience
+
+All automated tests (unit, integration, E2E) MUST be executable and visualizable through
+the development testing dashboard (spec 043). The dashboard MUST provide real-time test
+execution, visual component showcases, coverage visualization, and API mock management.
+UI components SHOULD have visual test stories that demonstrate all interactive states and
+variations without requiring Playwright tests for every state. Test results MUST be
+accessible in-browser during development to provide immediate feedback without context
+switching to terminal.
+
+**Test Dashboard Requirements**:
+
+- Test execution MUST be triggerable from browser with real-time progress streaming
+- Test results MUST show pass/fail counts, timing, and detailed error messages
+- UI components MUST be viewable in isolation with interactive prop controls
+- Code coverage MUST be visualizable with line-by-line highlighting
+- API mocks MUST be manageable with inline response editing and delay simulation
+- Failed tests MUST show expected vs actual comparisons with diff viewer
+- Test execution MUST complete in <5 seconds for typical unit test suites
+- Dashboard MUST be excluded from production builds (dev-only routes)
+
+**Visual Component Verification**:
+
+- Components SHOULD have `*.stories.ts` files for visual verification
+- Component stories MUST render in isolated sandbox with state controls
+- Accessibility audits (aXe) SHOULD run automatically for showcased components
+- Screenshot capture SHOULD be available for visual regression baseline
+
+**Coverage Standards**:
+
+- Minimum 70% code coverage MUST be maintained across all features
+- Coverage reports MUST be accessible via dashboard with file-tree navigation
+- Coverage trends MUST be tracked over time to prevent degradation
+- Warnings MUST be shown if coverage drops below 70% threshold
+
+**Developer Productivity**:
+
+- Debugging E2E failures SHOULD take <50% time compared to CLI-only workflow
+- Component states SHOULD be verifiable without writing test code
+- API response variations SHOULD be testable without modifying mock files
+- Test dashboard SHOULD be adopted by 80%+ of team within 3 months of rollout
+
+**Rationale**: Immediate visual feedback on test results and component behavior accelerates
+development cycles, reduces context switching between editor and terminal, and catches
+issues earlier. Visual component stories enable designers and product managers to verify
+UI states without running full test suites. Accessible test tooling encourages higher test
+coverage and adoption of testing practices across the team. Without test observability,
+developers waste time switching contexts, debugging becomes inefficient, and test-driven
+development adoption suffers.
 
 ### VII. Team Roles & Permissions vs. Crew Management
 
@@ -980,4 +1036,5 @@ constitution or implementation accordingly. Major principle changes (new core te
 removal of existing principles) require documented rationale and alignment with user
 feedback.
 
-**Version**: 2.3.2 | **Ratified**: 2025-10-16 | **Last Amended**: 2025-10-16 (Theme system styling requirements added)
+**Version**: 2.4.0 | **Ratified**: 2025-10-16 | **Last Amended**: 2025-10-18 (Test observability principle added, spec 043 created)
+
