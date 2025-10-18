@@ -44,8 +44,8 @@ This task list is generated from the implementation plan. Check items off as the
 
 ## Phase 2: Team Switcher & User Menu (2-3 days)
 
-- [ ] **Component**: Create `src/lib/components/layout/TeamSwitcher.svelte` using `shadcn/svelte`'s dropdown.
-- [ ] **Integration**: Connect the `TeamSwitcher` to the existing team store.
+- [x] **Component**: Create `src/lib/components/layout/TeamSwitcher.svelte` using `shadcn/svelte`'s dropdown.
+- [x] **Integration**: Connect the `TeamSwitcher` to the existing team store.
 - [ ] **Logic**: Implement the "smart redirect" team switching logic.
 - [ ] **Logic**: Implement the unsaved changes confirmation modal using the `forms.ts` store and `beforeNavigate`.
 - [ ] **Component**: Create `src/lib/components/layout/UserMenu.svelte` at the bottom of the sidebar.
