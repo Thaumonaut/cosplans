@@ -14,6 +14,7 @@
   import UpcomingShootsWidget from "./UpcomingShootsWidget.svelte";
   import ProgressWidget from "./ProgressWidget.svelte";
   import TasksWidget from "./TasksWidget.svelte";
+  import TimelineWidget from "./TimelineWidget.svelte";
 
   // Shadcn/svelte-style components (local)
   import Card from "../ui/Card.svelte";
@@ -80,6 +81,17 @@
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     },
+    {
+      id: "5",
+      type: "timeline",
+      user_id: userId,
+      template: "detailed",
+      position: 4,
+      visible: true,
+      settings: { limit: 5 },
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    },
   ];
 
   onMount(() => {
@@ -118,6 +130,7 @@
       budget: "Budget Summary",
       weather: "Weather Updates",
       ideas: "Costume Ideas",
+      timeline: "Timeline Overview",
     };
     return titles[type] || type;
   }
@@ -396,6 +409,75 @@
             <div class="col-span-full">
               <div class="text-center py-8" style="color: var(--theme-sidebar-muted);">
                 <p class="text-sm">No progress widgets configured</p>
+              </div>
+            </div>
+          {/if}
+        </div>
+      </div>
+
+      <!-- Timeline Section -->
+      <div class="mb-8">
+        <h3
+          class="text-xl font-semibold mb-4 flex items-center gap-2"
+          style="color: var(--theme-foreground);"
+        >
+          <svg
+            class="w-6 h-6"
+            style="color: var(--theme-sidebar-accent);"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+            />
+          </svg>
+          Timeline Overview
+        </h3>
+        <div class="grid gap-6 grid-cols-1">
+          {#each $widgetsByTemplate.filter((w) => w.type === "timeline") as widget (widget.id)}
+            <Card className="transition-shadow hover:shadow-lg focus-within:shadow-lg">
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle
+                  className="text-lg font-semibold flex-1"
+                  style="color: var(--theme-foreground);"
+                >
+                  {getWidgetTitle(widget.type)}
+                </CardTitle>
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="hover:opacity-70 focus:ring-2"
+                  style="color: var(--theme-sidebar-muted);"
+                  aria-label={widget.visible ? "Hide widget" : "Show widget"}
+                  on:click={() => dashboardActions.toggleWidget(widget.id)}
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d={widget.visible
+                        ? "M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                        : "M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"}
+                    />
+                  </svg>
+                </Button>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <TimelineWidget {teamId} settings={widget.settings} />
+              </CardContent>
+            </Card>
+          {/each}
+
+          <!-- Empty State if No Widgets -->
+          {#if $widgetsByTemplate.filter((w) => w.type === "timeline").length === 0}
+            <div class="col-span-full">
+              <div class="text-center py-8" style="color: var(--theme-sidebar-muted);">
+                <p class="text-sm">No timeline widgets configured</p>
               </div>
             </div>
           {/if}
