@@ -22,7 +22,7 @@ Generated from user stories and technical specifications. Organized by implement
 ### Core Infrastructure
 - [x] Implement Server-Sent Events endpoint (`/api/events/+server.js`) for real-time updates
 - [x] Create base dashboard layout component with responsive grid system
-- [ ] Setup authorization middleware using @casl/ability for dashboard permissions
+- [x] Setup authorization middleware using @casl/ability for dashboard permissions
 - [x] Implement client-side SSE connection with reconnection logic and fallback
 - [x] Create shared stores for dashboard state management (widgets, layout, permissions)
 
@@ -30,39 +30,39 @@ Generated from user stories and technical specifications. Organized by implement
 
 ### US-001: Dashboard Overview (P1)
 - [x] Create dashboard page component (`/src/routes/dashboard/+page.svelte`)
-- [ ] Implement widget container system with drag-and-drop positioning
+- [x] Implement widget container system with drag-and-drop positioning
 - [x] Create upcoming shoots widget with real-time data integration
-- [ ] Build costume ideas widget with filtering and search
+- [x] Build costume ideas widget with filtering and search
 - [x] Implement alerts widget with priority-based styling and actions
 - [x] Add template switching (compact/detailed/timeline-focus) with state persistence
-- [ ] Create dashboard customization modal for widget configuration
+- [x] Create dashboard customization modal for widget configuration
 - [x] Implement responsive breakpoints for mobile/tablet/desktop layouts
 
 ### US-004: Progress Tracker (P1) 
 - [x] Create `ProgressTracker` Svelte component with real-time progress bars
 - [x] Implement progress calculation service with category breakdown (costume/props/location/team/checklist/editing)
-- [ ] Build progress detail modals showing outstanding tasks and completion status
-- [ ] Create progress aggregation API endpoints with caching
-- [ ] Add progress trend visualization using lightweight charting
-- [ ] Implement progress alerts for delayed milestones
-- [ ] Setup automated progress recalculation triggers in database
-- [ ] Create progress export functionality for reporting
+- [x] Build progress detail modals showing outstanding tasks and completion status
+- [x] Create progress aggregation API endpoints with caching
+- [x] Add progress trend visualization using lightweight charting
+- [x] Implement progress alerts for delayed milestones
+- [x] Setup automated progress recalculation triggers in database
+- [x] Create progress export functionality for reporting
 
 ### US-006: Inventory Lifecycle (P1)
-- [ ] Create inventory lifecycle visualization component
-- [ ] Implement costume status tracking (planning → sourcing → construction → completed)
-- [ ] Build props lifecycle management with dependency tracking
-- [ ] Create inventory timeline view showing parallel workstreams
-- [ ] Add inventory milestone markers with automatic date calculations
-- [ ] Implement inventory status change notifications via SSE
-- [ ] Create inventory bottleneck detection and alerts
-- [ ] Build inventory handoff workflows between team members
+- [x] Create inventory lifecycle visualization component
+- [x] Implement costume status tracking (planning → sourcing → construction → completed)
+- [x] Build props lifecycle management with dependency tracking
+- [x] Create inventory timeline view showing parallel workstreams
+- [x] Add inventory milestone markers with automatic date calculations
+- [x] Implement inventory status change notifications via SSE
+- [x] Create inventory bottleneck detection and alerts
+- [x] Build inventory handoff workflows between team members
 
 ## Phase 3: P2 User Stories (Enhanced Functionality)
 
 ### US-002: Timeline & Gantt View (P2)
-- [ ] Create timeline page component (`/src/routes/timeline/+page.svelte`)
-- [ ] Implement Gantt chart visualization with interactive timeline
+- [x] Create timeline page component (`/src/routes/timeline/+page.svelte`)
+- [x] Implement Gantt chart visualization with interactive timeline
 - [ ] Build zoom controls (day/week/month/quarter/year) with smooth transitions
 - [ ] Create shoot scheduling interface with drag-and-drop rescheduling
 - [ ] Add dependency management between shoots with visual connection lines
