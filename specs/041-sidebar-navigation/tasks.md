@@ -48,8 +48,8 @@ This task list is generated from the implementation plan. Check items off as the
 - [x] **Integration**: Connect the `TeamSwitcher` to the existing team store.
 - [ ] **Logic**: Implement the "smart redirect" team switching logic.
 - [ ] **Logic**: Implement the unsaved changes confirmation modal using the `forms.ts` store and `beforeNavigate`.
-- [ ] **Component**: Create `src/lib/components/layout/UserMenu.svelte` at the bottom of the sidebar.
-- [ ] **UX**: Add user profile link and sign-out action to the `UserMenu`.
+- [x] **Component**: Create `src/lib/components/layout/UserMenu.svelte` at the bottom of the sidebar.
+- [x] **UX**: Add user profile link and sign-out action to the `UserMenu`.
 - [ ] **Unit Test**: Write tests for the team switch logic (smart redirect and permission checks).
 - [ ] **E2E Test**: Write a test for the team switching success path.
 - [ ] **E2E Test**: Write a test for the unsaved changes confirmation modal.

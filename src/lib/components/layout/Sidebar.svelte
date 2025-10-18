@@ -5,6 +5,7 @@
   import MobileMenuToggle from "$lib/components/layout/MobileMenuToggle.svelte";
   import SidebarSection from "$lib/components/layout/SidebarSection.svelte";
   import TeamSwitcher from "$lib/components/layout/TeamSwitcher.svelte";
+  import UserMenu from "$lib/components/layout/UserMenu.svelte";
   import { navigation as navigationStore } from "$lib/stores/navigation";
   import {
     MAIN_NAV_ITEMS,
@@ -181,40 +182,12 @@
   </div>
 
   <footer style="border-top: 1px solid var(--theme-sidebar-border);">
-    <a
-      href="/settings"
-      class={`block w-full px-4 py-4 transition-colors hover:bg-[var(--theme-sidebar-hover)] focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--theme-sidebar-accent)] ${$navigationStore.isCollapsed ? "flex justify-center" : "flex items-center gap-3"}`}
-      aria-label="Open settings"
-    >
-      <div class="flex-shrink-0">
-        {#if $navigationStore.user?.avatarUrl}
-          <img
-            src={$navigationStore.user.avatarUrl}
-            alt={$navigationStore.user?.name ?? "User"}
-            class="h-10 w-10 rounded-full object-cover"
-          />
-        {:else}
-          <div
-            class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-700"
-          >
-            <span class="text-sm font-semibold">
-              {($navigationStore.user?.name ?? "U").charAt(0).toUpperCase()}
-            </span>
-          </div>
-        {/if}
-      </div>
-
-      {#if !$navigationStore.isCollapsed}
-        <div class="flex-1 text-left">
-          <p class="text-sm font-medium text-[var(--theme-sidebar-text)]">
-            {$navigationStore.user?.name ?? "Guest User"}
-          </p>
-          <p class="text-xs text-[var(--theme-sidebar-muted)]">
-            {$navigationStore.user?.email ?? "guest@cosplans.app"}
-          </p>
-        </div>
-        <LucideIcon name="ChevronRight" size={16} class="text-[var(--theme-sidebar-muted)]" />
-      {/if}
-    </a>
+    <UserMenu 
+      collapsed={$navigationStore.isCollapsed} 
+      on:signOut={() => {
+        // TODO: Implement proper sign-out logic
+        console.log("Sign out requested");
+      }}
+    />
   </footer>
 </aside>
