@@ -44,6 +44,27 @@ TypeScript/JavaScript with SvelteKit: Follow standard conventions
 
 <!-- MANUAL ADDITIONS START -->
 
+## 📜 CONSTITUTION: Source of Truth
+
+**ALWAYS consult `.specify/memory/constitution.md` - This is the foundational source of truth for the entire project.**
+
+The constitution defines:
+- **Core Principles I-X** - Architectural mandates that MUST be followed
+- **Principle IX: Bun Runtime** - Constitutional requirement (never use Node.js/npm)
+- **Principle I: Web-First** - SvelteKit responsive web → Flutter mobile
+- **Principle II: Real-Time** - SSE + Yjs for collaboration
+- **Principle III: Integrations** - Google Calendar/Maps/Docs, Instagram, Email
+- **Principle IV-X** - Workflow customization, visual-first, TDD, team roles, creator community, analytics, sustainability
+
+**Before making ANY architectural decisions:**
+1. Read the relevant principle in constitution.md
+2. Verify your approach aligns with constitutional mandates
+3. If unsure, reference the constitution explicitly
+
+**The constitution supersedes all other documentation. When in conflict, constitution wins.**
+
+---
+
 ## ⚠️ CRITICAL: Implementation Workflow
 
 **ALWAYS follow this sequence before implementing ANY feature:**
@@ -92,12 +113,14 @@ Before adding new files:
 
 ## 🧠 Key Things to Remember
 
-### Always Check Specs Before:
+### Always Check Constitution & Specs Before:
+- **Constitution First**: Check `.specify/memory/constitution.md` for architectural principles
 - Creating new components
 - Adding new routes
 - Implementing new features
 - Making architectural decisions
 - Adding database tables/migrations
+- Choosing technologies or patterns
 
 ### Never:
 - Implement features without reading spec files
