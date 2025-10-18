@@ -76,9 +76,9 @@ const authGuard: Handle = async ({ event, resolve }) => {
   const protectedRoutes = ['/dashboard', '/timeline', '/progress', '/portfolio', '/budget'];
   const isProtectedRoute = protectedRoutes.some(route => event.url.pathname.startsWith(route));
 
-  if (isProtectedRoute && !session) {
-    redirect(303, '/auth/login');
-  }
+  // if (isProtectedRoute && !session) {
+  //   redirect(303, '/auth/login');
+  // }
 
   return resolve(event);
 };

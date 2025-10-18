@@ -43,20 +43,20 @@ Generated from user stories and technical specifications. Organized by implement
 - [x] Implement progress calculation service with category breakdown (costume/props/location/team/checklist/editing)
 - [x] Build progress detail modals showing outstanding tasks and completion status
 - [x] Create progress aggregation API endpoints with caching
-- [ ] Add progress trend visualization using lightweight charting
-- [ ] Implement progress alerts for delayed milestones
-- [ ] Setup automated progress recalculation triggers in database
-- [ ] Create progress export functionality for reporting
+- [x] Add progress trend visualization using lightweight charting
+- [x] Implement progress alerts for delayed milestones
+- [x] Setup automated progress recalculation triggers in database
+- [x] Create progress export functionality for reporting
 
 ### US-006: Inventory Lifecycle (P1)
 - [x] Create inventory lifecycle visualization component
 - [x] Implement costume status tracking (planning → sourcing → construction → completed)
 - [x] Build props lifecycle management with dependency tracking
 - [x] Create inventory timeline view showing parallel workstreams
-- [ ] Add inventory milestone markers with automatic date calculations
-- [ ] Implement inventory status change notifications via SSE
-- [ ] Create inventory bottleneck detection and alerts
-- [ ] Build inventory handoff workflows between team members
+- [x] Add inventory milestone markers with automatic date calculations
+- [x] Implement inventory status change notifications via SSE
+- [x] Create inventory bottleneck detection and alerts
+- [x] Build inventory handoff workflows between team members
 
 ## Phase 3: P2 User Stories (Enhanced Functionality)
 
