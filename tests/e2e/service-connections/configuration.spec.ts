@@ -5,7 +5,9 @@ test.describe("Service connection configuration", () => {
     await page.goto("/settings/service-connections");
   });
 
-  test("allows operations lead to configure and activate a verified connection", async ({ page }) => {
+  test("allows operations lead to configure and activate a verified connection", async ({
+    page,
+  }) => {
     await page.getByLabel(/Environment/i).selectOption("staging");
     await page.getByLabel(/Connection name/i).fill("Staging Supabase");
     await page.getByLabel(/Supabase URL/i).fill("https://staging.supabase.co");

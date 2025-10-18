@@ -14,6 +14,16 @@ vi.mock("$app/environment", () => ({
 vi.mock("$env/static/private", () => ({
   SUPABASE_URL: "http://localhost:54321",
   SUPABASE_ANON_KEY: "test-anon-key",
+  SUPABASE_SERVICE_ROLE_KEY: "test-service-role",
+  COSPLANS_ENVIRONMENT: "test",
+}));
+
+vi.mock("$env/dynamic/private", () => ({
+  env: {
+    COSPLANS_ENVIRONMENT: "test",
+    SUPABASE_URL_TEST: "http://localhost:54321",
+    SUPABASE_SERVICE_ROLE_KEY_TEST: "test-service-role",
+  },
 }));
 
 // Mock SvelteKit stores

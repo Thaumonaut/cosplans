@@ -18,19 +18,34 @@
     </h2>
   </div>
   <div class="overflow-x-auto">
-    <table class="min-w-full divide-y divide-[var(--theme-border)]" aria-label="Configured service connections">
+    <table
+      class="min-w-full divide-y divide-[var(--theme-border)]"
+      aria-label="Configured service connections"
+    >
       <thead class="bg-[var(--theme-subtle-bg)]">
         <tr>
-          <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted)]">
+          <th
+            scope="col"
+            class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted)]"
+          >
             Name
           </th>
-          <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted)]">
+          <th
+            scope="col"
+            class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted)]"
+          >
             Environment
           </th>
-          <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted)]">
+          <th
+            scope="col"
+            class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted)]"
+          >
             Status
           </th>
-          <th scope="col" class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted)]">
+          <th
+            scope="col"
+            class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted)]"
+          >
             Last Verified
           </th>
         </tr>

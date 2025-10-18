@@ -9,11 +9,11 @@
     "test": "bun run test:integration && bun run test:unit",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-  "lint": "prettier --check \"src/**/*.{ts,js,svelte,css}\" \"tests/**/*.{ts,js}\" && eslint .",
+    "lint": "prettier --check \"src/**/*.{ts,js,svelte,css}\" \"tests/**/*.{ts,js}\" && eslint .",
     "format": "prettier --write .",
     "supabase": "bunx supabase",
     "test:integration": "playwright test",
-    "test:unit": "vitest"
+    "test:unit": "vitest run"
   },
   "devDependencies": {
     "@playwright/test": "^1.28.1",

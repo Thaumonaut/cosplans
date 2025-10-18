@@ -9,17 +9,20 @@
 ## Changes Made
 
 ### 1. Added Owner Role (New)
+
 - **Owner**: Full system control, positioned for future privilege expansion
 - Differentiated from Admin to allow future governance enhancements
 - Can manage team settings (which admin cannot do in current model)
 - Can manage team members and view analytics (same as admin)
 
 ### 2. Updated Crew Contact Visibility
+
 - **Before**: Only admins could see crew email/phone
 - **After**: All team members (owner, admin, member, viewer) can see crew contact info
 - Rationale: Enables efficient coordination and scheduling across team
 
 ### 3. Crew Management Authority
+
 - **Owner & Admin**: Can add/edit/remove crew from shoots
 - **Member & Viewer**: Can only view crew assignments and contact info
 
@@ -58,19 +61,20 @@ Viewer
 
 ## Access Control Matrix (Updated)
 
-| Action | Owner | Admin | Member | Viewer |
-|--------|-------|-------|--------|--------|
-| Create shoot | ✅ | ✅ | ❌ | ❌ |
-| Edit shoot | ✅ | ✅ | ✅ | ❌ |
-| Delete shoot | ✅ | ✅ | ❌ | ❌ |
-| View shoot | ✅ | ✅ | ✅ | ✅ |
-| **View crew contact** | ✅ | ✅ | ✅ | ✅ |
-| **Manage crew** | ✅ | ✅ | ❌ | ❌ |
-| Manage team settings | ✅ | ❌ | ❌ | ❌ |
-| Manage members | ✅ | ✅ | ❌ | ❌ |
-| View analytics | ✅ | ✅ | ❌ | ❌ |
+| Action                | Owner | Admin | Member | Viewer |
+| --------------------- | ----- | ----- | ------ | ------ |
+| Create shoot          | ✅    | ✅    | ❌     | ❌     |
+| Edit shoot            | ✅    | ✅    | ✅     | ❌     |
+| Delete shoot          | ✅    | ✅    | ❌     | ❌     |
+| View shoot            | ✅    | ✅    | ✅     | ✅     |
+| **View crew contact** | ✅    | ✅    | ✅     | ✅     |
+| **Manage crew**       | ✅    | ✅    | ❌     | ❌     |
+| Manage team settings  | ✅    | ❌    | ❌     | ❌     |
+| Manage members        | ✅    | ✅    | ❌     | ❌     |
+| View analytics        | ✅    | ✅    | ❌     | ❌     |
 
 **Key Changes** (highlighted in bold):
+
 - Crew contact visibility expanded to all members
 - Owner role added with team management control
 
@@ -82,8 +86,8 @@ Viewer
 
 ```sql
 -- New seed data:
-INSERT INTO role_permissions (role, can_create_shoot, can_edit_shoot, can_delete_shoot, 
-  can_view_shoot, can_create_costume, can_edit_costume, can_delete_costume, 
+INSERT INTO role_permissions (role, can_create_shoot, can_edit_shoot, can_delete_shoot,
+  can_view_shoot, can_create_costume, can_edit_costume, can_delete_costume,
   can_manage_crew, can_view_crew_contact, can_manage_team, can_manage_members, can_view_analytics)
 VALUES
   ('owner', TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE),
@@ -93,6 +97,7 @@ VALUES
 ```
 
 **Changes**:
+
 - Added `'owner'` role (new)
 - Changed `can_view_crew_contact` from FALSE to TRUE for member and viewer roles
 - Admin cannot manage team settings (`can_manage_team = FALSE`)
@@ -120,6 +125,7 @@ VALUES
 ## Migration Path (Existing Teams)
 
 For teams with existing members:
+
 1. Create new `'owner'` role in role_permissions table
 2. Identify team creator (likely first member)
 3. Assign owner role to team creator: `UPDATE team_members SET role = 'owner' WHERE user_id = creator_id AND team_id = team_id`
@@ -133,6 +139,7 @@ For teams with existing members:
 ## Future Expansion (Owner Role Reserved For)
 
 Owner role is intentionally positioned for future capabilities such as:
+
 - Team billing/subscription management
 - Team deletion or archival
 - Role templates or permission customization
@@ -146,12 +153,14 @@ Owner role is intentionally positioned for future capabilities such as:
 ## Testing Scenarios
 
 ### Scenario 1: Member Views Crew Contact
+
 1. Member opens crew management page
 2. Searches for "Alice"
 3. ✅ Sees: Alice, alice@example.com, 555-1234, work history
 4. ✅ Cannot edit or remove Alice from shoots
 
 ### Scenario 2: Owner Manages Team
+
 1. Owner opens team settings
 2. ✅ Can change team name, subscription tier, etc.
 3. ✅ Can manage members and their roles
@@ -159,6 +168,7 @@ Owner role is intentionally positioned for future capabilities such as:
 5. Owner promotes member to admin role
 
 ### Scenario 3: Viewer Sees Contact Info
+
 1. Viewer opens shoot detail
 2. ✅ Sees crew assignments with full contact info
 3. ✅ Cannot add/edit/remove crew

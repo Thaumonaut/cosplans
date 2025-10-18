@@ -15,6 +15,7 @@ Constitution v2.1.0 adds comprehensive support for the Creator Community & Disco
 #### 1. New Principle VIII: Creator Community & Discovery Marketplace
 
 **Added comprehensive marketplace principle covering**:
+
 - Creator public profiles (optional opt-in)
 - Geographic search with distance filtering
 - Role-based discovery (photographer, makeup artist, etc.)
@@ -30,6 +31,7 @@ Constitution v2.1.0 adds comprehensive support for the Creator Community & Disco
 #### 2. Updated Sustainability Model
 
 **Commission-Based Revenue** (replacing storage-only model):
+
 - **Team Free Tier**: 5% commission on creator payments
 - **Team Paid Tier**: 0% commission (incentive to book more creators)
 - **Creator Free Tier**: 5% commission on earnings
@@ -42,6 +44,7 @@ Constitution v2.1.0 adds comprehensive support for the Creator Community & Disco
 #### 3. Updated Authentication
 
 **Public Username Support**:
+
 - Separate public username from real name
 - Enables creator marketplace discoverability
 - Users can hide real identity on public profiles
@@ -50,6 +53,7 @@ Constitution v2.1.0 adds comprehensive support for the Creator Community & Disco
 #### 4. Updated Data Privacy
 
 **Creator Marketplace Consent**:
+
 - Explicit opt-in for creator marketplace participation
 - Consent for profile visibility, geographic search, booking history, team reviews
 - Granular privacy controls (toggle public profile, hide location, set travel distance)
@@ -58,18 +62,21 @@ Constitution v2.1.0 adds comprehensive support for the Creator Community & Disco
 ### Detailed Changes by Section
 
 #### Principle VII (Crew Management)
+
 - **No changes to core principle**
 - Now explicitly supports external crew from Creator Marketplace
 - External crew can view public shoot details without team membership
 - Enhanced with marketplace integration capabilities
 
 #### Principle VIII (NEW)
+
 - Complete new principle dedicated to marketplace
 - 8 major feature categories: profiles, discovery, invitations, payments, reviews, moderation, showcase, privacy
 - Clear phase placement: Phase 1.5 (after core web validation)
 - Detailed rationale on creator economy benefits
 
 #### Sustainability Model (MAJOR REVISION)
+
 - Old: 2GB free tier, storage-focused, $5/month paid, 22 users to break even
 - New: Commission-based model, 5% on free tier transactions, 0% on paid tier, ~200 creators to break even
 - Added future revenue streams: referral rewards, SMS, analytics, B2B services
@@ -77,12 +84,14 @@ Constitution v2.1.0 adds comprehensive support for the Creator Community & Disco
 - Payment processing details (Stripe, escrow, payout frequency)
 
 #### Authentication & Session Management (UPDATED)
+
 - Added "Public Usernames & Creator Profiles" section
 - Clarifies separate usernames for discoverability
 - Team member profiles private by default
 - Added rationale for marketplace support
 
 #### Data Privacy (UPDATED)
+
 - Added "Creator marketplace participation" to consent requirements
 - Explicit opt-in for: profile visibility, geographic search, booking history, reviews
 - Granular privacy controls listed
@@ -91,6 +100,7 @@ Constitution v2.1.0 adds comprehensive support for the Creator Community & Disco
 ### Data Model Implications
 
 **New Tables** (defined in creator-community-marketplace-v1.md):
+
 - creator_profiles
 - creator_roles (per-role rates)
 - creator_availability
@@ -105,18 +115,19 @@ Constitution v2.1.0 adds comprehensive support for the Creator Community & Disco
 - marketplace_invitations
 
 **Modified Tables**:
+
 - shoot_crew: add external_crew flag, creator_id, invite fields
 - users: add public_username, is_creator flag
 
 ### Implementation Timeline
 
-| Phase | Timeline | Deliverables |
-|-------|----------|--------------|
-| 1.5a | Week 1-2 | Creator profiles, search, database migrations |
-| 1.5b | Week 3-4 | Invitations, external crew links, availability |
-| 1.5c | Week 5-6 | Payments, reviews, earnings dashboard |
-| 1.5d | Week 7-8 | Moderation, showcase, creator analytics |
-| 1.5e | Ongoing | Refinement, paid tier features, monitoring |
+| Phase | Timeline | Deliverables                                   |
+| ----- | -------- | ---------------------------------------------- |
+| 1.5a  | Week 1-2 | Creator profiles, search, database migrations  |
+| 1.5b  | Week 3-4 | Invitations, external crew links, availability |
+| 1.5c  | Week 5-6 | Payments, reviews, earnings dashboard          |
+| 1.5d  | Week 7-8 | Moderation, showcase, creator analytics        |
+| 1.5e  | Ongoing  | Refinement, paid tier features, monitoring     |
 
 ### Feature Priority (Updated)
 
@@ -137,6 +148,7 @@ Constitution Principle IV (Feature Priority Order) now reads:
 ### Revenue Model Implications
 
 **Year 1 Projections** (Conservative):
+
 - 100 free tier creators with $10/month avg spend (5% commission) = $50/month
 - 10 paid tier creators at $5/month = $50/month
 - 50 free tier teams at $20/month avg spend = $50/month
@@ -144,6 +156,7 @@ Constitution Principle IV (Feature Priority Order) now reads:
 - **Total**: ~$175/month at Year 1 end
 
 **Year 2 Growth**:
+
 - Assumes 3-5x growth (platform effects, word-of-mouth)
 - Target 500-1000 creators, 200-300 teams
 - Revenue: $2000-5000/month (breakeven achieved)
@@ -151,18 +164,21 @@ Constitution Principle IV (Feature Priority Order) now reads:
 ### Business Impact
 
 **For Teams**:
+
 - Access to verified, local talent (photographers, makeup artists, etc.)
 - Transparent booking & payment workflow
 - No markup (0% commission on paid tier)
 - Team budget management for shoot funds
 
 **For Creators**:
+
 - Build reputation through verified bookings & reviews
 - Earn money for specialized skills
 - Geographic autonomy (set travel distance, out-of-range exceptions)
 - Privacy (optional public profile, real name hidden option)
 
 **For Platform**:
+
 - Sustainable revenue from transaction commissions
 - Organic growth driver (more creators → better for teams → more teams → more creators)
 - Differentiation from Fiverr/TaskRabbit (cosplay-specific, community-driven)
@@ -171,6 +187,7 @@ Constitution Principle IV (Feature Priority Order) now reads:
 ### Backward Compatibility
 
 ✅ **Fully backward compatible** with existing Phase 1 features:
+
 - Team-based permissions unchanged
 - Shoot/costume workflows unchanged
 - Google integrations unchanged
@@ -178,6 +195,7 @@ Constitution Principle IV (Feature Priority Order) now reads:
 - All Phase 1 features remain free/affordable
 
 ✅ **Migration Path** for existing users:
+
 - Existing teams continue using Cosplans as-is (no mandatory features)
 - Teams can opt-in to creator marketplace when ready
 - Existing crew management (manual) still fully supported
@@ -186,6 +204,7 @@ Constitution Principle IV (Feature Priority Order) now reads:
 ### Security & Privacy Considerations
 
 **Creator Safety**:
+
 - Private profiles (default) - only visible if opt-in
 - Verification badges build trust
 - Report & moderation system prevents harassment
@@ -193,11 +212,13 @@ Constitution Principle IV (Feature Priority Order) now reads:
 - Out-of-range exceptions prevent pressure to book distant shoots
 
 **Team Safety**:
+
 - Review system validates creator quality
 - Stripe escrow protects payment (team funds held until shoot completion)
 - Contract-free bookings (rating-based enforcement)
 
 **Data Privacy**:
+
 - Creator data minimization (no unnecessary PII collection)
 - GDPR compliance (EU data residency, explicit consent)
 - Payment data handled by Stripe (PCI compliance delegated)
@@ -211,15 +232,15 @@ Constitution Principle IV (Feature Priority Order) now reads:
 
 ### Alignment with Core Principles
 
-| Principle | Alignment |
-|-----------|-----------|
-| I. Web-First | Creator marketplace launches on web (Phase 1.5) before mobile |
-| II. Real-Time Collab | Invitations, reviews, bookings all real-time sync |
-| III. External Integration | Instagram OAuth for creator auth; Teams can link teams Instagram to content calendar |
-| IV. Customizable Workflows | Creator roles customizable; verification criteria configurable by admin |
-| V. Visual-First | Creator portfolio (photos/links) displayed prominently |
-| VI. Test-Driven | Comprehensive test specs in creator-community-marketplace-v1.md |
-| VII. Team Roles & Crew | External crew now linked through Creator Marketplace; permissions unchanged |
+| Principle                  | Alignment                                                                            |
+| -------------------------- | ------------------------------------------------------------------------------------ |
+| I. Web-First               | Creator marketplace launches on web (Phase 1.5) before mobile                        |
+| II. Real-Time Collab       | Invitations, reviews, bookings all real-time sync                                    |
+| III. External Integration  | Instagram OAuth for creator auth; Teams can link teams Instagram to content calendar |
+| IV. Customizable Workflows | Creator roles customizable; verification criteria configurable by admin              |
+| V. Visual-First            | Creator portfolio (photos/links) displayed prominently                               |
+| VI. Test-Driven            | Comprehensive test specs in creator-community-marketplace-v1.md                      |
+| VII. Team Roles & Crew     | External crew now linked through Creator Marketplace; permissions unchanged          |
 
 ### Documentation References
 
@@ -232,12 +253,14 @@ Constitution Principle IV (Feature Priority Order) now reads:
 ### Known Limitations & Deferred Features
 
 **Phase 1.5 Scope**:
+
 - ✅ Creator profiles, search, invitations
 - ✅ Basic booking & payment processing
 - ✅ Review system & moderation
 - ✅ Community showcase
 
 **Phase 2+** (Deferred):
+
 - Referral rewards program (Creator recommends friend → earn commission)
 - Advanced creator analytics (trend forecasting, seasonality)
 - Creator mentorship program
@@ -246,6 +269,7 @@ Constitution Principle IV (Feature Priority Order) now reads:
 - Team consulting/training services
 
 **Why Deferred**:
+
 - Creator marketplace must prove product-market fit on web first
 - Revenue model needs validation before expanding offerings
 - Mobile apps (Flutter) come before B2B services
@@ -254,6 +278,7 @@ Constitution Principle IV (Feature Priority Order) now reads:
 ### Migration Checklist
 
 Before Phase 1.5 Launch:
+
 - [ ] Constitution v2.1.0 ratified and communicated to team
 - [ ] creator-community-marketplace-v1.md reviewed and approved
 - [ ] Data model SQL reviewed for performance/security

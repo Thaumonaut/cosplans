@@ -2,7 +2,10 @@ import { createHash } from "node:crypto";
 
 import { z } from "zod";
 
-import { loadServiceConnectionsConfig, type ServiceConnectionsConfig } from "$lib/server/config/service-connections";
+import {
+  loadServiceConnectionsConfig,
+  type ServiceConnectionsConfig,
+} from "$lib/server/config/service-connections";
 import {
   serviceConnectionEnvironments,
   serviceConnectionServiceTypes,

@@ -74,17 +74,18 @@ COSPLANS_ENVIRONMENT=staging bun test diagnostics/service-connections.test.ts
 Results are stored in `diagnostic_test_runs` and artifacts uploaded to `diagnostics-artifacts` bucket.
 
 ## 7. Monitoring Jobs
-Deploy Supabase Edge Function `service-health-heartbeat` and schedule it via cron to run every 5 minutes:
+Run the Bun heartbeat runner on a 5-minute cadence (cron or long-lived worker):
 
 ```bash
-supabase functions deploy service-health-heartbeat --project-ref <project-ref>
-supabase cron set service-health-heartbeat "*/5 * * * *"
+SERVICE_HEARTBEAT_WATCH=1 bun run scripts/supabase/schedule-heartbeat.ts
 ```
 
-The function should:
+Alternatively, wire an external scheduler to POST `/api/service-connections/heartbeat` with `Authorization: Bearer <SERVICE_HEARTBEAT_TOKEN>`.
+
+The runner should:
 1. Ping target services (Supabase PostgREST, Realtime, Storage, External APIs).
-2. Write status rows to `service_health_snapshots` view.
-3. Emit alerts when heartbeat fails twice consecutively.
+2. Write status rows to `service_connection_heartbeats` and refresh the `service_health_snapshots` view.
+3. Emit alerts when heartbeat fails twice consecutively via `evaluateHeartbeatAlerts`.
 
 ## 8. Frontend Error Messaging
 Ensure the SvelteKit error boundary imports the `CosplansError` translator:
@@ -109,6 +110,6 @@ Operator details are logged server-side with correlation IDs for follow-up using
 ## 10. Deployment Checklist
 - All environments have updated `.env` variables and migrations applied
 - Diagnostics suite passing with no `fail` or `blocked` outcomes
-- Edge function deployed and cron schedule active
+- Heartbeat runner deployed (script or API scheduling) and reporting data
 - Monitoring alerts verified by inducing a controlled failure in staging
 - Documentation updated in team runbook referencing this quickstart

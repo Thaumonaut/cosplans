@@ -8,6 +8,8 @@ export default defineConfig({
   resolve: {
     alias: {
       $lib: path.resolve(__dirname, "src/lib"),
+      "$env/dynamic/private": path.resolve(__dirname, "tests/mocks/env-dynamic-private.ts"),
+      "$env/static/private": path.resolve(__dirname, "tests/mocks/env-static-private.ts"),
     },
   },
   test: {

@@ -193,7 +193,7 @@ The Cosplans application needs a professional sidebar navigation system that pro
 ### Notifications & Status
 - **REQ-021**: Notification badge must appear on relevant navigation items
 - **REQ-022**: Badge must show count of unread/pending items
-- **REQ-023**: Status indicator for connection (online/offline) must be visible
+- **REQ-023**: Connection status indicator must reflect server and database health with distinct states: "Online" when both are reachable, "Degraded" when the server responds but database checks fail, and "Offline" when neither endpoint is available; indicator remains visible in the dashboard header/sidebar.
 - **REQ-024**: Typing indicators or real-time status must update without page refresh
 
 ### Performance

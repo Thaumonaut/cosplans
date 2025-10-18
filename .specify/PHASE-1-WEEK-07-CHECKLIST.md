@@ -146,11 +146,13 @@
 ## 🔗 Constitution References
 
 **Principle III (External Integrations)**
+
 - [ ] Google Maps for venue discovery
 - [ ] Google Calendar for team scheduling
 - [ ] Google Docs for collaborative production notes
 
 **Technology Stack (Constitution v2.2.0)**
+
 - [ ] Google APIs (Maps, Calendar, Drive)
 - [ ] OAuth 2.0 for authentication
 - [ ] Vitest + Playwright for testing
@@ -160,6 +162,7 @@
 ## 📦 Deliverables
 
 ### Code
+
 - [ ] `src/lib/services/googleMaps.ts` (venue search)
 - [ ] `src/lib/services/googleCalendar.ts` (calendar sync)
 - [ ] `src/lib/services/googleDocs.ts` (docs creation)
@@ -171,12 +174,14 @@
 - [ ] `src/components/GoogleDocsEmbed.svelte` (embedded Docs)
 
 ### Tests
+
 - [ ] Unit tests: 10+
 - [ ] Integration tests: 10+
 - [ ] E2E tests: 3+
 - [ ] Coverage: 70%+
 
 ### Documentation
+
 - [ ] Google APIs setup guide
 - [ ] Integration flows
 - [ ] Updated API spec
@@ -186,6 +191,7 @@
 ## ✅ Sign-Off Criteria
 
 **Week 7 COMPLETE when**:
+
 1. ✅ Venue search working (Google Maps Places)
 2. ✅ Calendar events created/deleted
 3. ✅ Google Docs creation + embedding

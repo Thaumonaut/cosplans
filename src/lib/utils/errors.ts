@@ -1,5 +1,3 @@
-import { randomUUID } from "node:crypto";
-
 export type CosplansErrorSeverity = "info" | "warning" | "error" | "critical";
 
 export interface CosplansError {
@@ -60,7 +58,7 @@ export function toCosplansError(input: ErrorInput): CosplansError {
       code: "UNKNOWN_ERROR",
       severity: "error",
       userMessage: DEFAULT_ERROR.description,
-      correlationId: randomUUID(),
+      correlationId: generateCorrelationId(),
     };
   }
 
@@ -69,14 +67,14 @@ export function toCosplansError(input: ErrorInput): CosplansError {
       code: "UNEXPECTED_STRING_ERROR",
       severity: "error",
       userMessage: input,
-      correlationId: randomUUID(),
+      correlationId: generateCorrelationId(),
     };
   }
 
   if (isCosplansError(input)) {
     return {
       ...input,
-      correlationId: input.correlationId ?? randomUUID(),
+      correlationId: input.correlationId ?? generateCorrelationId(),
     };
   }
 
@@ -86,7 +84,7 @@ export function toCosplansError(input: ErrorInput): CosplansError {
     code: "UNHANDLED_EXCEPTION",
     severity: "error",
     userMessage: generic.message || DEFAULT_ERROR.description,
-    correlationId: randomUUID(),
+    correlationId: generateCorrelationId(),
     cause: generic,
   };
 }
@@ -156,6 +154,41 @@ export function logCosplansError(input: ErrorInput, options: LogErrorOptions = {
   });
 
   return normalized;
+}
+
+function generateCorrelationId(): string {
+  const globalCrypto =
+    typeof globalThis !== "undefined"
+      ? (globalThis.crypto ??
+        (globalThis as typeof globalThis & { webcrypto?: Crypto }).webcrypto ??
+        null)
+      : null;
+
+  if (globalCrypto?.randomUUID) {
+    return globalCrypto.randomUUID();
+  }
+
+  if (globalCrypto?.getRandomValues) {
+    const bytes = new Uint8Array(16);
+    globalCrypto.getRandomValues(bytes);
+    return bytesToUuid(bytes);
+  }
+
+  const timestamp = Date.now().toString(36);
+  const random = Math.random().toString(36).slice(2, 10);
+  return `cosplans-${timestamp}-${random}`;
+}
+
+function bytesToUuid(bytes: Uint8Array): string {
+  const hex: string[] = [];
+  bytes.forEach((value) => {
+    hex.push(value.toString(16).padStart(2, "0"));
+  });
+
+  hex[6] = ((parseInt(hex[6], 16) & 0x0f) | 0x40).toString(16).padStart(2, "0");
+  hex[8] = ((parseInt(hex[8], 16) & 0x3f) | 0x80).toString(16).padStart(2, "0");
+
+  return `${hex.slice(0, 4).join("")}-${hex.slice(4, 6).join("")}-${hex.slice(6, 8).join("")}-${hex.slice(8, 10).join("")}-${hex.slice(10, 16).join("")}`;
 }
 
 function mapSeverityToLevel(severity: CosplansErrorSeverity): "warn" | "error" | "fatal" {

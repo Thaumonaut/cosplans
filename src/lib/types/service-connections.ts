@@ -28,6 +28,7 @@ export const diagnosticScenarios = [
 export const diagnosticRunStatuses = ["pass", "fail", "blocked"] as const;
 export const diagnosticTriggers = ["manual", "scheduled"] as const;
 export const errorEventSeverities = ["info", "warning", "error", "critical"] as const;
+export const serviceHealthStatuses = ["active", "degraded", "error"] as const;
 
 /**
  * Zod schemas and TypeScript types
@@ -74,11 +75,14 @@ export const errorEventSchema = z.object({
 
 export const healthSnapshotSchema = z.object({
   serviceConnectionId: z.string().uuid(),
-  currentStatus: z.enum(serviceConnectionStatuses),
+  currentStatus: z.enum(serviceHealthStatuses),
   uptimePercent24h: z.number().min(0).max(100),
   recentFailures: z.number().int().nonnegative(),
   lastHeartbeatAt: z.coerce.date().nullable(),
   lastErrorEventId: z.string().uuid().nullable(),
+  lastLatencyMs: z.number().int().nonnegative().nullable().default(null),
+  consecutiveFailures: z.number().int().nonnegative().default(0),
+  lastErrorCode: z.string().nullable().default(null),
 });
 
 export type ServiceConnectionServiceType = (typeof serviceConnectionServiceTypes)[number];
@@ -88,6 +92,7 @@ export type DiagnosticScenario = (typeof diagnosticScenarios)[number];
 export type DiagnosticRunStatus = (typeof diagnosticRunStatuses)[number];
 export type DiagnosticTrigger = (typeof diagnosticTriggers)[number];
 export type ErrorEventSeverity = (typeof errorEventSeverities)[number];
+export type ServiceHealthStatus = (typeof serviceHealthStatuses)[number];
 
 export type ServiceConnectionProfile = z.infer<typeof serviceConnectionProfileSchema>;
 export type DiagnosticRun = z.infer<typeof diagnosticRunSchema>;

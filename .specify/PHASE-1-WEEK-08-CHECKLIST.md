@@ -161,14 +161,17 @@
 ## 🔗 Constitution References
 
 **Principle VIII (Creator Community Marketplace)**
+
 - [ ] Crew members can access community features based on role
 
 **Principle IX (Team Roles & Structure)**
+
 - [ ] Owner, Editor, Viewer, Crew roles implemented
 - [ ] Multi-team support (user can be member of multiple teams)
 - [ ] Dynamic permission updates via Realtime
 
 **Technology Stack (Constitution v2.2.0)**
+
 - [ ] @casl/ability for declarative permissions
 - [ ] Supabase RLS for database security
 - [ ] Vitest + Playwright for testing
@@ -178,6 +181,7 @@
 ## 📦 Deliverables
 
 ### Code
+
 - [ ] `src/lib/ability.ts` (Ability definition)
 - [ ] `src/lib/services/permissions.ts` (permission utilities)
 - [ ] `src/routes/(app)/team/crew/+page.svelte` (crew list)
@@ -188,12 +192,14 @@
 - [ ] Database migrations: RLS policies on all tables, `team_member_roles` table
 
 ### Tests
+
 - [ ] Unit tests: 12+
 - [ ] Integration tests: 12+
 - [ ] E2E tests: 4+
 - [ ] Coverage: 70%+
 
 ### Documentation
+
 - [ ] Roles & permissions matrix
 - [ ] @casl/ability guide
 - [ ] RLS policies reference
@@ -203,6 +209,7 @@
 ## ✅ Sign-Off Criteria
 
 **Week 8 COMPLETE when**:
+
 1. ✅ @casl/ability rules defined and working
 2. ✅ RLS policies enforced on all tables
 3. ✅ Crew management page fully functional

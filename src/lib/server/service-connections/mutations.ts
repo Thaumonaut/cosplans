@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+
 import { fail, type ActionFailure } from "@sveltejs/kit";
 
 import { logCosplansError, toCosplansError } from "$lib/utils/errors";
@@ -15,6 +17,7 @@ import {
   type SaveServiceConnectionInput,
 } from "$lib/server/service-connections/repository";
 import { runConnectionVerification } from "$lib/server/service-connections/verify";
+import { recordErrorEvent } from "$lib/server/service-connections/errors.repository";
 import type {
   ServiceConnectionEnvironment,
   ServiceConnectionServiceType,
@@ -101,6 +104,21 @@ export async function executeVerification(
     });
 
     if (existing) {
+      await recordErrorEvent({
+        teamId: context.teamId,
+        serviceConnectionId: existing.id,
+        correlationId: error.correlationId ?? randomUUID(),
+        errorCode: error.code,
+        userMessage: error.userMessage,
+        severity: error.severity,
+        operatorContext: {
+          latencyMs: result.latencyMs,
+          remediation: result.remediation,
+        },
+      });
+    }
+
+    if (existing) {
       await persistVerificationResult({
         id: existing.id,
         teamId: context.teamId,
@@ -122,13 +140,13 @@ export async function executeVerification(
   }
 
   const record = existing
-    ? (await persistVerificationResult({
+    ? ((await persistVerificationResult({
         id: existing.id,
         teamId: context.teamId,
         status: "pending_verification",
         lastVerifiedAt: result.checkedAt,
         message: result.message,
-      })) ?? existing
+      })) ?? existing)
     : await saveServiceConnection({
         teamId: context.teamId,
         id: normalized.id,
@@ -157,10 +175,7 @@ export async function executeVerification(
   };
 }
 
-export async function saveConnection(
-  input: ServiceConnectionFormInput,
-  context: PrepareContext
-) {
+export async function saveConnection(input: ServiceConnectionFormInput, context: PrepareContext) {
   const prepared = await prepareConnectionDraft(input, context);
   if ("status" in prepared) {
     return prepared;

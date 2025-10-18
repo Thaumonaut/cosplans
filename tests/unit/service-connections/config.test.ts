@@ -1,7 +1,13 @@
 import { describe, expect, it } from "vitest";
 
-import { fingerprintCredentials, validateServiceConnectionInput } from "$lib/server/service-connections/validation";
-import type { ServiceConnectionEnvironment, ServiceConnectionServiceType } from "$lib/types/service-connections";
+import {
+  fingerprintCredentials,
+  validateServiceConnectionInput,
+} from "$lib/server/service-connections/validation";
+import type {
+  ServiceConnectionEnvironment,
+  ServiceConnectionServiceType,
+} from "$lib/types/service-connections";
 
 const baseConfig = {
   environment: "development" as ServiceConnectionEnvironment,
@@ -68,7 +74,7 @@ describe("validateServiceConnectionInput", () => {
 
     expect(result.success).toBe(false);
     if (result.success) return;
-  expect(result.errors.environment).toMatch(/expected/i);
+    expect(result.errors.environment).toMatch(/expected/i);
   });
 
   it("requires retesting when credentials change", () => {

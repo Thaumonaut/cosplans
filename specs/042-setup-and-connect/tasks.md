@@ -64,16 +64,16 @@
 
 ### Tests
 
-- [ ] T018 [P] [US2] Add Vitest suite simulating diagnostics harness against MSW failure mocks in `tests/unit/service-connections/diagnostics.test.ts`
-- [ ] T019 [P] [US2] Add Playwright flow to trigger diagnostics run and review results in `tests/e2e/service-connections/diagnostics.spec.ts`
+- [x] T018 [P] [US2] Add Vitest suite simulating diagnostics harness against MSW failure mocks in `tests/unit/service-connections/diagnostics.test.ts`
+- [x] T019 [P] [US2] Add Playwright flow to trigger diagnostics run and review results in `tests/e2e/service-connections/diagnostics.spec.ts`
 
 ### Implementation
 
-- [ ] T020 [P] [US2] Create diagnostics runner script leveraging Bun test executor in `src/lib/server/service-connections/diagnostics-runner.ts`
-- [ ] T021 [US2] Implement API endpoint `/api/diagnostics/runs` per OpenAPI contract in `src/routes/api/diagnostics/runs/+server.ts`
-- [ ] T022 [US2] Implement diagnostics result page components in `src/lib/components/service-connections/DiagnosticsPanel.svelte`
-- [ ] T023 [US2] Persist diagnostic outcomes and evidence uploads to Supabase Storage in `src/lib/server/service-connections/diagnostics.repository.ts`
-- [ ] T024 [US2] Wire notifications/alerts on failure outcomes via existing notification service at `src/lib/server/notifications/dispatch.ts`
+- [x] T020 [P] [US2] Create diagnostics runner script leveraging Bun test executor in `src/lib/server/service-connections/diagnostics-runner.ts`
+- [x] T021 [US2] Implement API endpoint `/api/diagnostics/runs` per OpenAPI contract in `src/routes/api/diagnostics/runs/+server.ts`
+- [x] T022 [US2] Implement diagnostics result page components in `src/lib/components/service-connections/DiagnosticsPanel.svelte`
+- [x] T023 [US2] Persist diagnostic outcomes and evidence uploads to Supabase Storage in `src/lib/server/service-connections/diagnostics.repository.ts`
+- [x] T024 [US2] Wire notifications/alerts on failure outcomes via existing notification service at `src/lib/server/notifications/dispatch.ts`
 
 **Checkpoint**: User Story 2 independently testable (diagnostics run + evidence capture).
 
@@ -87,21 +87,19 @@
 
 ### Tests
 
-- [ ] T025 [P] [US3] Add Vitest unit tests for `translateError` mapping to user/operator payloads in `tests/unit/service-connections/errors.test.ts`
-- [ ] T026 [P] [US3] Add Playwright scenario validating user-facing error messaging in `tests/e2e/service-connections/errors.spec.ts`
+- [x] T025 [P] [US3] Add Vitest unit tests for `translateError` mapping to user/operator payloads in `tests/unit/service-connections/errors.test.ts`
+- [x] T026 [P] [US3] Add Playwright scenario validating user-facing error messaging in `tests/e2e/service-connections/errors.spec.ts`
 
 ### Implementation
 
-- [ ] T027 [US3] Instrument API handlers to emit `CosplansError` objects with correlation IDs in `src/routes/api/**/*`
-- [ ] T028 [US3] Update UI loaders and forms to display translated messages and support retry/contact options in `src/lib/components/common/ErrorToast.svelte`
-- [ ] T029 [US3] Persist operator context into `error_events` table within `src/lib/server/service-connections/errors.repository.ts`
-- [ ] T030 [US3] Expose operator diagnostics viewer (guarded route) consuming correlation IDs in `src/routes/(auth)/operations/errors/+page.svelte`
-
-**Checkpoint**: User Story 3 independently testable (friendly errors + operator visibility).
+- [x] T027 [US3] Instrument API handlers to emit `CosplansError` objects with correlation IDs in `src/routes/api/**/*`
+- [x] T028 [US3] Update UI loaders and forms to display translated messages and support retry/contact options in `src/lib/components/common/ErrorToast.svelte`
+- [x] T029 [US3] Persist operator context into `error_events` table within `src/lib/server/service-connections/errors.repository.ts`
+- [x] T030 [US3] Expose operator diagnostics viewer (guarded route) consuming correlation IDs in `src/routes/(auth)/operations/errors/+page.svelte`
 
 ---
 
-## Phase 6: User Story 4 — Monitor Ongoing Service Health (Priority: P3)
+## Phase 6: User Story 4 — Service Health Monitoring (Priority: P3)
 
 **Goal**: Operations analyst views live health indicators and receives alerts on recurring failures.
 
@@ -109,16 +107,16 @@
 
 ### Tests
 
-- [ ] T031 [P] [US4] Add Vitest suite for heartbeat scheduler and snapshot calculation in `tests/unit/service-connections/heartbeat.test.ts`
-- [ ] T032 [P] [US4] Add Playwright coverage for health dashboard interactions in `tests/e2e/service-connections/health.spec.ts`
+- [x] T031 [P] [US4] Add Vitest suite for heartbeat scheduler and snapshot calculation in `tests/unit/service-connections/heartbeat.test.ts`
+- [x] T032 [P] [US4] Add Playwright coverage for health dashboard interactions in `tests/e2e/service-connections/health.spec.ts`
 
 ### Implementation
 
-- [ ] T033 [US4] Implement Supabase Edge Function `service-health-heartbeat` hitting service endpoints and writing snapshots (source in `supabase/functions/service-health-heartbeat/index.ts`)
-- [ ] T034 [US4] Configure cron schedule via Supabase CLI command script in `scripts/supabase/schedule-heartbeat.ts`
-- [ ] T035 [US4] Build health overview UI consuming `service_health_snapshots` view in `src/lib/components/service-connections/HealthOverview.svelte`
-- [ ] T036 [US4] Implement alerting thresholds and operator acknowledgment flow in `src/lib/server/service-connections/alerts.ts`
-- [ ] T037 [US4] Expose acknowledgement action endpoint in `src/routes/api/service-connections/incidents/+server.ts`
+- [x] T033 [US4] Implement Bun-based heartbeat runner `runServiceConnectionHeartbeats` and expose API trigger at `/api/service-connections/heartbeat`
+- [x] T034 [US4] Provide Bun scheduling script `scripts/supabase/schedule-heartbeat.ts` (watch/cron friendly)
+- [x] T035 [US4] Build health overview UI consuming `service_health_snapshots` view in `src/lib/components/service-connections/HealthOverview.svelte`
+- [x] T036 [US4] Implement alerting thresholds and operator acknowledgment flow in `src/lib/server/service-connections/alerts.ts`
+- [x] T037 [US4] Expose acknowledgement action endpoint in `src/routes/api/service-connections/incidents/+server.ts`
 
 **Checkpoint**: User Story 4 independently testable (heartbeat monitoring + alert acknowledgment).
 

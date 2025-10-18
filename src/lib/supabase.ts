@@ -10,6 +10,16 @@ import type {
   InventoryLifecycle,
   TimelineEvent,
 } from "$lib/types/dashboard";
+import type {
+  DiagnosticRunStatus,
+  DiagnosticScenario,
+  DiagnosticTrigger,
+  ErrorEventSeverity,
+  ServiceConnectionEnvironment,
+  ServiceConnectionServiceType,
+  ServiceConnectionStatus,
+  ServiceHealthStatus,
+} from "$lib/types/service-connections";
 
 export interface Database {
   public: {
@@ -50,6 +60,181 @@ export interface Database {
         Row: TimelineEvent;
         Insert: Omit<TimelineEvent, "id" | "timestamp">;
         Update: never; // Events are immutable
+      };
+      service_connection_profiles: {
+        Row: {
+          id: string;
+          team_id: string;
+          service_type: ServiceConnectionServiceType;
+          environment: ServiceConnectionEnvironment;
+          supabase_project_ref: string | null;
+          status: ServiceConnectionStatus;
+          last_verified_at: string | null;
+          connection_metadata: Record<string, unknown>;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          team_id: string;
+          service_type: ServiceConnectionServiceType;
+          environment: ServiceConnectionEnvironment;
+          supabase_project_ref?: string | null;
+          status?: ServiceConnectionStatus;
+          last_verified_at?: string | null;
+          connection_metadata?: Record<string, unknown>;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<{
+          team_id: string;
+          service_type: ServiceConnectionServiceType;
+          environment: ServiceConnectionEnvironment;
+          supabase_project_ref: string | null;
+          status: ServiceConnectionStatus;
+          last_verified_at: string | null;
+          connection_metadata: Record<string, unknown>;
+          created_at: string;
+          updated_at: string;
+        }>;
+      };
+      diagnostic_test_runs: {
+        Row: {
+          id: string;
+          service_connection_id: string;
+          scenario: DiagnosticScenario;
+          status: DiagnosticRunStatus;
+          trigger_source: DiagnosticTrigger;
+          executed_by: string | null;
+          started_at: string;
+          completed_at: string | null;
+          duration_ms: number | null;
+          evidence_url: string | null;
+          notes: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          service_connection_id: string;
+          scenario: DiagnosticScenario;
+          status: DiagnosticRunStatus;
+          trigger_source?: DiagnosticTrigger;
+          executed_by?: string | null;
+          started_at?: string;
+          completed_at?: string | null;
+          duration_ms?: number | null;
+          evidence_url?: string | null;
+          notes?: string | null;
+          created_at?: string;
+        };
+        Update: Partial<{
+          service_connection_id: string;
+          scenario: DiagnosticScenario;
+          status: DiagnosticRunStatus;
+          trigger_source: DiagnosticTrigger;
+          executed_by: string | null;
+          started_at: string;
+          completed_at: string | null;
+          duration_ms: number | null;
+          evidence_url: string | null;
+          notes: string | null;
+          created_at: string;
+        }>;
+      };
+      error_events: {
+        Row: {
+          id: string;
+          service_connection_id: string;
+          correlation_id: string;
+          severity: ErrorEventSeverity;
+          error_code: string;
+          user_message: string;
+          operator_context: Record<string, unknown>;
+          occurred_at: string;
+          acknowledged_at: string | null;
+          acknowledged_by: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          service_connection_id: string;
+          correlation_id: string;
+          severity?: ErrorEventSeverity;
+          error_code: string;
+          user_message: string;
+          operator_context?: Record<string, unknown>;
+          occurred_at?: string;
+          acknowledged_at?: string | null;
+          acknowledged_by?: string | null;
+          created_at?: string;
+        };
+        Update: Partial<{
+          service_connection_id: string;
+          correlation_id: string;
+          severity: ErrorEventSeverity;
+          error_code: string;
+          user_message: string;
+          operator_context: Record<string, unknown>;
+          occurred_at: string;
+          acknowledged_at: string | null;
+          acknowledged_by: string | null;
+          created_at: string;
+        }>;
+      };
+      service_connection_heartbeats: {
+        Row: {
+          id: string;
+          service_connection_id: string;
+          status: "pass" | "fail";
+          latency_ms: number | null;
+          error_code: string | null;
+          error_event_id: string | null;
+          occurred_at: string;
+          consecutive_failures: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          service_connection_id: string;
+          status: "pass" | "fail";
+          latency_ms?: number | null;
+          error_code?: string | null;
+          error_event_id?: string | null;
+          occurred_at?: string;
+          consecutive_failures?: number;
+          created_at?: string;
+        };
+        Update: Partial<{
+          service_connection_id: string;
+          status: "pass" | "fail";
+          latency_ms: number | null;
+          error_code: string | null;
+          error_event_id: string | null;
+          occurred_at: string;
+          consecutive_failures: number;
+          created_at: string;
+        }>;
+      };
+    };
+    Views: {
+      service_health_snapshots: {
+        Row: {
+          service_connection_id: string;
+          current_status: ServiceHealthStatus;
+          uptime_percent_24h: number;
+          recent_failures: number;
+          last_heartbeat_at: string | null;
+          last_error_event_id: string | null;
+          last_latency_ms: number | null;
+          consecutive_failures: number;
+          last_error_code: string | null;
+        };
+      };
+    };
+    Functions: {
+      refresh_service_health_snapshots: {
+        Args: Record<string, never>;
+        Returns: void;
       };
     };
   };

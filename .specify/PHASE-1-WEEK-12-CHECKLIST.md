@@ -227,15 +227,18 @@
 ## 🔗 Constitution References
 
 **Principle II (Real-Time, Mobile-Responsive)**
+
 - [ ] Production supports real-time sync (Supabase Realtime)
 - [ ] Mobile responsive (tested on iOS + Android)
 
 **Principle VII (Security & Privacy)**
+
 - [ ] HTTPS enforced
 - [ ] Database backups secure
 - [ ] Secrets not exposed in logs
 
 **Technology Stack (Constitution v2.2.0)**
+
 - [ ] Vercel/Netlify deployment (SvelteKit optimized)
 - [ ] Supabase production region (EU)
 - [ ] GitHub Actions for CI/CD
@@ -246,18 +249,21 @@
 ## 📦 Deliverables
 
 ### Configuration
+
 - [ ] `.github/workflows/deploy.yml` (GitHub Actions workflow)
 - [ ] `.env.example` (environment variables template)
 - [ ] `vercel.json` or `netlify.toml` (deployment config)
 - [ ] `supabase/migrations/` (all database migrations)
 
 ### Documentation
+
 - [ ] Deployment guide
 - [ ] Environment setup
 - [ ] Runbook (incident response)
 - [ ] Monitoring dashboard links
 
 ### Infrastructure
+
 - [ ] Domain registered and DNS configured
 - [ ] Staging environment live
 - [ ] Production environment live
@@ -265,6 +271,7 @@
 - [ ] Database backups configured
 
 ### Monitoring
+
 - [ ] Production health check endpoint
 - [ ] Error logging (console for MVP, Sentry for Phase 2)
 - [ ] Uptime monitoring (if using service)
@@ -274,21 +281,25 @@
 ## 📋 Daily Breakdown
 
 **Days 1-2**: CI/CD Pipeline + GitHub Actions
+
 - Create GitHub Actions workflow
 - Test locally: `npm run lint`, `npm run test`, `npm run build`
 - Verify pipeline runs on PR
 
 **Days 2-3**: Staging Environment
+
 - Deploy to staging
 - Run smoke tests
 - Manual QA testing
 
 **Days 3-4**: Production Deployment
+
 - Deploy to production
 - Run health checks
 - Monitor for errors
 
 **Days 4-5**: Documentation + Launch
+
 - Write deployment guide
 - Write runbook
 - Prepare launch announcement
@@ -299,17 +310,18 @@
 
 ## ⚠️ Known Considerations
 
-| Item | Impact | Resolution |
-|------|--------|-----------|
-| **Downtime** | MVP cannot be down during deployment | Use blue-green deployment or canary deployment (advanced) |
-| **Data Migration** | If schema changes, need migration strategy | Supabase migrations handle this; test thoroughly in staging |
-| **Secrets Rotation** | Security best practice | Automate using GitHub Actions (quarterly) |
+| Item                 | Impact                                     | Resolution                                                  |
+| -------------------- | ------------------------------------------ | ----------------------------------------------------------- |
+| **Downtime**         | MVP cannot be down during deployment       | Use blue-green deployment or canary deployment (advanced)   |
+| **Data Migration**   | If schema changes, need migration strategy | Supabase migrations handle this; test thoroughly in staging |
+| **Secrets Rotation** | Security best practice                     | Automate using GitHub Actions (quarterly)                   |
 
 ---
 
 ## ✅ Sign-Off Criteria
 
 **Week 12 COMPLETE when**:
+
 1. ✅ CI/CD pipeline working (tests pass → deploy to staging)
 2. ✅ Staging environment live and tested
 3. ✅ Production environment live and healthy
@@ -332,6 +344,7 @@
 ## 🎉 Phase 1 MVP Complete!
 
 Congratulations! By completing all 12 weeks, you've built:
+
 - ✅ Multi-team project management (Shoots, Costumes, Props)
 - ✅ Real-time collaboration (Yjs CRDT + Supabase)
 - ✅ Authentication (OAuth, Passkeys, 2FA)
@@ -343,6 +356,7 @@ Congratulations! By completing all 12 weeks, you've built:
 - ✅ Production-ready deployment
 
 **Next Steps**:
+
 1. Gather user feedback during first week of launch
 2. Plan Phase 1.5: Creator Community Marketplace
 3. Consider Phase 2 features: Advanced analytics, AI captions, commission system

@@ -205,17 +205,20 @@
 ## 🔗 Constitution References
 
 **Principle I (Web-First, Mobile-Responsive)**
+
 - [ ] All pages responsive: mobile 1 col, tablet 2 col, desktop 3+ col
 - [ ] Font sizes accessible (16px+ for inputs)
 - [ ] Touch targets 44px minimum
 
 **Principle V (Visual-First)**
+
 - [ ] Gallery grid for costumes/props
 - [ ] Large, responsive images
 - [ ] Status badges with color coding
 - [ ] Consistent visual hierarchy
 
 **Technology Stack (Constitution v2.2.0)**
+
 - [ ] SvelteKit for routing
 - [ ] Shadcn/svelte for UI components
 - [ ] Lucide for icons
@@ -228,6 +231,7 @@
 ## 📦 Deliverables
 
 ### Pages
+
 - [ ] `src/routes/(app)/dashboard/+page.svelte` (dashboard)
 - [ ] `src/routes/(app)/shoots/+page.svelte` (list)
 - [ ] `src/routes/(app)/shoots/create/+page.svelte` (create form)
@@ -238,6 +242,7 @@
 - [ ] `src/routes/(app)/props/[id]/+page.svelte` (detail)
 
 ### Components
+
 - [ ] `src/components/Navigation.svelte`
 - [ ] `src/components/ImageUpload.svelte`
 - [ ] `src/components/RichTextEditor.svelte`
@@ -246,12 +251,14 @@
 - [ ] `src/components/StatusBadge.svelte`
 
 ### Tests
+
 - [ ] Unit tests: 8+
 - [ ] Component tests: 10+
 - [ ] E2E tests: 6+
 - [ ] Coverage: 70%+
 
 ### Documentation
+
 - [ ] UI component guide
 - [ ] Page structure reference
 
@@ -260,6 +267,7 @@
 ## ✅ Sign-Off Criteria
 
 **Week 9 COMPLETE when**:
+
 1. ✅ Dashboard page working
 2. ✅ Shoots CRUD (create, read, update, delete) working
 3. ✅ Costumes CRUD working

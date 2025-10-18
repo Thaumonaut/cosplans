@@ -1,5 +1,6 @@
 <script lang="ts">
   import { translateError } from "$lib/utils/errors";
+  import ErrorToast from "$lib/components/common/ErrorToast.svelte";
   import {
     serviceConnectionEnvironments,
     type ServiceConnectionEnvironment,
@@ -35,9 +36,9 @@
   export let teamId: string;
   export let formDefaults: Partial<ServiceConnectionFormInput> = {};
 
-  const environmentOptions: ServiceConnectionEnvironment[] = [
-    ...serviceConnectionEnvironments,
-  ];
+  let verifyButton: HTMLButtonElement | null = null;
+
+  const environmentOptions: ServiceConnectionEnvironment[] = [...serviceConnectionEnvironments];
 
   const unwrapForm = (input: unknown): FormState | null => {
     if (!input || typeof input !== "object") {
@@ -71,12 +72,10 @@
     return merged;
   })();
 
-  $: validationErrors = currentForm?.kind === "validation" ? currentForm.errors ?? {} : {};
+  $: validationErrors = currentForm?.kind === "validation" ? (currentForm.errors ?? {}) : {};
   $: activationPermitted = Boolean(currentForm?.activationPermitted);
   $: verificationSuccess =
-    currentForm?.kind === "verification" && currentForm?.status === "success"
-      ? currentForm
-      : null;
+    currentForm?.kind === "verification" && currentForm?.status === "success" ? currentForm : null;
   $: verificationFailure =
     currentForm?.kind === "verification" && currentForm?.status === "error" ? currentForm : null;
   $: activationFailure =
@@ -106,15 +105,21 @@
         correlationId: activationFailure.correlationId,
       })
     : null;
+  const handleVerificationRetry = () => {
+    verifyButton?.click();
+  };
 </script>
 
-<div class="space-y-6 rounded-lg border border-[var(--theme-border)] bg-[var(--theme-surface)] p-6 shadow">
+<div
+  class="space-y-6 rounded-lg border border-[var(--theme-border)] bg-[var(--theme-surface)] p-6 shadow"
+>
   <header class="space-y-1">
     <h2 class="text-lg font-semibold" style="color: var(--theme-foreground);">
       Configure Service Connection
     </h2>
     <p class="text-sm" style="color: var(--theme-muted);">
-      Provide environment-specific Supabase credentials, test connectivity, then activate for your team.
+      Provide environment-specific Supabase credentials, test connectivity, then activate for your
+      team.
     </p>
   </header>
 
@@ -134,21 +139,11 @@
   {/if}
 
   {#if verificationFailure && translatedVerificationError}
-    <div
-      role="alert"
-      class="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900"
-    >
-      <p class="font-semibold">{translatedVerificationError.title}</p>
-      <p>{translatedVerificationError.description}</p>
-      {#if translatedVerificationError.supportRecommendation}
-        <p class="mt-2 text-xs">
-          {translatedVerificationError.supportRecommendation}
-        </p>
-      {/if}
-      {#if verificationFailure.correlationId}
-        <p class="mt-2 text-xs">Correlation ID: {verificationFailure.correlationId}</p>
-      {/if}
-    </div>
+    <ErrorToast
+      message={translatedVerificationError}
+      correlationId={verificationFailure.correlationId}
+      on:retry={handleVerificationRetry}
+    />
   {/if}
 
   {#if activationSuccess}
@@ -162,18 +157,12 @@
   {/if}
 
   {#if activationFailure && translatedActivationError}
-    <div
-      role="alert"
-      class="rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900"
-    >
-      <p class="font-semibold">{translatedActivationError.title}</p>
-      <p>{translatedActivationError.description}</p>
-      {#if translatedActivationError.supportRecommendation}
-        <p class="mt-2 text-xs">
-          {translatedActivationError.supportRecommendation}
-        </p>
-      {/if}
-    </div>
+    <ErrorToast
+      message={translatedActivationError}
+      correlationId={activationFailure.correlationId}
+      on:retry={handleVerificationRetry}
+      showSupportAction={true}
+    />
   {/if}
 
   <form method="POST" class="space-y-5" autocomplete="off">
@@ -240,7 +229,11 @@
 
     <div class="grid gap-4 md:grid-cols-2">
       <div class="space-y-1">
-        <label for="supabaseProjectRef" class="text-sm font-medium" style="color: var(--theme-muted);">
+        <label
+          for="supabaseProjectRef"
+          class="text-sm font-medium"
+          style="color: var(--theme-muted);"
+        >
           Project reference
         </label>
         <input
@@ -250,9 +243,7 @@
           class="w-full rounded-md border border-[var(--theme-border)] bg-[var(--theme-surface)] px-3 py-2 text-sm"
           bind:value={values.supabaseProjectRef}
           aria-invalid={Boolean(validationErrors.supabaseProjectRef)}
-          aria-describedby={
-            validationErrors.supabaseProjectRef ? "projectRef-error" : undefined
-          }
+          aria-describedby={validationErrors.supabaseProjectRef ? "projectRef-error" : undefined}
         />
         {#if validationErrors.supabaseProjectRef}
           <p id="projectRef-error" class="text-xs text-red-600">
@@ -262,7 +253,11 @@
       </div>
 
       <div class="space-y-1">
-        <label for="supabaseServiceRoleKey" class="text-sm font-medium" style="color: var(--theme-muted);">
+        <label
+          for="supabaseServiceRoleKey"
+          class="text-sm font-medium"
+          style="color: var(--theme-muted);"
+        >
           Service role key
         </label>
         <input
@@ -272,9 +267,9 @@
           class="w-full rounded-md border border-[var(--theme-border)] bg-[var(--theme-surface)] px-3 py-2 text-sm"
           bind:value={values.supabaseServiceRoleKey}
           aria-invalid={Boolean(validationErrors.supabaseServiceRoleKey)}
-          aria-describedby={
-            validationErrors.supabaseServiceRoleKey ? "serviceRole-error" : undefined
-          }
+          aria-describedby={validationErrors.supabaseServiceRoleKey
+            ? "serviceRole-error"
+            : undefined}
         />
         {#if validationErrors.supabaseServiceRoleKey}
           <p id="serviceRole-error" class="text-xs text-red-600">
@@ -313,6 +308,7 @@
           name="intent"
           value="verify"
           formaction="?/verify"
+          bind:this={verifyButton}
         >
           Test Connection
         </button>

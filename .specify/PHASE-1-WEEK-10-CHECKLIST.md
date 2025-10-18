@@ -132,7 +132,7 @@
   - Table of published posts: Caption preview, Likes, Comments, Shares, Reach
   - Sort by: Likes, Comments, Engagement rate
   - Date range filter: Last week, Last month, Custom
-  - Engagement rate = (Likes + Comments + Shares) / Reach * 100
+  - Engagement rate = (Likes + Comments + Shares) / Reach \* 100
 
 - [ ] **Account Analytics**
   - Followers (total, growth this month)
@@ -201,16 +201,19 @@
 ## 🔗 Constitution References
 
 **Principle IV (Social Media Publishing)**
+
 - [ ] Instagram content calendar + scheduling
 - [ ] Automatic publishing to Instagram
 - [ ] Analytics integration
 
 **Principle V (Visual-First)**
+
 - [ ] Image-centric draft creation
 - [ ] Carousel support for multiple images
 - [ ] Visual preview before scheduling
 
 **Technology Stack (Constitution v2.2.0)**
+
 - [ ] Instagram Graph API
 - [ ] OAuth 2.0 for Instagram connection
 - [ ] Scheduled job for automatic publishing
@@ -221,6 +224,7 @@
 ## 📦 Deliverables
 
 ### Pages
+
 - [ ] `src/routes/(app)/instagram/calendar/+page.svelte` (calendar view)
 - [ ] `src/routes/(app)/instagram/drafts/+page.svelte` (drafts list)
 - [ ] `src/routes/(app)/instagram/drafts/create/+page.svelte` (create form)
@@ -230,6 +234,7 @@
 - [ ] `src/routes/(app)/instagram/analytics/+page.svelte` (analytics)
 
 ### Components
+
 - [ ] `src/components/CalendarGrid.svelte` (month view)
 - [ ] `src/components/PostPreview.svelte` (tooltip preview)
 - [ ] `src/components/CarouselEditor.svelte` (multi-image upload)
@@ -238,6 +243,7 @@
 - [ ] `src/components/InstagramPreview.svelte` (how post looks on IG)
 
 ### API Routes
+
 - [ ] `src/routes/api/instagram/accounts/connect/+server.ts` (OAuth callback)
 - [ ] `src/routes/api/instagram/drafts/+server.ts` (CRUD)
 - [ ] `src/routes/api/instagram/schedule/+server.ts` (schedule post)
@@ -245,18 +251,21 @@
 - [ ] `src/routes/api/instagram/analytics/+server.ts` (get analytics)
 
 ### Database Migrations
+
 - [ ] `instagram_accounts` table
 - [ ] `instagram_drafts` table
 - [ ] `scheduled_instagram_posts` table
 - [ ] `instagram_post_analytics` table
 
 ### Tests
+
 - [ ] Unit tests: 10+
 - [ ] Integration tests: 12+
 - [ ] E2E tests: 4+
 - [ ] Coverage: 70%+
 
 ### Documentation
+
 - [ ] Instagram setup guide
 - [ ] Content calendar guide
 - [ ] Updated API spec
@@ -266,6 +275,7 @@
 ## ✅ Sign-Off Criteria
 
 **Week 10 COMPLETE when**:
+
 1. ✅ Instagram account connection working
 2. ✅ Calendar view showing scheduled posts
 3. ✅ Draft creation + editing working
