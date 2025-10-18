@@ -25,18 +25,18 @@ This task list is generated from the implementation plan. Check items off as the
 
 ## Phase 1: Core Sidebar Components (3-4 days)
 
-- [ ] **Component**: Create `src/lib/components/layout/Sidebar.svelte` as the main container.
-- [ ] **Component**: Create `src/lib/components/layout/SidebarSection.svelte` for grouping nav items.
-- [ ] **Component**: Create `src/lib/components/layout/NavigationItem.svelte` for individual links.
-- [ ] **Component**: Create `src/lib/components/layout/MobileMenuToggle.svelte` (hamburger button).
-- [ ] **Layout (Desktop)**: Implement sticky positioning, 250-280px width.
-- [ ] **Layout (Mobile)**: Implement fixed overlay with a backdrop for screens <768px.
-- [ ] **UX (Mobile)**: Add a swipe-to-close gesture for the mobile sidebar.
-- [ ] **Accessibility**: Implement a focus trap when the mobile sidebar is open.
-- [ ] **Routing**: Create the `(auth)` route group with a new `+layout.svelte` that includes the `Sidebar`.
-- [ ] **Routing**: Move the existing dashboard route into the `(auth)` group.
-- [ ] **State**: Wire up the `navigation.ts` store to manage the sidebar's open/closed state.
-- [ ] **Accessibility**: Add keyboard navigation (Tab, Arrow keys, Enter, Escape).
+- [x] **Component**: Create `src/lib/components/layout/Sidebar.svelte` as the main container.
+- [x] **Component**: Create `src/lib/components/layout/SidebarSection.svelte` for grouping nav items.
+- [x] **Component**: Create `src/lib/components/layout/NavigationItem.svelte` for individual links.
+- [x] **Component**: Create `src/lib/components/layout/MobileMenuToggle.svelte` (hamburger button).
+- [x] **Layout (Desktop)**: Implement sticky positioning, 250-280px width.
+- [x] **Layout (Mobile)**: Implement fixed overlay with a backdrop for screens <768px.
+- [x] **UX (Mobile)**: Add a swipe-to-close gesture for the mobile sidebar.
+- [x] **Accessibility**: Implement a focus trap when the mobile sidebar is open.
+- [x] **Routing**: Create the `(auth)` route group with a new `+layout.svelte` that includes the `Sidebar`.
+- [x] **Routing**: Move the existing dashboard route into the `(auth)` group.
+- [x] **State**: Wire up the `navigation.ts` store to manage the sidebar's open/closed state.
+- [x] **Accessibility**: Add keyboard navigation (Tab, Arrow keys, Enter, Escape).
 - [ ] **Component Test**: Write tests for `Sidebar.svelte` and `NavigationItem.svelte`.
 - [ ] **E2E Test**: Write a basic test to verify navigation between two pages works.
 
