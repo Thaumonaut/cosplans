@@ -41,18 +41,18 @@ Generated from user stories and technical specifications. Organized by implement
 ### US-004: Progress Tracker (P1) 
 - [x] Create `ProgressTracker` Svelte component with real-time progress bars
 - [x] Implement progress calculation service with category breakdown (costume/props/location/team/checklist/editing)
-- [ ] Build progress detail modals showing outstanding tasks and completion status
-- [ ] Create progress aggregation API endpoints with caching
+- [x] Build progress detail modals showing outstanding tasks and completion status
+- [x] Create progress aggregation API endpoints with caching
 - [ ] Add progress trend visualization using lightweight charting
 - [ ] Implement progress alerts for delayed milestones
 - [ ] Setup automated progress recalculation triggers in database
 - [ ] Create progress export functionality for reporting
 
 ### US-006: Inventory Lifecycle (P1)
-- [ ] Create inventory lifecycle visualization component
-- [ ] Implement costume status tracking (planning → sourcing → construction → completed)
-- [ ] Build props lifecycle management with dependency tracking
-- [ ] Create inventory timeline view showing parallel workstreams
+- [x] Create inventory lifecycle visualization component
+- [x] Implement costume status tracking (planning → sourcing → construction → completed)
+- [x] Build props lifecycle management with dependency tracking
+- [x] Create inventory timeline view showing parallel workstreams
 - [ ] Add inventory milestone markers with automatic date calculations
 - [ ] Implement inventory status change notifications via SSE
 - [ ] Create inventory bottleneck detection and alerts
