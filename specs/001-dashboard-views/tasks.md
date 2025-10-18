@@ -63,9 +63,9 @@ Generated from user stories and technical specifications. Organized by implement
 ### US-002: Timeline & Gantt View (P2)
 - [x] Create timeline page component (`/src/routes/timeline/+page.svelte`)
 - [x] Implement Gantt chart visualization with interactive timeline
-- [ ] Build zoom controls (day/week/month/quarter/year) with smooth transitions
-- [ ] Create shoot scheduling interface with drag-and-drop rescheduling
-- [ ] Add dependency management between shoots with visual connection lines
+- [x] Build zoom controls (day/week/month/quarter/year) with smooth transitions
+- [x] Create shoot scheduling interface with drag-and-drop rescheduling
+- [x] Add dependency management between shoots with visual connection lines
 - [ ] Implement milestone markers with custom labels and colors
 - [ ] Create timeline filtering by team member, status, character, and tags
 - [ ] Build timeline export functionality (PDF, calendar formats)

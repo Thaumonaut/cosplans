@@ -35,6 +35,10 @@
   let isLoading = true;
   let isDragging = false;
   let draggedEventId: string | null = null;
+  let isZooming = false;
+  let dragStartX = 0;
+  let timelineWidth = 0;
+  let timelineElement: HTMLElement | null = null;
 
   // Mock data
   const mockEvents: TimelineEvent[] = [
@@ -131,7 +135,15 @@
   }
 
   function handleZoomChange(level: ZoomLevel) {
+    if (zoomLevel === level) return;
+    
+    isZooming = true;
     zoomLevel = level;
+    
+    // Reset zooming flag after animation
+    setTimeout(() => {
+      isZooming = false;
+    }, 300);
   }
 
   function getPhaseColor(phase: CostumeBuild['phase']): string {
@@ -216,6 +228,74 @@
     // TODO: Update event date in database and trigger SSE notification
     console.log(`Moving event ${eventId} to ${newDate}`);
   }
+
+  function handleTimelineDragOver(e: DragEvent) {
+    e.preventDefault();
+    if (!isDragging || !draggedEventId) return;
+  }
+
+  function handleTimelineDrop(e: DragEvent) {
+    e.preventDefault();
+    if (!draggedEventId || !timelineElement) return;
+
+    const rect = timelineElement.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const percentage = x / rect.width;
+
+    const totalDays = getDaysBetween(startDate, endDate);
+    const daysFromStart = Math.floor(totalDays * percentage);
+
+    const newDate = new Date(startDate);
+    newDate.setDate(newDate.getDate() + daysFromStart);
+
+    // Update the event date
+    const event = events.find(ev => ev.id === draggedEventId);
+    if (event) {
+      const duration = getDaysBetween(new Date(event.start_date), new Date(event.end_date));
+      const newEndDate = new Date(newDate);
+      newEndDate.setDate(newEndDate.getDate() + duration);
+
+      // Update events array
+      events = events.map(ev => 
+        ev.id === draggedEventId
+          ? { ...ev, start_date: newDate.toISOString().split('T')[0], end_date: newEndDate.toISOString().split('T')[0] }
+          : ev
+      );
+
+      // Call API to persist changes
+      updateEventDates(draggedEventId, newDate, newEndDate);
+    }
+
+    isDragging = false;
+    draggedEventId = null;
+  }
+
+  async function updateEventDates(eventId: string, startDate: Date, endDate: Date) {
+    try {
+      const response = await fetch(`/api/timeline/events/${eventId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          start_date: startDate.toISOString(), 
+          end_date: endDate.toISOString() 
+        })
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to update event');
+      }
+      
+      const { event } = await response.json();
+      console.log(`Successfully updated event ${eventId}`, event);
+      
+      // TODO: Event will be broadcast via SSE to notify other users
+    } catch (error) {
+      console.error('Failed to update event dates:', error);
+      // Revert changes
+      await loadTimelineData();
+    }
+  }
 </script>
 
 <div class="space-y-4">
@@ -255,7 +335,11 @@
       ></div>
     </div>
   {:else}
-    <div class="border rounded-lg overflow-hidden" style="border-color: var(--theme-sidebar-border);">
+    <div 
+      class="border rounded-lg overflow-hidden timeline-container"
+      class:zooming={isZooming}
+      style="border-color: var(--theme-sidebar-border);"
+    >
       <!-- Timeline Header (Months) -->
       <div class="flex border-b" style="background: var(--theme-header-bg); border-color: var(--theme-sidebar-border);">
         <div class="w-48 flex-shrink-0 px-4 py-3 font-semibold" style="color: var(--theme-header-text);">
@@ -286,11 +370,21 @@
                 {event.team_members.length} member{event.team_members.length !== 1 ? 's' : ''}
               </div>
             </div>
-            <div class="flex-1 relative py-4 px-2">
+            <div 
+              class="flex-1 relative py-4 px-2"
+              bind:this={timelineElement}
+              on:dragover={handleTimelineDragOver}
+              on:drop={handleTimelineDrop}
+              role="region"
+              aria-label="Timeline grid"
+            >
               <!-- Timeline bar -->
               <div
                 class="absolute h-8 rounded-lg transition-all cursor-move"
                 draggable="true"
+                role="button"
+                tabindex="0"
+                aria-label="Drag to reschedule {event.shoot_name}"
                 on:dragstart={() => handleEventDragStart(event.id)}
                 on:dragend={handleEventDragEnd}
                 style="left: {position.left}%; width: {position.width}%; background: {event.color || getStatusColor(event.status)}; opacity: {isDragging && draggedEventId === event.id ? 0.5 : 1};"
@@ -328,6 +422,55 @@
           {/each}
         {/each}
       </div>
+
+      <!-- Dependency Arrows (SVG Overlay) -->
+      <svg 
+        class="absolute top-0 left-0 w-full h-full pointer-events-none"
+        style="z-index: 1;"
+      >
+        <defs>
+          <marker
+            id="arrowhead"
+            markerWidth="10"
+            markerHeight="10"
+            refX="9"
+            refY="3"
+            orient="auto"
+            markerUnits="strokeWidth"
+          >
+            <path d="M0,0 L0,6 L9,3 z" fill="var(--theme-sidebar-accent)" />
+          </marker>
+        </defs>
+
+        {#each events as event, eventIndex}
+          {#if event.dependencies && event.dependencies.length > 0}
+            {#each event.dependencies as depId}
+              {@const dependentEvent = events.find(e => e.id === depId)}
+              {#if dependentEvent}
+                {@const fromPos = getPositionAndWidth(dependentEvent.start_date, dependentEvent.end_date)}
+                {@const toPos = getPositionAndWidth(event.start_date, event.end_date)}
+                {@const fromIndex = events.findIndex(e => e.id === depId)}
+                {@const rowHeight = 60}
+                {@const labelWidth = 192}
+                {@const fromY = fromIndex * rowHeight + rowHeight / 2 + 60}
+                {@const toY = eventIndex * rowHeight + rowHeight / 2 + 60}
+                {@const fromX = labelWidth + (fromPos.left + fromPos.width) * 0.01 * (timelineWidth || 800)}
+                {@const toX = labelWidth + toPos.left * 0.01 * (timelineWidth || 800)}
+                {@const midX = (fromX + toX) / 2}
+                
+                <path
+                  d="M {fromX} {fromY} C {midX} {fromY}, {midX} {toY}, {toX} {toY}"
+                  stroke="var(--theme-sidebar-accent)"
+                  stroke-width="2"
+                  fill="none"
+                  marker-end="url(#arrowhead)"
+                  opacity="0.6"
+                />
+              {/if}
+            {/each}
+          {/if}
+        {/each}
+      </svg>
     </div>
 
     <!-- Legend -->
@@ -340,6 +483,18 @@
         <div class="w-4 h-4 rounded" style="background: #3b82f6; opacity: 0.7;"></div>
         <span style="color: var(--theme-sidebar-muted);">Costume Build</span>
       </div>
+      <div class="flex items-center gap-2">
+        <svg class="w-6 h-4" viewBox="0 0 24 16">
+          <path
+            d="M2 8 L22 8"
+            stroke="var(--theme-sidebar-accent)"
+            stroke-width="2"
+            fill="none"
+            marker-end="url(#arrowhead)"
+          />
+        </svg>
+        <span style="color: var(--theme-sidebar-muted);">Dependency</span>
+      </div>
     </div>
   {/if}
 </div>
@@ -347,5 +502,39 @@
 <style>
   .selected {
     box-shadow: 0 0 0 2px var(--theme-sidebar-accent);
+    transform: scale(1.02);
+  }
+  
+  .timeline-container {
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  .timeline-container.zooming {
+    opacity: 0.7;
+  }
+  
+  .timeline-container :global(.transition-all) {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  button {
+    transition: all 0.2s ease-in-out;
+  }
+  
+  button:hover:not(.selected) {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  button:active {
+    transform: translateY(0);
+  }
+  
+  .cursor-move:hover {
+    filter: brightness(1.1);
+  }
+  
+  .cursor-move:active {
+    cursor: grabbing;
   }
 </style>
