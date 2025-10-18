@@ -22,7 +22,7 @@ Generated from user stories and technical specifications. Organized by implement
 ### Core Infrastructure
 - [x] Implement Server-Sent Events endpoint (`/api/events/+server.js`) for real-time updates
 - [x] Create base dashboard layout component with responsive grid system
-- [ ] Setup authorization middleware using @casl/ability for dashboard permissions
+- [x] Setup authorization middleware using @casl/ability for dashboard permissions
 - [x] Implement client-side SSE connection with reconnection logic and fallback
 - [x] Create shared stores for dashboard state management (widgets, layout, permissions)
 
@@ -30,12 +30,12 @@ Generated from user stories and technical specifications. Organized by implement
 
 ### US-001: Dashboard Overview (P1)
 - [x] Create dashboard page component (`/src/routes/dashboard/+page.svelte`)
-- [ ] Implement widget container system with drag-and-drop positioning
+- [x] Implement widget container system with drag-and-drop positioning
 - [x] Create upcoming shoots widget with real-time data integration
-- [ ] Build costume ideas widget with filtering and search
+- [x] Build costume ideas widget with filtering and search
 - [x] Implement alerts widget with priority-based styling and actions
 - [x] Add template switching (compact/detailed/timeline-focus) with state persistence
-- [ ] Create dashboard customization modal for widget configuration
+- [x] Create dashboard customization modal for widget configuration
 - [x] Implement responsive breakpoints for mobile/tablet/desktop layouts
 
 ### US-004: Progress Tracker (P1) 
