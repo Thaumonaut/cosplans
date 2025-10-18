@@ -254,7 +254,6 @@
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle
                 className="text-lg font-semibold flex items-center gap-2"
-                style="color: var(--theme-foreground);"
               >
                 <svg
                   class="w-5 h-5"
@@ -275,9 +274,8 @@
               <Button
                 size="icon"
                 variant="ghost"
-                className="hover:opacity-70 focus:ring-2"
-                style="color: var(--theme-sidebar-muted);"
-                aria-label={widget.visible ? "Hide widget" : "Show widget"}
+                className="hover:opacity-70 focus:ring-2 text-[var(--theme-sidebar-muted)]"
+                ariaLabel={widget.visible ? "Hide widget" : "Show widget"}
                 on:click={() => dashboardActions.toggleWidget(widget.id)}
               >
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -307,7 +305,6 @@
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle
                 className="text-lg font-semibold flex items-center gap-2"
-                style="color: var(--theme-foreground);"
               >
                 <svg
                   class="w-5 h-5"
@@ -328,9 +325,8 @@
               <Button
                 size="icon"
                 variant="ghost"
-                className="hover:opacity-70 focus:ring-2"
-                style="color: var(--theme-sidebar-muted);"
-                aria-label={widget.visible ? "Hide widget" : "Show widget"}
+                className="hover:opacity-70 focus:ring-2 text-[var(--theme-sidebar-muted)]"
+                ariaLabel={widget.visible ? "Hide widget" : "Show widget"}
                 on:click={() => dashboardActions.toggleWidget(widget.id)}
               >
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -374,16 +370,14 @@
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle
                   className="text-lg font-semibold flex-1"
-                  style="color: var(--theme-foreground);"
                 >
                   {getWidgetTitle(widget.type)}
                 </CardTitle>
                 <Button
                   size="icon"
                   variant="ghost"
-                  className="hover:opacity-70 focus:ring-2"
-                  style="color: var(--theme-sidebar-muted);"
-                  aria-label={widget.visible ? "Hide widget" : "Show widget"}
+                  className="hover:opacity-70 focus:ring-2 text-[var(--theme-sidebar-muted)]"
+                  ariaLabel={widget.visible ? "Hide widget" : "Show widget"}
                   on:click={() => dashboardActions.toggleWidget(widget.id)}
                 >
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -443,16 +437,14 @@
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle
                   className="text-lg font-semibold flex-1"
-                  style="color: var(--theme-foreground);"
                 >
                   {getWidgetTitle(widget.type)}
                 </CardTitle>
                 <Button
                   size="icon"
                   variant="ghost"
-                  className="hover:opacity-70 focus:ring-2"
-                  style="color: var(--theme-sidebar-muted);"
-                  aria-label={widget.visible ? "Hide widget" : "Show widget"}
+                  className="hover:opacity-70 focus:ring-2 text-[var(--theme-sidebar-muted)]"
+                  ariaLabel={widget.visible ? "Hide widget" : "Show widget"}
                   on:click={() => dashboardActions.toggleWidget(widget.id)}
                 >
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

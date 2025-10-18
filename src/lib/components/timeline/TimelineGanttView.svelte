@@ -308,7 +308,7 @@
       <div class="flex gap-1">
         {#each ['day', 'week', 'month', 'quarter', 'year'] as level}
           <button
-            on:click={() => handleZoomChange(level)}
+            on:click={() => handleZoomChange(level as ZoomLevel)}
             class="px-3 py-1.5 rounded-lg text-sm font-medium transition-colors"
             class:selected={zoomLevel === level}
             style="background: {zoomLevel === level ? 'var(--theme-sidebar-accent)' : 'var(--theme-sidebar-hover)'}; color: {zoomLevel === level ? 'white' : 'var(--theme-sidebar-text)'};"

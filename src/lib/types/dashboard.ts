@@ -3,7 +3,7 @@
 
 export interface DashboardWidget {
   id: string;
-  type: "upcoming_shoots" | "ideas" | "alerts" | "budget" | "weather" | "progress";
+  type: "upcoming_shoots" | "ideas" | "alerts" | "budget" | "weather" | "progress" | "recent_activity" | "tasks" | "timeline";
   user_id: string;
   template: "compact" | "detailed" | "timeline-focus";
   position: number;
