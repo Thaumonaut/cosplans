@@ -1,196 +1,138 @@
-# Feature Specification: Contact Directory
+# Feature Specification: Convention & Event Integration
 
-**Feature Branch**: `017-contact-directory`  
+**Feature Branch**: `012-012-convention-event`  
 **Created**: 2025-10-15  
 **Status**: Draft  
-**Input**: User description: "017-contact-directory"
+**Input**: Link shoots to conventions, track convention schedules, photoshoot meetups, venue maps, badge/ticket integration
 
 ## User Scenarios & Testing *(mandatory)*
 
-### User Story 1 - Team Contact Management (Priority: P1)
+### User Story 1 - Link Shoots to Conventions (Priority: P1)
 
-Team organizers can maintain a central contact directory for all team members, models, and photographers with names, phone numbers, emails, social media handles, and notes about their roles/specializations.
+As a convention-goer planning shoots, I want to link my shoots to specific conventions (e.g., "Anime Expo 2025") so that I can see all my convention shoots grouped together and manage them alongside the event schedule.
 
-**Why this priority**: Core contact management that centralizes team communication information in one accessible location.
+**Why this priority**: Core convention context - helps organize shoots that happen at events vs standalone locations.
 
-**Independent Test**: Can be fully tested by creating contact entries with all fields, viewing directory list, and searching by name/role.
+**Independent Test**: User can create/select convention, link shoots to it, view convention dashboard with all linked shoots.
 
 **Acceptance Scenarios**:
 
-1. **Given** a team with members, **When** organizer adds contact with name, phone, email, Instagram handle, **Then** contact appears in directory list with all fields visible
-2. **Given** directory with 20+ contacts, **When** user searches for "photographer", **Then** all contacts with photographer role display in filtered list
-3. **Given** a contact entry, **When** user clicks phone number or email, **Then** device opens phone dialer or email client with pre-filled recipient
+1. **Given** I'm planning shoot at Anime Expo, **When** I create shoot and link to "Anime Expo 2025 - July 4-7", **Then** shoot displays convention badge and links to event
+2. **Given** I have 5 shoots at same convention, **When** I view convention dashboard, **Then** all 5 shoots display with dates/times in event context
+3. **Given** convention has location, **When** I link shoot to convention, **Then** convention venue auto-suggests as shoot location option
+4. **Given** I'm browsing my shoots, **When** I filter "Convention shoots only", **Then** only shoots linked to conventions display
 
 ---
 
-### User Story 2 - Availability Calendars (Priority: P2)
+### User Story 2 - Import Convention Schedule (Priority: P2)
 
-Team members can mark their availability status (available, busy, out of town) on calendar view, making it easy to schedule shoots when key participants are available without messaging everyone individually.
+As a convention attendee, I want to import or manually add convention event schedule (panels, contests, meetups) so that I can plan shoots around my other convention activities and avoid conflicts.
 
-**Why this priority**: Streamlines scheduling by visualizing team availability, building on P1's contact information.
+**Why this priority**: Prevents scheduling conflicts. Builds on P1 convention linking with schedule awareness.
 
-**Independent Test**: Can be fully tested by marking availability dates on calendar, viewing team calendar with all members' status, and filtering by available members for date range.
+**Independent Test**: User can add convention events, system warns about shoot/event time conflicts.
 
 **Acceptance Scenarios**:
 
-1. **Given** a team member contact entry, **When** user marks dates as "Out of town" on calendar, **Then** dates highlight in red with hover tooltip showing reason
-2. **Given** team calendar view with all members, **When** user selects date range, **Then** members available for all dates in range highlight in green with count displayed
-3. **Given** shoot planning with required roles (photographer, model), **When** user checks availability, **Then** calendar shows only members with matching roles and their availability status
+1. **Given** convention is July 5-7, **When** I add event "Cosplay Contest - July 6, 2pm-4pm", **Then** event appears in convention schedule
+2. **Given** I plan shoot at 3pm July 6, **When** I have contest at 2pm-4pm, **Then** system warns "Conflicts with Cosplay Contest"
+3. **Given** convention publishes schedule, **When** I import via URL or file, **Then** all events populate automatically
+4. **Given** I'm viewing convention day, **When** I see timeline, **Then** shoots and events display together showing full day schedule
 
 ---
 
-### User Story 3 - Skills & Equipment Listings (Priority: P3)
+### User Story 3 - Photoshoot Meetup Discovery (Priority: P3)
 
-Contacts can list their skills (photography, makeup, sewing, prop-making), owned equipment (cameras, lenses, lighting, wigs), and experience level, searchable when planning shoots to find qualified team members.
+As a cosplayer looking for groups, I want to discover and join public photoshoot meetups at conventions (e.g., "Genshin Impact group shoot, Sat 10am, East Garden") so that I can participate in community shoots.
 
-**Why this priority**: Enhances contact profiles with capabilities, useful for matching skills to shoot needs.
+**Why this priority**: Community feature that adds social value. Builds on P1-P2 with public shoot visibility.
 
-**Independent Test**: Can be fully tested by adding skills/equipment to contact profiles, searching directory by skill/equipment, and viewing detailed capability listings.
+**Independent Test**: User can mark shoot as "Public Meetup", others can discover and RSVP, organizer sees attendee list.
 
 **Acceptance Scenarios**:
 
-1. **Given** a photographer contact, **When** user adds skills (portrait, action shots) and equipment (Canon R5, 24-70mm lens), **Then** profile displays skills and equipment with icons
-2. **Given** shoot planning requiring makeup artist, **When** user searches directory for "makeup", **Then** all contacts with makeup skill display with experience level (beginner/intermediate/expert)
-3. **Given** equipment search for "lighting", **When** user views results, **Then** contacts with lighting equipment display with gear list and availability for lending
+1. **Given** I'm organizing group shoot, **When** I toggle "Public Meetup" and add details, **Then** shoot appears in convention's public meetup list
+2. **Given** I'm attending convention, **When** I browse meetups and filter "Genshin Impact", **Then** I see all public Genshin shoots with time/location
+3. **Given** I find interesting meetup, **When** I click "RSVP", **Then** I'm added to attendee list and organizer notified
+4. **Given** I organized meetup, **When** viewing shoot, **Then** I see "12 attendees" with names/characters/roles
 
 ---
 
-### User Story 4 - Emergency Contact Information (Priority: P4)
+### User Story 4 - Venue Maps & Navigation (Priority: P4)
 
-Users can designate emergency contacts with separate fields for emergency name, relationship, and phone number, accessible offline and exportable for convention shoots where medical emergencies might require quick contact.
+As a convention photographer, I want to see venue map with marked photo locations and navigate between meetup spots so that I don't waste time finding shooting locations in large convention centers.
 
-**Why this priority**: Safety feature important for conventions and remote locations, less critical for everyday use.
+**Why this priority**: Convenience feature for large venues. Nice-to-have but shoots work without maps.
 
-**Independent Test**: Can be fully tested by adding emergency contact info to profiles, exporting contact list with emergency details as PDF, and verifying offline access.
+**Independent Test**: User can view convention venue map, pin shoot locations, get directions between pins.
 
 **Acceptance Scenarios**:
 
-1. **Given** a team member profile, **When** user adds emergency contact (name, relationship, phone), **Then** emergency info displays in separate "Emergency" section marked with alert icon
-2. **Given** directory with emergency contacts, **When** user exports contact list, **Then** PDF includes member names, phones, and emergency contact details formatted for print
-3. **Given** offline mode at convention, **When** user opens contact directory, **Then** all contact info including emergency contacts is accessible without internet connection
+1. **Given** convention has uploaded venue map, **When** I view convention, **Then** map displays with labeled halls/gardens/photo spots
+2. **Given** I'm planning shoot at "East Garden", **When** I select location, **Then** map shows pin with location name
+3. **Given** I have 3 shoots at different spots, **When** I view day schedule, **Then** map shows all 3 pins with numbered route
+4. **Given** I'm at convention, **When** I need directions to next shoot, **Then** map highlights walking path from current location
 
 ---
 
 ### Edge Cases
 
-- What happens when contact has multiple phone numbers? System MUST allow multiple phone entries with labels (Mobile, Work, Home), show primary number prominently, and allow clicking any number to dial
-- How are duplicate contacts prevented? System MUST check for existing contacts by email/phone on save, show "Possible Duplicate" warning with merge option, and allow user to proceed if intentionally separate
-- What if availability calendar conflicts with shoot assignments? System MUST show warning when assigning member to shoot on marked "Unavailable" dates, allow override with confirmation, and log override reason
-- How are removed team members handled? System MUST allow archiving contacts (vs deletion), hide archived from main directory, preserve historical shoot participation, and allow restoring if member returns
-- What happens when exporting large directory (100+ contacts)? System MUST generate PDF export as background job (if > 50 contacts), email download link when ready (< 2 min), and include export date/team name in header
-- How is privacy handled for personal phone numbers? System MUST allow contacts to mark phone/email as "Private" (visible only to organizers), respect privacy in exports, and show "Contact via platform" message to other members
-- What if member updates their own contact info? System MUST allow team members to edit their own entries (phone, email, social handles, skills), send notification to organizers on changes, and log edit history
-- How are preferred communication methods indicated? System MUST allow contacts to mark preferred method (email, text, Discord, Instagram DM) with rank order, show preference badge on profile, and suggest method when initiating contact
+- What happens when convention dates change? (Update all linked shoots, notify users of date changes)
+- How to handle multi-day conventions with shoots on different days? (Group by date, show daily sub-schedules)
+- What if user RSVPs to meetup then can't attend? (Allow canceling RSVP, notify organizer)
+- Should there be convention database vs user-created? (Both: verified convention list + custom events)
+- How to handle private shoots at conventions? (Default private, opt-in to public meetup listing)
+- What about badge/ticket verification? (Link to external ticketing, don't replicate badge systems)
+- Should meetups have capacity limits? (Optional max attendees, waitlist when full)
+- How to prevent spam/inappropriate meetups? (Report system, organizer reputation, moderation)
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
-#### Contact Management (FR-001 to FR-006)
-
-- **FR-001**: System MUST allow users to create contact entries with fields: name, role (photographer/model/makeup artist/other), phone (multiple with labels), email, Instagram, Discord, notes
-- **FR-002**: System MUST display contact directory as searchable/sortable list with filters by role, availability status, and alphabetical sections (A-Z)
-- **FR-003**: System MUST provide click-to-contact functionality where clicking phone opens dialer, email opens mail client, social handles open respective apps/websites
-- **FR-004**: System MUST detect potential duplicate contacts by matching email or phone number, show merge interface with field comparison, and allow user to merge or keep separate
-- **FR-005**: System MUST allow archiving contacts (vs deletion) to preserve historical shoot participation while removing from active directory
-- **FR-006**: System MUST support importing contacts from CSV files with field mapping interface and validation for phone/email formats
-
-#### Availability Calendars (FR-007 to FR-011)
-
-- **FR-007**: System MUST provide calendar interface for each contact to mark availability status: Available (green), Busy (yellow), Out of town (red), with optional reason notes
-- **FR-008**: System MUST display team availability calendar showing all members' status side-by-side with date range selector (week/month view)
-- **FR-009**: System MUST highlight dates when all required roles (based on shoot planning) are available with member count and click-to-view details
-- **FR-010**: System MUST send availability reminders to team members asking them to update calendar before major events (conventions, planned shoots)
-- **FR-011**: System MUST show warnings when assigning members to shoots on dates marked as "Busy" or "Out of town", allowing override with confirmation and reason logging
-
-#### Skills & Equipment (FR-012 to FR-016)
-
-- **FR-012**: System MUST allow contacts to list skills with categories (photography, makeup, sewing, prop-making, wig styling, editing) and experience level (beginner/intermediate/expert)
-- **FR-013**: System MUST allow contacts to list owned equipment with categories (cameras, lenses, lighting, wigs, props, costumes) and availability for lending (yes/no/ask first)
-- **FR-014**: System MUST provide search functionality across skills and equipment with filters by experience level and lending availability
-- **FR-015**: System MUST display skill/equipment badges on contact cards in directory list for quick visual identification
-- **FR-016**: System MUST suggest contacts based on shoot requirements (e.g., "Need photographer with lighting equipment") matching skills and equipment to needs
-
-#### Emergency & Privacy (FR-017 to FR-020)
-
-- **FR-017**: System MUST allow adding emergency contact information to profiles with separate fields for emergency contact name, relationship, phone number, marked with alert icon
-- **FR-018**: System MUST export contact directory to PDF including member info, roles, and emergency contacts formatted for print with export date and team name
-- **FR-019**: System MUST allow contacts to mark phone/email as "Private" (visible only to organizers) and show "Contact via platform" message to non-organizers
-- **FR-020**: System MUST allow team members to edit their own contact entries with notification to organizers on changes and edit history logging (date, field, old/new values)
+- **FR-001**: System MUST allow creating convention entries with name, dates, location/venue, website URL
+- **FR-002**: System MUST support linking shoots to conventions with optional visibility (private/public meetup)
+- **FR-003**: System MUST display convention dashboard showing all linked shoots grouped by date
+- **FR-004**: System MUST provide "Convention shoots" filter in main shoots list
+- **FR-005**: System MUST allow adding convention schedule events (name, date/time, location, type: panel/contest/meetup/other)
+- **FR-006**: System MUST detect and warn about time conflicts between shoots and convention events
+- **FR-007**: System MUST support importing convention schedule from URL or file (iCal, CSV)
+- **FR-008**: System MUST display unified timeline showing shoots and convention events together
+- **FR-009**: System MUST allow marking shoot as "Public Meetup" visible in convention's public meetup list
+- **FR-010**: System MUST provide meetup discovery interface with search/filter by series, character, time
+- **FR-011**: System MUST support RSVP to public meetups with attendee list visible to organizer
+- **FR-012**: System MUST notify meetup organizer when someone RSVPs
+- **FR-013**: System MUST allow canceling RSVP with organizer notification
+- **FR-014**: System MUST support optional max attendee capacity with waitlist
+- **FR-015**: System MUST display attendee list with character/role info for meetup planning
+- **FR-016**: System MUST support uploading or linking to convention venue maps (image or interactive)
+- **FR-017**: System MUST allow pinning shoot locations on venue map
+- **FR-018**: System MUST display route between multiple pinned locations on map
+- **FR-019**: System MUST provide verified convention database (major cons) plus custom convention creation
+- **FR-020**: System MUST support reporting inappropriate public meetups with moderation queue
+- **FR-021**: System MUST notify users when linked convention dates change
 
 ### Key Entities
 
-- **Contact**: Directory entry with name, role, phone numbers (multiple), email, social handles, notes, privacy settings
-- **AvailabilityCalendar**: Calendar entries per contact marking dates as available/busy/out of town with optional reason notes
-- **ContactSkill**: Listed skill with category, experience level, and notes about specialization
-- **ContactEquipment**: Listed equipment item with category, model/brand, and lending availability status
-- **EmergencyContact**: Emergency contact info with name, relationship, phone number, linked to team member contact
-
-### User Story 3 - [Brief Title] (Priority: P3)
-
-[Describe this user journey in plain language]
-
-**Why this priority**: [Explain the value and why it has this priority level]
-
-**Independent Test**: [Describe how this can be tested independently]
-
-**Acceptance Scenarios**:
-
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
-
----
-
-[Add more user stories as needed, each with an assigned priority]
-
-### Edge Cases
-
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right edge cases.
--->
-
-- What happens when [boundary condition]?
-- How does system handle [error scenario]?
-
-## Requirements *(mandatory)*
-
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right functional requirements.
--->
-
-### Functional Requirements
-
-- **FR-001**: System MUST [specific capability, e.g., "allow users to create accounts"]
-- **FR-002**: System MUST [specific capability, e.g., "validate email addresses"]  
-- **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
-- **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
-- **FR-005**: System MUST [behavior, e.g., "log all security events"]
-
-*Example of marking unclear requirements:*
-
-- **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
-- **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
-
-### Key Entities *(include if feature involves data)*
-
-- **Contact**: Directory entry with name, role, phone numbers (multiple), email, social handles, notes, privacy settings
-- **AvailabilityCalendar**: Calendar entries per contact marking dates as available/busy/out of town with optional reason notes
-- **ContactSkill**: Listed skill with category, experience level, and notes about specialization
-- **ContactEquipment**: Listed equipment item with category, model/brand, and lending availability status
-- **EmergencyContact**: Emergency contact info with name, relationship, phone number, linked to team member contact
+- **Convention**: Event hosting shoots. Attributes: name, start date, end date, location, venue name, website URL, venue map image/URL, is verified (official vs user-created), created by user ID
+- **ConventionEvent**: Scheduled event at convention. Attributes: convention ID, event name, event date/time, location within venue, event type (panel/contest/meetup/other), duration
+- **ShootConventionLink**: Links shoot to convention. Attributes: shoot ID, convention ID, is public meetup, RSVP count, max capacity (optional)
+- **MeetupRSVP**: RSVP to public meetup. Attributes: shoot ID, user ID, character name, role (photographer/cosplayer/assistant), RSVP timestamp, status (attending/waitlist/canceled)
+- **VenueMapPin**: Location marker on map. Attributes: convention ID, shoot ID (optional), pin name, coordinates (x, y or lat/long), description
+- **MeetupReport**: Report inappropriate meetup. Attributes: shoot ID, reporter user ID, reason, report timestamp, resolution status
 
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
 
-- **SC-001**: Users can create contact entry with all fields in under 2 minutes
-- **SC-002**: Directory search returns results in under 1 second for 100+ contacts
-- **SC-003**: Duplicate detection identifies potential matches in under 500ms on contact save
-- **SC-004**: Team availability calendar loads and displays 10+ members for month view in under 2 seconds
-- **SC-005**: CSV import processes 50 contacts with validation in under 30 seconds
-- **SC-006**: PDF export generation for 100 contacts completes in under 2 minutes with email notification
-- **SC-007**: Click-to-contact functionality (phone/email/social) opens correct app in under 1 second
-- **SC-008**: Skill/equipment search filters and updates results in real-time (< 500ms per keystroke)
-- **SC-009**: 90% of team members successfully update their own contact info within 5 minutes on first use
-- **SC-010**: Offline contact directory access (cached) loads in under 1 second without internet connection
+- **SC-001**: Users can link shoot to convention in under 30 seconds
+- **SC-002**: Convention dashboard loads all linked shoots in under 2 seconds
+- **SC-003**: Schedule conflict detection triggers within 1 second of date/time change
+- **SC-004**: iCal/CSV schedule import processes 50+ events in under 5 seconds
+- **SC-005**: Public meetup listing loads with filters in under 1 second on 3G
+- **SC-006**: RSVP notification delivers to organizer within 30 seconds
+- **SC-007**: Venue map with 10 pins renders in under 2 seconds
+- **SC-008**: 60% of convention-goers use convention linking feature (indicates value)
+- **SC-009**: Public meetups average 5+ RSVPs (indicates community engagement)
+- **SC-010**: Reported meetups resolved within 24 hours (moderation responsiveness)
+

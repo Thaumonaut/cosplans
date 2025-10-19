@@ -1,0 +1,146 @@
+{
+  "metadata": {
+    "description": "Locked package versions for Cosplans Phase 1 MVP",
+    "constitution_version": "2.2.0",
+    "generated_date": "2025-01-14",
+    "update_policy": "Never auto-update; manual review for security patches",
+    "audit_schedule": "Monthly security audit (npm audit)",
+    "node_version": ">=18.17.0",
+    "npm_version": ">=9.0.0"
+  },
+  "core_framework": {
+    "svelte": {
+      "version": "^4.2.0",
+      "purpose": "UI framework",
+      "notes": "Latest stable version; no breaking changes expected in 4.x"
+    },
+    "sveltekit": {
+      "version": "^2.0.0",
+      "purpose": "Full-stack framework (routing, SSR, API routes)",
+      "notes": "LTS version; recommended for production"
+    }
+  },
+  "styling": {
+    "tailwindcss": {
+      "version": "^3.3.0",
+      "purpose": "Utility-first CSS framework",
+      "notes": "Stable version; v4 coming soon but wait for ecosystem"
+    },
+    "shadcn-svelte": {
+      "version": "^0.11.0",
+      "purpose": "Accessible, copy-paste components (Radix UI + Tailwind)",
+      "notes": "Early stage; may have breaking changes in 0.x (check before updating)"
+    },
+    "lucide-svelte": {
+      "version": "^0.263.0",
+      "purpose": "Icon library",
+      "notes": "Stable; new icons added regularly (safe to update minor)"
+    }
+  },
+  "forms_validation": {
+    "sveltekit-superforms": {
+      "version": "^2.0.0",
+      "purpose": "Server-first form handling with client validation",
+      "notes": "Stable; integrates with Zod schemas"
+    },
+    "zod": {
+      "version": "^3.22.0",
+      "purpose": "Schema validation and TypeScript type inference",
+      "notes": "Stable; widely used in ecosystem"
+    }
+  },
+  "real_time_sync": {
+    "yjs": {
+      "version": "^13.6.0",
+      "purpose": "CRDT algorithm for conflict-free real-time sync",
+      "notes": "Production-proven (used by Figma, Notion); stable API"
+    },
+    "y-protocols": {
+      "version": "^1.0.6",
+      "purpose": "Protocol for Yjs synchronization",
+      "notes": "Required by y-websocket; keep in sync"
+    },
+    "y-websocket": {
+      "version": "^1.5.0",
+      "purpose": "WebSocket provider for Yjs",
+      "notes": "Connects to Supabase Realtime via WebSocket"
+    }
+  },
+  "backend_database": {
+    "supabase": {
+      "version": "^2.38.0",
+      "purpose": "PostgreSQL + Auth + Realtime + Storage (S3-compatible)",
+      "notes": "Stable; covers auth, database, real-time, file storage"
+    },
+    "sharp": {
+      "version": "^0.33.0",
+      "purpose": "Image optimization (WebP, JPEG, responsive sizes)",
+      "notes": "Production-proven; handles native dependencies well"
+    },
+    "date-fns": {
+      "version": "^3.0.0",
+      "purpose": "Date/time utilities (formatting, timezone handling)",
+      "notes": "Lightweight alternative to Moment.js"
+    }
+  },
+  "authorization_permissions": {
+    "casl": {
+      "version": "^6.6.0",
+      "purpose": "Declarative authorization library (@casl/ability for rules)",
+      "notes": "Integrates with RLS policies on database side"
+    }
+  },
+  "testing": {
+    "vitest": {
+      "version": "^1.0.0",
+      "purpose": "Unit and integration test runner (Vite native)",
+      "notes": "Fast, ESM-native; Jest-compatible API"
+    },
+    "playwright": {
+      "version": "^1.40.0",
+      "purpose": "E2E testing (cross-browser)",
+      "notes": "Supports Chrome, Firefox, Safari, plus mobile browsers"
+    },
+    "msw": {
+      "version": "^2.0.0",
+      "purpose": "Mock Service Worker for API mocking",
+      "notes": "Mock requests at network layer; works in tests and dev"
+    },
+    "testing-library-svelte": {
+      "version": "^4.0.0",
+      "purpose": "Component testing utilities",
+      "notes": "Query components like real users would"
+    }
+  },
+  "development_tools": {
+    "typescript": {
+      "version": "^5.3.0",
+      "purpose": "Static type checking",
+      "notes": "Required by SvelteKit; keep up-to-date for type improvements"
+    },
+    "eslint": {
+      "version": "^8.54.0",
+      "purpose": "Code linting",
+      "notes": "Configured via .eslintrc.js"
+    },
+    "prettier": {
+      "version": "^3.1.0",
+      "purpose": "Code formatting",
+      "notes": "Opinionated formatter; run before commit"
+    },
+    "svelte-check": {
+      "version": "^3.6.0",
+      "purpose": "Type-check Svelte files",
+      "notes": "Run in CI/CD to catch type errors in templates"
+    }
+  },
+  "update_history": [
+    {
+      "date": "2025-01-14",
+      "version": "1.0.0",
+      "notes": "Initial lock file for Phase 1 MVP (Constitution v2.2.0)"
+    }
+  ],
+  "installation_command": "npm ci --omit=dev (production) OR npm ci (development with devDependencies)",
+  "verification_command": "npm ls --depth=0 (verify installed versions match lock file)"
+}

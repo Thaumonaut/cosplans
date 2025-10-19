@@ -1,144 +1,138 @@
-# Feature Specification: Portfolio/Gallery
+# Feature Specification: Editing Task Assignment
 
-**Feature Branch**: `015-portfolio-gallery`  
+**Feature Branch**: `009-009-editing-task`  
 **Created**: 2025-10-15  
 **Status**: Draft  
-**Input**: User description: "015-portfolio-gallery"
+**Input**: Assign photos to editors, track editing status, annotation tools, version history, approval workflow
 
 ## User Scenarios & Testing *(mandatory)*
 
-### User Story 1 - Public Portfolio Pages (Priority: P1)
+### User Story 1 - Assign Photos to Editors (Priority: P1)
 
-Photographers and teams can create public portfolio pages showcasing their best cosplay photoshoot work with custom URLs, organized galleries by event/character, and responsive image grids that load quickly on any device.
+As a photographer/lead, I want to assign specific photos from a shoot to editors so that editing work is distributed clearly and progress can be tracked.
 
-**Why this priority**: Core portfolio functionality that allows photographers to share their work professionally with potential clients and the cosplay community.
+**Why this priority**: Core task assignment - the foundation for all editing coordination and workflow management.
 
-**Independent Test**: Can be fully tested by creating a portfolio page, uploading images, organizing into galleries, and accessing via custom URL with responsive layout verification.
+**Independent Test**: User can select photos, assign to editors, editors see their assigned photos with download/edit capabilities.
 
 **Acceptance Scenarios**:
 
-1. **Given** a photographer account with completed shoots, **When** user creates portfolio page and selects custom URL (e.g., /portfolio/username), **Then** page is publicly accessible with chosen URL and displays uploaded images
-2. **Given** a portfolio with multiple shoots, **When** user organizes photos into galleries by event/character, **Then** galleries display as separate collections with titles and descriptions
-3. **Given** a public portfolio URL, **When** visitor views on mobile/tablet/desktop, **Then** image grid adjusts responsively with optimized loading (lazy load, thumbnails)
+1. **Given** shoot has 50 uploaded photos, **When** I select 10 photos and assign to "@editor_sarah", **Then** Sarah sees 10 assigned photos in her editing queue
+2. **Given** I'm assigning photos, **When** I select multiple editors, **Then** same photos can be assigned to multiple people (e.g., primary and backup editor)
+3. **Given** editor receives assignment, **When** they view their queue, **Then** photos display with shoot context (shoot name, date, character details)
+4. **Given** assignments are made, **When** I view shoot overview, **Then** I see "15 photos assigned to Sarah, 20 to Mike, 15 unassigned"
 
 ---
 
-### User Story 2 - Client Access with Codes (Priority: P2)
+### User Story 2 - Track Editing Status (Priority: P2)
 
-Photographers can generate unique access codes for private galleries, allowing clients/models to view their specific photoshoot images without requiring accounts, with optional download permissions and expiration dates.
+As an editor, I want to mark photos as "Not Started", "In Progress", "Ready for Review", or "Approved" so that the team knows editing progress in real-time.
 
-**Why this priority**: Enables professional client delivery workflow, building on P1's public portfolio with private access control.
+**Why this priority**: Status visibility enables coordination. Builds on P1 assignments with progress tracking.
 
-**Independent Test**: Can be fully tested by creating private gallery, generating access code, sharing with client (no account), and verifying code-gated access with download controls.
+**Independent Test**: Editor can update status per photo, photographer sees real-time status updates and filtering options.
 
 **Acceptance Scenarios**:
 
-1. **Given** a completed photoshoot, **When** photographer creates private gallery and generates access code, **Then** code is created with unique URL and configurable expiration date (7/30/90 days)
-2. **Given** a client with access code, **When** client enters code on landing page, **Then** private gallery unlocks showing only their photos without requiring login
-3. **Given** a private gallery with download permissions enabled, **When** client clicks download button, **Then** full-resolution images download as ZIP file with watermarks optionally applied
+1. **Given** I have 10 assigned photos, **When** I start editing photo #1, I mark it "In Progress", **Then** status updates for whole team with timestamp
+2. **Given** I finish editing photo #1, **When** I mark "Ready for Review", **Then** photographer receives notification and photo appears in their review queue
+3. **Given** photographer reviews photo, **When** they mark "Approved", **Then** photo moves to finals collection and I see confirmation
+4. **Given** shoot has mixed statuses, **When** viewing overview, **Then** progress shows "5 approved, 3 ready for review, 4 in progress, 3 not started"
 
 ---
 
-### User Story 3 - Watermarking & Branding (Priority: P3)
+### User Story 3 - Add Editing Notes & Annotations (Priority: P3)
 
-Users can apply custom watermarks (logo, text, signature) to portfolio images with configurable position, opacity, and size, plus add team branding (colors, fonts, header images) to portfolio pages for consistent professional presentation.
+As a photographer providing feedback, I want to add text notes or visual annotations (arrows, circles, comments) to photos so that editors understand exactly what changes are needed.
 
-**Why this priority**: Protects intellectual property and enhances professional branding, building on P1-P2's sharing capabilities.
+**Why this priority**: Improves communication quality. Works with P2 review workflow to clarify editing direction.
 
-**Independent Test**: Can be fully tested by uploading watermark image, configuring placement/opacity, applying to gallery images, and viewing portfolio with branded theme.
+**Independent Test**: User can add text notes and draw annotations on photos, annotations save and display for assigned editor.
 
 **Acceptance Scenarios**:
 
-1. **Given** a photographer with logo image, **When** user uploads watermark and configures placement (corner, center, opacity 30-100%), **Then** watermark applies to all portfolio images automatically
-2. **Given** portfolio images with watermarks, **When** visitor views or downloads images, **Then** watermark is embedded on displayed/downloaded versions (not originals)
-3. **Given** a team portfolio page, **When** user customizes branding (colors, fonts, header image), **Then** portfolio displays with custom theme matching team identity
+1. **Given** photo is "Ready for Review", **When** I add note "Please brighten face by +0.5 stops", **Then** note appears with photo for editor and me
+2. **Given** I'm reviewing photo, **When** I use annotation tool to circle area and add "Remove photobomber here", **Then** arrow/circle saves as layer on image preview
+3. **Given** editor views photo with annotations, **When** they click annotation marker, **Then** full note and annotation display clearly
+4. **Given** photo has multiple rounds of feedback, **When** viewing note history, **Then** all previous notes show with timestamps and authors
 
 ---
 
-### User Story 4 - Tags, Filters & Search (Priority: P4)
+### User Story 4 - Version History (Priority: P4)
 
-Visitors can filter portfolio galleries by tags (character, series, location, costume type), search by keywords, and sort images by date/popularity, making it easy to find specific work within large portfolios.
+As an editor, I want to upload multiple versions of an edited photo so that we can compare edits and revert if needed without losing work.
 
-**Why this priority**: Improves portfolio navigation and discoverability for visitors, enhancing the viewing experience after core features are established.
+**Why this priority**: Protects work and enables iteration. Valuable for professional workflows but basic editing works without versions.
 
-**Independent Test**: Can be fully tested by tagging portfolio images, using filter dropdowns and search box to narrow results, and verifying correct images display per criteria.
+**Independent Test**: User can upload v1, v2, v3 of same photo, switch between versions, compare side-by-side.
 
 **Acceptance Scenarios**:
 
-1. **Given** portfolio images tagged with character/series/location, **When** visitor clicks tag filter dropdown, **Then** only images matching selected tags display in gallery
-2. **Given** a portfolio with 100+ images, **When** visitor types search query (e.g., "Final Fantasy"), **Then** search results show images with matching tags, titles, or descriptions
-3. **Given** filtered gallery results, **When** visitor changes sort order (newest, oldest, most viewed), **Then** images reorder accordingly with smooth transition
+1. **Given** I edited photo and marked "Ready for Review", **When** I upload new version after feedback, **Then** system stores v1 and displays v2 as current
+2. **Given** photo has 3 versions, **When** photographer views it, **Then** version dropdown shows "v1 (Oct 12), v2 (Oct 13), v3 (Oct 14 - current)"
+3. **Given** I want to compare versions, **When** I select "Compare v1 and v3", **Then** side-by-side view displays both with swipe/toggle
+4. **Given** v2 was better than v3, **When** photographer marks "Use v2 as final", **Then** v2 becomes approved version and v3 remains in history
 
 ---
 
 ### Edge Cases
 
-- What happens when custom URL is already taken? System MUST check URL availability on save, show error if taken, suggest alternatives (username2, username-photo, etc.), and allow user to choose different URL
-- How are large image collections handled for performance? System MUST implement lazy loading (load images as user scrolls), thumbnail generation (200x200px, 800x800px), and pagination (50 images per page) to maintain < 3s page load
-- What if access code is shared publicly? System MUST allow photographers to invalidate/regenerate codes, track code usage (views, downloads), and set usage limits (max 100 views per code)
-- How are expired access codes handled? System MUST automatically revoke access when expiration date passes, show "Code Expired" message to visitors, and notify photographer 48 hours before expiration
-- What happens when visitor downloads gallery with 500+ images? System MUST queue ZIP generation as background job, email download link when ready (< 10 min), and expire link after 7 days
-- How are watermarks applied to various aspect ratios? System MUST detect image dimensions, scale watermark proportionally (5-20% of image size), and position based on user preference (corner, center) without distortion
-- What if portfolio page has no images? System MUST show placeholder state with "No images yet" message, upload button for owner, and hide empty portfolio from public listing until 1+ image added
-- How are deleted images handled in shared access codes? System MUST remove deleted images from all galleries/codes immediately, show "Image Removed" placeholder in gallery view, and update download counts
+- What happens when editor downloads photo for offline editing? (Track download but don't block other assignments, allow manual upload of edited version)
+- How to handle very large RAW files (50MB+)? (Support but provide thumbnail previews, full res download on demand)
+- What if photographer wants to reassign photo mid-edit? (Allow reassignment, notify original editor, preserve work/status)
+- Should there be edit deadlines per photo? (Optional deadline field with reminders 24hrs before)
+- How to handle batch status updates? (Select multiple, update status all at once)
+- What if annotation tools are used on mobile? (Support basic touch annotations, full tools on desktop)
+- Should approved photos be locked from further edits? (Soft lock with "Reopen editing" option requiring photographer approval)
+- How to handle color profile/calibration differences? (Display profile metadata, warn if mismatched)
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
-#### Portfolio Creation & Management (FR-001 to FR-006)
-
-- **FR-001**: System MUST allow users to create public portfolio pages with custom URL slugs (alphanumeric, hyphens, 3-50 characters) that are publicly accessible without authentication
-- **FR-002**: System MUST allow users to upload images to portfolio galleries with automatic thumbnail generation (200px, 800px, original) and metadata preservation (date, camera, location)
-- **FR-003**: System MUST allow users to organize portfolio images into named galleries (e.g., "Anime Expo 2025", "Final Fantasy Shoots") with titles, descriptions, and cover images
-- **FR-004**: System MUST display portfolio pages with responsive image grid layouts that adapt to screen size (1 column mobile, 2-3 tablet, 3-4 desktop)
-- **FR-005**: System MUST implement lazy loading for portfolio images, loading thumbnails as user scrolls with smooth fade-in transitions
-- **FR-006**: System MUST allow users to reorder galleries and images within galleries via drag-and-drop interface with real-time preview
-
-#### Client Access & Private Galleries (FR-007 to FR-011)
-
-- **FR-007**: System MUST allow photographers to create private galleries with unique access codes (8-character alphanumeric) that unlock gallery view without account creation
-- **FR-008**: System MUST allow photographers to set expiration dates for access codes (7, 30, 90 days, or custom date) with automatic revocation after expiration
-- **FR-009**: System MUST allow photographers to configure download permissions per gallery (enabled/disabled, original resolution/web resolution, with/without watermarks)
-- **FR-010**: System MUST track access code usage including view count, unique visitors, and download count per code
-- **FR-011**: System MUST allow photographers to regenerate/invalidate access codes and notify affected clients via email with new code
-
-#### Watermarking & Branding (FR-012 to FR-016)
-
-- **FR-012**: System MUST allow users to upload watermark images (PNG with transparency preferred) and configure placement (top-left, top-right, bottom-left, bottom-right, center)
-- **FR-013**: System MUST apply watermarks to portfolio/gallery images at configurable opacity (30-100%) and size (5-20% of image dimensions) without distorting original
-- **FR-014**: System MUST apply watermarks to displayed and downloaded images but never modify original uploaded files
-- **FR-015**: System MUST allow teams to customize portfolio branding including color scheme (primary, secondary), fonts (header, body), and header images
-- **FR-016**: System MUST generate branded portfolio URLs with custom domains (e.g., portfolio.cosplayteam.com) if user provides DNS configuration
-
-#### Tags, Filters & Search (FR-017 to FR-021)
-
-- **FR-017**: System MUST allow users to tag portfolio images with multiple tags (character, series, location, costume type, photographer) and suggest previously used tags during entry
-- **FR-018**: System MUST provide filter interface on portfolio pages with multi-select dropdowns for each tag category, updating results in real-time as filters change
-- **FR-019**: System MUST provide search functionality across portfolio images matching tags, gallery titles, descriptions, and image metadata
-- **FR-020**: System MUST allow visitors to sort portfolio images by newest, oldest, most viewed, or manual order (photographer-defined)
-- **FR-021**: System MUST display tag clouds on portfolio pages showing most frequently used tags with size reflecting usage count
+- **FR-001**: System MUST allow selecting one or more photos from shoot and assigning to one or more editors
+- **FR-002**: System MUST display assigned photos in editor's personal editing queue with shoot context
+- **FR-003**: System MUST show assignment overview per shoot: assigned count per editor, unassigned count
+- **FR-004**: System MUST support photo statuses: Not Started, In Progress, Ready for Review, Approved
+- **FR-005**: System MUST allow editors to update photo status with real-time sync (< 2 seconds) to all team members
+- **FR-006**: System MUST notify photographer when photo marked "Ready for Review"
+- **FR-007**: System MUST display shoot-wide progress summary with counts per status
+- **FR-008**: System MUST support filtering photos by status and assigned editor
+- **FR-009**: System MUST allow adding text notes to photos (max 1000 characters per note)
+- **FR-010**: System MUST support visual annotations on photos: arrows, circles, rectangles, freehand drawing, text boxes
+- **FR-011**: System MUST save annotations as non-destructive layer overlay on image preview
+- **FR-012**: System MUST display all notes and annotations to photo owner and assigned editors
+- **FR-013**: System MUST preserve note history with timestamp and author for each note
+- **FR-014**: System MUST support uploading multiple versions of same photo (v1, v2, v3...)
+- **FR-015**: System MUST display version history with upload date and version number
+- **FR-016**: System MUST allow selecting which version is "current" for review
+- **FR-017**: System MUST provide side-by-side version comparison view
+- **FR-018**: System MUST support high-resolution image display (RAW, PNG, JPG up to 50MB)
+- **FR-019**: System MUST generate thumbnail previews for fast loading (< 1 second on 3G)
+- **FR-020**: System MUST allow reassigning photos with notification to original and new editor
+- **FR-021**: System MUST support optional deadline per photo with 24-hour reminder notifications
+- **FR-022**: System MUST support batch operations: assign multiple photos at once, update status for multiple at once
 
 ### Key Entities
 
-- **PortfolioPage**: Public or team portfolio with custom URL, branding settings, galleries, and view analytics
-- **Gallery**: Named collection of images within portfolio with title, description, cover image, access settings (public/private)
-- **PortfolioImage**: Image in portfolio with thumbnail URLs, tags, metadata, watermark settings, view/download counts
-- **AccessCode**: Unique code for private gallery access with expiration date, download permissions, usage tracking
-- **Watermark**: Uploaded watermark image with placement, opacity, size settings applied to portfolio images
-- **PortfolioBranding**: Team branding configuration with colors, fonts, header image, custom domain settings
+- **PhotoAssignment**: Links photo to editor. Attributes: photo ID, shoot ID, assigned editor user ID, assigned date, status (Not Started/In Progress/Ready for Review/Approved), deadline (optional), status updated timestamp
+- **EditingNote**: Feedback on photo. Attributes: photo ID, author user ID, note text, created timestamp
+- **PhotoAnnotation**: Visual markup on photo. Attributes: photo ID, annotation type (arrow/circle/rectangle/freehand/textbox), coordinates/path data, label text, author user ID, created timestamp
+- **PhotoVersion**: Multiple versions of edited photo. Attributes: photo ID, version number, file path, uploaded by user ID, upload timestamp, is current version (boolean)
+- **Photo**: From existing system. Extended with: current status, version count, assignment references
 
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
 
-- **SC-001**: Portfolio pages load in under 3 seconds on 3G connection with 50+ images
-- **SC-002**: Custom URL availability check completes in under 1 second with clear suggestions if taken
-- **SC-003**: Access code generation and email delivery completes in under 2 minutes
-- **SC-004**: Watermark application to gallery images (20 photos) completes in under 30 seconds
-- **SC-005**: 95% of visitors successfully access private galleries on first attempt using provided code
-- **SC-006**: ZIP download generation for 100 images completes in under 10 minutes with email notification
-- **SC-007**: Image lazy loading triggers 500px before scrolling into view for smooth browsing experience
-- **SC-008**: Tag filter updates gallery view in under 1 second showing relevant images
-- **SC-009**: 90% of photographers successfully create and share portfolio within 15 minutes on first use
-- **SC-010**: Portfolio pages display correctly on mobile/tablet/desktop with responsive breakpoints (320px, 768px, 1024px)
+- **SC-001**: Users can assign 20 photos to an editor in under 1 minute
+- **SC-002**: Status updates sync to all team members within 2 seconds
+- **SC-003**: Editor receives "Ready for Review" notification within 30 seconds of status change
+- **SC-004**: Photo thumbnails load in under 1 second on 3G connection
+- **SC-005**: Full-resolution photo (up to 50MB) downloads in under 10 seconds on broadband
+- **SC-006**: Annotation tools respond with < 100ms latency for smooth drawing
+- **SC-007**: Version comparison view loads both images in under 3 seconds
+- **SC-008**: 80% of assigned photos reach "Approved" status (indicates workflow completion)
+- **SC-009**: Shoots using editing workflow complete post-production 30% faster than without (measured by time from shoot to final delivery)
+- **SC-010**: Photographers using annotation tools report 50% fewer clarification questions from editors (measured via survey)
+

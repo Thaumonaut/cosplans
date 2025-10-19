@@ -1,0 +1,720 @@
+openapi: 3.0.3
+info:
+  title: Cosplans User Management API
+  description: Authentication and authorization API for the Cosplans application
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@cosplans.com
+
+servers:
+  - url: https://api.cosplans.com
+    description: Production server
+  - url: http://localhost:5173
+    description: Development server
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    SessionAuth:
+      type: apiKey
+      in: cookie
+      name: sb-access-token
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique user identifier
+        email:
+          type: string
+          format: email
+          description: User's email address
+        first_name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: User's first name
+        last_name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: User's last name
+        avatar_url:
+          type: string
+          format: uri
+          description: URL to user's profile picture
+        bio:
+          type: string
+          maxLength: 1000
+          description: User's biography
+        created_at:
+          type: string
+          format: date-time
+          description: Account creation timestamp
+        updated_at:
+          type: string
+          format: date-time
+          description: Last profile update timestamp
+
+    AuthResponse:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        session:
+          type: object
+          properties:
+            access_token:
+              type: string
+              description: JWT access token
+            refresh_token:
+              type: string
+              description: Refresh token
+            expires_at:
+              type: number
+              description: Token expiration timestamp
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+        code:
+          type: string
+          description: Error code for programmatic handling
+
+    PasswordResetRequest:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+          description: Email address for password reset
+
+    PasswordResetConfirm:
+      type: object
+      required:
+        - token
+        - password
+      properties:
+        token:
+          type: string
+          description: Password reset token from email
+        password:
+          type: string
+          minLength: 8
+          description: New password (must meet requirements)
+
+    ProfileUpdateRequest:
+      type: object
+      properties:
+        first_name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        last_name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        avatar_url:
+          type: string
+          format: uri
+        bio:
+          type: string
+          maxLength: 1000
+
+    Role:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          description: Role name (e.g., "admin", "member")
+        permissions:
+          type: array
+          items:
+            type: string
+          description: List of permissions granted by this role
+
+    TeamMember:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        team_id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        role:
+          $ref: '#/components/schemas/Role'
+        assigned_at:
+          type: string
+          format: date-time
+
+paths:
+  # Authentication Endpoints
+  /auth/signup:
+    post:
+      summary: User registration
+      description: Create a new user account with email verification
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+                - first_name
+                - last_name
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  minLength: 8
+                  description: Must contain uppercase, lowercase, and numbers
+                first_name:
+                  type: string
+                  minLength: 1
+                  maxLength: 100
+                last_name:
+                  type: string
+                  minLength: 1
+                  maxLength: 100
+      responses:
+        '201':
+          description: Account created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Please check your email for verification link"
+        '400':
+          description: Invalid input or email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/login:
+    post:
+      summary: User login
+      description: Authenticate user and return session tokens
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  minLength: 1
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '423':
+          description: Account locked due to too many failed attempts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Rate limit exceeded
+
+  /auth/logout:
+    post:
+      summary: User logout
+      description: Terminate current session
+      tags:
+        - Authentication
+      security:
+        - BearerAuth: []
+        - SessionAuth: []
+      responses:
+        '200':
+          description: Logout successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Successfully logged out"
+        '401':
+          description: Not authenticated
+
+  /auth/refresh:
+    post:
+      summary: Refresh session token
+      description: Get new access token using refresh token
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - refresh_token
+              properties:
+                refresh_token:
+                  type: string
+      responses:
+        '200':
+          description: Token refreshed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                  expires_at:
+                    type: number
+        '401':
+          description: Invalid or expired refresh token
+
+  /auth/forgot-password:
+    post:
+      summary: Request password reset
+      description: Send password reset email to user
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequest'
+      responses:
+        '200':
+          description: Reset email sent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Password reset email sent"
+        '429':
+          description: Rate limit exceeded
+
+  /auth/reset-password:
+    post:
+      summary: Confirm password reset
+      description: Set new password using reset token
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirm'
+      responses:
+        '200':
+          description: Password reset successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: Invalid or expired reset token
+
+  /auth/verify-email:
+    post:
+      summary: Verify email address
+      description: Confirm email address using verification token
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - token
+              properties:
+                token:
+                  type: string
+                  description: Email verification token
+      responses:
+        '200':
+          description: Email verified successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Email verified successfully"
+        '400':
+          description: Invalid or expired verification token
+
+  # Profile Management Endpoints
+  /profile:
+    get:
+      summary: Get user profile
+      description: Retrieve current user's profile information
+      tags:
+        - Profile
+      security:
+        - BearerAuth: []
+        - SessionAuth: []
+      responses:
+        '200':
+          description: Profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Not authenticated
+
+    put:
+      summary: Update user profile
+      description: Update current user's profile information
+      tags:
+        - Profile
+      security:
+        - BearerAuth: []
+        - SessionAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileUpdateRequest'
+      responses:
+        '200':
+          description: Profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Not authenticated
+
+  # Authorization Endpoints (Admin only)
+  /teams/{teamId}/members:
+    get:
+      summary: Get team members
+      description: Retrieve all members of a team with their roles
+      tags:
+        - Authorization
+      security:
+        - BearerAuth: []
+        - SessionAuth: []
+      parameters:
+        - name: teamId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Team members retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TeamMember'
+        '403':
+          description: Insufficient permissions
+        '404':
+          description: Team not found
+
+    post:
+      summary: Add team member
+      description: Add a user to a team with specified role
+      tags:
+        - Authorization
+      security:
+        - BearerAuth: []
+        - SessionAuth: []
+      parameters:
+        - name: teamId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - user_id
+                - role_id
+              properties:
+                user_id:
+                  type: string
+                  format: uuid
+                  description: ID of user to add to team
+                role_id:
+                  type: string
+                  format: uuid
+                  description: ID of role to assign
+      responses:
+        '201':
+          description: Member added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamMember'
+        '400':
+          description: Invalid input data
+        '403':
+          description: Insufficient permissions
+        '404':
+          description: Team or role not found
+
+  /teams/{teamId}/members/{userId}:
+    put:
+      summary: Update team member role
+      description: Change a team member's role assignment
+      tags:
+        - Authorization
+      security:
+        - BearerAuth: []
+        - SessionAuth: []
+      parameters:
+        - name: teamId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - role_id
+              properties:
+                role_id:
+                  type: string
+                  format: uuid
+                  description: New role ID to assign
+      responses:
+        '200':
+          description: Role updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamMember'
+        '400':
+          description: Invalid role ID
+        '403':
+          description: Insufficient permissions
+        '404':
+          description: Team member not found
+
+    delete:
+      summary: Remove team member
+      description: Remove a user from a team
+      tags:
+        - Authorization
+      security:
+        - BearerAuth: []
+        - SessionAuth: []
+      parameters:
+        - name: teamId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Member removed successfully
+        '403':
+          description: Insufficient permissions (cannot remove team owner)
+        '404':
+          description: Team member not found
+
+  # Audit and Security Endpoints
+  /auth/audit:
+    get:
+      summary: Get authentication audit log
+      description: Retrieve authentication events for current user (for security monitoring)
+      tags:
+        - Security
+      security:
+        - BearerAuth: []
+        - SessionAuth: []
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        '200':
+          description: Audit log retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        event_type:
+                          type: string
+                        timestamp:
+                          type: string
+                          format: date-time
+                        ip_address:
+                          type: string
+        '401':
+          description: Not authenticated
+
+  /auth/deactivate:
+    post:
+      summary: Request account deactivation
+      description: Start the account deletion process (30-day grace period)
+      tags:
+        - Account Management
+      security:
+        - BearerAuth: []
+        - SessionAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - password
+              properties:
+                password:
+                  type: string
+                  description: Current password for verification
+      responses:
+        '200':
+          description: Deactivation request submitted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Account deactivation scheduled. You have 30 days to cancel."
+        '400':
+          description: Invalid password
+        '401':
+          description: Not authenticated
+
+  /auth/reactivate:
+    post:
+      summary: Cancel account deactivation
+      description: Cancel pending account deletion within grace period
+      tags:
+        - Account Management
+      security:
+        - BearerAuth: []
+        - SessionAuth: []
+      responses:
+        '200':
+          description: Deactivation cancelled successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Account deactivation cancelled"
+        '400':
+          description: No pending deactivation or grace period expired
+        '401':
+          description: Not authenticated

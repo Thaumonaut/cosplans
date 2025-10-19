@@ -4,90 +4,154 @@
 
 **Last Updated**: 2025-10-15
 
----
-
-## Current Specifications (In Progress)
-
-| ID | Feature | Status | Branch |
-|----|---------|--------|--------|
-| 001 | Shoot Transfer Between Teams | ✅ Spec Complete | `001-shoot-transfer` |
-| 002 | AI-Generated Reference Poses with Face Swap | ✅ Spec Complete | `002-ai-references` |
-| 003 | AI-Powered Backdrop and Location Suggestions | ✅ Spec Complete | `003-generate-backdrop-or` |
+**Strategy**: MVP focused on **user acquisition through public sharing** and **core creative planning**. Budget features demoted in favor of viral growth mechanisms.
 
 ---
 
-## High Priority Features (Next to Spec)
+## Phase 0: Foundation (Build First) ✅ SPECS COMPLETE
 
-These features are critical to the core cosplay photoshoot workflow and should be implemented early.
+These are the absolute essentials - without them, no other features can function.
 
-### Content Creation & Planning
+| ID | Feature | Status | Branch | Why Critical |
+|----|---------|--------|--------|--------------|
+| 023 | **User Authentication & Teams** | ✅ Spec Complete | `023-user-authentication-teams` | Users need accounts, teams for collaboration |
+| 024 | **Dashboard & Shoot List** | ✅ Spec Complete | `024-dashboard-shoot-list` | Primary navigation hub, first page after login |
+| 022 | **Shoot Details Page (Central Hub)** | ✅ Spec Complete | `022-details-page-for` | Most important page - all planning happens here |
 
-| Feature | Description | Why High Priority |
-|---------|-------------|-------------------|
-| **Shot-by-Shot Planning** | Storyboard builder with shot list, director notes, camera angles, timing markers, and reference images per shot. Shot status tracking and on-set checklists. | Core feature for organized shoots. Differentiates from generic project tools. Essential for complex choreographed content. |
-| **Trending Audio Integration** | Browse/save trending audio from Instagram/TikTok, attach to shoots, mark audio beats, calculate shot timing, trend alerts. | Critical for viral content creation. Most cosplay shoots are now for reels/TikToks. Helps content perform better. |
+**Value After Phase 0**: Users can create accounts, form teams, view shoots in dashboard, and create/edit detailed shoot plans with reference organization.
 
-### Logistics & Organization
-
-| Feature | Description | Why High Priority |
-|---------|-------------|-------------------|
-| **Budget Tracking & Expenses** | Set budgets per shoot, track expenses by category (costumes, props, location, travel), shared expense splitting, receipt uploads. | Helps users stay within budget. Common pain point. Required for professional cosplayers tracking ROI. |
-| **Gear Checklist Management** | Photography gear checklists, costume piece tracking, prop inventory with "packed" status, pre-shoot verification, ownership tracking. | Prevents forgetting critical items on shoot day. Very common problem that ruins shoots. |
-| **Weather Integration** | Weather forecast for locations, rain/wind alerts, alternative date suggestions, indoor backup recommendations. | Weather makes or breaks outdoor shoots. Proactive planning saves wasted trips and money. |
-| **Editing Task Assignment** | Assign photos to editors, track editing status (raw → edited → approved), annotation tools, version history, approval workflow. | Editing is major bottleneck. Prevents "did you finish editing?" messages. Essential for team coordination. |
+**Timeline**: Weeks 1-6
 
 ---
 
-## Medium Priority Features
+## Phase 1: MVP Core Features (Launch Blockers) ✅ SPECS COMPLETE
 
-These enhance existing features and improve user experience but aren't critical for MVP.
+Features required for MVP launch. Focus on **creative planning** and **user acquisition**.
 
-### Enhanced References & Inspiration
+### Core Planning Features
 
-| Feature | Description | Value |
-|---------|-------------|-------|
-| **Reference Pose Library** | Save/organize reference images from any source, tag by character/difficulty/location, quick "use this pose" linking, community sharing (optional). | Better than camera roll. Organizes constant inspiration collection. Complements AI pose generation. |
+| ID | Feature | Status | Branch | Why MVP |
+|----|---------|--------|--------|---------|
+| 004 | **Shot-by-Shot Planning** | ✅ Spec Complete | `004-shot-by-shot` | Core differentiator. Organized shoots. Integrates with spec 022. |
+| 011 | **Reference Pose Library** | ✅ Spec Complete | `010-reference-pose-library` | Better than camera roll. Essential for creative planning. Complements spec 022 references. |
+| 007 | **Gear Checklist Management** | ✅ Spec Complete | `007-gear-checklist` | Prevents forgetting critical items. Common pain point. |
+| 021 | **Team Notes (P1 only)** | ✅ Spec Complete | `021-team-notes-notion` | Team communication baseline. Notion sync is Phase 2. |
 
-### Team Coordination
+### Growth & Acquisition Features
 
-| Feature | Description | Value |
-|---------|-------------|-------|
-| **Team Communication/Chat** | In-app chat per shoot, polls, @mentions, file sharing, notification preferences. | Reduces context-switching between messaging apps. Keeps planning conversation with shoot data. |
-| **Convention/Event Integration** | Import convention schedules, coordinate group shoots at cons, map meeting spots, track con-specific shoots, badge tracking. | Many shoots happen at conventions. Complex scheduling needs. |
+| ID | Feature | Status | Branch | Why MVP |
+|----|---------|--------|--------|---------|
+| 020 | **Public Shoot Detail Page** | ✅ Spec Complete | `020-create-a-specification` | **CRITICAL FOR GROWTH**. Viral sharing mechanism. Recruit collaborators. Drive signups. |
 
----
+**MVP Value Proposition**:
+> "Plan and share your cosplay photoshoots: organize references and shot lists, share public previews to recruit collaborators, and coordinate with your team—all in one visual hub."
 
-## Lower Priority Features
+**Timeline**: Weeks 7-12
 
-Nice-to-have features that add polish or serve specific use cases. Consider after core features are validated.
-
-### Professional Features
-
-| Feature | Description | Value |
-|---------|-------------|-------|
-| **Model/Photographer Release Forms** | Digital release templates, electronic signatures, form storage per shoot, PDF export. | Legal protection for professional cosplayers. Not needed by hobbyists initially. |
-| **Social Media Post Scheduling** | Schedule edited photos to Instagram/TikTok, caption templates, hashtag suggestions, cross-platform posting, analytics. | Closes loop from planning → shooting → posting. Can use external tools initially (Buffer, Later). |
-| **Portfolio/Gallery View** | Public portfolio pages, filter by character/photographer, embed galleries, watermark options, SEO-friendly URLs. | Showcases work. More important once user has content. Can use external portfolio sites initially. |
-
-### Documentation & Tracking
-
-| Feature | Description | Value |
-|---------|-------------|-------|
-| **Costume Progress Photos** | Progress timeline per costume, before/after comparisons, tutorial notes, social sharing, completion estimates. | Good for build documentation. Secondary to planning features. Can use camera roll initially. |
-| **Contact Directory** | Database of photographers, makeup artists, prop makers with ratings, availability calendars, collaboration history. | Network management. More valuable as user base grows. Can use phone contacts initially. |
+**Total MVP Timeline**: **12 weeks** (Phase 0 + Phase 1)
 
 ---
 
-## Future Considerations
+## Phase 2: Enhanced Features (Post-MVP v1.1)
+
+Features that enhance the core experience but aren't required for launch.
+
+### AI & Automation
+
+| ID | Feature | Status | Branch | Why Post-MVP |
+|----|---------|--------|--------|--------------|
+| 002 | **AI-Generated Reference Poses** | ✅ Spec Complete | `002-ai-references` | Enhances reference library (011) but manual works for MVP |
+| 003 | **AI Backdrop/Location Suggestions** | ✅ Spec Complete | `003-generate-backdrop-or` | Nice enhancement but users can manually find locations |
+| 005 | **Trending Audio Integration** | ✅ Spec Complete | `005-trending-audio` | Important for viral content but can be added post-launch |
+
+### Professional Tools
+
+| ID | Feature | Status | Branch | Why Post-MVP |
+|----|---------|--------|--------|--------------|
+| 006 | **Budget Tracking & Expenses** | ✅ Spec Complete | `006-budget-tracking` | **Demoted from Phase 1**. Valuable but not launch-critical. Users can use spreadsheets initially. |
+| 008 | **Weather Integration** | ✅ Spec Complete | `008-weather-integration` | Prevents wasted trips but users check weather apps |
+
+**Timeline**: +6-8 weeks after MVP launch
+
+---
+
+## Phase 3: Team Collaboration (v1.2-1.3)
+
+Features that improve multi-user workflows and team coordination.
+
+| ID | Feature | Status | Branch | Why Later |
+|----|---------|--------|--------|-----------|
+| 001 | **Shoot Transfer Between Teams** | ✅ Spec Complete | `001-shoot-transfer` | Edge case for team changes, not common workflow |
+| 009 | **Editing Task Assignment** | ✅ Spec Complete | `009-editing-task` | Important for post-shoot but planning features more critical |
+| 012 | **Team Communication/Chat** | ⏳ Not Yet Spec'd | - | Real-time chat is nice but notes (021) cover basics |
+| 021 | **Notion Integration (P2)** | ✅ Spec Complete | `021-team-notes-notion` | Enhances notes but not required for core functionality |
+| 013 | **Model/Photographer Release Forms** | ✅ Spec Complete | `013-model-release-forms` | Legal protection for professionals, hobbyists don't need |
+
+**Timeline**: +3-6 weeks after Phase 2
+
+---
+
+## Phase 4: Professional Features (v2.0+)
+
+Features for serious/professional cosplayers and content creators.
+
+| ID | Feature | Status | Branch | Target Users |
+|----|---------|--------|--------|--------------|
+| 012 | **Convention/Event Integration** | ✅ Spec Complete | `012-convention-event` | Users attending cons regularly |
+| 014 | **Social Media Post Scheduling** | ✅ Spec Complete | `014-social-media-scheduling` | Content creators posting regularly |
+| 015 | **Portfolio/Gallery View** | ✅ Spec Complete | `015-portfolio-gallery` | Photographers showcasing work |
+| 016 | **Costume Progress Photos** | ✅ Spec Complete | `016-costume-progress-photos` | Costume builders documenting process |
+| 017 | **Contact Directory** | ✅ Spec Complete | `017-contact-directory` | Frequent collaborators managing network |
+
+**Timeline**: v2.0+ (6+ months post-launch)
+
+---
+
+## Phase 5: Future Considerations
 
 Ideas to explore after core product-market fit is established.
 
-- **Team Analytics**: Track shoot completion rates, time estimates vs actual, budget accuracy, team member contributions
+- **Team Analytics**: Track shoot completion rates, time estimates vs actual, budget accuracy
 - **Marketplace Integration**: Connect with costume commissioners, prop makers, photographers for hire
 - **Event Discovery**: Find local cosplay meetups, photoshoots, conventions
 - **Skill Sharing**: Tutorial library, technique guides, community Q&A
-- **Costume Pattern Library**: Store and share sewing patterns, 3D print files, craft templates
-- **Sponsorship Tools**: Track brand partnerships, sponsored content requirements, payment tracking
+- **Costume Pattern Library**: Store and share sewing patterns, 3D print files
+- **Sponsorship Tools**: Track brand partnerships, sponsored content requirements
+
+---
+
+## Key Strategic Decisions
+
+### ✅ What Changed in This Roadmap
+
+| Feature | Before | After | Rationale |
+|---------|--------|-------|-----------|
+| **Reference Pose Library (011)** | Medium Priority | **Phase 1 MVP** | Core to creative planning. Without it, reference management in 022 is basic file storage. |
+| **Public Shoot Pages (020)** | Phase 3 Collaboration | **Phase 1 MVP** | **Main user acquisition channel**. Organic growth through viral sharing. |
+| **Budget Tracking (006)** | Phase 1 MVP | **Phase 2 Enhanced** | Nice-to-have but doesn't drive signups. Spreadsheets work initially. |
+| **Team Communication (012)** | High Priority | **Phase 3** | Team notes (021 P1) cover basics. Full chat can wait. |
+
+### 🎯 User Acquisition Strategy
+
+**Viral Loop with Public Sharing**:
+```
+1. User creates shoot with cool references
+   ↓
+2. Generates public link (Spec 020)
+   ↓
+3. Shares on Reddit: "Looking for photographer for this Genshin shoot!"
+   ↓
+4. Non-users click link → see beautiful shoot preview
+   ↓
+5. "I want to plan shoots like this" → Sign up
+   ↓
+6. New user creates their own shoot → shares publicly
+   ↓
+7. Loop repeats (exponential growth)
+```
+
+**Without public sharing**: Users plan privately → no discovery → linear growth via ads only  
+**With public sharing**: Every shoot is a marketing asset → exponential organic growth
 
 ---
 
@@ -96,16 +160,82 @@ Ideas to explore after core product-market fit is established.
 When evaluating new features, consider:
 
 1. **Constitutional Alignment**: Does it support mobile-first, real-time collaboration, visual-first content?
-2. **User Pain Point Severity**: How much does this problem hurt users daily?
-3. **Differentiation**: Does this set us apart from generic project management tools?
-4. **Development Complexity**: Can we ship value quickly?
-5. **User Adoption Impact**: Will users understand and use this feature?
+2. **User Acquisition Impact**: Does this help new users discover and join Cosplans?
+3. **User Pain Point Severity**: How much does this problem hurt users daily?
+4. **Differentiation**: Does this set us apart from generic project management tools?
+5. **Development Complexity**: Can we ship value quickly?
+6. **Network Effects**: Does this feature become more valuable as more users join?
+
+---
+
+## MVP Development Phases (12 Week Timeline)
+
+### **Phase 0.1: Foundation (Weeks 1-3)**
+1. Spec 023: Authentication (signup, login, OAuth)
+2. Spec 023: Team management (create teams, invite members)
+3. Spec 024: Basic dashboard (view shoots, filters)
+
+### **Phase 0.2: Core Shoot Management (Weeks 4-6)**
+4. Spec 022: Shoot CRUD (create, view, edit)
+5. Spec 022: References section (manual upload, organize)
+6. Spec 024: Dashboard search and advanced filters
+
+### **Phase 1.1: Planning Features (Weeks 7-9)**
+7. Spec 011: Reference Pose Library (save, tag, organize references)
+8. Spec 004: Shot-by-Shot Planning (integrate into 022)
+9. Spec 021: Team Notes (basic P1 features)
+10. Spec 007: Gear Checklist Management
+
+### **Phase 1.2: Growth & Launch Prep (Weeks 10-12)**
+11. **Spec 020: Public Shoot Detail Page** (shareable links, privacy controls, RSVP)
+12. Spec 022: Auto-save, real-time sync
+13. Spec 024: Performance optimization (< 3s load time)
+14. Public sharing OpenGraph tags (social media previews)
+15. Testing, bug fixes, analytics setup
+
+**🚀 Launch Ready**: Week 12
+
+---
+
+## Success Metrics by Phase
+
+### Phase 0 Success
+- ✅ Users can create accounts in under 2 minutes
+- ✅ 95% of new users successfully create first shoot
+- ✅ Dashboard loads in under 2 seconds
+
+### Phase 1 (MVP) Success
+- ✅ 30% of shoots enable public sharing within first month
+- ✅ 20% increase in signups from public shoot link referrals
+- ✅ Average 10+ reference images per shoot
+- ✅ 70% of shoots create shot lists
+
+### Phase 2+ Success
+- ✅ 40% of users utilize AI reference generation
+- ✅ Budget tracking used by 50% of professional users
+- ✅ Notion integration adopted by 20% of teams
 
 ---
 
 ## Next Steps
 
-1. Create specifications for High Priority features using `/speckit.specify`
-2. Validate prioritization with target users (cosplayers, photographers)
-3. Plan MVP feature set for Phase 1 (SvelteKit web)
-4. Review roadmap quarterly based on user feedback
+1. ✅ **Phase 0 Specs Complete** - Authentication, Dashboard, Shoot Details
+2. ✅ **Phase 1 Specs Complete** - Shot Planning, Reference Library, Public Sharing, Notes, Gear
+3. 🔄 **Start Development** - Begin with Spec 023 (authentication)
+4. 📋 **Technical Planning** - Use `/speckit.plan` on each spec to break down implementation
+5. 🎨 **Design System** - Create UI component library in SvelteKit
+6. 🧪 **Testing Strategy** - Set up Playwright for E2E tests (per constitution)
+
+---
+
+## Specification Status
+
+| Phase | Specs Complete | Specs Pending | Ready to Build |
+|-------|----------------|---------------|----------------|
+| **Phase 0** | 3/3 (100%) | 0 | ✅ YES |
+| **Phase 1** | 5/5 (100%) | 0 | ✅ YES |
+| **Phase 2** | 5/5 (100%) | 0 | ✅ YES |
+| **Phase 3** | 4/5 (80%) | Team Chat | ⏳ Mostly |
+| **Phase 4+** | 5/5 (100%) | 0 | ⏳ Post-Launch |
+
+**Total Specifications**: 22 complete, 1 pending (Team Chat)
