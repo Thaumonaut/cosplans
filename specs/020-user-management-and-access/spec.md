@@ -6,6 +6,18 @@
 **Tier**: 0 - Foundation (Critical - blocks everything else)
 **Priority**: P0 (Must build first)
 
+## Clarifications
+
+### Session 2025-10-19
+
+- Q: What is the core technology stack for this application? → A: SvelteKit + Supabase + PostgreSQL
+- Q: Which email service should be used for authentication flows? → A: Supabase built-in email service
+- Q: How should user sessions be stored and managed? → A: Supabase Auth sessions (server-side)
+- Q: Which password hashing algorithm and configuration should be used? → A: Argon2 with default parameters
+- Q: How should rate limiting be implemented for authentication endpoints? → A: Supabase Auth built-in rate limiting
+
+---
+
 ## Overview
 
 User management and access control form the foundational security layer of Cosplans. This system handles user authentication (verifying identity) and authorization (defining what authenticated users can do). Together, they enable secure collaboration, protect sensitive data, and ensure users can only access appropriate features and content.
