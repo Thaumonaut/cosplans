@@ -1,20 +1,18 @@
 <!--
 Sync Impact Report:
-- Version change: 2.3.0 → 2.4.0
-- Modified principles: Added Principle VI.5 (Test Observability & Developer Experience)
-- Added sections: Test Dashboard Requirements, Visual Component Verification, Coverage Standards, Developer Productivity
+- Version change: 2.4.0 → 2.5.0
+- Modified principles: Added Principle II.5 (User Team Ownership Requirement)
+- Added sections: User Team Ownership, Team Deletion Rules, Solo User Support
 - Removed sections: None
-- New spec created: 043-dev-testing-dashboard (test visualization and component showcase)
+- Specs affected: 020-user-management-and-access (onboarding must create team), 021-shoots-teams-creation (team deletion validation)
 - Templates requiring updates:
-  * ⚠ quickstart.md - add instructions for accessing /dev/tests dashboard
-  * ⚠ README.md - add developer testing section with dashboard link
-  * ✅ spec-template.md - already supports test requirements
-  * ✅ tasks-template.md - already supports test tasks
+  * ✅ spec-template.md - already supports user onboarding requirements
+  * ✅ tasks-template.md - already supports onboarding tasks
+  * ⚠ quickstart.md - may need team creation workflow documentation
 - Follow-up TODOs:
-  * Implement spec 043 to provide test dashboard functionality
-  * Update existing specs to include *.stories.ts files for components
-  * Configure Vitest for JSON coverage output
-  * Set up MSW mock management interface
+  * Verify team deletion logic prevents users from deleting their last owned team
+  * Ensure onboarding flow creates default team for all signup methods (email, OAuth)
+  * Add database constraint: users must own at least one team
 -->
 
 
@@ -60,6 +58,31 @@ Offline capability with sync-on-reconnect is required for location scouting and 
 
 **Rationale**: Cosplay teams coordinate complex logistics across multiple people, locations,
 and timelines requiring instant communication and updates.
+
+### II.5. User Team Ownership Requirement
+
+Every user MUST be part of at least one team they own at all times. During account creation
+and onboarding, the system MUST automatically create a default team with the new user as
+owner. Users MAY create additional teams and MAY join existing teams as members, but they
+MUST always maintain ownership of at least one team.
+
+**Team Deletion Rules**: A team can only be deleted when there is only one member remaining
+AND that member owns at least one other team. The system MUST prevent deletion of a user's
+last owned team. When a user attempts to delete their only owned team, the system MUST
+display an error message: "Cannot delete your only team. Create or join another team first."
+
+**Solo User Support**: Users working independently effectively operate as a "team of one"
+with full owner permissions. This ensures a consistent permission model and data architecture
+across all use cases—whether users collaborate in large teams or work solo on personal
+projects. All core features (shoots, costumes, props, schedules) exist within a team context.
+
+**Rationale**: The application is fundamentally team-centric in its architecture and data
+model. All features are designed around team workflows and team-scoped data. Requiring every
+user to own at least one team ensures consistent permission checking, data organization, and
+feature access. Solo cosplayers benefit from the same powerful features as collaborative
+teams without added complexity. The team ownership requirement prevents edge cases where
+users have no context to create or view content, and ensures proper cleanup when teams
+disband (remaining member must join/create another team before deletion).
 
 ### III. External Integration Integrity
 

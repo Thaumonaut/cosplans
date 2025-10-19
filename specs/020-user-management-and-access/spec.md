@@ -49,6 +49,25 @@ A new user discovers Cosplans and wants to create an account to start planning t
 
 ---
 
+#### User Story 1.5 - User Onboarding (Priority: P1)
+
+New user completes initial setup after registration to create their first team and set up their profile.
+
+**Why this priority**: Essential for MVP - users MUST be part of at least one team they own per constitutional requirement.
+
+**Independent Test**: After signup, users can complete onboarding independently and access dashboard.
+
+**Acceptance Scenarios**:
+
+1. **Given** user completes email verification, **When** user is redirected to onboarding, **Then** user sees team creation and profile setup form
+2. **Given** user is on onboarding page, **When** user enters team name and profile details, **Then** team is created with user as owner
+3. **Given** user is on onboarding page, **When** user uploads a profile picture, **Then** picture is stored and displayed in profile
+4. **Given** user is on onboarding page, **When** user toggles "Public Profile" setting, **Then** preference is saved for future feature
+5. **Given** user is on onboarding page, **When** user clicks "Skip for now", **Then** team is created with default name and user goes to dashboard
+6. **Given** user has completed onboarding, **When** user logs in again, **Then** user skips directly to dashboard
+
+---
+
 #### User Story 2 - User Login (Priority: P1)
 
 Returning user wants to log in to access their shoots and team data.
@@ -80,6 +99,34 @@ User forgot their password and needs to regain access to their account.
 2. **Given** user enters registered email, **When** user submits, **Then** password reset email is sent within 60 seconds
 3. **Given** user receives reset email, **When** user clicks reset link, **Then** user can set new password and is logged in
 4. **Given** password reset link is 24 hours old, **When** user tries to use it, **Then** system shows "Link expired" and prompts for new reset
+
+---
+
+#### User Story 3.5 - OAuth Social Login (Priority: P1) ⚠️ CONSTITUTIONAL REQUIREMENT
+
+User wants to sign up or log in using their existing social media accounts (Google, Instagram/Facebook, X/Twitter) as the primary authentication method.
+
+**Scenario 1**: Sign up with Google
+- **Given** I'm a new user on the signup page
+- **When** I click "Sign up with Google"
+- **Then** I'm redirected to Google OAuth consent screen
+- **And** After approving, I'm redirected back and logged in
+- **And** My profile is created with Google account information
+
+**Scenario 2**: Login with Instagram/Facebook
+- **Given** I'm an existing user on the login page
+- **When** I click "Continue with Instagram"
+- **Then** I'm redirected to Facebook/Instagram OAuth flow
+- **And** After authentication, I'm logged in and redirected to dashboard
+
+**Scenario 3**: Link multiple social accounts
+- **Given** I signed up with Google
+- **When** I go to profile settings and click "Link Instagram account"
+- **Then** I can authenticate with Instagram
+- **And** Both accounts are linked to my Cosplans account
+- **And** I can sign in with either provider
+
+**Constitutional Requirement**: OAuth MUST be the primary authentication mechanism. Email/password is secondary option for users without social accounts.
 
 ---
 
@@ -251,6 +298,10 @@ System tracks access and permission changes for security audit.
 - **FR-001**: System MUST support email/password registration with email verification
 - **FR-002**: System MUST hash all passwords using industry-standard algorithm (bcrypt, Argon2, or PBKDF2)
 - **FR-003**: System MUST enforce minimum password requirements: 8+ characters, mix of uppercase/lowercase/numbers
+- **FR-003a**: System MUST provide post-signup onboarding flow for team creation, profile setup (picture, display name, bio), and preferences (public profile toggle)
+- **FR-003b**: System MUST automatically create a team with new user as owner during onboarding (constitutional requirement)
+- **FR-003c**: System MUST allow users to skip onboarding with sensible defaults (private profile, auto-generated team name)
+- **FR-003d**: System MUST track onboarding completion status to prevent re-showing for returning users
 - **FR-004**: System MUST support email-based login with email and password credentials
 - **FR-005**: System MUST prevent account lockout after 5 failed login attempts (15-minute cooldown)
 - **FR-006**: System MUST support "Forgot Password" flow with email-based reset token
@@ -262,7 +313,7 @@ System tracks access and permission changes for security audit.
 - **FR-012**: System MUST support account deactivation with 30-day grace period before permanent deletion
 - **FR-013**: System MUST enforce HTTPS for all authentication-related operations
 - **FR-014**: System MUST not display whether an email is registered when login fails (prevent email enumeration)
-- **FR-015**: System MUST support future OAuth2/Google Sign-In integration (architecture, not implementation required)
+- **FR-015**: System MUST support OAuth2 social authentication as PRIMARY authentication mechanism (Google, Instagram/Facebook, X/Twitter) per Constitution - P1 MVP REQUIREMENT
 - **FR-016**: System MUST log all authentication events (login, logout, password reset, failed attempts)
 - **FR-017**: System MUST securely store and transmit all authentication tokens
 - **FR-018**: System MUST support "Remember Me" functionality (optional, 30-day persistent session)
@@ -440,7 +491,7 @@ System tracks access and permission changes for security audit.
 - Email delivery service is available and reliable (will use Supabase built-in or SendGrid)
 - All users have valid email addresses for recovery
 - Passwords are transmitted over HTTPS only (enforced at infrastructure level)
-- Initial implementation uses email/password only; OAuth2 is future enhancement
+- Initial implementation includes email/password AND OAuth2 social login (Google, Instagram/Facebook, X/Twitter) per constitutional requirement
 - User consent for data processing is obtained separately (see Legal & Compliance spec)
 - Permissions are checked before every operation (security by default)
 - Team roles are primary; shoot roles are secondary and must not grant access higher than team role
@@ -463,10 +514,9 @@ System tracks access and permission changes for security audit.
 
 **Authentication**:
 - Two-factor authentication (2FA)
-- OAuth2 / Social sign-in
 - Single Sign-On (SSO)
 - Magic link authentication
-- WebAuthn/biometric authentication
+- WebAuthn/biometric authentication (Note: Passkey support is P1 per Constitution)
 - SAML authentication
 
 **Authorization**:
