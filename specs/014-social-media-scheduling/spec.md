@@ -1,147 +1,196 @@
-# Feature Specification: Social Media Scheduling
+# Feature Specification: Costume Progress Photos
 
-**Feature Branch**: `014-social-media-scheduling`  
+**Feature Branch**: `016-costume-progress-photos`  
 **Created**: 2025-10-15  
 **Status**: Draft  
-**Input**: User description: "014-social-media-scheduling"
+**Input**: User description: "016-costume-progress-photos"
 
 ## User Scenarios & Testing *(mandatory)*
 
-### User Story 1 - Schedule Posts to Queue (Priority: P1)
+### User Story 1 - Progress Timeline Documentation (Priority: P1)
 
-Photographers can create posts with photos and captions, schedule them to specific dates/times, and queue them across multiple platforms (Instagram, TikTok, Facebook) for automatic publishing.
+Cosplayers can document their costume creation process by uploading progress photos with dates and notes, creating a visual timeline from initial planning through final completion that automatically organizes chronologically.
 
-**Why this priority**: Core scheduling functionality that automates social media workflow and saves time for photographers who shoot multiple events.
+**Why this priority**: Core documentation functionality that helps cosplayers track their work-in-progress and share their creative journey.
 
-**Independent Test**: Can be fully tested by creating a post, setting a future publish time, and verifying it appears in the scheduled queue with correct platform selections.
+**Independent Test**: Can be fully tested by creating costume entry, uploading photos at different stages with dates/notes, and viewing chronological timeline with thumbnails.
 
 **Acceptance Scenarios**:
 
-1. **Given** a team with completed photoshoot images, **When** user creates a post with photo, caption, and scheduled time, **Then** post appears in schedule queue with pending status
-2. **Given** a scheduled post with future publish time, **When** scheduled time arrives, **Then** system attempts to publish to selected platforms and updates status to published/failed
-3. **Given** multiple posts in queue, **When** user views schedule calendar, **Then** all upcoming posts are displayed with platform icons and publish times
+1. **Given** a new costume project, **When** user uploads progress photo with date and note "Cut fabric pieces", **Then** photo appears in timeline with date stamp and note visible below
+2. **Given** multiple progress photos uploaded out of order, **When** user views timeline, **Then** photos auto-sort chronologically by date with earliest at top
+3. **Given** progress timeline with 10+ photos, **When** user clicks photo, **Then** full-size image displays with swipe navigation to previous/next photos
 
 ---
 
-### User Story 2 - Caption Templates & Hashtag Management (Priority: P2)
+### User Story 2 - Before/After Comparisons (Priority: P2)
 
-Users can save reusable caption templates with placeholders for event names, character names, and dates, plus create hashtag collections for different shoot types (convention, outdoor, studio) for quick insertion.
+Users can create side-by-side before/after comparison views showing costume evolution (initial fabric vs finished piece, wig styling stages, armor construction steps) with slider control for dramatic reveals.
 
-**Why this priority**: Reduces repetitive typing and ensures consistent branding/hashtags across posts, building on P1's posting capability.
+**Why this priority**: Enhances progress visualization by showing transformation clearly, building on P1's timeline documentation.
 
-**Independent Test**: Can be fully tested by creating caption templates with placeholders, saving hashtag collections, and applying them to new posts with auto-replacement.
+**Independent Test**: Can be fully tested by selecting two progress photos from timeline, creating comparison view with slider control, and verifying smooth transition between images.
 
 **Acceptance Scenarios**:
 
-1. **Given** a saved caption template "Check out photos from {event} featuring {character}!", **When** user applies template to post and fills placeholders, **Then** caption populates with replaced values
-2. **Given** saved hashtag collections (#cosplay, #anime, #photography), **When** user selects collection, **Then** hashtags are inserted into caption
-3. **Given** multiple caption templates, **When** user creates new post, **Then** template dropdown shows all saved templates with preview
+1. **Given** timeline with progress photos, **When** user selects "Create Comparison" and picks two photos, **Then** side-by-side view displays with vertical slider control
+2. **Given** before/after comparison view, **When** user drags slider left/right, **Then** slider reveals before image (left) and after image (right) smoothly
+3. **Given** multiple comparisons created, **When** user views costume page, **Then** featured comparisons display as gallery with play button for auto-slide animation
 
 ---
 
-### User Story 3 - Cross-Platform Preview (Priority: P3)
+### User Story 3 - Construction Notes & Materials (Priority: P3)
 
-Before publishing, users can preview how their post will appear on each platform (Instagram square/portrait, TikTok vertical, Facebook horizontal) with correct image cropping and character limits.
+Cosplayers can attach detailed construction notes to progress photos including techniques used, materials/patterns purchased, time spent, and challenges encountered, searchable for future reference.
 
-**Why this priority**: Prevents formatting issues and ensures posts look professional across different platform requirements.
+**Why this priority**: Adds context and reference value to progress photos, useful for portfolio and future projects.
 
-**Independent Test**: Can be fully tested by creating a post with image and caption, selecting multiple platforms, and viewing side-by-side previews showing correct aspect ratios and caption truncation.
+**Independent Test**: Can be fully tested by adding detailed notes to progress photo (materials, time, techniques), saving, and searching notes by keyword to find relevant photos.
 
 **Acceptance Scenarios**:
 
-1. **Given** a post with horizontal photo, **When** user selects Instagram + TikTok + Facebook, **Then** preview shows Instagram center-crop, TikTok vertical-crop, Facebook full-width
-2. **Given** a caption with 500 characters, **When** user views platform previews, **Then** Instagram shows truncation at 2200 chars, Twitter at 280, Facebook full caption
-3. **Given** multiple images in post, **When** user views preview, **Then** carousel indicator shows image count and order per platform
+1. **Given** a progress photo, **When** user adds construction note with materials (Worbla, EVA foam), time (5 hours), techniques (heat forming), **Then** note saves with structured fields visible on photo detail page
+2. **Given** multiple photos with notes mentioning "Worbla", **When** user searches construction notes for "Worbla", **Then** all relevant photos display with matching notes highlighted
+3. **Given** costume with completion date, **When** user views costume summary, **Then** total time spent (sum of all photo time entries) displays with material cost aggregation
 
 ---
 
-### User Story 4 - Post Analytics Dashboard (Priority: P4)
+### User Story 4 - Pattern & Reference Attachments (Priority: P4)
 
-After posts are published, users can view engagement metrics (likes, comments, shares, views) aggregated across platforms with trends over time to identify which content performs best.
+Users can attach sewing patterns (PDF), reference images, tutorial links, and material receipts to costume progress entries for complete project documentation that's accessible during future builds.
 
-**Why this priority**: Provides insights for improving content strategy, but requires posts to be published first (builds on P1-P3).
+**Why this priority**: Completes comprehensive documentation with all related files organized with progress photos.
 
-**Independent Test**: Can be fully tested by viewing dashboard showing published posts with engagement metrics from API, sorted by performance, with trend graphs.
+**Independent Test**: Can be fully tested by uploading pattern PDF, reference images, and tutorial URLs to costume entry, then accessing files from progress timeline.
 
 **Acceptance Scenarios**:
 
-1. **Given** published posts across multiple platforms, **When** user views analytics dashboard, **Then** metrics display for each post (likes, comments, shares, reach) with platform breakdown
-2. **Given** analytics for past 30 days, **When** user views trend graph, **Then** engagement over time is visualized with peaks/valleys and best-performing days highlighted
-3. **Given** posts with different hashtag sets, **When** user compares performance, **Then** system shows which hashtag collections correlated with higher engagement
+1. **Given** a costume progress entry, **When** user uploads sewing pattern PDF, **Then** pattern appears in "Attachments" section with download link and file size
+2. **Given** progress photo with reference images attached, **When** user clicks "View References", **Then** all reference images display in lightbox gallery
+3. **Given** multiple patterns/receipts attached, **When** user views costume archive, **Then** all files remain accessible with original filenames and upload dates preserved
 
 ---
 
 ### Edge Cases
 
-- What happens when OAuth token expires mid-publish? System MUST detect expired tokens, halt publishing, notify user to re-authenticate, and preserve post in queue for retry after re-auth
-- How does system handle platform API rate limits? System MUST track API usage per platform, queue posts when approaching limits, and automatically retry after rate limit window resets
-- What if image aspect ratio doesn't fit any platform requirements? System MUST show cropping preview with manual adjustment controls (pan, zoom) and warn if important content will be cropped
-- How are posts handled if scheduled time is in the past? System MUST detect past timestamps on save, show warning, and offer to publish immediately or reschedule to next available slot
-- What happens when platform APIs are down during scheduled publish? System MUST retry up to 3 times with exponential backoff, mark post as failed if all retries fail, and send notification for manual retry
-- How are deleted/unavailable photos handled? System MUST detect missing images before publish, mark post as invalid, and prevent publishing until user replaces image or removes post
-- What if user schedules multiple posts to same time slot? System MUST allow overlapping schedules but stagger actual API calls by 2-minute intervals to avoid rate limits
-- How are platform-specific character limits enforced? System MUST validate caption length per platform on save, show character counts with warnings, and prevent publishing if captions exceed limits (unless truncation enabled)
+- What happens when progress photos are uploaded without dates? System MUST use upload timestamp as default date, allow user to edit date retroactively, and show warning icon if date seems unrealistic (future date or > 5 years past)
+- How are very large photo collections handled? System MUST implement pagination (20 photos per page), thumbnail lazy loading, and option to collapse timeline sections by month/year for better navigation
+- What if user wants to reorganize timeline manually? System MUST allow drag-and-drop reordering of photos overriding chronological sort, with "Reset to Chronological" button to restore date-based ordering
+- How are deleted progress photos handled in comparisons? System MUST detect deleted photos in saved comparisons, show placeholder with "Photo Removed" message, and allow user to select replacement photo or delete comparison
+- What happens when construction notes have sensitive pricing info? System MUST allow users to mark notes/materials as "Private" (visible only to creator), excluding private data from shared/exported versions
+- How are pattern PDFs with large file sizes handled? System MUST enforce 50MB per-file limit, compress PDFs automatically if > 10MB, and show upload progress bar for files > 5MB
+- What if user forgets to log time spent? System MUST allow retroactive time entry editing, calculate gaps in timeline (days between photos), and suggest estimated hours based on costume complexity
+- How are before/after comparisons shared externally? System MUST generate shareable comparison URLs (read-only, no login required), with optional password protection and expiration dates
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
-#### Post Creation & Scheduling (FR-001 to FR-006)
+#### Progress Timeline (FR-001 to FR-006)
 
-- **FR-001**: System MUST allow users to create social media posts with one or more images, caption text (up to 5000 characters), and platform selection (Instagram, TikTok, Facebook)
-- **FR-002**: System MUST allow users to schedule posts to specific date/time (UTC) or save as draft for manual publishing
-- **FR-003**: System MUST display scheduled posts in calendar view with daily/weekly/monthly layouts showing post thumbnails and platform icons
-- **FR-004**: System MUST allow users to edit scheduled posts before publish time, including images, caption, platforms, and scheduled time
-- **FR-005**: System MUST allow users to cancel scheduled posts and move them back to drafts without publishing
-- **FR-006**: System MUST support bulk scheduling by uploading multiple images with caption template and generating individual posts with sequential publish times (e.g., every 2 hours)
+- **FR-001**: System MUST allow users to create costume progress entries associated with costume items in inventory, with title, character/series, start date, and target completion date
+- **FR-002**: System MUST allow users to upload progress photos (JPEG/PNG) with date, caption/notes (up to 500 characters), and automatic thumbnail generation (200px, 800px)
+- **FR-003**: System MUST display progress timeline view with photos sorted chronologically (earliest to latest), showing date stamps, captions, and photo count per stage
+- **FR-004**: System MUST allow users to edit progress photo dates, captions, and order via drag-and-drop or date picker interface
+- **FR-005**: System MUST implement photo lightbox viewer with swipe/keyboard navigation (prev/next) and pinch-to-zoom on mobile devices
+- **FR-006**: System MUST allow users to organize timeline by stages (Planning, Fabric Cutting, Sewing, Details, Final) with collapsible sections and photo counts per stage
 
-#### Platform Integration & Publishing (FR-007 to FR-011)
+#### Before/After Comparisons (FR-007 to FR-010)
 
-- **FR-007**: System MUST integrate with Instagram Graph API for automated posting to Instagram Feed and Instagram Stories
-- **FR-008**: System MUST integrate with TikTok Creator API for automated video/photo posting with caption and hashtags
-- **FR-009**: System MUST integrate with Facebook Graph API for automated posting to Facebook Pages with images, caption, and tags
-- **FR-010**: System MUST handle OAuth authentication for each platform per team, storing refresh tokens securely and detecting expired tokens with re-auth prompts
-- **FR-011**: System MUST publish posts at scheduled time (within 60 seconds of target time) by calling platform APIs in background job, updating post status to published/failed with error details
+- **FR-007**: System MUST allow users to create before/after comparison views by selecting two progress photos from timeline with side-by-side or slider layout
+- **FR-008**: System MUST provide slider control for comparisons that reveals before (left) and after (right) images smoothly as user drags handle
+- **FR-009**: System MUST allow users to save comparison views with captions (e.g., "Wig Styling Evolution") and feature them on costume detail page
+- **FR-010**: System MUST generate shareable comparison URLs (no login required) with optional password protection and 30/90-day expiration dates
 
-#### Caption Templates & Hashtags (FR-012 to FR-016)
+#### Construction Notes & Materials (FR-011 to FR-016)
 
-- **FR-012**: System MUST allow users to create caption templates with placeholders ({event}, {character}, {photographer}, {date}) that auto-replace when applied to posts
-- **FR-013**: System MUST allow users to save hashtag collections with names (e.g., "Convention Posts", "Outdoor Shoots") containing up to 30 hashtags each
-- **FR-014**: System MUST allow users to insert saved hashtag collections into captions with single click, appending to existing caption text
-- **FR-015**: System MUST show character count per platform (Instagram 2200, Facebook 63,206, Twitter 280, TikTok 2200) with warnings when caption exceeds limits
-- **FR-016**: System MUST support hashtag autocomplete based on previously used hashtags and popular trending tags per platform
+- **FR-011**: System MUST allow users to attach structured construction notes to progress photos including materials used, techniques applied, time spent (hours), and challenges encountered
+- **FR-012**: System MUST provide material library with autocomplete for commonly used items (Worbla, EVA foam, fabric types, paints, adhesives) and custom entry option
+- **FR-013**: System MUST calculate total time spent and material costs per costume by aggregating time/cost entries across all progress photos
+- **FR-014**: System MUST provide search functionality across construction notes by keywords, materials, techniques, or date ranges
+- **FR-015**: System MUST allow users to mark notes/materials as "Private" (visible only to creator) or "Public" (visible in shared views)
+- **FR-016**: System MUST generate costume summary report with timeline, total time/cost, materials list, and key progress milestones (PDF export)
 
-#### Cross-Platform Preview (FR-017 to FR-019)
+#### Pattern & Reference Attachments (FR-017 to FR-020)
 
-- **FR-017**: System MUST generate platform-specific previews showing how post will appear on each selected platform (Instagram square/portrait, TikTok vertical 9:16, Facebook horizontal)
-- **FR-018**: System MUST allow users to adjust image cropping per platform with pan/zoom controls and save different crops for each platform
-- **FR-019**: System MUST show caption preview per platform with character truncation indicators and link preview rendering (if URL present in caption)
-
-#### Analytics & Performance (FR-020 to FR-022)
-
-- **FR-020**: System MUST fetch engagement metrics from platform APIs after post is published (likes, comments, shares, views, reach) and display in analytics dashboard
-- **FR-021**: System MUST allow users to view performance trends over time with graphs showing engagement metrics by day/week/month
-- **FR-022**: System MUST allow users to compare post performance by hashtag collections, time of day, or day of week to identify patterns
+- **FR-017**: System MUST allow users to upload pattern files (PDF, max 50MB) and attach to costume progress entries with filename, upload date, and file size visible
+- **FR-018**: System MUST allow users to attach reference images (multiple) to progress photos with lightbox gallery view for quick access
+- **FR-019**: System MUST allow users to save tutorial links (YouTube, blogs, forums) with title, URL, and preview thumbnail extracted from link
+- **FR-020**: System MUST preserve all attachments (patterns, references, receipts) with original filenames and make downloadable from costume archive view
 
 ### Key Entities
 
-- **SocialMediaPost**: A scheduled or published social media post with images, caption, platforms, scheduled time, publish status, engagement metrics
-- **CaptionTemplate**: A reusable caption template with placeholders for dynamic content (event, character, date, etc.)
-- **HashtagCollection**: A saved collection of hashtags with name and tags, organized for different shoot types
-- **PlatformConnection**: OAuth connection to social media platform (Instagram, TikTok, Facebook) with access tokens and expiration tracking
-- **PostAnalytics**: Engagement metrics for published post (likes, comments, shares, views, reach) fetched from platform APIs
+- **CostumeProgress**: Progress tracking entry for costume with title, character, start date, target completion date, total time/cost
+- **ProgressPhoto**: Individual progress photo with image URL, date, caption, stage, construction notes, time spent
+- **BeforeAfterComparison**: Saved comparison view with two photo references, caption, layout type (side-by-side/slider), share settings
+- **ConstructionNote**: Structured note with materials list, techniques used, time spent, cost, challenges, privacy setting
+- **ProgressAttachment**: Attached file (pattern PDF, receipt, reference image, tutorial link) with filename, type, upload date, file size
+
+### User Story 3 - [Brief Title] (Priority: P3)
+
+[Describe this user journey in plain language]
+
+**Why this priority**: [Explain the value and why it has this priority level]
+
+**Independent Test**: [Describe how this can be tested independently]
+
+**Acceptance Scenarios**:
+
+1. **Given** [initial state], **When** [action], **Then** [expected outcome]
+
+---
+
+[Add more user stories as needed, each with an assigned priority]
+
+### Edge Cases
+
+<!--
+  ACTION REQUIRED: The content in this section represents placeholders.
+  Fill them out with the right edge cases.
+-->
+
+- What happens when [boundary condition]?
+- How does system handle [error scenario]?
+
+## Requirements *(mandatory)*
+
+<!--
+  ACTION REQUIRED: The content in this section represents placeholders.
+  Fill them out with the right functional requirements.
+-->
+
+### Functional Requirements
+
+- **FR-001**: System MUST [specific capability, e.g., "allow users to create accounts"]
+- **FR-002**: System MUST [specific capability, e.g., "validate email addresses"]  
+- **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
+- **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
+- **FR-005**: System MUST [behavior, e.g., "log all security events"]
+
+*Example of marking unclear requirements:*
+
+- **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
+- **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
+
+### Key Entities *(include if feature involves data)*
+
+- **CostumeProgress**: Progress tracking entry for costume with title, character, start date, target completion date, total time/cost
+- **ProgressPhoto**: Individual progress photo with image URL, date, caption, stage, construction notes, time spent
+- **BeforeAfterComparison**: Saved comparison view with two photo references, caption, layout type (side-by-side/slider), share settings
+- **ConstructionNote**: Structured note with materials list, techniques used, time spent, cost, challenges, privacy setting
+- **ProgressAttachment**: Attached file (pattern PDF, receipt, reference image, tutorial link) with filename, type, upload date, file size
 
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
 
-- **SC-001**: Users can create and schedule a post with image and caption in under 2 minutes
-- **SC-002**: System publishes scheduled posts within 60 seconds of target time with 99% success rate
-- **SC-003**: OAuth token refresh process completes without user intervention 95% of the time
-- **SC-004**: Platform previews generate in under 2 seconds showing correct aspect ratios for all platforms
-- **SC-005**: Caption templates reduce post creation time by 50% compared to manual caption writing
-- **SC-006**: Hashtag autocomplete surfaces relevant hashtags within 3 keystrokes
-- **SC-007**: Analytics dashboard loads engagement metrics for 30 posts in under 3 seconds
-- **SC-008**: Bulk scheduling uploads 20 images and creates individual posts in under 60 seconds
-- **SC-009**: Failed publish attempts retry successfully 80% of the time without user intervention
-- **SC-010**: 90% of users successfully connect at least one platform account on first attempt
+- **SC-001**: Users can upload progress photo with date and notes in under 90 seconds
+- **SC-002**: Timeline view loads 50+ progress photos in under 3 seconds with lazy loading
+- **SC-003**: Before/after comparison slider responds smoothly with < 16ms frame time (60 FPS)
+- **SC-004**: Construction note search returns results in under 1 second across 100+ entries
+- **SC-005**: Pattern PDF upload (10MB) completes in under 30 seconds with progress indicator
+- **SC-006**: Total time/cost calculation updates in real-time (< 500ms) as user enters new progress entries
+- **SC-007**: 90% of users successfully create and view progress timeline within 10 minutes on first use
+- **SC-008**: Shareable comparison URLs load in under 2 seconds for external viewers (no login)
+- **SC-009**: Costume summary report PDF generation (20 photos, notes) completes in under 60 seconds
+- **SC-010**: Mobile photo upload from camera roll completes in under 15 seconds per photo (3G connection)

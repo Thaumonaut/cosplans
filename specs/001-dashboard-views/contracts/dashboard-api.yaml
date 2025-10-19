@@ -1,0 +1,1302 @@
+openapi: 3.0.3
+info:
+  title: Dashboard & Specialized Views API
+  version: 1.0.0
+  description: API contracts for dashboard widgets, timeline views, progress tracking, and portfolio management
+
+servers:
+  - url: https://api.cosplans.app/v1
+    description: Production API
+  - url: http://localhost:3000/api/v1
+    description: Local development
+
+paths:
+  /dashboard/widgets:
+    get:
+      summary: Get user dashboard widgets
+      tags: [Dashboard]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: template
+          in: query
+          schema:
+            type: string
+            enum: [compact, detailed, timeline-focus]
+      responses:
+        '200':
+          description: User dashboard widgets
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  widgets:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DashboardWidget'
+                  template:
+                    type: string
+                  layout:
+                    $ref: '#/components/schemas/DashboardLayout'
+
+    post:
+      summary: Create or update dashboard widget
+      tags: [Dashboard]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DashboardWidgetInput'
+      responses:
+        '201':
+          description: Widget created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardWidget'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+
+  /dashboard/widgets/{widgetId}:
+    put:
+      summary: Update widget settings
+      tags: [Dashboard]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: widgetId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                visible:
+                  type: boolean
+                position:
+                  type: integer
+                settings:
+                  type: object
+      responses:
+        '200':
+          description: Widget updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardWidget'
+
+    delete:
+      summary: Remove widget from dashboard
+      tags: [Dashboard]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: widgetId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Widget removed
+
+  /timeline/view:
+    get:
+      summary: Get timeline view configuration
+      tags: [Timeline]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: team_id
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: start_date
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: end_date
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: zoom_level
+          in: query
+          schema:
+            type: string
+            enum: [day, week, month, quarter, year]
+      responses:
+        '200':
+          description: Timeline view data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  timeline:
+                    $ref: '#/components/schemas/TimelineView'
+                  shoots:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TimelineShoot'
+                  dependencies:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ShootDependency'
+
+    post:
+      summary: Update timeline view settings
+      tags: [Timeline]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimelineViewInput'
+      responses:
+        '200':
+          description: Timeline view updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimelineView'
+
+  /timeline/shoots/{shootId}/reschedule:
+    post:
+      summary: Reschedule shoot with dependency updates
+      tags: [Timeline]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: shootId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                start_date:
+                  type: string
+                  format: date-time
+                end_date:
+                  type: string
+                  format: date-time
+                update_dependencies:
+                  type: boolean
+                  default: true
+              required: [start_date, end_date]
+      responses:
+        '200':
+          description: Shoot rescheduled
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  shoot:
+                    $ref: '#/components/schemas/TimelineShoot'
+                  affected_shoots:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TimelineShoot'
+                  events_created:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TimelineEvent'
+        '409':
+          description: Scheduling conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  conflicts:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SchedulingConflict'
+
+  /progress/{shootId}:
+    get:
+      summary: Get shoot progress tracking data
+      tags: [Progress]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: shootId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Progress tracking data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgressTracker'
+
+    post:
+      summary: Recalculate progress tracking
+      tags: [Progress]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: shootId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Progress recalculated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgressTracker'
+
+  /portfolio/characters:
+    get:
+      summary: Get character profiles and portfolio
+      tags: [Portfolio]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: team_id
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: cosplayer_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: series
+          in: query
+          schema:
+            type: string
+        - name: costume_status
+          in: query
+          schema:
+            type: string
+            enum: [planned, acquiring, in_progress, ready, owned, sold, damaged, rented, lost, stored, loaned]
+      responses:
+        '200':
+          description: Character portfolio data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  characters:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CharacterProfile'
+                  total:
+                    type: integer
+                  page:
+                    type: integer
+                  limit:
+                    type: integer
+
+    post:
+      summary: Create character profile
+      tags: [Portfolio]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CharacterProfileInput'
+      responses:
+        '201':
+          description: Character profile created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharacterProfile'
+
+  /portfolio/series/{seriesId}/completion:
+    get:
+      summary: Get series completion tracking
+      tags: [Portfolio]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: seriesId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Series completion data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeriesCompletion'
+
+  /portfolio/characters/{characterId}/inventory:
+    get:
+      summary: Get character costume inventory
+      tags: [Portfolio]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: characterId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Costume inventory items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CostumeInventoryItem'
+
+    post:
+      summary: Add inventory item to character
+      tags: [Portfolio]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: characterId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CostumeInventoryItemInput'
+      responses:
+        '201':
+          description: Inventory item created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CostumeInventoryItem'
+
+  /portfolio/inventory/{itemId}/status:
+    put:
+      summary: Update inventory item status
+      tags: [Portfolio]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [planned, acquiring, in_progress, ready, owned, sold, damaged, rented, lost, stored, loaned]
+                metadata:
+                  type: object
+                  description: Status-specific additional data (price, damage details, rental info)
+              required: [status]
+      responses:
+        '200':
+          description: Status updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CostumeInventoryItem'
+        '400':
+          description: Invalid status transition
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  valid_transitions:
+                    type: array
+                    items:
+                      type: string
+
+  /budget/team/{teamId}:
+    get:
+      summary: Get team budget overview
+      tags: [Budget]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: teamId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: include_trends
+          in: query
+          schema:
+            type: boolean
+            default: false
+        - name: include_settlements
+          in: query
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Team budget data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamBudget'
+
+  /budget/settlements:
+    get:
+      summary: Get expense settlements for user
+      tags: [Budget]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: team_id
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, confirmed, disputed]
+      responses:
+        '200':
+          description: Settlement data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  settlements:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ExpenseSettlement'
+                  summary:
+                    $ref: '#/components/schemas/SettlementSummary'
+
+    post:
+      summary: Mark settlement as paid
+      tags: [Budget]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                settlement_id:
+                  type: string
+                  format: uuid
+                receipt_url:
+                  type: string
+                  format: uri
+                confirmation_note:
+                  type: string
+              required: [settlement_id]
+      responses:
+        '200':
+          description: Settlement confirmed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpenseSettlement'
+
+  /characters/search:
+    get:
+      summary: Search external character database
+      tags: [Characters]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 2
+        - name: series
+          in: query
+          schema:
+            type: string
+        - name: source
+          in: query
+          schema:
+            type: string
+            enum: [mal_api, community, all]
+            default: all
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 20
+      responses:
+        '200':
+          description: Character search results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  characters:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ExternalCharacter'
+                  total:
+                    type: integer
+                  source:
+                    type: string
+
+  /events/stream:
+    get:
+      summary: Server-Sent Events stream for real-time updates
+      tags: [Events]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: team_id
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: event_types
+          in: query
+          schema:
+            type: string
+            description: Comma-separated list of event types to subscribe to
+      responses:
+        '200':
+          description: SSE stream
+          content:
+            text/event-stream:
+              schema:
+                type: string
+                description: Server-sent events formatted as "data: {json}\n\n"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    DashboardWidget:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: [upcoming_shoots, ideas, alerts, budget, weather, progress]
+        user_id:
+          type: string
+          format: uuid
+        template:
+          type: string
+          enum: [compact, detailed, timeline-focus]
+        position:
+          type: integer
+        visible:
+          type: boolean
+        settings:
+          type: object
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    DashboardWidgetInput:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [upcoming_shoots, ideas, alerts, budget, weather, progress]
+        template:
+          type: string
+          enum: [compact, detailed, timeline-focus]
+        position:
+          type: integer
+        visible:
+          type: boolean
+          default: true
+        settings:
+          type: object
+          default: {}
+      required: [type, template]
+
+    DashboardLayout:
+      type: object
+      properties:
+        columns:
+          type: integer
+        responsive:
+          type: object
+          properties:
+            mobile:
+              type: string
+            tablet:
+              type: string
+        widgets:
+          type: array
+          items:
+            type: string
+
+    TimelineView:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        team_id:
+          type: string
+          format: uuid
+        zoom_level:
+          type: string
+          enum: [day, week, month, quarter, year]
+        date_range_start:
+          type: string
+          format: date
+        date_range_end:
+          type: string
+          format: date
+        visible_shoots:
+          type: array
+          items:
+            type: string
+            format: uuid
+        filter_settings:
+          type: object
+        milestone_markers:
+          type: array
+          items:
+            type: object
+
+    TimelineViewInput:
+      type: object
+      properties:
+        team_id:
+          type: string
+          format: uuid
+        zoom_level:
+          type: string
+          enum: [day, week, month, quarter, year]
+        date_range_start:
+          type: string
+          format: date
+        date_range_end:
+          type: string
+          format: date
+        filter_settings:
+          type: object
+      required: [team_id]
+
+    TimelineShoot:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        start_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
+        status:
+          type: string
+        character:
+          type: string
+        series:
+          type: string
+        costume_phases:
+          type: array
+          items:
+            type: object
+            properties:
+              phase:
+                type: string
+                enum: [planning, building, complete]
+              start_date:
+                type: string
+                format: date
+              end_date:
+                type: string
+                format: date
+              progress:
+                type: integer
+                minimum: 0
+                maximum: 100
+
+    ShootDependency:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        source_shoot_id:
+          type: string
+          format: uuid
+        target_shoot_id:
+          type: string
+          format: uuid
+        dependency_type:
+          type: string
+          enum: [costume_sharing, sequential_planning, location_sharing]
+        buffer_days:
+          type: integer
+          minimum: 0
+        is_critical_path:
+          type: boolean
+
+    TimelineEvent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        shoot_id:
+          type: string
+          format: uuid
+        event_type:
+          type: string
+          enum: [reschedule, dependency_add, dependency_remove, status_change]
+        event_data:
+          type: object
+        user_id:
+          type: string
+          format: uuid
+        timestamp:
+          type: string
+          format: date-time
+        version:
+          type: integer
+
+    SchedulingConflict:
+      type: object
+      properties:
+        conflict_type:
+          type: string
+          enum: [overlapping_shoots, dependency_violation, resource_conflict]
+        affected_shoot_id:
+          type: string
+          format: uuid
+        conflict_details:
+          type: object
+        suggested_resolution:
+          type: string
+
+    ProgressTracker:
+      type: object
+      properties:
+        shoot_id:
+          type: string
+          format: uuid
+        costume_progress:
+          type: integer
+          minimum: 0
+          maximum: 100
+        props_progress:
+          type: integer
+          minimum: 0
+          maximum: 100
+        location_progress:
+          type: integer
+          minimum: 0
+          maximum: 100
+        team_progress:
+          type: integer
+          minimum: 0
+          maximum: 100
+        checklist_progress:
+          type: integer
+          minimum: 0
+          maximum: 100
+        editing_progress:
+          type: integer
+          minimum: 0
+          maximum: 100
+        overall_progress:
+          type: integer
+          minimum: 0
+          maximum: 100
+        outstanding_tasks:
+          type: array
+          items:
+            type: object
+            properties:
+              task_type:
+                type: string
+              task_id:
+                type: string
+                format: uuid
+              description:
+                type: string
+              priority:
+                type: string
+                enum: [low, medium, high, critical]
+        calculation_timestamp:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    CharacterProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        series:
+          type: string
+        cosplayer_id:
+          type: string
+          format: uuid
+        costume_inventory_status:
+          type: string
+          enum: [planned, acquiring, in_progress, ready, owned, sold, damaged, rented, lost, stored, loaned]
+        shoot_history:
+          type: array
+          items:
+            type: string
+            format: uuid
+        photo_galleries:
+          type: array
+          items:
+            type: object
+            properties:
+              shoot_id:
+                type: string
+                format: uuid
+              gallery_url:
+                type: string
+              thumbnail_url:
+                type: string
+              photo_count:
+                type: integer
+        external_character_id:
+          type: string
+        character_source:
+          type: string
+          enum: [mal_api, user_custom, community]
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    CharacterProfileInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+        series:
+          type: string
+          minLength: 1
+        cosplayer_id:
+          type: string
+          format: uuid
+        external_character_id:
+          type: string
+        character_source:
+          type: string
+          enum: [mal_api, user_custom, community]
+          default: user_custom
+      required: [name, series, cosplayer_id]
+
+    SeriesCompletion:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        series_name:
+          type: string
+        team_id:
+          type: string
+          format: uuid
+        total_character_count:
+          type: integer
+          minimum: 0
+        shot_character_list:
+          type: array
+          items:
+            type: string
+            format: uuid
+        unshot_character_list:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalCharacter'
+        completion_percentage:
+          type: integer
+          minimum: 0
+          maximum: 100
+        series_source:
+          type: string
+          enum: [mal_api, user_custom]
+        external_series_id:
+          type: string
+        series_metadata:
+          type: object
+
+    CostumeInventoryItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        character_id:
+          type: string
+          format: uuid
+        item_type:
+          type: string
+          enum: [costume, prop, accessory, makeup]
+        name:
+          type: string
+        status:
+          type: string
+          enum: [planned, acquiring, in_progress, ready, owned, sold, damaged, rented, lost, stored, loaned]
+        purchase_date:
+          type: string
+          format: date
+        purchase_price:
+          type: number
+          format: decimal
+        current_value:
+          type: number
+          format: decimal
+        sale_date:
+          type: string
+          format: date
+        sale_price:
+          type: number
+          format: decimal
+        rental_period:
+          type: object
+          properties:
+            start_date:
+              type: string
+              format: date
+            end_date:
+              type: string
+              format: date
+            cost:
+              type: number
+            renter:
+              type: string
+        storage_location:
+          type: string
+        condition_notes:
+          type: string
+        damage_details:
+          type: object
+        insurance_docs:
+          type: array
+          items:
+            type: string
+        state_history:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+              timestamp:
+                type: string
+                format: date-time
+              user_id:
+                type: string
+                format: uuid
+              notes:
+                type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    CostumeInventoryItemInput:
+      type: object
+      properties:
+        item_type:
+          type: string
+          enum: [costume, prop, accessory, makeup]
+        name:
+          type: string
+          minLength: 1
+        status:
+          type: string
+          enum: [planned, acquiring, in_progress, ready, owned, sold, damaged, rented, lost, stored, loaned]
+          default: planned
+        purchase_date:
+          type: string
+          format: date
+        purchase_price:
+          type: number
+          format: decimal
+        storage_location:
+          type: string
+        condition_notes:
+          type: string
+      required: [item_type, name]
+
+    TeamBudget:
+      type: object
+      properties:
+        team_id:
+          type: string
+          format: uuid
+        total_allocated:
+          type: number
+          format: decimal
+        total_spent:
+          type: number
+          format: decimal
+        remaining_budget:
+          type: number
+          format: decimal
+        percentage_used:
+          type: integer
+          minimum: 0
+          maximum: 100
+        category_breakdown:
+          type: object
+          properties:
+            costumes:
+              type: number
+            props:
+              type: number
+            location:
+              type: number
+            equipment:
+              type: number
+            travel:
+              type: number
+            other:
+              type: number
+        shoot_breakdown:
+          type: array
+          items:
+            type: object
+            properties:
+              shoot_id:
+                type: string
+                format: uuid
+              shoot_title:
+                type: string
+              allocated:
+                type: number
+              spent:
+                type: number
+              status:
+                type: string
+                enum: [under_budget, on_budget, over_budget]
+        monthly_trends:
+          type: array
+          items:
+            type: object
+            properties:
+              month:
+                type: string
+                format: date
+              total_spent:
+                type: number
+              shoot_count:
+                type: integer
+        settlement_calculations:
+          type: object
+          properties:
+            user_balances:
+              type: object
+              additionalProperties:
+                type: number
+            pending_settlements:
+              type: array
+              items:
+                $ref: '#/components/schemas/ExpenseSettlement'
+        last_updated:
+          type: string
+          format: date-time
+
+    ExpenseSettlement:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        from_user_id:
+          type: string
+          format: uuid
+        from_user_name:
+          type: string
+        to_user_id:
+          type: string
+          format: uuid
+        to_user_name:
+          type: string
+        amount:
+          type: number
+          format: decimal
+        status:
+          type: string
+          enum: [pending, confirmed, disputed]
+        receipt_url:
+          type: string
+          format: uri
+        confirmation_details:
+          type: object
+        confirmed_at:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+
+    SettlementSummary:
+      type: object
+      properties:
+        total_owed_by_user:
+          type: number
+          format: decimal
+        total_owed_to_user:
+          type: number
+          format: decimal
+        net_balance:
+          type: number
+          format: decimal
+        pending_count:
+          type: integer
+        confirmed_count:
+          type: integer
+
+    ExternalCharacter:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        series:
+          type: string
+        image_url:
+          type: string
+        source:
+          type: string
+          enum: [mal_api, community]
+        popularity_rank:
+          type: integer
+
+  responses:
+    ValidationError:
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    field:
+                      type: string
+                    message:
+                      type: string
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "Resource not found"
+
+    Unauthorized:
+      description: Unauthorized access
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "Unauthorized"
+
+security:
+  - bearerAuth: []
