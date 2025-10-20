@@ -574,7 +574,7 @@ collection (not monetization) differentiate Cosplans from exploitative social pl
 ### Authentication & Session Management
 
 OAuth MUST be the primary authentication mechanism. Supported OAuth providers MUST include
-Google, Instagram/Facebook, and X/Twitter (formerly Twitter). Email authentication with
+Google, Instagram/Facebook, X/Twitter (formerly Twitter), and Twitch. Email authentication with
 passkey/WebAuthn MUST be available as primary credential option for users without social
 accounts. Two-factor authentication (2FA) MUST be optional for all users and strongly
 recommended for team admins; 2FA adoption MAY become mandatory for admin roles in Phase 2
@@ -585,7 +585,8 @@ after user feedback.
 1. **Google OAuth**: Standard OAuth flow via Google Sign-In
 2. **Instagram/Facebook OAuth**: Meta-managed credentials (Instagram Business accounts)
 3. **X/Twitter OAuth**: Standard OAuth flow via X Sign-In
-4. **Email + Passkey**: Primary credential for non-social-account users; WebAuthn-based
+4. **Twitch OAuth**: Standard OAuth flow via Twitch Sign-In (cosplay streaming community)
+5. **Email + Passkey**: Primary credential for non-social-account users; WebAuthn-based
 
 **Email Authentication Requirements**: Email authentication MUST use passkey/WebAuthn as
 the primary authentication factor. If user does not have passkey enrolled, email/password
@@ -613,14 +614,16 @@ expire after 24 hours. Account deletion MUST require confirmation email within 7
 prevent accidental loss.
 
 **Social Account Linking**: Users MAY link multiple social accounts (Google, Instagram/
-Facebook, X/Twitter) to the same Cosplans account. When multiple social accounts are linked,
+Facebook, X/Twitter, Twitch) to the same Cosplans account. When multiple social accounts are linked,
 user can sign in with any of them. Email/passkey account MAY also be linked to social
 accounts.
 
-**Rationale**: OAuth via social media (Google, Instagram, X) reduces friction for cosplay
-community members who already use these platforms daily. Passkeys and 2FA provide
-defense-in-depth for users without social accounts or preferring passwordless auth.
-Instagram/Facebook integration aligns with social media planning features (Principle V.5);
+**Rationale**: OAuth via social media (Google, Instagram, X) and streaming platforms (Twitch) 
+reduces friction for cosplay community members who already use these platforms daily. Twitch 
+is particularly relevant as many cosplayers stream costume creation, attend conventions, and 
+have active communities on the platform. Passkeys and 2FA provide defense-in-depth for users 
+without social accounts or preferring passwordless auth. Instagram/Facebook integration aligns 
+with social media planning features (Principle V.5);
 users can authenticate with the same social account they manage content from. Session
 management balances security (inactivity timeout) with usability (not requiring constant
 re-authentication). Multi-account linking flexibility accommodates users who switch between
