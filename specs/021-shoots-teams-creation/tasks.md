@@ -57,12 +57,12 @@
 ### Implementation for User Story 1
 
 - [X] T014 [P] [US1] Create team creation form component in `src/lib/components/teams/TeamCreateForm.svelte`
-- [X] T015 [P] [US1] Create teams list page in `src/routes/teams/+page.svelte`
-- [X] T016 [P] [US1] Implement teams list loader in `src/routes/teams/+page.server.ts`
-- [X] T017 [US1] Create team creation page in `src/routes/teams/create/+page.svelte`
-- [X] T018 [US1] Implement team creation form action in `src/routes/teams/create/+page.server.ts`
-- [ ] T019 [US1] Create team details page in `src/routes/teams/[teamId]/+page.svelte`
-- [ ] T020 [US1] Implement team details loader in `src/routes/teams/[teamId]/+page.server.ts`
+- [X] T015 [P] [US1] Create teams list page in `src/routes/(auth)/teams/+page.svelte`
+- [X] T016 [P] [US1] Implement teams list loader in `src/routes/(auth)/teams/+page.server.ts`
+- [X] T017 [US1] Create team creation page in `src/routes/(auth)/teams/create/+page.svelte`
+- [X] T018 [US1] Implement team creation form action in `src/routes/(auth)/teams/create/+page.server.ts`
+- [X] T019 [US1] Create team details page in `src/routes/(auth)/teams/[teamId]/+page.svelte`
+- [X] T020 [US1] Implement team details loader in `src/routes/(auth)/teams/[teamId]/+page.server.ts`
 - [X] T021 [US1] Add team validation (name 1-100 chars, description 0-500 chars)
 - [X] T022 [US1] Implement automatic owner assignment in team_members table
 

@@ -18,34 +18,45 @@
     }
   }
 
-  // Initialize with mock data for now (replace with real API call later)
-  onMount(() => {
-    const mockTeams: Team[] = [
-      {
-        id: "1",
-        name: "Cosplans Team",
-        slug: "cosplans-team",
-        role: "owner",
-        permissions: ["admin", "manage_shoots", "manage_members"],
-      },
-      {
-        id: "2",
-        name: "Creative Team",
-        slug: "creative-team",
-        role: "admin",
-        permissions: ["manage_shoots", "view_members"],
-      },
-      {
-        id: "3",
-        name: "Event Crew",
-        slug: "event-crew",
-        role: "member",
-        permissions: ["view_shoots"],
-      },
-    ];
-
-    teamStore.initialize(mockTeams);
+  // Load real teams from API
+  onMount(async () => {
+    try {
+      const response = await fetch('/api/teams');
+      if (response.ok) {
+        const data = await response.json();
+        const teams: Team[] = data.teams.map((t: any) => ({
+          id: t.id,
+          name: t.name,
+          slug: t.name.toLowerCase().replace(/\s+/g, '-'),
+          role: t.role,
+          permissions: getPermissionsForRole(t.role),
+        }));
+        
+        teamStore.initialize(teams);
+      } else {
+        console.error('Failed to load teams');
+        teamStore.initialize([]);
+      }
+    } catch (error) {
+      console.error('Error loading teams:', error);
+      teamStore.initialize([]);
+    }
   });
+
+  function getPermissionsForRole(role: string): string[] {
+    switch (role) {
+      case 'owner':
+        return ['admin', 'manage_shoots', 'manage_members', 'delete_team'];
+      case 'admin':
+        return ['manage_shoots', 'manage_members'];
+      case 'member':
+        return ['view_shoots', 'edit_shoots'];
+      case 'viewer':
+        return ['view_shoots'];
+      default:
+        return [];
+    }
+  }
 
   async function selectTeam(teamId: string) {
     const success = await teamStore.switchTeam(teamId);
@@ -55,15 +66,8 @@
       const teamContext = teamStore.getSidebarContext();
       navigationStore.setTeam(teamContext);
       
-      // TODO: Implement smart redirect logic
-      // For now, just stay on current page if valid, otherwise go to dashboard
-      const currentPath = $page.url.pathname;
-      
-      // Simple redirect to dashboard for team switch
-      // Later: Check if current route is valid for new team permissions
-      if (!currentPath.startsWith("/dashboard")) {
-        await goto("/dashboard");
-      }
+      // Navigate to the selected team's page
+      await goto(`/teams/${teamId}`);
       
       isOpen = false;
     }
@@ -107,7 +111,7 @@
       <LucideIcon
         name={isOpen ? "ChevronUp" : "ChevronDown"}
         size={16}
-        class="text-[var(--theme-sidebar-muted)]"
+        className="text-[var(--theme-sidebar-muted)]"
       />
     </button>
 
@@ -131,7 +135,7 @@
             <LucideIcon name="Users" size={16} />
             <span class="flex-1 text-left">{teamItem.name}</span>
             {#if teamItem.id === currentTeam?.id}
-              <LucideIcon name="Check" size={16} class="ml-auto" />
+              <LucideIcon name="Check" size={16} className="ml-auto" />
             {/if}
           </button>
         {/each}
