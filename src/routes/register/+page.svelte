@@ -1,6 +1,7 @@
 <script lang="ts">
   import { enhance } from '$app/forms'
   import { authStore } from '$lib/auth/auth-store'
+  import OAuthButtons from '$lib/components/auth/OAuthButtons.svelte'
   import type { ActionData, PageData } from './$types'
 
   export let form: ActionData
@@ -248,6 +249,9 @@
           {/if}
         </button>
       </div>
+
+      <!-- OAuth Social Login -->
+      <OAuthButtons mode="signup" />
 
       <div class="text-center">
         <p class="text-sm text-gray-600">
