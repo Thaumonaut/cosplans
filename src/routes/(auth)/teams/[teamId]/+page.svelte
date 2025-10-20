@@ -9,6 +9,8 @@
 	$: userRole = data.userRole;
 	$: permissions = data.permissions;
 	
+	let isManagingMembers = false;
+	
 	// Format date helper
 	function formatDate(dateString: string): string {
 		return new Date(dateString).toLocaleDateString('en-US', {
@@ -80,12 +82,13 @@
 			<div class="flex items-center justify-between mb-6">
 				<h2 class="text-xl font-semibold text-gray-900">Team Members</h2>
 				{#if permissions.canManageMembers}
-					<a
-						href="/teams/{team.id}/settings"
-						class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+					<button
+						type="button"
+						on:click={() => isManagingMembers = !isManagingMembers}
+						class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white {isManagingMembers ? 'bg-gray-600 hover:bg-gray-700' : 'bg-blue-600 hover:bg-blue-700'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
 					>
-						Manage Members
-					</a>
+						{isManagingMembers ? 'Done Managing' : 'Manage Members'}
+					</button>
 				{/if}
 			</div>
 
@@ -100,7 +103,7 @@
 							
 							<div>
 								<p class="font-medium text-gray-900">
-									User {member.user_id.substring(0, 8)}
+									{member.displayName}
 								</p>
 								<p class="text-sm text-gray-500">
 									Joined {formatDate(member.joined_at)}
@@ -109,18 +112,57 @@
 						</div>
 						
 						<div class="flex items-center gap-3">
-							<span class="px-3 py-1 text-sm font-medium rounded-full {getRoleBadgeClass(member.role)}">
-								{member.role}
-							</span>
-							
-							{#if member.user_id === team.owner_id}
-								<span class="px-3 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
-									Owner
+							{#if isManagingMembers && permissions.canManageMembers && member.user_id !== team.owner_id}
+								<!-- Edit mode: show role dropdown and remove button -->
+								<select
+									value={member.role}
+									class="px-3 py-1 text-sm font-medium rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+									on:change={(e) => console.log('Change role to:', e.currentTarget.value)}
+								>
+									<option value="admin">Admin</option>
+									<option value="member">Member</option>
+									<option value="viewer">Viewer</option>
+								</select>
+								<button
+									type="button"
+									on:click={() => console.log('Remove member:', member.user_id)}
+									class="px-3 py-1 text-sm font-medium text-red-600 hover:text-red-800 hover:bg-red-50 rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+									title="Remove member"
+								>
+									Remove
+								</button>
+							{:else}
+								<!-- View mode: show role badge -->
+								<span class="px-3 py-1 text-sm font-medium rounded-full {getRoleBadgeClass(member.role)}">
+									{member.role}
 								</span>
+								
+								{#if member.user_id === team.owner_id}
+									<span class="px-3 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">
+										Owner
+									</span>
+								{/if}
 							{/if}
 						</div>
 					</div>
 				{/each}
+
+				<!-- Add new member button (only in manage mode) -->
+				{#if isManagingMembers && permissions.canManageMembers}
+					<a
+						href="/teams/{team.id}/settings"
+						class="flex items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-400 hover:bg-blue-50 transition-colors group"
+					>
+						<div class="flex items-center gap-3 text-gray-600 group-hover:text-blue-600">
+							<div class="w-12 h-12 rounded-full bg-gray-100 group-hover:bg-blue-100 flex items-center justify-center">
+								<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+								</svg>
+							</div>
+							<span class="font-medium">Add new team member</span>
+						</div>
+					</a>
+				{/if}
 			</div>
 
 			{#if members.length === 0}

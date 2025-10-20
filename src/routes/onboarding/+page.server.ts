@@ -65,6 +65,8 @@ export const actions: Actions = {
     const userId = user.id
     const formData = await request.formData()
     const teamName = formData.get('teamName')?.toString()?.trim() || `${user.email}'s Team`
+    const displayName = formData.get('displayName')?.toString()?.trim() || ''
+    const bio = formData.get('bio')?.toString()?.trim() || ''
 
     // Validate team name (1-100 characters per spec)
     if (!teamName || teamName.length < 1 || teamName.length > 100) {
@@ -90,10 +92,11 @@ export const actions: Actions = {
       })
     }
 
-    // Mark onboarding as complete
+    // Mark onboarding as complete and save display name
     const { error: profileError } = await locals.supabase
       .from('user_profiles')
       .update({
+        display_name: displayName || null,
         onboarding_completed: true,
         onboarding_completed_at: new Date().toISOString()
       })
