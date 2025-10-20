@@ -15,10 +15,11 @@ OAuth social authentication is now implemented in Cosplans per constitutional re
 1. **Google OAuth** - Standard OAuth flow
 2. **Facebook/Instagram OAuth** - Meta-managed credentials  
 3. **X/Twitter OAuth** - Standard OAuth flow
+4. **Twitch OAuth** - Perfect for cosplay streamers (FREE)
 
 ## Implementation Status
 
-✅ **T041e**: OAuth button components created  
+✅ **T041e**: OAuth button components created (Google, Facebook, Twitter, Twitch)
 ✅ **T041i**: Unified OAuth callback route exists  
 ✅ **T041k**: OAuth buttons added to login page  
 ✅ **T041l**: OAuth buttons added to signup page  
@@ -51,6 +52,21 @@ OAuth social authentication is now implemented in Cosplans per constitutional re
 4. In Supabase dashboard → Authentication → Providers → Enable Twitter
 5. Enter Client ID and Client Secret
 
+### 4. Twitch OAuth (FREE - Great for Cosplay Streamers!)
+
+1. Go to [Twitch Developer Console](https://dev.twitch.tv/console)
+2. Click **Register Your Application**
+3. Fill in details:
+   - Name: `Cosplans`
+   - OAuth Redirect URLs: `https://your-project.supabase.co/auth/v1/callback`
+   - Category: `Website Integration`
+4. Click **Create**
+5. Copy **Client ID** and generate **Client Secret**
+6. In Supabase dashboard → Authentication → Providers → Enable Twitch
+7. Enter Client ID and Client Secret
+
+**Why Twitch?** Many cosplayers stream their costume creation process, attend conventions, and have active Twitch communities. This makes authentication seamless for that audience!
+
 ---
 
 ## Testing
@@ -61,7 +77,7 @@ OAuth social authentication is now implemented in Cosplans per constitutional re
 bun run dev
 ```
 
-Navigate to `/login` or `/register` and click any OAuth button.
+Navigate to `/login` or `/register` and click any OAuth button (Google, Facebook, Twitter, or Twitch).
 
 ### Common Issues
 
@@ -93,12 +109,13 @@ Navigate to `/login` or `/register` and click any OAuth button.
 
 ## Production Checklist
 
-- [ ] Configure all OAuth providers in Supabase
-- [ ] Add production callback URLs
-- [ ] Test all three OAuth flows
-- [ ] Verify error handling
+- [ ] Configure all OAuth providers in Supabase (Google, Facebook, Twitter, Twitch)
+- [ ] Add production callback URLs to all providers
+- [ ] Test all four OAuth flows
+- [ ] Verify error handling for each provider
 - [ ] Test on mobile devices
-- [ ] Submit apps for verification
+- [ ] Submit apps for verification (Google, Facebook if needed)
+- [ ] Twitch app review (usually instant approval)
 
 ---
 
