@@ -75,10 +75,19 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	const canEditTeam = userMember.role === 'owner' || userMember.role === 'admin';
 	const canDeleteTeam = userMember.role === 'owner';
 
+	// Check if team has a join link
+	const { data: joinLink } = await locals.supabase
+		.from('team_join_links')
+		.select('*')
+		.eq('team_id', teamId)
+		.eq('is_active', true)
+		.single();
+
 	return {
 		team,
 		members: enrichedMembers,
 		invitations: invitations || [],
+		joinLink: joinLink || null,
 		userRole: userMember.role,
 		permissions: {
 			canManageMembers,
@@ -246,5 +255,128 @@ export const actions: Actions = {
 			inviteSuccess: true,
 			message: 'Invitation sent successfully'
 		};
+	},
+
+	createJoinLink: async ({ params, locals }) => {
+		const { user } = await locals.safeGetSession();
+
+		if (!user) {
+			return fail(401, { error: 'Unauthorized' });
+		}
+
+		const { teamId } = params;
+
+		// Verify user has permission
+		const { data: member } = await locals.supabase
+			.from('team_members')
+			.select('role')
+			.eq('team_id', teamId)
+			.eq('user_id', user.id)
+			.single();
+
+		if (!member || (member.role !== 'owner' && member.role !== 'admin')) {
+			return fail(403, { error: 'You do not have permission to create join links' });
+		}
+
+		// Check if join link already exists
+		const { data: existingLink } = await locals.supabase
+			.from('team_join_links')
+			.select('*')
+			.eq('team_id', teamId)
+			.eq('is_active', true)
+			.single();
+
+		if (existingLink) {
+			return { success: true, joinLinkCreated: true };
+		}
+
+		// Generate join token and code
+		const token = crypto.randomUUID();
+		
+		// Generate a unique 6-character code
+		let code = '';
+		let isUnique = false;
+		const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Exclude similar looking chars
+		
+		while (!isUnique) {
+			code = '';
+			for (let i = 0; i < 6; i++) {
+				code += chars.charAt(Math.floor(Math.random() * chars.length));
+			}
+			
+			// Check if code is unique
+			const { data: existingCode } = await locals.supabase
+				.from('team_join_links')
+				.select('id')
+				.eq('code', code)
+				.single();
+			
+			if (!existingCode) {
+				isUnique = true;
+			}
+		}
+
+		// Create join link with code
+		const { error: linkError } = await locals.supabase.from('team_join_links').insert({
+			team_id: teamId,
+			token,
+			code,
+			created_by: user.id,
+			is_active: true
+		});
+
+		if (linkError) {
+			console.error('Error creating join link:', linkError);
+			return fail(500, { error: 'Failed to create join link' });
+		}
+
+		return { success: true, joinLinkCreated: true };
+	},
+
+	toggleJoinLink: async ({ params, locals }) => {
+		const { user } = await locals.safeGetSession();
+
+		if (!user) {
+			return fail(401, { error: 'Unauthorized' });
+		}
+
+		const { teamId } = params;
+
+		// Verify user has permission
+		const { data: member } = await locals.supabase
+			.from('team_members')
+			.select('role')
+			.eq('team_id', teamId)
+			.eq('user_id', user.id)
+			.single();
+
+		if (!member || (member.role !== 'owner' && member.role !== 'admin')) {
+			return fail(403, { error: 'You do not have permission to manage join links' });
+		}
+
+		// Get current join link
+		const { data: joinLink } = await locals.supabase
+			.from('team_join_links')
+			.select('*')
+			.eq('team_id', teamId)
+			.eq('is_active', true)
+			.single();
+
+		if (!joinLink) {
+			return fail(404, { error: 'No active join link found' });
+		}
+
+		// Toggle active status
+		const { error: updateError } = await locals.supabase
+			.from('team_join_links')
+			.update({ is_active: !joinLink.is_active })
+			.eq('id', joinLink.id);
+
+		if (updateError) {
+			console.error('Error toggling join link:', updateError);
+			return fail(500, { error: 'Failed to toggle join link' });
+		}
+
+		return { success: true, joinLinkToggled: true };
 	}
 };
