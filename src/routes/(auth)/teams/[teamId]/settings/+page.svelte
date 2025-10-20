@@ -169,9 +169,68 @@
 						<h2 class="text-xl font-semibold mb-4" style="color: var(--theme-foreground);">
 							Invite Members
 						</h2>
-						<p class="text-sm mb-4" style="color: var(--theme-sidebar-muted);">
-							Invite functionality coming soon! You'll be able to send email invitations to new team members.
-						</p>
+
+						{#if form?.inviteSuccess}
+							<div class="mb-4 p-4 rounded-lg" style="background: #10b981; color: white;">
+								{form.message || 'Invitation sent successfully!'}
+							</div>
+						{/if}
+
+						{#if form?.error && !form?.success}
+							<div class="mb-4 p-4 rounded-lg" style="background: #ef4444; color: white;">
+								{form.error}
+							</div>
+						{/if}
+
+						<form method="POST" action="?/inviteMember" use:enhance class="space-y-4">
+							<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+								<div class="md:col-span-2">
+									<label for="email" class="block text-sm font-medium mb-2" style="color: var(--theme-foreground);">
+										Email Address
+									</label>
+									<input
+										type="email"
+										id="email"
+										name="email"
+										required
+										placeholder="colleague@example.com"
+										class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2"
+										style="background: var(--theme-sidebar-bg); color: var(--theme-foreground); border-color: var(--theme-sidebar-border);"
+									/>
+								</div>
+
+								<div>
+									<label for="role" class="block text-sm font-medium mb-2" style="color: var(--theme-foreground);">
+										Role
+									</label>
+									<select
+										id="role"
+										name="role"
+										required
+										class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2"
+										style="background: var(--theme-sidebar-bg); color: var(--theme-foreground); border-color: var(--theme-sidebar-border);"
+									>
+										<option value="member">Member</option>
+										<option value="admin">Admin</option>
+										<option value="viewer">Viewer</option>
+									</select>
+								</div>
+							</div>
+
+							<button
+								type="submit"
+								class="px-4 py-2 rounded-lg font-medium text-white focus:outline-none focus:ring-2"
+								style="background: var(--theme-sidebar-accent);"
+							>
+								Send Invitation
+							</button>
+						</form>
+
+						<div class="mt-4 p-4 rounded-lg" style="background: var(--theme-sidebar-hover);">
+							<p class="text-sm" style="color: var(--theme-sidebar-muted);">
+								<strong>Note:</strong> Email sending is not yet configured. Invitations are created in the database and will appear in the pending invitations list below.
+							</p>
+						</div>
 					</div>
 				{/if}
 

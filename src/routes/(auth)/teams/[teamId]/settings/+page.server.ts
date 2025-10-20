@@ -141,5 +141,110 @@ export const actions: Actions = {
 		}
 
 		return { success: true };
+	},
+
+	inviteMember: async ({ request, params, locals }) => {
+		const { user } = await locals.safeGetSession();
+
+		if (!user) {
+			return fail(401, { error: 'Unauthorized' });
+		}
+
+		const { teamId } = params;
+		const formData = await request.formData();
+		const email = formData.get('email')?.toString()?.trim().toLowerCase();
+		const role = formData.get('role')?.toString() as 'admin' | 'member' | 'viewer';
+
+		// Validate email
+		if (!email || !email.includes('@')) {
+			return fail(400, { error: 'Valid email is required' });
+		}
+
+		// Validate role
+		if (!role || !['admin', 'member', 'viewer'].includes(role)) {
+			return fail(400, { error: 'Valid role is required' });
+		}
+
+		// Verify user has permission to invite
+		const { data: member } = await locals.supabase
+			.from('team_members')
+			.select('role')
+			.eq('team_id', teamId)
+			.eq('user_id', user.id)
+			.single();
+
+		if (!member || (member.role !== 'owner' && member.role !== 'admin')) {
+			return fail(403, { error: 'You do not have permission to invite members' });
+		}
+
+		// Check if user is trying to invite themselves
+		if (email === user.email) {
+			return fail(400, { error: 'You cannot invite yourself' });
+		}
+
+		// Check if email is already a team member
+		const { data: existingMember } = await locals.supabase
+			.from('team_members')
+			.select('user_id, user_profiles!inner(user_id)')
+			.eq('team_id', teamId);
+
+		// Get user IDs from existing members
+		const memberUserIds = existingMember?.map((m) => m.user_id) || [];
+
+		// Check if any of these users have this email
+		if (memberUserIds.length > 0) {
+			const { data: authUsers } = await locals.supabase.auth.admin.listUsers();
+			const existingUser = authUsers?.users.find(
+				(u) => u.email?.toLowerCase() === email && memberUserIds.includes(u.id)
+			);
+
+			if (existingUser) {
+				return fail(400, { error: 'This user is already a team member' });
+			}
+		}
+
+		// Check for existing pending invitation
+		const { data: existingInvite } = await locals.supabase
+			.from('team_invitations')
+			.select('id')
+			.eq('team_id', teamId)
+			.eq('email', email)
+			.eq('status', 'pending')
+			.single();
+
+		if (existingInvite) {
+			return fail(400, { error: 'An invitation has already been sent to this email' });
+		}
+
+		// Generate invitation token
+		const token = crypto.randomUUID();
+		const expiresAt = new Date();
+		expiresAt.setDate(expiresAt.getDate() + 7); // 7 days from now
+
+		// Create invitation
+		const { error: inviteError } = await locals.supabase.from('team_invitations').insert({
+			team_id: teamId,
+			email,
+			role,
+			token,
+			invited_by: user.id,
+			status: 'pending',
+			expires_at: expiresAt.toISOString()
+		});
+
+		if (inviteError) {
+			console.error('Error creating invitation:', inviteError);
+			return fail(500, { error: 'Failed to create invitation' });
+		}
+
+		// TODO: Send invitation email (T045)
+		// For now, we'll just return success with the token
+		// In production, this would trigger an email with the invitation link
+
+		return { 
+			success: true, 
+			inviteSuccess: true,
+			message: 'Invitation sent successfully'
+		};
 	}
 };
