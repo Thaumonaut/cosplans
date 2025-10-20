@@ -1,17 +1,23 @@
-# Feature Specification: Teams Creation
+# Feature Specification: Teams Creation & Cross-Team Management
 
 **Feature Branch**: `021-shoots-teams-creation`  
 **Created**: October 16, 2025  
-**Updated**: October 20, 2025 (Scope refined: shoots deferred)  
+**Updated**: October 20, 2025 (Added cross-team architecture: All Teams widget & dashboard)  
 **Status**: Draft  
 **Tier**: 0 - Foundation (Critical)  
 **Priority**: P0 (Must build early)
 
 ## Overview
 
-Teams are the core organizational unit in Cosplans. A Team is a group of collaborators (photographers, assistants, coordinators) who work together on photography projects. This feature enables users to create teams, invite members, and manage team membership. This is foundational because it satisfies the constitutional requirement that every user must own at least one team, and it unblocks user onboarding completion.
+Teams are the core organizational unit in Cosplans. A Team is a group of collaborators (photographers, assistants, coordinators) who work together on photography projects. This feature enables users to create teams, invite members, and manage team membership across three levels of interaction:
 
-**Scope Note**: Shoots functionality (creating and managing photography events within teams) has been deferred to the next feature phase to accelerate delivery of the auth onboarding blocker. This feature focuses exclusively on team infrastructure.
+1. **Team-Scoped Dashboard** (Primary Workspace): Focused view for managing a single team's shoots, costumes, and schedules
+2. **All Teams Activity Widget**: Quick awareness of upcoming shoots across all teams without context switching
+3. **All Teams Dashboard**: Unified cross-team view with calendar, timeline, and task management for power users
+
+This is foundational because it satisfies the constitutional requirement that every user must own at least one team, and it unblocks user onboarding completion. The three-level architecture provides progressive disclosure: solo users work within single teams, multi-team users gain awareness through the widget, and power users leverage the full All Teams dashboard for complex coordination.
+
+**Scope Note**: Shoots functionality (creating and managing photography events within teams) has been deferred to the next feature phase to accelerate delivery of the auth onboarding blocker. This feature focuses exclusively on team infrastructure and cross-team navigation patterns.
 
 ---
 
@@ -87,6 +93,47 @@ Team owner wants to view team members, change their roles, and remove them if ne
 3. **Given** team owner removes member, **When** removal is confirmed, **Then** member loses access to team and its shoots
 4. **Given** member is removed, **When** user tries to access team, **Then** user receives "Access Denied" error
 5. **Given** pending invitation exists, **When** owner cancels it, **Then** invitation is marked expired and invitee doesn't receive it
+
+---
+
+### User Story 7 - All Teams Activity Widget (Priority: P2)
+
+User with multiple teams wants quick awareness of upcoming shoots across all teams without switching context.
+
+**Why this priority**: Provides cross-team awareness without overwhelming single-team users. Important for multi-team coordination but not critical for MVP.
+
+**Independent Test**: Widget displays correctly and links to All Teams dashboard independently of team context.
+
+**Acceptance Scenarios**:
+
+1. **Given** user is on team dashboard, **When** user views page, **Then** "All Teams Activity" widget shows 5 upcoming shoots from all teams
+2. **Given** widget shows shoots, **When** user views shoot items, **Then** each shoot displays team badge with team name and color
+3. **Given** user clicks widget shoot, **When** shoot is clicked, **Then** user navigates to that shoot's detail page in its team context
+4. **Given** user clicks "View All Teams Timeline", **When** link is clicked, **Then** user navigates to `/all-teams` dashboard
+5. **Given** user has no upcoming shoots, **When** user views widget, **Then** widget shows "No upcoming shoots across all teams" message
+6. **Given** user has only one team, **When** user views dashboard, **Then** widget is hidden (no need for cross-team awareness)
+
+---
+
+### User Story 8 - All Teams Dashboard (Priority: P3)
+
+User managing multiple teams wants a unified view to coordinate shoots, tasks, and schedules across all projects simultaneously.
+
+**Why this priority**: Power user feature for complex multi-team coordination. Lower priority as it serves advanced use cases.
+
+**Independent Test**: All Teams dashboard functions independently of team context switching.
+
+**Acceptance Scenarios**:
+
+1. **Given** user navigates to `/all-teams`, **When** page loads, **Then** calendar view shows shoots from all user's teams with color-coded team indicators
+2. **Given** user is on calendar view, **When** user switches to timeline view, **Then** Gantt chart displays all teams' shoots in parallel timelines
+3. **Given** user is on timeline view, **When** user switches to tasks view, **Then** aggregated task list shows tasks from all teams sorted by priority and due date
+4. **Given** user views calendar, **When** user clicks team filter dropdown, **Then** user can filter view to specific teams or "All Teams"
+5. **Given** user filters to specific team, **When** filter is applied, **Then** only that team's shoots/tasks are displayed
+6. **Given** user clicks shoot on calendar, **When** shoot is clicked, **Then** shoot detail modal opens showing team context and full shoot information
+7. **Given** user has 10+ teams, **When** user views timeline, **Then** timeline is scrollable and performant with all teams visible
+8. **Given** user switches team context in navigation, **When** user returns to All Teams page, **Then** All Teams page still shows all teams (not affected by context switch)
+9. **Given** user has no teams, **When** user navigates to `/all-teams`, **Then** user sees empty state with prompt to create first team
 
 ---
 

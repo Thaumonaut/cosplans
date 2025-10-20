@@ -74,7 +74,32 @@ display an error message: "Cannot delete your only team. Create or join another 
 **Solo User Support**: Users working independently effectively operate as a "team of one"
 with full owner permissions. This ensures a consistent permission model and data architecture
 across all use cases—whether users collaborate in large teams or work solo on personal
-projects. All core features (shoots, costumes, props, schedules) exist within a team context.
+projects. All core features (shoots, costumes, props, schedules) are owned by a team.
+
+**Cross-Team Awareness and Management**: While the application maintains a primary team context
+for focused work, users MUST be able to view and manage shoots, tasks, and schedules from all
+their teams in a unified "All Teams" dashboard. The system provides three levels of team views:
+
+1. **Team-Scoped Dashboard** (Primary Workspace): Default view showing detailed shoot management,
+   costumes, props, and schedules for the currently selected team. Full features and focused
+   context for day-to-day operations.
+
+2. **All Teams Activity Widget**: Compact widget displayed on team dashboards showing upcoming
+   shoots from all user's teams. Provides quick awareness of cross-team commitments without
+   requiring context switching. Links to the full All Teams dashboard.
+
+3. **All Teams Dashboard** (Cross-Team Management): Dedicated page (`/all-teams`) providing
+   unified views across all teams:
+   - Calendar View: Shows shoots from all teams with color-coded team indicators
+   - Timeline View: Gantt-style visualization for identifying overlapping shoots and conflicts
+   - Task Management: Aggregated task list from all teams with filtering and priority sorting
+   - Team Filtering: Filter views to specific teams while maintaining cross-team context
+
+**Team Context Switching**: The team dropdown in the navigation allows users to switch their
+primary team context, which updates the team-scoped dashboard and all team-specific pages.
+This context switch does NOT affect the All Teams dashboard, which always shows data from all
+user's teams. Team switching is designed for focused work within a single team, while the All
+Teams dashboard is designed for holistic planning across multiple projects.
 
 **Rationale**: The application is fundamentally team-centric in its architecture and data
 model. All features are designed around team workflows and team-scoped data. Requiring every
@@ -83,6 +108,13 @@ feature access. Solo cosplayers benefit from the same powerful features as colla
 teams without added complexity. The team ownership requirement prevents edge cases where
 users have no context to create or view content, and ensures proper cleanup when teams
 disband (remaining member must join/create another team before deletion).
+
+Users participating in multiple cosplay teams need both focused team workspaces and holistic
+cross-team views. The three-level architecture (team dashboard, quick widget, all teams page)
+provides progressive disclosure: casual users work within single teams, active multi-team
+members use the widget for awareness, and power users leverage the full All Teams dashboard
+for complex coordination. This approach prevents overwhelming solo users while empowering
+multi-team users to manage complex scheduling across multiple projects.
 
 ### III. External Integration Integrity
 
