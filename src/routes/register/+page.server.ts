@@ -39,9 +39,25 @@ export const actions = {
       })
     }
 
-    if (password.length < 6) {
+    // Validate password strength (Supabase requirements)
+    if (password.length < 8) {
       return fail(400, {
-        error: 'Password must be at least 6 characters long',
+        error: 'Password must be at least 8 characters long',
+        email,
+        firstName,
+        lastName
+      })
+    }
+
+    // Check for required character types
+    const hasLowercase = /[a-z]/.test(password)
+    const hasUppercase = /[A-Z]/.test(password)
+    const hasNumber = /[0-9]/.test(password)
+    const hasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(password)
+
+    if (!hasLowercase || !hasUppercase || !hasNumber || !hasSpecial) {
+      return fail(400, {
+        error: 'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character',
         email,
         firstName,
         lastName
@@ -71,12 +87,25 @@ export const actions = {
         })
       }
 
+      // If email confirmation is disabled, user is signed in immediately
+      // Redirect to onboarding to create their first team (Constitutional requirement)
+      if (data.session) {
+        console.log('✅ User signed up and auto-signed in, redirecting to onboarding')
+        throw redirect(303, '/onboarding')
+      }
+
+      // If email confirmation is required, show success message
       return {
         success: true,
         message: 'Account created successfully! Please check your email for verification.'
       }
     } catch (error) {
-      console.error('Signup error:', error)
+      // If it's a redirect, re-throw it (don't log as error)
+      if (error instanceof Response && error.status >= 300 && error.status < 400) {
+        throw error
+      }
+
+      console.error('❌ Signup error:', error)
       return fail(400, {
         error: 'An error occurred during registration',
         email,
@@ -93,8 +122,12 @@ function getAuthErrorMessage(error: any) {
     return 'An account with this email already exists'
   }
 
+  if (error?.code === 'weak_password' || error?.message?.includes('Password should contain')) {
+    return 'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character'
+  }
+
   if (error?.message?.includes('Password should be at least')) {
-    return 'Password must be at least 6 characters long'
+    return 'Password must be at least 8 characters long'
   }
 
   return 'Registration failed. Please try again'

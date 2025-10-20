@@ -17,9 +17,35 @@
   let firstName = ''
   let lastName = ''
 
-  // Validation
-  $: isFormValid = email && password && confirmPassword && password === confirmPassword && password.length >= 6
-  $: passwordStrength = password.length >= 8 ? 'strong' : password.length >= 6 ? 'medium' : 'weak'
+  // Debounced password for validation (only update every 300ms)
+  let debouncedPassword = ''
+  let debounceTimer: ReturnType<typeof setTimeout>
+  
+  $: {
+    // Debounce password validation
+    clearTimeout(debounceTimer)
+    debounceTimer = setTimeout(() => {
+      debouncedPassword = password
+    }, 300)
+  }
+
+  // Password strength validation (using debounced password)
+  $: hasMinLength = debouncedPassword.length >= 8
+  $: hasLowercase = /[a-z]/.test(debouncedPassword)
+  $: hasUppercase = /[A-Z]/.test(debouncedPassword)
+  $: hasNumber = /[0-9]/.test(debouncedPassword)
+  $: hasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(debouncedPassword)
+  $: isPasswordValid = hasMinLength && hasLowercase && hasUppercase && hasNumber && hasSpecial
+  $: passwordsMatch = password === confirmPassword && confirmPassword.length > 0
+  
+  // Calculate password strength (0-5 requirements met)
+  $: requirementsMet = [hasMinLength, hasLowercase, hasUppercase, hasNumber, hasSpecial].filter(Boolean).length
+  $: strengthPercentage = (requirementsMet / 5) * 100
+  $: strengthColor = requirementsMet <= 2 ? 'bg-red-500' : requirementsMet <= 3 ? 'bg-yellow-500' : requirementsMet === 4 ? 'bg-blue-500' : 'bg-green-500'
+  $: strengthLabel = requirementsMet <= 2 ? 'Weak' : requirementsMet <= 3 ? 'Fair' : requirementsMet === 4 ? 'Good' : 'Strong'
+  
+  // Form validation
+  $: isFormValid = email && firstName && lastName && isPasswordValid && passwordsMatch
 
   const togglePasswordVisibility = (field: 'password' | 'confirm') => {
     if (field === 'password') {
@@ -179,15 +205,99 @@
             </button>
           </div>
 
-          {#if password}
-            <div class="mt-2">
-              <div class="flex items-center space-x-2">
-                <div class="flex-1 bg-gray-200 rounded-full h-2">
-                  <div
-                    class="h-2 rounded-full transition-all duration-300 {passwordStrength === 'weak' ? 'bg-red-500 w-1/3' : passwordStrength === 'medium' ? 'bg-yellow-500 w-2/3' : 'bg-green-500 w-full'}"
+          {#if password.length > 0}
+            <div class="mt-3 p-3 bg-gray-50 rounded-md space-y-3 text-sm">
+              <!-- Strength Indicator -->
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <p class="font-medium text-gray-700">Password Strength:</p>
+                  <span class="text-xs font-medium" class:text-red-600={requirementsMet <= 2} class:text-yellow-600={requirementsMet === 3} class:text-blue-600={requirementsMet === 4} class:text-green-600={requirementsMet === 5}>
+                    {strengthLabel}
+                  </span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div 
+                    class="h-2 rounded-full transition-all duration-300 {strengthColor}" 
+                    style="width: {strengthPercentage}%"
                   ></div>
                 </div>
-                <span class="text-xs text-gray-600 capitalize">{passwordStrength}</span>
+              </div>
+              
+              <!-- Requirements Checklist -->
+              <div>
+                <p class="font-medium text-gray-700 mb-2">Requirements ({requirementsMet}/5):</p>
+                <div class="space-y-1.5">
+                <div class="flex items-center gap-2">
+                  {#if hasMinLength}
+                    <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                  {:else}
+                    <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                    </svg>
+                  {/if}
+                  <span class:text-green-600={hasMinLength} class:text-gray-600={!hasMinLength}>
+                    At least 8 characters
+                  </span>
+                </div>
+                <div class="flex items-center gap-2">
+                  {#if hasLowercase}
+                    <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                  {:else}
+                    <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                    </svg>
+                  {/if}
+                  <span class:text-green-600={hasLowercase} class:text-gray-600={!hasLowercase}>
+                    One lowercase letter (a-z)
+                  </span>
+                </div>
+                <div class="flex items-center gap-2">
+                  {#if hasUppercase}
+                    <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                  {:else}
+                    <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                    </svg>
+                  {/if}
+                  <span class:text-green-600={hasUppercase} class:text-gray-600={!hasUppercase}>
+                    One uppercase letter (A-Z)
+                  </span>
+                </div>
+                <div class="flex items-center gap-2">
+                  {#if hasNumber}
+                    <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                  {:else}
+                    <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                    </svg>
+                  {/if}
+                  <span class:text-green-600={hasNumber} class:text-gray-600={!hasNumber}>
+                    One number (0-9)
+                  </span>
+                </div>
+                <div class="flex items-center gap-2">
+                  {#if hasSpecial}
+                    <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                  {:else}
+                    <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                    </svg>
+                  {/if}
+                  <span class:text-green-600={hasSpecial} class:text-gray-600={!hasSpecial}>
+                    One special character (!@#$%^&*...)
+                  </span>
+                </div>
+                </div>
               </div>
             </div>
           {/if}

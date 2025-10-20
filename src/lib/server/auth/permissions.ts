@@ -98,9 +98,14 @@ export async function attachAbilities(
     .eq('user_id', user.id);
 
   if (error) {
-    console.error('Error fetching team memberships:', error);
-    // Return minimal permissions on error
+    console.warn('⚠️ Error fetching team memberships (user may not have completed onboarding):', error.message);
+    // Return minimal permissions - this is expected for new users who haven't completed onboarding
     return defineAbilitiesFor(user, []);
+  }
+
+  // Empty array is valid - new users won't have team memberships until onboarding
+  if (!teamMemberships || teamMemberships.length === 0) {
+    console.log('ℹ️ User has no team memberships yet (likely needs onboarding)');
   }
 
   return defineAbilitiesFor(user, teamMemberships || []);

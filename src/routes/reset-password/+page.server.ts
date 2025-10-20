@@ -55,7 +55,12 @@ export const actions: Actions = {
 
       throw redirect(302, '/login?message=password-updated')
     } catch (error) {
-      console.error('Password update error:', error)
+      // Re-throw redirects - they are NOT errors!
+      if (error instanceof Response && error.status >= 300 && error.status < 400) {
+        throw error
+      }
+
+      console.error('❌ Password update error:', error)
       return fail(400, {
         error: 'An error occurred while updating your password',
         token

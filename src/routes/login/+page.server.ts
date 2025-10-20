@@ -27,45 +27,46 @@ export const actions = {
       })
     }
 
-    try {
-      // Use the Supabase client from locals (set up in hooks.server.ts)
-      const { data: authData, error } = await locals.supabase.auth.signInWithPassword({
-        email,
-        password
-      })
+    // Use the Supabase client from locals (set up in hooks.server.ts)
+    const { data: authData, error } = await locals.supabase.auth.signInWithPassword({
+      email,
+      password
+    })
 
-      if (error) {
-        console.error('Login error:', error)
-        return fail(400, {
-          error: getAuthErrorMessage(error),
-          email
-        })
-      }
-
-      if (!authData.session) {
-        console.error('Login succeeded but no session returned')
-        return fail(400, {
-          error: 'Login failed - no session created',
-          email
-        })
-      }
-
-      console.log('Login successful, session created:', authData.session.user.email)
-
-      // Redirect to dashboard on successful login
-      throw redirect(303, '/dashboard')
-    } catch (error: any) {
-      // Don't catch redirect errors
-      if (error?.status === 303 || error?.status === 302) {
-        throw error
-      }
-      
+    if (error) {
       console.error('Login error:', error)
       return fail(400, {
-        error: 'An error occurred during login',
+        error: getAuthErrorMessage(error),
         email
       })
     }
+
+    if (!authData.session) {
+      console.error('Login succeeded but no session returned')
+      return fail(400, {
+        error: 'Login failed - no session created',
+        email
+      })
+    }
+
+    console.log('✅ Login successful, session created:', authData.session.user.email)
+
+    // Check if user has completed onboarding (Constitutional requirement: must own a team)
+    const userId = authData.session.user.id
+    const { data: profile } = await locals.supabase
+      .from('user_profiles')
+      .select('onboarding_completed')
+      .eq('id', userId)
+      .single()
+
+    // Redirect to onboarding if not completed
+    if (!profile || !profile.onboarding_completed) {
+      console.log('🎯 User needs onboarding, redirecting...')
+      throw redirect(303, '/onboarding')
+    }
+
+    // Redirect to dashboard on successful login
+    throw redirect(303, '/dashboard')
   }
 }
 

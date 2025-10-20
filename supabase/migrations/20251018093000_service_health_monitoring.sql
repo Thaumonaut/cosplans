@@ -2,13 +2,25 @@
 -- Created: 2025-10-18
 -- Description: Introduce heartbeat tracking table, health status enums, and refreshed health snapshot view.
 
+-- Enable UUID extension if not already enabled
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 -- Enumerated types for heartbeat outcomes and health status
-create type if not exists public.service_connection_heartbeat_status as enum ('pass', 'fail');
-create type if not exists public.service_health_status as enum ('active', 'degraded', 'error');
+DO $$ BEGIN
+  CREATE TYPE public.service_connection_heartbeat_status AS ENUM ('pass', 'fail');
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
+
+DO $$ BEGIN
+  CREATE TYPE public.service_health_status AS ENUM ('active', 'degraded', 'error');
+EXCEPTION
+  WHEN duplicate_object THEN null;
+END $$;
 
 -- Heartbeat events table
 create table if not exists public.service_connection_heartbeats (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   service_connection_id uuid not null references public.service_connection_profiles(id) on delete cascade,
   status public.service_connection_heartbeat_status not null,
   latency_ms integer,

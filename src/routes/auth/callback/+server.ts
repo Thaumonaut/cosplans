@@ -4,6 +4,8 @@ import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/publi
 import type { RequestHandler } from './$types'
 
 export const GET: RequestHandler = async ({ url, cookies }) => {
+  console.log('🔐 Auth callback triggered')
+  
   const code = url.searchParams.get('code')
   const error = url.searchParams.get('error')
   const error_description = url.searchParams.get('error_description')
@@ -15,9 +17,12 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
   }
 
   if (!code) {
+    console.error('No authorization code received')
     throw redirect(302, '/login?error=No authorization code received')
   }
 
+  console.log('📝 Exchanging code for session...')
+  
   try {
     // Create Supabase server client (same pattern as hooks.server.ts)
     const supabase = createServerClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
@@ -39,10 +44,52 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
       throw redirect(302, `/login?error=${encodeURIComponent(sessionError.message)}`)
     }
 
+    console.log('✅ Session created for user:', data.user?.email)
+    console.log('📋 User metadata:', JSON.stringify(data.user?.user_metadata, null, 2))
+
+    // Check if user has completed onboarding (Constitutional requirement: must own a team)
+    if (data.user) {
+      console.log('🔍 Checking onboarding status...')
+      
+      const { data: profile, error: profileError } = await supabase
+        .from('user_profiles')
+        .select('onboarding_completed')
+        .eq('id', data.user.id)
+        .single()
+
+      console.log('Profile data:', profile, 'Error:', profileError)
+
+      // Redirect to onboarding if not completed or profile doesn't exist
+      if (!profile || !profile.onboarding_completed) {
+        console.log('🎯 Redirecting to onboarding (profile:', !!profile, 'completed:', profile?.onboarding_completed, ')')
+        // Use 303 See Other to force a GET request and prevent any POST data from being resubmitted
+        return new Response(null, {
+          status: 303,
+          headers: {
+            location: '/onboarding'
+          }
+        })
+      }
+      
+      console.log('✅ Onboarding already completed')
+    }
+
     // Redirect to dashboard on successful authentication
-    throw redirect(302, '/dashboard')
+    console.log('🏠 Redirecting to dashboard')
+    return new Response(null, {
+      status: 303,
+      headers: {
+        location: '/dashboard'
+      }
+    })
   } catch (error) {
-    console.error('OAuth callback error:', error)
+    // Re-throw redirects - SvelteKit redirects are Response objects with status 3xx
+    if (error instanceof Response) {
+      console.log('✅ Re-throwing redirect response:', error.status, error.headers.get('location'))
+      throw error
+    }
+    
+    console.error('❌ OAuth callback error:', error)
     throw redirect(302, '/login?error=Authentication failed')
   }
 }

@@ -72,12 +72,12 @@ const authGuard: Handle = async ({ event, resolve }) => {
   }
 
   // Protected routes that require authentication
-  const protectedRoutes = ['/dashboard', '/timeline', '/progress', '/portfolio', '/budget'];
+  const protectedRoutes = ['/dashboard', '/timeline', '/progress', '/portfolio', '/budget', '/teams'];
   const isProtectedRoute = protectedRoutes.some(route => event.url.pathname.startsWith(route));
 
-  // if (isProtectedRoute && !session) {
-  //   redirect(303, '/auth/login');
-  // }
+  if (isProtectedRoute && !session) {
+    throw redirect(303, '/login');
+  }
 
   return resolve(event);
 };

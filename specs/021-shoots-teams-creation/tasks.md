@@ -14,11 +14,11 @@
 
 **Purpose**: Project initialization and teams feature structure
 
-- [ ] T001 Create teams directory structure in `src/lib/components/teams/`, `src/lib/server/teams/`, `src/lib/types/`
-- [ ] T002 [P] Create TypeScript types for teams in `src/lib/types/teams.ts`
-- [ ] T003 [P] Run database migration `database/migrations/004_teams_schema.sql` to create teams, team_members, and team_invitations tables
+- [X] T001 Create teams directory structure in `src/lib/components/teams/`, `src/lib/server/teams/`, `src/lib/types/`
+- [X] T002 [P] Create TypeScript types for teams in `src/lib/types/teams.ts`
+- [X] T003 [P] Run database migration `database/migrations/004_teams_schema.sql` to create teams, team_members, and team_invitations tables
 - [ ] T004 [P] Verify RLS policies are active on all team tables in Supabase dashboard
-- [ ] T005 [P] Add team-related environment variables if needed (none required per research.md)
+- [X] T005 [P] Add team-related environment variables if needed (none required per research.md)
 
 ---
 
@@ -28,10 +28,10 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T006 Create TeamService class in `src/lib/server/teams/team-service.ts` with createTeam, getUserTeams, getTeamById methods
-- [ ] T007 [P] Create InvitationService class in `src/lib/server/teams/invitation-service.ts` with createInvitation, acceptInvitation methods
-- [ ] T008 [P] Create team permissions helper in `src/lib/server/teams/permissions.ts` with canManageMembers, canDeleteTeam functions
-- [ ] T009 [P] Create team store for client-side state in `src/lib/stores/team.ts` (update existing file)
+- [X] T006 Create TeamService class in `src/lib/server/teams/team-service.ts` with createTeam, getUserTeams, getTeamById methods
+- [X] T007 [P] Create InvitationService class in `src/lib/server/teams/invitation-service.ts` with createInvitation, acceptInvitation methods
+- [X] T008 [P] Create team permissions helper in `src/lib/server/teams/permissions.ts` with canManageMembers, canDeleteTeam functions
+- [X] T009 [P] Create team store for client-side state in `src/lib/stores/team.ts` (update existing file)
 - [ ] T010 [P] Add user_profiles table migration if not exists for onboarding_completed flag
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
@@ -50,21 +50,21 @@
 
 **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T011 [P] [US1] Unit test for TeamService.createTeam in `tests/unit/teams/team-service.test.ts`
-- [ ] T012 [P] [US1] Unit test for team ownership validation in `tests/unit/teams/team-service.test.ts`
+- [X] T011 [P] [US1] Unit test for TeamService.createTeam in `tests/unit/teams/team-service.test.ts`
+- [X] T012 [P] [US1] Unit test for team ownership validation in `tests/unit/teams/team-service.test.ts`
 - [ ] T013 [P] [US1] E2E test for team creation flow in `tests/e2e/teams/team-creation.spec.ts`
 
 ### Implementation for User Story 1
 
-- [ ] T014 [P] [US1] Create team creation form component in `src/lib/components/teams/TeamCreateForm.svelte`
-- [ ] T015 [P] [US1] Create teams list page in `src/routes/teams/+page.svelte`
-- [ ] T016 [P] [US1] Implement teams list loader in `src/routes/teams/+page.server.ts`
-- [ ] T017 [US1] Create team creation page in `src/routes/teams/create/+page.svelte`
-- [ ] T018 [US1] Implement team creation form action in `src/routes/teams/create/+page.server.ts`
+- [X] T014 [P] [US1] Create team creation form component in `src/lib/components/teams/TeamCreateForm.svelte`
+- [X] T015 [P] [US1] Create teams list page in `src/routes/teams/+page.svelte`
+- [X] T016 [P] [US1] Implement teams list loader in `src/routes/teams/+page.server.ts`
+- [X] T017 [US1] Create team creation page in `src/routes/teams/create/+page.svelte`
+- [X] T018 [US1] Implement team creation form action in `src/routes/teams/create/+page.server.ts`
 - [ ] T019 [US1] Create team details page in `src/routes/teams/[teamId]/+page.svelte`
 - [ ] T020 [US1] Implement team details loader in `src/routes/teams/[teamId]/+page.server.ts`
-- [ ] T021 [US1] Add team validation (name 1-100 chars, description 0-500 chars)
-- [ ] T022 [US1] Implement automatic owner assignment in team_members table
+- [X] T021 [US1] Add team validation (name 1-100 chars, description 0-500 chars)
+- [X] T022 [US1] Implement automatic owner assignment in team_members table
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 
