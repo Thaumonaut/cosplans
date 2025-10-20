@@ -5,8 +5,6 @@
 	export let data: PageData;
 	export let form: ActionData;
 
-	let activeTab: 'general' | 'members' | 'danger' = 'general';
-	let isEditingTeam = false;
 	let teamName = data.team.name;
 	let teamDescription = data.team.description || '';
 
@@ -40,9 +38,9 @@
 </svelte:head>
 
 <div class="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
-	<div class="max-w-7xl mx-auto">
+	<div class="max-w-4xl mx-auto">
 		<!-- Header -->
-		<div class="mb-6">
+		<div class="mb-8">
 			<div class="flex items-center gap-3 mb-2">
 				<a
 					href="/teams/{data.team.id}"
@@ -68,58 +66,9 @@
 			</p>
 		</div>
 
-		<!-- Tabs -->
-		<div
-			class="border-b mb-6"
-			style="border-color: var(--theme-sidebar-border);"
-		>
-			<nav class="flex gap-8">
-				<button
-					type="button"
-					on:click={() => (activeTab = 'general')}
-					class="pb-4 px-1 border-b-2 font-medium text-sm transition-colors"
-					class:active={activeTab === 'general'}
-					style="border-color: {activeTab === 'general'
-						? 'var(--theme-sidebar-accent)'
-						: 'transparent'}; color: {activeTab === 'general'
-						? 'var(--theme-foreground)'
-						: 'var(--theme-sidebar-muted)'};"
-				>
-					General
-				</button>
-				<button
-					type="button"
-					on:click={() => (activeTab = 'members')}
-					class="pb-4 px-1 border-b-2 font-medium text-sm transition-colors"
-					class:active={activeTab === 'members'}
-					style="border-color: {activeTab === 'members'
-						? 'var(--theme-sidebar-accent)'
-						: 'transparent'}; color: {activeTab === 'members'
-						? 'var(--theme-foreground)'
-						: 'var(--theme-sidebar-muted)'};"
-				>
-					Members
-				</button>
-				{#if data.permissions.canDeleteTeam}
-					<button
-						type="button"
-						on:click={() => (activeTab = 'danger')}
-						class="pb-4 px-1 border-b-2 font-medium text-sm transition-colors"
-						class:active={activeTab === 'danger'}
-						style="border-color: {activeTab === 'danger'
-							? 'var(--theme-sidebar-accent)'
-							: 'transparent'}; color: {activeTab === 'danger'
-							? 'var(--theme-foreground)'
-							: 'var(--theme-sidebar-muted)'};"
-					>
-						Danger Zone
-					</button>
-				{/if}
-			</nav>
-		</div>
-
-		<!-- General Tab -->
-		{#if activeTab === 'general'}
+		<!-- Single Column Layout -->
+		<div class="space-y-6">
+			<!-- General Settings -->
 			<div class="shadow rounded-lg p-6" style="background: var(--theme-sidebar-bg); border: 1px solid var(--theme-sidebar-border);">
 				<h2 class="text-xl font-semibold mb-4" style="color: var(--theme-foreground);">
 					Team Information
@@ -168,7 +117,7 @@
 							rows="4"
 							class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2"
 							style="background: var(--theme-sidebar-bg); color: var(--theme-foreground); border-color: var(--theme-sidebar-border);"
-						/>
+						></textarea>
 						<p class="mt-1 text-sm" style="color: var(--theme-sidebar-muted);">
 							{teamDescription.length}/500 characters
 						</p>
@@ -211,10 +160,8 @@
 					</dl>
 				</div>
 			</div>
-		{/if}
 
-		<!-- Members Tab -->
-		{#if activeTab === 'members'}
+			<!-- Team Members -->
 			<div class="space-y-6">
 				<!-- Invite Members Section -->
 				{#if data.permissions.canManageMembers}
@@ -239,11 +186,11 @@
 							<div class="flex items-center justify-between p-4 border rounded-lg" style="border-color: var(--theme-sidebar-border);">
 								<div class="flex items-center gap-4">
 									<div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold" style="background: var(--theme-sidebar-accent);">
-										{member.user_profiles?.display_name?.substring(0, 2).toUpperCase() || 'U'}
+										{member.display_name?.substring(0, 2).toUpperCase() || 'U'}
 									</div>
 									<div>
 										<p class="font-medium" style="color: var(--theme-foreground);">
-											{member.user_profiles?.display_name || 'Unknown User'}
+											{member.display_name || 'Unknown User'}
 										</p>
 										<p class="text-sm" style="color: var(--theme-sidebar-muted);">
 											Joined {formatDate(member.joined_at)}
@@ -285,10 +232,9 @@
 					</div>
 				{/if}
 			</div>
-		{/if}
 
-		<!-- Danger Zone Tab -->
-		{#if activeTab === 'danger' && data.permissions.canDeleteTeam}
+			<!-- Danger Zone -->
+			{#if data.permissions.canDeleteTeam}
 			<div class="shadow rounded-lg p-6" style="background: var(--theme-sidebar-bg); border: 1px solid var(--theme-sidebar-border);">
 				<h2 class="text-xl font-semibold mb-4" style="color: #ef4444;">
 					Danger Zone
@@ -313,6 +259,7 @@
 					</div>
 				</div>
 			</div>
-		{/if}
+			{/if}
+		</div>
 	</div>
 </div>

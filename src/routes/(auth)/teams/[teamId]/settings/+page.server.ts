@@ -27,8 +27,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 		.select(`
 			user_id,
 			role,
-			joined_at,
-			user_profiles!inner(display_name)
+			joined_at
 		`)
 		.eq('team_id', teamId)
 		.order('joined_at', { ascending: true });
@@ -36,6 +35,22 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	if (membersError) {
 		console.error('Error fetching team members:', membersError);
 	}
+
+	// Fetch display names for members
+	const memberIds = members?.map((m) => m.user_id) || [];
+	const { data: profiles } = await locals.supabase
+		.from('user_profiles')
+		.select('user_id, display_name')
+		.in('user_id', memberIds);
+
+	// Create a map of user_id to display_name
+	const profileMap = new Map(profiles?.map((p) => [p.user_id, p.display_name]) || []);
+
+	// Enrich members with display names
+	const enrichedMembers = (members || []).map((m) => ({
+		...m,
+		display_name: profileMap.get(m.user_id) || `User ${m.user_id.substring(0, 8)}`
+	}));
 
 	// Fetch pending invitations
 	const { data: invitations, error: invitationsError } = await locals.supabase
@@ -50,7 +65,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	}
 
 	// Check user's role in this team
-	const userMember = members?.find((m) => m.user_id === user.id);
+	const userMember = enrichedMembers.find((m) => m.user_id === user.id);
 	if (!userMember) {
 		throw error(403, 'You are not a member of this team');
 	}
@@ -62,7 +77,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 
 	return {
 		team,
-		members: members || [],
+		members: enrichedMembers,
 		invitations: invitations || [],
 		userRole: userMember.role,
 		permissions: {
