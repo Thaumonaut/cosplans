@@ -1,5 +1,5 @@
-import { createClient, type SupabaseClient } from '@supabase/supabase-js'
-import type { Database } from './supabase-types'
+import { createBrowserClient } from '@supabase/ssr'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
 // Get environment variables
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
@@ -9,18 +9,11 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables')
 }
 
-// Create Supabase client with auth configuration
-export const supabase: SupabaseClient<Database> = createClient<Database>(
+// Create Supabase browser client with SSR support
+// This properly handles PKCE flow and cookies for OAuth
+export const supabase: SupabaseClient = createBrowserClient(
   supabaseUrl,
-  supabaseAnonKey,
-  {
-    auth: {
-      autoRefreshToken: true,
-      persistSession: true,
-      detectSessionInUrl: true,
-      flowType: 'pkce'
-    }
-  }
+  supabaseAnonKey
 )
 
 // Auth helper functions

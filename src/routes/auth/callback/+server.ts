@@ -1,5 +1,6 @@
 import { redirect } from '@sveltejs/kit'
-import { createSupabaseServerClient } from '$lib/server/auth'
+import { createServerClient } from '@supabase/ssr'
+import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public'
 import type { RequestHandler } from './$types'
 
 export const GET: RequestHandler = async ({ url, cookies }) => {
@@ -18,18 +19,17 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
   }
 
   try {
-    // Create Supabase server client
-    const supabase = createSupabaseServerClient({
+    // Create Supabase server client (same pattern as hooks.server.ts)
+    const supabase = createServerClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
       cookies: {
-        get: (name: string) => cookies.get(name),
-        set: (name: string, value: string, options: any) => {
-          cookies.set(name, value, options)
-        },
-        remove: (name: string, options: any) => {
-          cookies.set(name, '', { ...options, maxAge: 0 })
+        getAll: () => cookies.getAll(),
+        setAll: (cookiesToSet) => {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            cookies.set(name, value, { ...options, path: '/' })
+          })
         }
       }
-    } as any)
+    })
 
     // Exchange code for session
     const { data, error: sessionError } = await supabase.auth.exchangeCodeForSession(code)
