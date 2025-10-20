@@ -109,8 +109,8 @@
 
 - [ ] T034 [P] [US2] Create team invite form component in `src/lib/components/teams/TeamInviteForm.svelte`
 - [ ] T035 [P] [US2] Create team member list component in `src/lib/components/teams/TeamMemberList.svelte`
-- [ ] T036 [US2] Create team settings page in `src/routes/teams/[teamId]/settings/+page.svelte`
-- [ ] T037 [US2] Implement team settings loader in `src/routes/teams/[teamId]/settings/+page.server.ts`
+- [X] T036 [US2] Create team settings page in `src/routes/teams/[teamId]/settings/+page.svelte`
+- [X] T037 [US2] Implement team settings loader in `src/routes/teams/[teamId]/settings/+page.server.ts`
 - [ ] T038 [US2] Add inviteMember form action in `src/routes/teams/[teamId]/settings/+page.server.ts`
 - [ ] T039 [US2] Implement invitation token generation using crypto.randomUUID()
 - [ ] T040 [US2] Create invitation acceptance page in `src/routes/invite/[token]/+page.svelte`
