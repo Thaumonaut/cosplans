@@ -5,6 +5,12 @@
 **Status**: In Progress  
 **Input**: User description: "Migrate UI library from shadcn-svelte to Flowbite Svelte and create reusable themed components to reduce code duplication and ensure consistent styling across the application"
 
+## Clarifications
+
+### Session 2025-10-21
+
+- Q: How should the refactored pages be deployed to production? → A: Feature flag the new components for gradual rollout with staging validation (1-2 weeks) before production
+
 ## User Scenarios & Testing *(mandatory)*
 
 <!--
@@ -94,6 +100,8 @@ Developers need existing pages refactored to use new reusable components to redu
 - **FR-010**: System MUST maintain backward compatibility with existing dashboard widgets through component wrappers
 - **FR-011**: Constitution and memory system MUST be updated to reflect Flowbite Svelte as primary UI library
 - **FR-012**: All refactored pages MUST maintain identical functionality to original implementation
+- **FR-013**: System MUST support feature flags to enable gradual rollout of refactored components in production
+- **FR-014**: Refactored components MUST be validated in staging environment for 1-2 weeks before production deployment
 
 ### Key Components
 
