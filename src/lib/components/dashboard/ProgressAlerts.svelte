@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { Button } from '$lib/components/ui/button';
 
   export let teamId: string;
 
@@ -275,21 +274,21 @@
             <!-- Actions -->
             <div class="flex gap-2">
               {#if !alert.acknowledged}
-                <Button
-                  variant="ghost"
-                  size="sm"
+                <button
+                  type="button"
+                  class="px-3 py-1 text-sm rounded hover:bg-gray-100 dark:hover:bg-gray-700"
                   on:click={() => acknowledgeAlert(alert.id)}
                 >
                   Acknowledge
-                </Button>
+                </button>
               {/if}
-              <Button
-                variant="ghost"
-                size="sm"
+              <button
+                type="button"
+                class="px-3 py-1 text-sm rounded hover:bg-gray-100 dark:hover:bg-gray-700"
                 on:click={() => dismissAlert(alert.id)}
               >
                 Dismiss
-              </Button>
+              </button>
             </div>
           </div>
         </div>

@@ -1,10 +1,21 @@
 <script lang="ts">
-  export let className: string = "";
-  export let variant: "outline" | "solid" = "solid";
+	// Temporary wrapper for dashboard components
+	export let variant: 'default' | 'secondary' | 'success' | 'warning' | 'danger' = 'default';
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	export let className: string = '';
+
+	$: backgroundColor = {
+		default: 'var(--theme-sidebar-accent)',
+		secondary: 'var(--theme-sidebar-muted)',
+		success: 'var(--theme-success)',
+		warning: 'var(--theme-warning)',
+		danger: 'var(--theme-error)'
+	}[variant];
 </script>
 
 <span
-  class={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${variant === "outline" ? "border border-gray-300 bg-white text-gray-700" : "bg-blue-100 text-blue-800"} ${className}`.trim()}
+	class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {className}"
+	style="background: {backgroundColor}; color: white;"
 >
-  <slot />
+	<slot />
 </span>

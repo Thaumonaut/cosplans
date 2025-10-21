@@ -4,6 +4,12 @@
 	import { onMount } from 'svelte';
 	import { team as teamStore } from '$lib/stores/team';
 	import ConfirmModal from '$lib/components/ui/ConfirmModal.svelte';
+	import ThemedCard from '$lib/components/ui/ThemedCard.svelte';
+	import ThemedInput from '$lib/components/ui/ThemedInput.svelte';
+	import ThemedTextarea from '$lib/components/ui/ThemedTextarea.svelte';
+	import ThemedButton from '$lib/components/ui/ThemedButton.svelte';
+	import ThemedAlert from '$lib/components/ui/ThemedAlert.svelte';
+	import ThemedSelect from '$lib/components/ui/ThemedSelect.svelte';
 	import type { PageData, ActionData } from './$types';
 
 	export let data: PageData;
@@ -147,21 +153,17 @@
 		<!-- Single Column Layout -->
 		<div class="space-y-6">
 			<!-- General Settings -->
-			<div class="shadow rounded-lg p-6" style="background: var(--theme-sidebar-bg); border: 1px solid var(--theme-sidebar-border);">
-				<h2 class="text-xl font-semibold mb-4" style="color: var(--theme-foreground);">
-					Team Information
-				</h2>
-
+			<ThemedCard title="Team Information">
 				{#if form?.success && form?.action === 'updateTeam'}
-					<div class="mb-4 p-4 rounded-lg" style="background: #10b981; color: white;">
+					<ThemedAlert type="success">
 						Team updated successfully!
-					</div>
+					</ThemedAlert>
 				{/if}
 
 				{#if form?.error && form?.action === 'updateTeam'}
-					<div class="mb-4 p-4 rounded-lg" style="background: #ef4444; color: white;">
+					<ThemedAlert type="error">
 						{form.error}
-					</div>
+					</ThemedAlert>
 				{/if}
 
 				<form method="POST" action="?/updateTeam" use:enhance={() => {
@@ -193,16 +195,13 @@
 						<label for="name" class="block text-sm font-medium mb-2" style="color: var(--theme-foreground);">
 							Team Name
 						</label>
-						<input
+						<ThemedInput
 							type="text"
-							id="name"
 							name="name"
 							bind:value={teamName}
 							disabled={!data.permissions.canEditTeam}
 							required
-							maxlength="100"
-							class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2"
-							style="background: var(--theme-sidebar-bg); color: var(--theme-foreground); border-color: var(--theme-sidebar-border);"
+							maxlength={100}
 						/>
 					</div>
 
@@ -210,16 +209,13 @@
 						<label for="description" class="block text-sm font-medium mb-2" style="color: var(--theme-foreground);">
 							Description
 						</label>
-						<textarea
-							id="description"
+						<ThemedTextarea
 							name="description"
 							bind:value={teamDescription}
 							disabled={!data.permissions.canEditTeam}
-							maxlength="500"
-							rows="4"
-							class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2"
-							style="background: var(--theme-sidebar-bg); color: var(--theme-foreground); border-color: var(--theme-sidebar-border);"
-						></textarea>
+							maxlength={500}
+							rows={4}
+						/>
 						<p class="mt-1 text-sm" style="color: var(--theme-sidebar-muted);">
 							{teamDescription.length}/500 characters
 						</p>
@@ -227,14 +223,13 @@
 
 					{#if data.permissions.canEditTeam}
 						<div class="flex gap-3">
-							<button
+							<ThemedButton
 								type="submit"
+								variant="primary"
 								disabled={!hasChanges}
-								class="px-4 py-2 rounded-lg font-medium text-white focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
-								style="background: var(--theme-sidebar-accent);"
 							>
 								Save Changes
-							</button>
+							</ThemedButton>
 							{#if hasChanges}
 								<button
 									type="button"
@@ -343,7 +338,7 @@
 						{/each}
 					</div>
 				</div>
-			</div>
+			</ThemedCard>
 
 			<!-- Team Management: Create & Join -->
 			<div class="shadow rounded-lg p-6" style="background: var(--theme-sidebar-bg); border: 1px solid var(--theme-sidebar-border);">
