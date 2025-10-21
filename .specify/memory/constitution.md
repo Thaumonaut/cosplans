@@ -1,18 +1,37 @@
 <!--
 Sync Impact Report:
-- Version change: 2.4.0 → 2.5.0
-- Modified principles: Added Principle II.5 (User Team Ownership Requirement)
-- Added sections: User Team Ownership, Team Deletion Rules, Solo User Support
+- Version change: 2.5.0 → 3.0.0 (MAJOR: New core principles added)
+- Modified principles: 
+  * Added Principle I.5 (Reduce Overwhelm via Prioritization)
+  * Added Principle II.7 (Community Trust & Accountability - Reputation System)
+  * Added Principle III.5 (Flexible & Fair Monetization)
+  * Added Principle VI.7 (Spec-Driven Development Workflow)
+  * Added Principle VII.5 (Dependency-First Development)
+  * Added Principle VIII.5 (Solo Developer Efficiency & Cost Optimization)
+  * Updated Principle V.5 (AI is Assistive, Not Creative)
+- Added sections: 
+  * Reputation System (tier-based accountability)
+  * Temp/Event Teams (short-lived collaboration)
+  * Monetization Strategy (0% commission, $5 Growth Premium)
+  * Spec-Driven Workflow (GitHub Spec Kit mandate)
+  * Cost Optimization (Cloudflare R2, Workers)
+  * AI Credit System (opt-in, cost-based)
+  * Phased Release Strategy
 - Removed sections: None
-- Specs affected: 020-user-management-and-access (onboarding must create team), 021-shoots-teams-creation (team deletion validation)
+- Specs affected: All future specs must follow spec-driven workflow
 - Templates requiring updates:
-  * ✅ spec-template.md - already supports user onboarding requirements
-  * ✅ tasks-template.md - already supports onboarding tasks
-  * ⚠ quickstart.md - may need team creation workflow documentation
+  * ⚠ spec-template.md - add reputation system requirements
+  * ⚠ plan-template.md - add cost optimization checkpoints
+  * ⚠ tasks-template.md - add dependency-first task ordering
+  * ⚠ quickstart.md - document spec-driven workflow
 - Follow-up TODOs:
-  * Verify team deletion logic prevents users from deleting their last owned team
-  * Ensure onboarding flow creates default team for all signup methods (email, OAuth)
-  * Add database constraint: users must own at least one team
+  * Implement reputation calculation engine (Cloudflare Worker)
+  * Build temp team creation and auto-archive system
+  * Set up Stripe Connect for marketplace payments
+  * Implement max 3 active projects limit for free tier
+  * Create AI credit tracking system
+  * Set up Cloudflare R2 for media storage
+  * Implement XMP metadata export feature
 -->
 
 
@@ -49,6 +68,43 @@ Flutter for mobile apps provides native performance with 100% code reuse between
 iOS, accelerating Phases 2-3 development. Cosplayers need mobile access for on-location
 work, but web-responsive design serves this initially while building toward native app
 performance.
+
+### I.5. Reduce Overwhelm via Prioritization
+
+Features MUST enforce prioritization to prevent project overload. Free tier users MUST be
+limited to **3 active projects maximum** to encourage focus and completion. An unlimited
+**Idea Bank** MUST be provided for storing future project concepts without cluttering active
+work. UI MUST be clean, progress-oriented, and emphasize "next actions" over comprehensive
+task lists.
+
+**Active Projects vs Idea Bank**:
+
+- **Active Projects** (max 3 for free tier): Full project management with tasks, schedules,
+  budgets, crew assignments, and progress tracking. These are projects actively being worked
+  on with deadlines and deliverables.
+- **Idea Bank** (unlimited): Lightweight storage for future costume ideas with minimal
+  details (character name, reference images, rough notes). No task management or scheduling.
+  Easy promotion to active project when ready to start work.
+
+**Prioritization Features**:
+
+- Visual indicators showing active project slots (e.g., "2/3 active projects")
+- "Quick win" tags for morale-boosting small projects
+- Complexity ratings (beginner-friendly vs advanced builds)
+- Time estimates (weekend project vs 6-month build)
+- Convention deadline urgency filters
+- Automatic archiving when projects marked complete
+
+**Conversion Hook**: The 3-project limit is the primary driver for free-to-paid conversion.
+Premium tier ($5/month) unlocks unlimited active projects while maintaining the Idea Bank
+for all users.
+
+**Rationale**: Cosplayers frequently experience project overload from having too many
+simultaneous builds, leading to stress, incomplete costumes, and burnout. Enforced
+prioritization through active project limits helps users focus on completion rather than
+accumulation. The Idea Bank prevents loss of inspiration while keeping active work
+manageable. This addresses the core problem statement: "reduce stress from project overload
+when you have many ideas."
 
 ### II. Real-Time Collaboration
 
@@ -1138,4 +1194,4 @@ constitution or implementation accordingly. Major principle changes (new core te
 removal of existing principles) require documented rationale and alignment with user
 feedback.
 
-**Version**: 2.4.0 | **Ratified**: 2025-10-16 | **Last Amended**: 2025-10-18 (Test observability principle added, spec 043 created)
+**Version**: 3.0.0 | **Ratified**: 2025-10-16 | **Last Amended**: 2025-10-21 (Major update: Added reputation system, temp teams, monetization strategy, spec-driven workflow, dependency-first development, and cost optimization principles)
