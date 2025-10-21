@@ -341,10 +341,7 @@
 			</ThemedCard>
 
 			<!-- Team Management: Create & Join -->
-			<div class="shadow rounded-lg p-6" style="background: var(--theme-sidebar-bg); border: 1px solid var(--theme-sidebar-border);">
-				<h2 class="text-xl font-semibold mb-6" style="color: var(--theme-foreground);">
-					Team Management
-				</h2>
+			<ThemedCard title="Team Management">
 
 				<!-- Create New Team -->
 				<div class="mb-6">
@@ -356,7 +353,7 @@
 					</p>
 
 					{#if form?.success && form?.team && !form?.joinedTeam}
-						<div class="mb-4 p-4 rounded-lg" style="background: #10b981; color: white;">
+						<ThemedAlert type="success">
 							<p class="font-semibold">✅ Team "{form.team.name}" created successfully!</p>
 							<p class="text-sm mt-1">The team is now available in your team switcher.</p>
 							{#if form.team.joinCode}
@@ -374,13 +371,13 @@
 							>
 								Go to Team
 							</a>
-						</div>
+						</ThemedAlert>
 					{/if}
 
 					{#if form?.error && !form?.success && form?.action === 'createTeam'}
-						<div class="mb-4 p-4 rounded-lg" style="background: #ef4444; color: white;">
+						<ThemedAlert type="error">
 							{form.error}
-						</div>
+						</ThemedAlert>
 					{/if}
 
 					<form method="POST" action="?/createTeam" use:enhance class="space-y-3">
@@ -388,15 +385,12 @@
 							<label for="newTeamName" class="block text-sm font-medium mb-1" style="color: var(--theme-foreground);">
 								Team Name *
 							</label>
-							<input
+							<ThemedInput
 								type="text"
-								id="newTeamName"
 								name="name"
 								required
-								maxlength="100"
+								maxlength={100}
 								placeholder="My Awesome Team"
-								class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2"
-								style="background: var(--theme-sidebar-bg); color: var(--theme-foreground); border-color: var(--theme-sidebar-border);"
 							/>
 						</div>
 
@@ -404,24 +398,17 @@
 							<label for="newTeamDescription" class="block text-sm font-medium mb-1" style="color: var(--theme-foreground);">
 								Description (optional)
 							</label>
-							<textarea
-								id="newTeamDescription"
+							<ThemedTextarea
 								name="description"
-								maxlength="500"
-								rows="2"
+								maxlength={500}
+								rows={2}
 								placeholder="What's this team for?"
-								class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2"
-								style="background: var(--theme-sidebar-bg); color: var(--theme-foreground); border-color: var(--theme-sidebar-border);"
-							></textarea>
+							/>
 						</div>
 
-						<button
-							type="submit"
-							class="px-4 py-2 rounded-lg font-medium text-white"
-							style="background: var(--theme-sidebar-accent);"
-						>
+						<ThemedButton type="submit" variant="primary">
 							Create Team
-						</button>
+						</ThemedButton>
 					</form>
 				</div>
 
@@ -438,7 +425,7 @@
 					</p>
 
 					{#if form?.success && form?.joinedTeam}
-						<div class="mb-4 p-4 rounded-lg" style="background: #10b981; color: white;">
+						<ThemedAlert type="success">
 							<p class="font-semibold mb-2">✅ Successfully joined {form.joinedTeam.name}!</p>
 							<p class="text-sm mb-3">The team is now available in your team switcher.</p>
 							<div class="flex gap-2">
@@ -464,55 +451,47 @@
 									Stay Here & Refresh
 								</button>
 							</div>
-						</div>
+						</ThemedAlert>
 					{/if}
 
 					{#if form?.error && !form?.success && form?.action === 'joinTeamWithCode'}
-						<div class="mb-4 p-4 rounded-lg" style="background: #ef4444; color: white;">
+						<ThemedAlert type="error">
 							{form.error}
-						</div>
+						</ThemedAlert>
 					{/if}
 
 					<form method="POST" action="?/joinTeamWithCode" use:enhance class="flex gap-2">
-						<input
-							type="text"
-							name="code"
-							required
-							maxlength="9"
-							placeholder="XXXX-XXXX"
-							class="flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 uppercase font-mono"
-							style="background: var(--theme-sidebar-bg); color: var(--theme-foreground); border-color: var(--theme-sidebar-border);"
-						/>
-						<button
-							type="submit"
-							class="px-4 py-2 rounded-lg font-medium text-white focus:outline-none focus:ring-2"
-							style="background: var(--theme-sidebar-accent);"
-						>
+						<div class="flex-1">
+							<ThemedInput
+								type="text"
+								name="code"
+								required
+								maxlength={9}
+								placeholder="XXXX-XXXX"
+							/>
+						</div>
+						<ThemedButton type="submit" variant="primary">
 							Join Team
-						</button>
+						</ThemedButton>
 					</form>
 				</div>
-			</div>
+			</ThemedCard>
 
 			<!-- Team Members -->
 			<div class="space-y-6">
 				<!-- Invite Members Section (only for public teams) -->
 				{#if !data.team.is_personal && data.permissions.canManageMembers}
-					<div class="shadow rounded-lg p-6" style="background: var(--theme-sidebar-bg); border: 1px solid var(--theme-sidebar-border);">
-						<h2 class="text-xl font-semibold mb-6" style="color: var(--theme-foreground);">
-							Invite Members
-						</h2>
-
+					<ThemedCard title="Invite Members">
 						{#if form?.inviteSuccess}
-							<div class="mb-4 p-4 rounded-lg" style="background: #10b981; color: white;">
+							<ThemedAlert type="success">
 								{form.message || 'Invitation sent successfully!'}
-							</div>
+							</ThemedAlert>
 						{/if}
 
 						{#if form?.error && !form?.success}
-							<div class="mb-4 p-4 rounded-lg" style="background: #ef4444; color: white;">
+							<ThemedAlert type="error">
 								{form.error}
-							</div>
+							</ThemedAlert>
 						{/if}
 
 						<!-- Three invitation methods in one list -->
@@ -524,31 +503,22 @@
 								</h3>
 								<form method="POST" action="?/inviteMember" use:enhance>
 									<div class="flex gap-2">
-										<input
-											type="email"
-											name="email"
-											required
-											placeholder="colleague@example.com"
-											class="flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2"
-											style="background: var(--theme-sidebar-bg); color: var(--theme-foreground); border-color: var(--theme-sidebar-border);"
-										/>
-										<select
-											name="role"
-											required
-											class="px-3 py-2 border rounded-lg focus:outline-none focus:ring-2"
-											style="background: var(--theme-sidebar-bg); color: var(--theme-foreground); border-color: var(--theme-sidebar-border);"
-										>
+										<div class="flex-1">
+											<ThemedInput
+												type="email"
+												name="email"
+												required
+												placeholder="colleague@example.com"
+											/>
+										</div>
+										<ThemedSelect name="role" required>
 											<option value="member">Member</option>
 											<option value="admin">Admin</option>
 											<option value="viewer">Viewer</option>
-										</select>
-										<button
-											type="submit"
-											class="px-4 py-2 rounded-lg font-medium text-white focus:outline-none"
-											style="background: var(--theme-sidebar-accent);"
-										>
+										</ThemedSelect>
+										<ThemedButton type="submit" variant="primary">
 											Send
-										</button>
+										</ThemedButton>
 									</div>
 								</form>
 								<p class="mt-2 text-xs" style="color: var(--theme-sidebar-muted);">
@@ -563,24 +533,24 @@
 								</h3>
 								{#if data.joinLink}
 									<div class="flex gap-2">
-										<input
-											type="text"
-											readonly
-											value="{origin}/register?joinCode={data.joinLink.code}"
-											class="flex-1 px-3 py-2 border rounded-lg focus:outline-none text-sm"
-											style="background: var(--theme-sidebar-hover); color: var(--theme-foreground); border-color: var(--theme-sidebar-border);"
-											on:click={(e) => e.currentTarget.select()}
-										/>
-										<button
+										<div class="flex-1">
+											<ThemedInput
+												type="text"
+												name="joinLink"
+												readonly
+												value="{origin}/register?joinCode={data.joinLink.code}"
+												on:click={(e) => e.currentTarget.select()}
+											/>
+										</div>
+										<ThemedButton
 											type="button"
-											class="px-4 py-2 rounded-lg font-medium text-white focus:outline-none"
-											style="background: var(--theme-sidebar-accent);"
+											variant="primary"
 											on:click={() => {
 												navigator.clipboard.writeText(`${origin}/register?joinCode=${data.joinLink.code}`);
 											}}
 										>
 											Copy
-										</button>
+										</ThemedButton>
 									</div>
 									<p class="mt-2 text-xs" style="color: var(--theme-sidebar-muted);">
 										Used {data.joinLink.current_uses} {data.joinLink.current_uses === 1 ? 'time' : 'times'}
@@ -590,13 +560,9 @@
 										Join link is automatically generated for new teams. This team was created before auto-generation was enabled.
 									</p>
 									<form method="POST" action="?/createJoinLink" use:enhance>
-										<button
-											type="submit"
-											class="px-4 py-2 rounded-lg font-medium text-white focus:outline-none"
-											style="background: var(--theme-sidebar-accent);"
-										>
+										<ThemedButton type="submit" variant="primary">
 											Create Join Link & Code
-										</button>
+										</ThemedButton>
 									</form>
 								{/if}
 							</div>
@@ -608,33 +574,29 @@
 								</h3>
 								{#if data.joinLink}
 									<div class="flex gap-2 items-center">
-										<input
-											type="text"
-											readonly
-											value={data.joinLink.code}
-											class="w-32 px-3 py-2 border rounded-lg text-center text-xl font-mono font-bold focus:outline-none"
-											style="background: var(--theme-sidebar-hover); color: var(--theme-foreground); border-color: var(--theme-sidebar-border);"
-											on:click={(e) => e.currentTarget.select()}
-										/>
-										<button
+										<div class="w-32">
+											<ThemedInput
+												type="text"
+												name="joinCode"
+												readonly
+												value={data.joinLink.code}
+												on:click={(e) => e.currentTarget.select()}
+											/>
+										</div>
+										<ThemedButton
 											type="button"
-											class="px-4 py-2 rounded-lg font-medium text-white focus:outline-none"
-											style="background: var(--theme-sidebar-accent);"
+											variant="primary"
 											on:click={() => {
 												navigator.clipboard.writeText(data.joinLink.code);
 											}}
 										>
 											Copy
-										</button>
+										</ThemedButton>
 										<div class="flex-1"></div>
 										<form method="POST" action="?/toggleJoinLink" use:enhance>
-											<button
-												type="submit"
-												class="px-4 py-2 rounded-lg font-medium border focus:outline-none text-sm"
-												style="color: var(--theme-foreground); border-color: var(--theme-sidebar-border);"
-											>
+											<ThemedButton type="submit" variant="secondary">
 												Disable Link & Code
-											</button>
+											</ThemedButton>
 										</form>
 									</div>
 									<p class="mt-2 text-xs" style="color: var(--theme-sidebar-muted);">
