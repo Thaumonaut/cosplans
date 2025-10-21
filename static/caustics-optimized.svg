@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <!-- Simplified single-layer caustics with reduced complexity -->
+    <filter id="caustics" x="-5%" y="-5%" width="110%" height="110%">
+      <!-- Single turbulence layer instead of 4 -->
+      <feTurbulence type="turbulence" baseFrequency="0.008 0.007" numOctaves="2" seed="42" result="noise"/>
+      <feColorMatrix in="noise" type="saturate" values="0" result="gray"/>
+      
+      <!-- Single blur instead of multiple -->
+      <feGaussianBlur in="gray" stdDeviation="1.5" result="smooth"/>
+      
+      <!-- Edge detection -->
+      <feComposite in="gray" in2="smooth" operator="arithmetic" k1="0" k2="3" k3="-2.5" k4="0" result="edges"/>
+      
+      <!-- Brightness adjustment -->
+      <feComponentTransfer in="edges" result="final">
+        <feFuncR type="table" tableValues="0.6 0.7 0.8 0.9 1"/>
+        <feFuncG type="table" tableValues="0.6 0.7 0.8 0.9 1"/>
+        <feFuncB type="table" tableValues="0.6 0.7 0.8 0.9 1"/>
+      </feComponentTransfer>
+    </filter>
+  </defs>
+  
+  <!-- Light cyan background -->
+  <rect width="1920" height="1080" fill="#e0f2fe"/>
+  
+  <!-- Single caustics layer -->
+  <rect width="1920" height="1080" fill="#0891b2" opacity="0.12" filter="url(#caustics)"/>
+</svg>

@@ -88,8 +88,8 @@ export const THEME_VARIANTS: ThemeVariant[] = [
 			background: '#ecfeff'
 		},
 		cssVars: {
-			'--theme-background': '#91dff1',
-			'--theme-background-pattern': 'url(/caustics.svg)',
+			'--theme-background': '#ecfeff',
+			'--theme-background-pattern': 'url(/caustics.png)',
 			'--theme-background-size': 'cover',
 			'--theme-background-position': 'center',
 			'--theme-background-repeat': 'no-repeat',
