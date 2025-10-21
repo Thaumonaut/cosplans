@@ -1,6 +1,6 @@
 import type { ThemeVariant } from "$lib/types/theme";
-import { createTheme } from "./theme-builder";
 import { generateHarmony } from "./color-harmony";
+import { buildTheme } from "./theme-builder";
 
 export const DEFAULT_THEME_ID = "light-default";
 
@@ -20,7 +20,7 @@ export const THEME_VARIANTS: ThemeVariant[] = [
 		cssVars: (() => {
 			const colors = generateHarmony('#16a34a', 'analogous');
 			const pattern = 'radial-gradient(circle at 20% 50%, rgba(22, 163, 74, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(22, 163, 74, 0.06) 0%, transparent 50%), radial-gradient(circle at 50% 80%, rgba(22, 163, 74, 0.05) 0%, transparent 50%)';
-			return createTheme(colors.primary, colors.secondary, colors.accent, 'light', pattern);
+			return buildTheme({ colors, mode: 'light', backgroundPattern: pattern });
 		})(),
 		source: 'built-in'
 	},
@@ -38,7 +38,7 @@ export const THEME_VARIANTS: ThemeVariant[] = [
 		cssVars: (() => {
 			const colors = generateHarmony('#ea580c', 'analogous');
 			const pattern = 'repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(234, 88, 12, 0.04) 40px, rgba(234, 88, 12, 0.04) 80px), repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(234, 88, 12, 0.03) 40px, rgba(234, 88, 12, 0.03) 80px)';
-			return createTheme(colors.primary, colors.secondary, colors.accent, 'light', pattern);
+			return buildTheme({ colors, mode: 'light', backgroundPattern: pattern });
 		})(),
 		source: 'built-in'
 	},
@@ -56,40 +56,40 @@ export const THEME_VARIANTS: ThemeVariant[] = [
 		cssVars: (() => {
 			const colors = generateHarmony('#0891b2', 'analogous');
 			const pattern = 'url(/caustics.svg)';
-			return createTheme(colors.primary, colors.secondary, colors.accent, 'light', pattern);
+			return buildTheme({ colors, mode: 'light', backgroundPattern: pattern });
 		})(),
 		source: 'built-in'
 	},
 	
-	// === DARK THEMES (Original Hand-Crafted) ===
+	// === DARK THEMES (Hand-Crafted for Character & Charm) ===
 	{
 		id: 'dark-default',
 		label: 'Rolling Storm',
 		description: 'Dramatic stormy skies with electric lightning strikes.',
 		mode: 'dark',
 		preview: {
-			primary: '#eab308',
-			accent: '#fbbf24',
+			primary: '#6366f1',
+			accent: '#818cf8',
 			muted: '#64748b',
-			background: '#1e293b'
+			background: '#0f172a'
 		},
 		cssVars: {
 			'--theme-background': '#0f172a',
-			'--theme-background-pattern': 'radial-gradient(ellipse 1200px 400px at 40% 20%, rgba(251, 191, 36, 0.02) 0%, transparent 50%), radial-gradient(ellipse 1000px 350px at 70% 40%, rgba(234, 179, 8, 0.025) 0%, transparent 45%), radial-gradient(ellipse 800px 300px at 30% 70%, rgba(202, 138, 4, 0.015) 0%, transparent 40%), repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(71, 85, 105, 0.02) 2px, rgba(71, 85, 105, 0.02) 4px), repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(51, 65, 85, 0.015) 2px, rgba(51, 65, 85, 0.015) 4px), radial-gradient(circle 2px at 25% 15%, rgba(250, 204, 21, 0.3) 0%, transparent 100%), radial-gradient(circle 1px at 75% 30%, rgba(234, 179, 8, 0.25) 0%, transparent 100%), radial-gradient(circle 3px at 15% 60%, rgba(251, 191, 36, 0.22) 0%, transparent 100%), radial-gradient(circle 1px at 85% 75%, rgba(250, 204, 21, 0.18) 0%, transparent 100%), radial-gradient(circle 2px at 45% 85%, rgba(234, 179, 8, 0.28) 0%, transparent 100%), radial-gradient(circle 1px at 55% 45%, rgba(251, 191, 36, 0.24) 0%, transparent 100%)',
+			'--theme-background-pattern': 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(99, 102, 241, 0.03) 2px, rgba(99, 102, 241, 0.03) 4px), repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(99, 102, 241, 0.03) 2px, rgba(99, 102, 241, 0.03) 4px), radial-gradient(ellipse 800px 600px at 50% 120%, rgba(99, 102, 241, 0.15) 0%, transparent 50%), radial-gradient(ellipse 600px 400px at 80% -20%, rgba(129, 140, 248, 0.12) 0%, transparent 50%), radial-gradient(ellipse 500px 350px at 20% 50%, rgba(99, 102, 241, 0.08) 0%, transparent 50%)',
 			'--theme-foreground': '#f1f5f9',
-			'--theme-sidebar-bg': '#0a0f1a',
-			'--theme-sidebar-text': '#f1f5f9',
-			'--theme-sidebar-muted': '#cbd5e1',
-			'--theme-sidebar-accent': '#eab308',
-			'--theme-sidebar-hover': '#1e293b',
-			'--theme-sidebar-active': '#334155',
+			'--theme-sidebar-bg': '#1e293b',
+			'--theme-sidebar-text': '#e2e8f0',
+			'--theme-sidebar-muted': '#94a3b8',
+			'--theme-sidebar-accent': '#6366f1',
+			'--theme-sidebar-hover': '#334155',
+			'--theme-sidebar-active': '#475569',
 			'--theme-sidebar-border': '#475569',
-			'--theme-sidebar-shadow': '0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.4)',
-			'--theme-header-bg': '#1e293b',
-			'--theme-header-text': '#fef3c7',
-			'--theme-header-muted': '#fbbf24',
-			'--theme-header-hover': '#334155',
-			'--theme-header-active': '#475569',
+			'--theme-sidebar-shadow': '0 1px 3px 0 rgb(0 0 0 / 0.5), 0 1px 2px -1px rgb(0 0 0 / 0.5)',
+			'--theme-header-bg': '#334155',
+			'--theme-header-text': '#c7d2fe',
+			'--theme-header-muted': '#818cf8',
+			'--theme-header-hover': '#475569',
+			'--theme-header-active': '#4338ca',
 			'--theme-header-shadow': '0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.4)',
 			'--theme-success': '#10b981',
 			'--theme-error': '#ef4444',
