@@ -144,8 +144,8 @@ Each user story delivers independently testable value and can be deployed separa
 
 ### Onboarding Page Refactoring
 
-- [ ] T017 [P] [US3] Refactor onboarding page in `src/routes/onboarding/+page.svelte` to use ThemedCard, ThemedInput, ThemedTextarea, ThemedButton
-- [ ] T018 [P] [US3] Refactor success/error messages in onboarding page to use ThemedAlert
+- [x] T017 [P] [US3] Refactor onboarding page in `src/routes/onboarding/+page.svelte` to use ThemedCard, ThemedInput, ThemedTextarea, ThemedButton
+- [x] T018 [P] [US3] Refactor success/error messages in onboarding page to use ThemedAlert
 - [ ] T019 [P] [US3] Test onboarding page: verify team creation works, validation works, theme switching works
 
 ---

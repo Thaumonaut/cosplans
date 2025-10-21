@@ -3,6 +3,11 @@
   import { authStore } from '$lib/auth/auth-store'
   import type { ActionData, PageData } from './$types'
   import { onMount } from 'svelte'
+  import ThemedCard from '$lib/components/ui/ThemedCard.svelte'
+  import ThemedInput from '$lib/components/ui/ThemedInput.svelte'
+  import ThemedTextarea from '$lib/components/ui/ThemedTextarea.svelte'
+  import ThemedButton from '$lib/components/ui/ThemedButton.svelte'
+  import ThemedAlert from '$lib/components/ui/ThemedAlert.svelte'
 
   export let form: ActionData
   export let data: PageData
@@ -94,140 +99,124 @@
   <meta name="description" content="Complete your setup and create your first team" />
 </svelte:head>
 
-<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen py-12 px-4 sm:px-6 lg:px-8" style="background: var(--theme-background);">
   <div class="max-w-md mx-auto">
-    <div class="bg-white py-8 px-6 shadow rounded-lg sm:px-10">
+    <ThemedCard>
       <div class="mb-8">
-        <h2 class="text-2xl font-bold text-gray-900 text-center">
+        <h2 class="text-2xl font-bold text-center" style="color: var(--theme-foreground);">
           Welcome to Cosplans! 🎉
         </h2>
-        <p class="mt-2 text-sm text-gray-600 text-center">
+        <p class="mt-2 text-sm text-center" style="color: var(--theme-sidebar-muted);">
           Let's set up your account and create your first team
         </p>
       </div>
 
       <form class="space-y-6" method="POST" use:enhance>
         {#if form?.error}
-          <div class="bg-red-50 border border-red-200 rounded-md p-4">
-            <div class="flex">
-              <div class="ml-3">
-                <p class="text-sm text-red-800">{form.error}</p>
-              </div>
-            </div>
-          </div>
+          <ThemedAlert type="error">
+            {form.error}
+          </ThemedAlert>
         {/if}
 
         <div>
-          <label for="teamName" class="block text-sm font-medium text-gray-700">
+          <label for="teamName" class="block text-sm font-medium mb-1" style="color: var(--theme-foreground);">
             Team Name *
           </label>
           <div class="mt-1 flex gap-2">
-            <input
-              id="teamName"
-              name="teamName"
-              type="text"
-              required
-              class="flex-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              placeholder="My Photography Team"
-              bind:value={teamName}
-            />
-            <button
+            <div class="flex-1">
+              <ThemedInput
+                type="text"
+                name="teamName"
+                required
+                placeholder="My Photography Team"
+                bind:value={teamName}
+              />
+            </div>
+            <ThemedButton
               type="button"
+              variant="secondary"
               on:click={() => teamName = generateFunTeamName()}
-              class="px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              title="Generate a random team name"
             >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
-            </button>
+            </ThemedButton>
           </div>
-          <p class="mt-1 text-sm text-gray-500">
+          <p class="mt-1 text-sm" style="color: var(--theme-sidebar-muted);">
             This will be your team's display name. Click the refresh button to generate a new random name.
           </p>
         </div>
 
         <div>
-          <label for="displayName" class="block text-sm font-medium text-gray-700">
+          <label for="displayName" class="block text-sm font-medium mb-1" style="color: var(--theme-foreground);">
             Display Name
           </label>
-          <input
-            id="displayName"
-            name="displayName"
+          <ThemedInput
             type="text"
-            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            name="displayName"
             placeholder="John Doe"
             bind:value={displayName}
           />
-          <p class="mt-1 text-sm text-gray-500">
+          <p class="mt-1 text-sm" style="color: var(--theme-sidebar-muted);">
             How should we display your name in the app?
           </p>
           
           <!-- Team Name Suggestion Prompt -->
           {#if showTeamNameSuggestion}
-            <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-md">
-              <div class="flex items-start">
-                <svg class="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
-                </svg>
-                <div class="ml-3 flex-1">
-                  <p class="text-sm text-blue-800">
-                    Do you want to change the team name to <strong>"{suggestedTeamName}"</strong>?
-                  </p>
-                  <div class="mt-2 flex gap-2">
-                    <button
-                      type="button"
-                      on:click={acceptSuggestion}
-                      class="text-xs px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      Yes, use it
-                    </button>
-                    <button
-                      type="button"
-                      on:click={dismissSuggestion}
-                      class="text-xs px-3 py-1 bg-white text-blue-600 border border-blue-300 rounded hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      No, keep current
-                    </button>
-                  </div>
+            <div class="mt-3">
+              <ThemedAlert type="info">
+                <p class="text-sm mb-2">
+                  Do you want to change the team name to <strong>"{suggestedTeamName}"</strong>?
+                </p>
+                <div class="flex gap-2">
+                  <ThemedButton
+                    type="button"
+                    variant="primary"
+                    on:click={acceptSuggestion}
+                  >
+                    Yes, use it
+                  </ThemedButton>
+                  <ThemedButton
+                    type="button"
+                    variant="secondary"
+                    on:click={dismissSuggestion}
+                  >
+                    No, keep current
+                  </ThemedButton>
                 </div>
-              </div>
+              </ThemedAlert>
             </div>
           {/if}
         </div>
 
         <div>
-          <label for="bio" class="block text-sm font-medium text-gray-700">
+          <label for="bio" class="block text-sm font-medium mb-1" style="color: var(--theme-foreground);">
             Bio
           </label>
-          <textarea
-            id="bio"
+          <ThemedTextarea
             name="bio"
-            rows="3"
-            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            rows={3}
             placeholder="Tell us a bit about yourself and your photography style..."
             bind:value={bio}
-          ></textarea>
-          <p class="mt-1 text-sm text-gray-500">
+          />
+          <p class="mt-1 text-sm" style="color: var(--theme-sidebar-muted);">
             Optional - helps your team members get to know you better.
           </p>
         </div>
 
         <!-- Join Code Field -->
-        <div class="border-t border-gray-200 pt-6">
-          <label for="joinCode" class="block text-sm font-medium text-gray-700">
+        <div class="border-t pt-6" style="border-color: var(--theme-sidebar-border);">
+          <label for="joinCode" class="block text-sm font-medium mb-1" style="color: var(--theme-foreground);">
             Join an Existing Team (Optional)
           </label>
-          <input
-            id="joinCode"
-            name="joinCode"
+          <ThemedInput
             type="text"
-            maxlength="6"
-            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 uppercase font-mono"
+            name="joinCode"
+            maxlength={6}
             placeholder="ABC123"
             value={data.joinCode}
           />
-          <p class="mt-1 text-sm text-gray-500">
+          <p class="mt-1 text-sm" style="color: var(--theme-sidebar-muted);">
             Have a team join code? Enter it here to join an existing team in addition to creating your personal team.
           </p>
         </div>
@@ -237,19 +226,21 @@
             id="isPublicProfile"
             name="isPublicProfile"
             type="checkbox"
-            class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            class="h-4 w-4 rounded"
+            style="color: var(--theme-sidebar-accent);"
             bind:checked={isPublicProfile}
           />
-          <label for="isPublicProfile" class="ml-2 block text-sm text-gray-900">
+          <label for="isPublicProfile" class="ml-2 block text-sm" style="color: var(--theme-foreground);">
             Make my profile public (for future features)
           </label>
         </div>
 
         <div>
-          <button
+          <ThemedButton
             type="submit"
+            variant="primary"
+            fullWidth
             disabled={!isFormValid || isLoading}
-            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {#if isLoading}
               <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -260,13 +251,14 @@
             {:else}
               Complete Setup
             {/if}
-          </button>
+          </ThemedButton>
         </div>
 
         <div class="text-center">
           <button
             type="button"
-            class="text-sm text-gray-600 hover:text-gray-500"
+            class="text-sm"
+            style="color: var(--theme-sidebar-muted);"
             on:click={() => {
               // Skip onboarding with minimal defaults
               // Team name is already set (either from user name or random)
@@ -282,6 +274,6 @@
           </button>
         </div>
       </form>
-    </div>
+    </ThemedCard>
   </div>
 </div>
