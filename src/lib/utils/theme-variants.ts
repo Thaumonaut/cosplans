@@ -1,6 +1,4 @@
 import type { ThemeVariant } from "$lib/types/theme";
-import { generateHarmony } from "./color-harmony";
-import { buildTheme } from "./theme-builder";
 
 export const DEFAULT_THEME_ID = "light-default";
 
@@ -17,11 +15,29 @@ export const THEME_VARIANTS: ThemeVariant[] = [
 			muted: '#94a3b8',
 			background: '#ffffff'
 		},
-		cssVars: (() => {
-			const colors = generateHarmony('#16a34a', 'analogous');
-			const pattern = 'radial-gradient(circle at 20% 50%, rgba(22, 163, 74, 0.08) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(22, 163, 74, 0.06) 0%, transparent 50%), radial-gradient(circle at 50% 80%, rgba(22, 163, 74, 0.05) 0%, transparent 50%)';
-			return buildTheme({ colors, mode: 'light', backgroundPattern: pattern });
-		})(),
+		cssVars: {
+			'--theme-background': '#f8fafc',
+			'--theme-background-pattern': 'radial-gradient(circle at 20% 50%, rgba(22, 163, 74, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(22, 163, 74, 0.12) 0%, transparent 50%), radial-gradient(circle at 50% 80%, rgba(22, 163, 74, 0.1) 0%, transparent 50%), radial-gradient(circle at 40% 30%, rgba(34, 197, 94, 0.08) 0%, transparent 40%)',
+			'--theme-foreground': '#0f172a',
+			'--theme-sidebar-bg': '#ffffff',
+			'--theme-sidebar-text': '#0f172a',
+			'--theme-sidebar-muted': '#64748b',
+			'--theme-sidebar-accent': '#16a34a',
+			'--theme-sidebar-hover': '#f8fafc',
+			'--theme-sidebar-active': '#f0fdf4',
+			'--theme-sidebar-border': '#e2e8f0',
+			'--theme-sidebar-shadow': '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
+			'--theme-header-bg': '#f0fdf4',
+			'--theme-header-text': '#14532d',
+			'--theme-header-muted': '#166534',
+			'--theme-header-hover': '#dcfce7',
+			'--theme-header-active': '#bbf7d0',
+			'--theme-header-shadow': '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
+			'--theme-success': '#10b981',
+			'--theme-error': '#ef4444',
+			'--theme-warning': '#f59e0b',
+			'--theme-info': '#3b82f6'
+		},
 		source: 'built-in'
 	},
 	{
@@ -35,11 +51,29 @@ export const THEME_VARIANTS: ThemeVariant[] = [
 			muted: '#a8a29e',
 			background: '#fef7ee'
 		},
-		cssVars: (() => {
-			const colors = generateHarmony('#ea580c', 'analogous');
-			const pattern = 'repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(234, 88, 12, 0.04) 40px, rgba(234, 88, 12, 0.04) 80px), repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(234, 88, 12, 0.03) 40px, rgba(234, 88, 12, 0.03) 80px)';
-			return buildTheme({ colors, mode: 'light', backgroundPattern: pattern });
-		})(),
+		cssVars: {
+			'--theme-background': '#fef7ee',
+			'--theme-background-pattern': 'repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(234, 88, 12, 0.04) 40px, rgba(234, 88, 12, 0.04) 80px), repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(234, 88, 12, 0.03) 40px, rgba(234, 88, 12, 0.03) 80px)',
+			'--theme-foreground': '#1c1917',
+			'--theme-sidebar-bg': '#fef3e2',
+			'--theme-sidebar-text': '#1c1917',
+			'--theme-sidebar-muted': '#57534e',
+			'--theme-sidebar-accent': '#dc2626',
+			'--theme-sidebar-hover': '#fef7ee',
+			'--theme-sidebar-active': '#fed7aa',
+			'--theme-sidebar-border': '#e7d4b5',
+			'--theme-sidebar-shadow': '0 1px 3px 0 rgb(124 45 18 / 0.1), 0 1px 2px -1px rgb(124 45 18 / 0.1)',
+			'--theme-header-bg': '#fed7aa',
+			'--theme-header-text': '#7c2d12',
+			'--theme-header-muted': '#9a3412',
+			'--theme-header-hover': '#fdba74',
+			'--theme-header-active': '#fb923c',
+			'--theme-header-shadow': '0 1px 3px 0 rgb(124 45 18 / 0.1), 0 1px 2px -1px rgb(124 45 18 / 0.1)',
+			'--theme-success': '#10b981',
+			'--theme-error': '#ef4444',
+			'--theme-warning': '#f59e0b',
+			'--theme-info': '#3b82f6'
+		},
 		source: 'built-in'
 	},
 	{
@@ -53,11 +87,32 @@ export const THEME_VARIANTS: ThemeVariant[] = [
 			muted: '#64748b',
 			background: '#ecfeff'
 		},
-		cssVars: (() => {
-			const colors = generateHarmony('#0891b2', 'analogous');
-			const pattern = 'url(/caustics.svg)';
-			return buildTheme({ colors, mode: 'light', backgroundPattern: pattern });
-		})(),
+		cssVars: {
+			'--theme-background': '#91dff1',
+			'--theme-background-pattern': 'url(/caustics.svg)',
+			'--theme-background-size': 'cover',
+			'--theme-background-position': 'center',
+			'--theme-background-repeat': 'no-repeat',
+			'--theme-foreground': '#0c4a6e',
+			'--theme-sidebar-bg': '#e0f2fe',
+			'--theme-sidebar-text': '#0c4a6e',
+			'--theme-sidebar-muted': '#475569',
+			'--theme-sidebar-accent': '#0369a1',
+			'--theme-sidebar-hover': '#ecfeff',
+			'--theme-sidebar-active': '#bae6fd',
+			'--theme-sidebar-border': '#7dd3fc',
+			'--theme-sidebar-shadow': '0 1px 3px 0 rgb(8 51 68 / 0.1), 0 1px 2px -1px rgb(8 51 68 / 0.1)',
+			'--theme-header-bg': '#bae6fd',
+			'--theme-header-text': '#075985',
+			'--theme-header-muted': '#0c4a6e',
+			'--theme-header-hover': '#7dd3fc',
+			'--theme-header-active': '#38bdf8',
+			'--theme-header-shadow': '0 1px 3px 0 rgb(8 51 68 / 0.1), 0 1px 2px -1px rgb(8 51 68 / 0.1)',
+			'--theme-success': '#10b981',
+			'--theme-error': '#ef4444',
+			'--theme-warning': '#f59e0b',
+			'--theme-info': '#3b82f6'
+		},
 		source: 'built-in'
 	},
 	
