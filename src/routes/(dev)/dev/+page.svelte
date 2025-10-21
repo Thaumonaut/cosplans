@@ -24,24 +24,25 @@
       </div>
       <a
         href="/dashboard"
-        class="inline-flex items-center gap-2 rounded-lg border border-emerald-500/60 bg-emerald-500/10 px-4 py-2 text-sm font-semibold text-emerald-200 transition hover:border-emerald-400 hover:text-emerald-50"
+        class="inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-semibold transition hover:opacity-100"
+        style="border-color: var(--theme-success); background: var(--theme-success); color: white; opacity: 0.9;"
       >
         <span>Open Dashboard</span>
       </a>
     </div>
 
     <div class="grid gap-4 md:grid-cols-2">
-      <article class="space-y-3 rounded-lg border border-emerald-500/40 bg-emerald-500/5 p-4">
+      <article class="space-y-3 rounded-lg border p-4" style="border-color: var(--theme-success);">
         <header class="flex items-start justify-between">
-          <h4 class="text-lg font-semibold text-emerald-200">📊 Dashboard Overview</h4>
-          <span class="rounded-full bg-emerald-600 px-2 py-0.5 text-xs font-bold text-white"
-            >ACTIVE</span
-          >
+          <h4 class="text-lg font-semibold" style="color: var(--theme-foreground);">📊 Dashboard Overview</h4>
+          <span class="rounded-full px-2 py-0.5 text-xs font-bold text-white" style="background: var(--theme-success);">
+            ACTIVE
+          </span>
         </header>
-        <p class="text-sm text-emerald-100">
+        <p class="text-sm" style="color: var(--theme-foreground);">
           Customizable widgets showing upcoming shoots, progress, and alerts with real-time sync.
         </p>
-        <p class="text-xs font-medium text-emerald-200/80">✓ Fully functional Phase 1 feature</p>
+        <p class="text-xs font-medium" style="color: var(--theme-sidebar-muted);">✓ Fully functional Phase 1 feature</p>
       </article>
     </div>
   </section>
@@ -51,19 +52,23 @@
       <h3 class="text-lg font-semibold text-[var(--theme-foreground)]">🎨 UI Component Testing</h3>
       <div class="flex flex-wrap gap-2">
         <span
-          class="rounded-full bg-indigo-500/20 px-3 py-1 text-xs uppercase tracking-wide text-indigo-200"
+          class="rounded-full px-3 py-1 text-xs uppercase tracking-wide"
+          style="background: var(--theme-sidebar-accent); color: white; opacity: 0.8;"
           >Cards</span
         >
         <span
-          class="rounded-full bg-indigo-500/20 px-3 py-1 text-xs uppercase tracking-wide text-indigo-200"
+          class="rounded-full px-3 py-1 text-xs uppercase tracking-wide"
+          style="background: var(--theme-sidebar-accent); color: white; opacity: 0.8;"
           >Buttons</span
         >
         <span
-          class="rounded-full bg-indigo-500/20 px-3 py-1 text-xs uppercase tracking-wide text-indigo-200"
+          class="rounded-full px-3 py-1 text-xs uppercase tracking-wide"
+          style="background: var(--theme-sidebar-accent); color: white; opacity: 0.8;"
           >Inputs</span
         >
         <span
-          class="rounded-full bg-indigo-500/20 px-3 py-1 text-xs uppercase tracking-wide text-indigo-200"
+          class="rounded-full px-3 py-1 text-xs uppercase tracking-wide"
+          style="background: var(--theme-sidebar-accent); color: white; opacity: 0.8;"
           >Alerts</span
         >
       </div>
@@ -71,7 +76,8 @@
       <p class="text-xs text-[var(--theme-sidebar-muted)]">Located in <code>src/lib/components/ui/</code></p>
       <a
         href="/components"
-        class="inline-flex items-center gap-2 rounded-lg border border-indigo-500/60 bg-indigo-500/10 px-4 py-2 text-sm font-semibold text-indigo-200 transition hover:border-indigo-400 hover:text-indigo-50"
+        class="inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-semibold transition hover:opacity-100"
+        style="border-color: var(--theme-sidebar-accent); background: var(--theme-sidebar-accent); color: white; opacity: 0.9;"
       >
         <span>View Component Showcase</span>
         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

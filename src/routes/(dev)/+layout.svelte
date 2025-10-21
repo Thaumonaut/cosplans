@@ -22,7 +22,7 @@
       <h1 class="text-lg font-semibold tracking-wide" style="color: var(--theme-foreground);">Developer Tools</h1>
       <div class="flex items-center gap-4">
         <p class="text-xs uppercase" style="color: var(--theme-sidebar-muted);">{$page.url.pathname}</p>
-        <ThemeSwitcher />
+        <ThemeSwitcher inHeader={true} />
       </div>
     </div>
   </header>
