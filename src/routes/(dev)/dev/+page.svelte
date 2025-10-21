@@ -60,11 +60,24 @@
         >
         <span
           class="rounded-full bg-indigo-500/20 px-3 py-1 text-xs uppercase tracking-wide text-indigo-200"
-          >Badges</span
+          >Inputs</span
+        >
+        <span
+          class="rounded-full bg-indigo-500/20 px-3 py-1 text-xs uppercase tracking-wide text-indigo-200"
+          >Alerts</span
         >
       </div>
-      <p class="text-sm text-slate-300">Tailwind CSS + shadcn-style components</p>
+      <p class="text-sm text-slate-300">Themed components with automatic light/dark mode support</p>
       <p class="text-xs text-slate-500">Located in <code>src/lib/components/ui/</code></p>
+      <a
+        href="/components"
+        class="inline-flex items-center gap-2 rounded-lg border border-indigo-500/60 bg-indigo-500/10 px-4 py-2 text-sm font-semibold text-indigo-200 transition hover:border-indigo-400 hover:text-indigo-50"
+      >
+        <span>View Component Showcase</span>
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
     </article>
 
     <article class="space-y-3 rounded-xl border border-slate-800 bg-slate-900/60 p-6">
