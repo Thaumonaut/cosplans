@@ -609,7 +609,7 @@
 								{/if}
 							</div>
 						</div>
-					</div>
+					</ThemedCard>
 				{/if}
 
 				<!-- Pending Invitations -->
@@ -673,9 +673,9 @@
 							</p>
 
 							{#if form?.error && form?.action === 'deleteTeam'}
-								<div class="mb-4 p-4 rounded-lg" style="background: #ef4444; color: white;">
+								<ThemedAlert type="error">
 									{form.error}
-								</div>
+								</ThemedAlert>
 							{/if}
 
 							<form method="POST" action="?/deleteTeam" use:enhance={() => {
@@ -692,10 +692,9 @@
 									}
 								};
 							}} bind:this={deleteTeamForm}>
-								<button
+								<ThemedButton
 									type="button"
-									class="px-4 py-2 rounded-lg font-medium text-white focus:outline-none focus:ring-2"
-									style="background: #ef4444;"
+									variant="danger"
 									on:click={() => {
 										console.log('Delete button clicked, opening modal');
 										showDeleteTeamModal = true;
@@ -703,7 +702,7 @@
 									}}
 								>
 									Delete Team
-								</button>
+								</ThemedButton>
 							</form>
 						{/if}
 					</div>
@@ -720,26 +719,25 @@
 							</p>
 
 							{#if form?.transferOwnershipSuccess && form?.action === 'transferOwnership'}
-								<div class="mb-4 p-4 rounded-lg" style="background: #10b981; color: white;">
+								<ThemedAlert type="success">
 									Ownership transferred successfully!
-								</div>
+								</ThemedAlert>
 							{/if}
 
 							{#if form?.error && form?.action === 'transferOwnership'}
-								<div class="mb-4 p-4 rounded-lg" style="background: #ef4444; color: white;">
+								<ThemedAlert type="error">
 									{form.error}
-								</div>
+								</ThemedAlert>
 							{/if}
 
 							{#if !showTransferOwnership}
-								<button
+								<ThemedButton
 									type="button"
+									variant="warning"
 									on:click={() => showTransferOwnership = true}
-									class="px-4 py-2 rounded-lg font-medium text-white focus:outline-none focus:ring-2"
-									style="background: #f59e0b;"
 								>
 									Transfer Ownership
-								</button>
+								</ThemedButton>
 							{:else}
 								<form method="POST" action="?/transferOwnership" use:enhance class="space-y-3" bind:this={transferOwnershipForm}>
 									<div>
@@ -764,26 +762,24 @@
 									</div>
 
 									<div class="flex gap-2">
-										<button
+										<ThemedButton
 											type="button"
+											variant="warning"
 											disabled={!selectedNewOwner}
-											class="px-4 py-2 rounded-lg font-medium text-white focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed"
-											style="background: #f59e0b;"
 											on:click={() => showTransferOwnershipModal = true}
 										>
 											Confirm Transfer
-										</button>
-										<button
+										</ThemedButton>
+										<ThemedButton
 											type="button"
+											variant="secondary"
 											on:click={() => {
 												showTransferOwnership = false;
 												selectedNewOwner = '';
 											}}
-											class="px-4 py-2 rounded-lg font-medium border focus:outline-none focus:ring-2"
-											style="color: var(--theme-foreground); border-color: var(--theme-sidebar-border); background: var(--theme-sidebar-bg);"
 										>
 											Cancel
-										</button>
+										</ThemedButton>
 									</div>
 								</form>
 							{/if}
@@ -801,14 +797,13 @@
 								<p class="text-sm mb-4" style="color: var(--theme-sidebar-muted);">
 									As the owner, you must transfer ownership to another member before leaving the team.
 								</p>
-								<button
+								<ThemedButton
 									type="button"
-									class="px-4 py-2 rounded-lg font-medium focus:outline-none opacity-50 cursor-not-allowed"
-									style="background: var(--theme-sidebar-border); color: var(--theme-sidebar-muted);"
+									variant="secondary"
 									disabled
 								>
 									Transfer Ownership First
-								</button>
+								</ThemedButton>
 							{:else}
 								<p class="text-sm mb-4" style="color: var(--theme-sidebar-muted);">
 									You will lose access to all team data and shoots. This action cannot be undone.
@@ -827,14 +822,13 @@
 										}
 									};
 								}} bind:this={leaveTeamForm}>
-									<button
+									<ThemedButton
 										type="button"
-										class="px-4 py-2 rounded-lg font-medium text-white focus:outline-none focus:ring-2"
-										style="background: #f59e0b;"
+										variant="warning"
 										on:click={() => showLeaveTeamModal = true}
 									>
 										Leave Team
-									</button>
+									</ThemedButton>
 								</form>
 							{/if}
 						</div>

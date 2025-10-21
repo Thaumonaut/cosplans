@@ -139,7 +139,7 @@ Each user story delivers independently testable value and can be deployed separa
 - [x] T012 [US3] Refactor Team Management section (Create Team form) in `src/routes/(auth)/teams/[teamId]/+page.svelte` to use ThemedCard, ThemedInput, ThemedTextarea, ThemedButton
 - [x] T013 [US3] Refactor Join Team section in `src/routes/(auth)/teams/[teamId]/+page.svelte` to use ThemedInput, ThemedButton
 - [x] T014 [US3] Refactor Invite Members section in `src/routes/(auth)/teams/[teamId]/+page.svelte` to use ThemedCard, ThemedInput, ThemedSelect, ThemedButton
-- [ ] T015 [US3] Refactor success/error messages in all team settings sections to use ThemedAlert
+- [x] T015 [US3] Refactor success/error messages in all team settings sections to use ThemedAlert
 - [ ] T016 [US3] Test team settings page: verify all forms submit, buttons click, theme switching works
 
 ### Onboarding Page Refactoring
