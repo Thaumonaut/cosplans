@@ -162,8 +162,8 @@ Each user story delivers independently testable value and can be deployed separa
 
 ### Documentation & Cleanup
 
-- [ ] T023 Remove old `.specify/specs/ui-library-migration-flowbite.md` (duplicate spec file)
-- [ ] T024 Update memory system to document all themed components with usage examples
+- [x] T023 Remove old `.specify/specs/ui-library-migration-flowbite.md` (duplicate spec file)
+- [x] T024 Update memory system to document all themed components with usage examples
 
 ---
 
