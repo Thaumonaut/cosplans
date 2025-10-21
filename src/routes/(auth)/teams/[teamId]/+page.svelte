@@ -3,6 +3,7 @@
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 	import { team as teamStore } from '$lib/stores/team';
+	import ConfirmModal from '$lib/components/ui/ConfirmModal.svelte';
 	import type { PageData, ActionData } from './$types';
 
 	export let data: PageData;
@@ -51,6 +52,19 @@
 	// Transfer ownership state
 	let showTransferOwnership = false;
 	let selectedNewOwner = '';
+
+	// Confirmation modals
+	let showRemoveMemberModal = false;
+	let memberToRemove: { id: string; name: string } | null = null;
+	let showDeleteTeamModal = false;
+	let showLeaveTeamModal = false;
+	let showTransferOwnershipModal = false;
+	
+	// Form references for submission after confirmation
+	let removeMemberForm: HTMLFormElement | undefined;
+	let deleteTeamForm: HTMLFormElement | undefined;
+	let leaveTeamForm: HTMLFormElement | undefined;
+	let transferOwnershipForm: HTMLFormElement | undefined;
 
 	// Update saved state when data changes (on page load or navigation)
 	// But NOT when we just submitted (to prevent clearing)
@@ -138,13 +152,13 @@
 					Team Information
 				</h2>
 
-				{#if form?.success}
+				{#if form?.success && form?.action === 'updateTeam'}
 					<div class="mb-4 p-4 rounded-lg" style="background: #10b981; color: white;">
 						Team updated successfully!
 					</div>
 				{/if}
 
-				{#if form?.error}
+				{#if form?.error && form?.action === 'updateTeam'}
 					<div class="mb-4 p-4 rounded-lg" style="background: #ef4444; color: white;">
 						{form.error}
 					</div>
@@ -309,16 +323,15 @@
 
 									<!-- Remove Member Button -->
 									{#if !data.team.is_personal && data.permissions.canManageMembers && member.role !== 'owner' && member.user_id !== data.user.id}
-										<form method="POST" action="?/removeMember" use:enhance class="inline">
+										<form method="POST" action="?/removeMember" use:enhance class="inline" bind:this={removeMemberForm}>
 											<input type="hidden" name="userId" value={member.user_id} />
 											<button
-												type="submit"
+												type="button"
 												class="px-2 py-1 text-xs font-medium rounded hover:bg-red-100 transition-colors"
 												style="color: #ef4444;"
-												on:click={(e) => {
-													if (!confirm(`Remove ${member.display_name} from the team?`)) {
-														e.preventDefault();
-													}
+												on:click={() => {
+													memberToRemove = { id: member.user_id, name: member.display_name };
+													showRemoveMemberModal = true;
 												}}
 											>
 												Remove
@@ -351,6 +364,9 @@
 						<div class="mb-4 p-4 rounded-lg" style="background: #10b981; color: white;">
 							<p class="font-semibold">✅ Team "{form.team.name}" created successfully!</p>
 							<p class="text-sm mt-1">The team is now available in your team switcher.</p>
+							{#if form.team.joinCode}
+								<p class="text-sm mt-2">Join Code: <span class="font-mono font-bold">{form.team.joinCode}</span></p>
+							{/if}
 							<a
 								href="/teams/{form.team.id}"
 								class="inline-block mt-2 px-4 py-2 rounded-lg font-medium"
@@ -366,7 +382,7 @@
 						</div>
 					{/if}
 
-					{#if form?.error && !form?.success && !form?.joinedTeam}
+					{#if form?.error && !form?.success && form?.action === 'createTeam'}
 						<div class="mb-4 p-4 rounded-lg" style="background: #ef4444; color: white;">
 							{form.error}
 						</div>
@@ -456,7 +472,7 @@
 						</div>
 					{/if}
 
-					{#if form?.error && !form?.success}
+					{#if form?.error && !form?.success && form?.action === 'joinTeamWithCode'}
 						<div class="mb-4 p-4 rounded-lg" style="background: #ef4444; color: white;">
 							{form.error}
 						</div>
@@ -467,8 +483,8 @@
 							type="text"
 							name="code"
 							required
-							maxlength="6"
-							placeholder="ABC123"
+							maxlength="9"
+							placeholder="XXXX-XXXX"
 							class="flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 uppercase font-mono"
 							style="background: var(--theme-sidebar-bg); color: var(--theme-foreground); border-color: var(--theme-sidebar-border);"
 						/>
@@ -575,13 +591,16 @@
 										Used {data.joinLink.current_uses} {data.joinLink.current_uses === 1 ? 'time' : 'times'}
 									</p>
 								{:else}
+									<p class="text-sm mb-3" style="color: var(--theme-sidebar-muted);">
+										Join link is automatically generated for new teams. This team was created before auto-generation was enabled.
+									</p>
 									<form method="POST" action="?/createJoinLink" use:enhance>
 										<button
 											type="submit"
 											class="px-4 py-2 rounded-lg font-medium text-white focus:outline-none"
 											style="background: var(--theme-sidebar-accent);"
 										>
-											Generate Link & Code
+											Create Join Link & Code
 										</button>
 									</form>
 								{/if}
@@ -693,16 +712,42 @@
 							</button>
 						{:else}
 							<p class="text-sm mb-4" style="color: var(--theme-sidebar-muted);">
-								Once you delete a team, there is no going back. This action cannot be undone.
+								Once you delete a team, there is no going back. All team data, shoots, and settings will be permanently deleted. This action cannot be undone.
 							</p>
-							<button
-								type="button"
-								class="px-4 py-2 rounded-lg font-medium text-white focus:outline-none focus:ring-2"
-								style="background: #ef4444;"
-								disabled
-							>
-								Delete Team (Coming Soon)
-							</button>
+
+							{#if form?.error && form?.action === 'deleteTeam'}
+								<div class="mb-4 p-4 rounded-lg" style="background: #ef4444; color: white;">
+									{form.error}
+								</div>
+							{/if}
+
+							<form method="POST" action="?/deleteTeam" use:enhance={() => {
+								return async ({ result }) => {
+									if (result.type === 'redirect') {
+										// Reload team switcher before redirect
+										if (typeof window !== 'undefined' && (window as any).reloadTeamSwitcher) {
+											await (window as any).reloadTeamSwitcher();
+										}
+										// Let the redirect happen
+										window.location.href = result.location;
+									} else {
+										await applyAction(result);
+									}
+								};
+							}} bind:this={deleteTeamForm}>
+								<button
+									type="button"
+									class="px-4 py-2 rounded-lg font-medium text-white focus:outline-none focus:ring-2"
+									style="background: #ef4444;"
+									on:click={() => {
+										console.log('Delete button clicked, opening modal');
+										showDeleteTeamModal = true;
+										console.log('showDeleteTeamModal:', showDeleteTeamModal);
+									}}
+								>
+									Delete Team
+								</button>
+							</form>
 						{/if}
 					</div>
 					{/if}
@@ -739,7 +784,7 @@
 									Transfer Ownership
 								</button>
 							{:else}
-								<form method="POST" action="?/transferOwnership" use:enhance class="space-y-3">
+								<form method="POST" action="?/transferOwnership" use:enhance class="space-y-3" bind:this={transferOwnershipForm}>
 									<div>
 										<label for="newOwner" class="block text-sm font-medium mb-2" style="color: var(--theme-foreground);">
 											Select New Owner
@@ -763,15 +808,11 @@
 
 									<div class="flex gap-2">
 										<button
-											type="submit"
+											type="button"
 											disabled={!selectedNewOwner}
 											class="px-4 py-2 rounded-lg font-medium text-white focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed"
 											style="background: #f59e0b;"
-											on:click={(e) => {
-												if (!confirm(`Transfer ownership to ${data.members.find(m => m.user_id === selectedNewOwner)?.display_name}? This action cannot be undone.`)) {
-													e.preventDefault();
-												}
-											}}
+											on:click={() => showTransferOwnershipModal = true}
 										>
 											Confirm Transfer
 										</button>
@@ -792,8 +833,8 @@
 						</div>
 					{/if}
 
-					<!-- Leave Team (for public teams) -->
-					{#if !data.team.is_personal}
+					<!-- Leave Team (for public teams with multiple members) -->
+					{#if !data.team.is_personal && data.members.length > 1}
 						<div class="mt-4 p-4 border rounded-lg" style="border-color: {data.userRole === 'owner' ? '#f59e0b' : 'var(--theme-sidebar-border)'};">
 							<h3 class="font-medium mb-2" style="color: var(--theme-foreground);">
 								Leave Team
@@ -828,16 +869,12 @@
 											await applyAction(result);
 										}
 									};
-								}}>
+								}} bind:this={leaveTeamForm}>
 									<button
-										type="submit"
+										type="button"
 										class="px-4 py-2 rounded-lg font-medium text-white focus:outline-none focus:ring-2"
 										style="background: #f59e0b;"
-										on:click={(e) => {
-											if (!confirm('Are you sure you want to leave this team? You will lose access to all team data.')) {
-												e.preventDefault();
-											}
-										}}
+										on:click={() => showLeaveTeamModal = true}
 									>
 										Leave Team
 									</button>
@@ -851,3 +888,60 @@
 		</div>
 	</div>
 </div>
+
+<!-- Confirmation Modals -->
+<ConfirmModal
+	bind:isOpen={showRemoveMemberModal}
+	title="Remove Team Member"
+	message={memberToRemove ? `Are you sure you want to remove ${memberToRemove.name} from the team? They will lose access to all team data.` : ''}
+	confirmText="Remove Member"
+	cancelText="Cancel"
+	confirmStyle="danger"
+	onConfirm={() => {
+		if (removeMemberForm) {
+			removeMemberForm.requestSubmit();
+		}
+	}}
+/>
+
+<ConfirmModal
+	bind:isOpen={showDeleteTeamModal}
+	title="Delete Team"
+	message={`Are you sure you want to permanently delete "${data.team.name}"? This will remove all team data, shoots, and settings. This action cannot be undone.`}
+	confirmText="Delete Team"
+	cancelText="Cancel"
+	confirmStyle="danger"
+	onConfirm={() => {
+		if (deleteTeamForm) {
+			deleteTeamForm.requestSubmit();
+		}
+	}}
+/>
+
+<ConfirmModal
+	bind:isOpen={showLeaveTeamModal}
+	title="Leave Team"
+	message="Are you sure you want to leave this team? You will lose access to all team data and shoots. This action cannot be undone."
+	confirmText="Leave Team"
+	cancelText="Cancel"
+	confirmStyle="warning"
+	onConfirm={() => {
+		if (leaveTeamForm) {
+			leaveTeamForm.requestSubmit();
+		}
+	}}
+/>
+
+<ConfirmModal
+	bind:isOpen={showTransferOwnershipModal}
+	title="Transfer Ownership"
+	message={`Transfer ownership to ${data.members.find(m => m.user_id === selectedNewOwner)?.display_name}? You will become an admin. This action cannot be undone.`}
+	confirmText="Transfer Ownership"
+	cancelText="Cancel"
+	confirmStyle="warning"
+	onConfirm={() => {
+		if (transferOwnershipForm) {
+			transferOwnershipForm.requestSubmit();
+		}
+	}}
+/>

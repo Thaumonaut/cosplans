@@ -99,7 +99,66 @@ export class TeamService {
 			};
 		}
 
-		return { team, error: null };
+		// Auto-generate join link for public teams
+		let joinCode: string | null = null;
+		if (!isPersonal) {
+			// Generate a unique 8-character code and token
+			joinCode = this.generateJoinCode();
+			const token = this.generateToken();
+			
+			console.log('Creating join link for team:', team.id, 'with code:', joinCode);
+			
+			const { data: insertedLink, error: joinLinkError } = await this.supabase
+				.from('team_join_links')
+				.insert({
+					team_id: team.id,
+					token: token,
+					code: joinCode,
+					created_by: userId,
+					expires_at: null, // No expiration by default
+					is_active: true
+				})
+				.select()
+				.single();
+
+			if (joinLinkError) {
+				console.error('Failed to create join link:', joinLinkError);
+				console.error('Join link error details:', JSON.stringify(joinLinkError, null, 2));
+				// Don't fail team creation if join link fails
+				joinCode = null;
+			} else {
+				console.log('Join link created successfully:', insertedLink);
+			}
+		}
+
+		return { team: { ...team, joinCode }, error: null };
+	}
+
+	/**
+	 * Generate a random 8-character join code
+	 * Format: XXXX-XXXX (uppercase letters and numbers)
+	 */
+	private generateJoinCode(): string {
+		const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Exclude similar chars (I, O, 0, 1)
+		let code = '';
+		for (let i = 0; i < 8; i++) {
+			if (i === 4) code += '-';
+			code += chars.charAt(Math.floor(Math.random() * chars.length));
+		}
+		return code;
+	}
+
+	/**
+	 * Generate a secure random token for join links
+	 * Format: 32-character hex string
+	 */
+	private generateToken(): string {
+		const chars = '0123456789abcdef';
+		let token = '';
+		for (let i = 0; i < 32; i++) {
+			token += chars.charAt(Math.floor(Math.random() * chars.length));
+		}
+		return token;
 	}
 
 	/**

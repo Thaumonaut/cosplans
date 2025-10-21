@@ -18,15 +18,15 @@ export class TeamJoinService {
 	/**
 	 * Join a team using a join code
 	 * @param userId - The user ID attempting to join
-	 * @param code - The 6-character join code
+	 * @param code - The 9-character join code (format: XXXX-XXXX)
 	 * @returns Result object with success status and team info or error
 	 */
 	async joinTeamWithCode(userId: string, code: string): Promise<JoinTeamResult> {
-		// Validate code format
-		if (!code || code.length !== 6) {
+		// Validate code format (9 characters including dash)
+		if (!code || code.length !== 9) {
 			return {
 				success: false,
-				error: 'Please enter a valid 6-character join code'
+				error: 'Please enter a valid join code (format: XXXX-XXXX)'
 			};
 		}
 

@@ -34,6 +34,12 @@ export const THEME_VARIANTS: ThemeVariant[] = [
       "--theme-sidebar-shadow": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)", // Subtle shadow
       "--theme-alert-color": "#dc2626", // Red alert color for urgent items
 
+      // Semantic colors
+      "--theme-success": "#10b981", // Success green
+      "--theme-error": "#ef4444", // Error red
+      "--theme-warning": "#f59e0b", // Warning orange
+      "--theme-info": "#3b82f6", // Info blue
+
       // Action Bar (neutral with subtle green hint)
       "--theme-header-bg": "#f8fafc", // Neutral light gray
       "--theme-header-text": "#0f172a", // Dark slate text
@@ -75,6 +81,12 @@ export const THEME_VARIANTS: ThemeVariant[] = [
       "--theme-sidebar-shadow":
         "0 1px 3px 0 rgb(124 45 18 / 0.1), 0 1px 2px -1px rgb(124 45 18 / 0.1)", // Warm shadow
       "--theme-alert-color": "#dc2626", // Red alert color for urgent items
+
+      // Semantic colors
+      "--theme-success": "#10b981", // Success green
+      "--theme-error": "#ef4444", // Error red
+      "--theme-warning": "#f59e0b", // Warning orange
+      "--theme-info": "#3b82f6", // Info blue
 
       // Action Bar (subtle warm tint instead of bold orange)
       "--theme-header-bg": "#fed7aa", // Soft peach (subtle, not bold)
@@ -119,6 +131,12 @@ export const THEME_VARIANTS: ThemeVariant[] = [
       "--theme-sidebar-shadow": "0 1px 3px 0 rgb(8 51 68 / 0.1), 0 1px 2px -1px rgb(8 51 68 / 0.1)", // Cool shadow
       "--theme-alert-color": "#dc2626", // Red alert color for urgent items
 
+      // Semantic colors
+      "--theme-success": "#10b981", // Success green
+      "--theme-error": "#ef4444", // Error red
+      "--theme-warning": "#f59e0b", // Warning orange
+      "--theme-info": "#3b82f6", // Info blue
+
       // Action Bar (subtle cool tint instead of bold cyan)
       "--theme-header-bg": "#bae6fd", // Soft sky blue (subtle, not bold)
       "--theme-header-text": "#075985", // Deep cyan text
@@ -160,6 +178,12 @@ export const THEME_VARIANTS: ThemeVariant[] = [
       "--theme-sidebar-shadow": "0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.4)", // Dark shadow
       "--theme-alert-color": "#fbbf24", // Amber/yellow alert color for urgent items (lightning)
 
+      // Semantic colors
+      "--theme-success": "#10b981", // Success green
+      "--theme-error": "#ef4444", // Error red
+      "--theme-warning": "#f59e0b", // Warning orange
+      "--theme-info": "#3b82f6", // Info blue
+
       // Action Bar (storm clouds)
       "--theme-header-bg": "#1e293b", // Storm slate
       "--theme-header-text": "#fef3c7", // Warm light text
@@ -200,6 +224,12 @@ export const THEME_VARIANTS: ThemeVariant[] = [
       "--theme-sidebar-border": "#4a3a2c", // Dark earth border
       "--theme-sidebar-shadow": "0 1px 3px 0 rgb(0 0 0 / 0.5), 0 1px 2px -1px rgb(0 0 0 / 0.5)", // Deep shadow
       "--theme-alert-color": "#f59e0b", // Warm amber alert color for urgent items
+
+      // Semantic colors
+      "--theme-success": "#10b981", // Success green
+      "--theme-error": "#ef4444", // Error red
+      "--theme-warning": "#f59e0b", // Warning orange
+      "--theme-info": "#3b82f6", // Info blue
 
       // Action Bar (warm earth with green hints)
       "--theme-header-bg": "#352b20", // Medium earth brown
@@ -243,6 +273,12 @@ export const THEME_VARIANTS: ThemeVariant[] = [
       "--theme-sidebar-border": "#6366f1", // Indigo border (Night Sky/Astro mix)
       "--theme-sidebar-shadow": "0 1px 3px 0 rgb(0 0 0 / 0.5), 0 1px 2px -1px rgb(0 0 0 / 0.5)", // Deep shadow
       "--theme-alert-color": "#f472b6", // Pink alert color for urgent items (matches pink stars)
+
+      // Semantic colors
+      "--theme-success": "#10b981", // Success green
+      "--theme-error": "#ef4444", // Error red
+      "--theme-warning": "#f59e0b", // Warning orange
+      "--theme-info": "#3b82f6", // Info blue
 
       // Action Bar (much darker purple-pink gradient)
       "--theme-header-bg": "#1e1b4b", // Much darker rich indigo

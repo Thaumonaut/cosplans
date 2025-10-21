@@ -88,6 +88,12 @@ and are deleted only when the user account is deleted.
 - Personal teams: Created automatically during onboarding. User names their personal team.
 - Public teams: Created via "Create Team" button in settings. User provides team name and
   optional description.
+  - Join link and code are automatically generated upon team creation
+  - After creation, user is shown a modal with options to invite others:
+    - Share join link (copy to clipboard)
+    - Share join code (copy to clipboard)
+    - Skip and continue to team page
+  - Join link and code remain accessible in team settings
 
 **Team Member Management** (Public Teams Only):
 
@@ -912,8 +918,8 @@ development while maintaining code quality and architecture integrity:
 **Core Framework & UI**:
 
 - SvelteKit (web framework) - built-in server-side rendering, API routes, file-based routing, and SSG
-- Tailwind CSS (styling) - utility-first CSS framework
-- Shadcn/svelte (component library) - accessible, copy-paste components built on Radix UI
+- Tailwind CSS v3 (styling) - utility-first CSS framework (v3 stable, v4 has SSR compatibility issues)
+- Flowbite Svelte (component library) - native Svelte components built for Tailwind CSS, 50+ accessible components
 - Lucide Svelte (icons) - clean SVG icon library
   - **Icon Import Requirement**: When using Lucide icons in components, ALL icons MUST be explicitly imported in three places:
     1. Import statement in `/src/lib/components/icons/LucideIcon.svelte` from 'lucide-svelte'
@@ -985,7 +991,8 @@ development while maintaining code quality and architecture integrity:
 - ❌ Redux, Pinia, Zustand - state management overkill; use SvelteKit load() + writable stores
 - ❌ Third-party analytics vendors - use custom PostgreSQL analytics per Principle IX
 - ❌ Auth0, Okta - Supabase Auth is sufficient; avoids vendor lock-in
-- ❌ Material Design, Bootstrap - Shadcn/svelte is lighter and more customizable
+- ❌ Material Design, Bootstrap - Flowbite Svelte is lighter, native to Svelte, and more customizable
+- ❌ Tailwind CSS v4 - Has SSR compatibility issues with SvelteKit; use stable v3
 
 **Implementation Time Savings**: Using recommended packages reduces Phase 1 MVP timeline from
 180-220 working days to 60-80 working days (100-140 days saved, ~55% time reduction).

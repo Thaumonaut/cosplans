@@ -195,15 +195,15 @@ export const actions: Actions = {
 		const description = formData.get('description')?.toString();
 
 		if (!name || name.trim().length === 0) {
-			return fail(400, { error: 'Team name is required' });
+			return fail(400, { error: 'Team name is required', action: 'updateTeam' });
 		}
 
 		if (name.length > 100) {
-			return fail(400, { error: 'Team name must be 100 characters or less' });
+			return fail(400, { error: 'Team name must be 100 characters or less', action: 'updateTeam' });
 		}
 
 		if (description && description.length > 500) {
-			return fail(400, { error: 'Description must be 500 characters or less' });
+			return fail(400, { error: 'Description must be 500 characters or less', action: 'updateTeam' });
 		}
 
 		// Verify user has permission
@@ -215,7 +215,7 @@ export const actions: Actions = {
 			.single();
 
 		if (!member || (member.role !== 'owner' && member.role !== 'admin')) {
-			return fail(403, { error: 'You do not have permission to edit this team' });
+			return fail(403, { error: 'You do not have permission to edit this team', action: 'updateTeam' });
 		}
 
 		// Update team
@@ -230,10 +230,10 @@ export const actions: Actions = {
 
 		if (updateError) {
 			console.error('Error updating team:', updateError);
-			return fail(500, { error: 'Failed to update team' });
+			return fail(500, { error: 'Failed to update team', action: 'updateTeam' });
 		}
 
-		return { success: true };
+		return { success: true, action: 'updateTeam' };
 	},
 
 	inviteMember: async ({ request, params, locals }) => {
@@ -478,12 +478,13 @@ export const actions: Actions = {
 		const result = await joinService.joinTeamWithCode(user.id, code);
 
 		if (!result.success) {
-			return fail(400, { error: result.error });
+			return fail(400, { error: result.error, action: 'joinTeamWithCode' });
 		}
 
 		// Return success with team info - let user choose whether to switch
 		return {
 			success: true,
+			action: 'joinTeamWithCode',
 			joinedTeam: {
 				id: result.teamId,
 				name: result.teamName
@@ -506,6 +507,7 @@ export const actions: Actions = {
 		if (!name || name.length < 1 || name.length > 100) {
 			return fail(400, {
 				error: 'Team name must be between 1 and 100 characters',
+				action: 'createTeam',
 				name,
 				description
 			});
@@ -523,6 +525,7 @@ export const actions: Actions = {
 		if (error || !team) {
 			return fail(500, {
 				error: error?.message || 'Failed to create team',
+				action: 'createTeam',
 				name,
 				description
 			});
@@ -530,9 +533,11 @@ export const actions: Actions = {
 
 		return {
 			success: true,
+			action: 'createTeam',
 			team: {
 				id: team.id,
-				name: team.name
+				name: team.name,
+				joinCode: (team as any).joinCode // Join code from TeamService
 			}
 		};
 	},
@@ -809,5 +814,58 @@ export const actions: Actions = {
 		}
 
 		return { transferOwnershipSuccess: true, action: 'transferOwnership' };
+	},
+
+	deleteTeam: async ({ request, locals, params }) => {
+		const { user } = await locals.safeGetSession();
+		if (!user) {
+			throw redirect(303, '/login');
+		}
+
+		const { teamId } = params;
+
+		// Check if user is the owner
+		const { data: team } = await locals.supabase
+			.from('teams')
+			.select('owner_id, is_personal, name')
+			.eq('id', teamId)
+			.single();
+
+		if (!team) {
+			return fail(404, { error: 'Team not found', action: 'deleteTeam' });
+		}
+
+		if (team.owner_id !== user.id) {
+			return fail(403, { error: 'Only the owner can delete the team', action: 'deleteTeam' });
+		}
+
+		if (team.is_personal) {
+			return fail(400, { error: 'Cannot delete personal teams', action: 'deleteTeam' });
+		}
+
+		// Delete the team (cascade will handle team_members, invitations, etc.)
+		const { error: deleteError } = await locals.supabase
+			.from('teams')
+			.delete()
+			.eq('id', teamId);
+
+		if (deleteError) {
+			console.error('Delete team error:', deleteError);
+			return fail(500, { error: 'Failed to delete team', action: 'deleteTeam' });
+		}
+
+		// Redirect to personal team
+		const { data: personalTeam } = await locals.supabase
+			.from('teams')
+			.select('id')
+			.eq('owner_id', user.id)
+			.eq('is_personal', true)
+			.single();
+
+		if (personalTeam) {
+			throw redirect(303, `/teams/${personalTeam.id}`);
+		}
+
+		throw redirect(303, '/dashboard');
 	}
 };
