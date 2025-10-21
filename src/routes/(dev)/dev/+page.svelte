@@ -8,19 +8,19 @@
 
 <section class="space-y-12">
   <header class="space-y-2">
-    <h2 class="text-3xl font-bold text-slate-100">Development Overview</h2>
-    <p class="text-sm uppercase tracking-widest text-slate-400">Phase 1 · Dashboard Views</p>
-    <p class="text-sm text-slate-300">
+    <h2 class="text-3xl font-bold" style="color: var(--theme-foreground);">Development Overview</h2>
+    <p class="text-sm uppercase tracking-widest" style="color: var(--theme-sidebar-muted);">Phase 1 · Dashboard Views</p>
+    <p class="text-sm" style="color: var(--theme-foreground);">
       Runtime: <strong>Bun</strong> · Framework: <strong>SvelteKit</strong> · UI:
-      <strong>Tailwind + shadcn</strong>
+      <strong>Flowbite Svelte + Themed Components</strong>
     </p>
   </header>
 
-  <section class="space-y-6 rounded-xl border border-slate-800 bg-slate-900/60 p-6">
+  <section class="space-y-6 rounded-xl border border-[var(--theme-sidebar-border)] bg-[var(--theme-sidebar-bg)] p-6">
     <div class="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
       <div>
-        <h3 class="text-2xl font-semibold text-slate-100">🚀 Active Features</h3>
-        <p class="text-slate-300">Phase 1 features ready for testing and development</p>
+        <h3 class="text-2xl font-semibold text-[var(--theme-foreground)]">🚀 Active Features</h3>
+        <p class="text-[var(--theme-foreground)]">Phase 1 features ready for testing and development</p>
       </div>
       <a
         href="/dashboard"
@@ -47,8 +47,8 @@
   </section>
 
   <section class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-    <article class="space-y-4 rounded-xl border border-slate-800 bg-slate-900/60 p-6">
-      <h3 class="text-lg font-semibold text-slate-100">🎨 UI Component Testing</h3>
+    <article class="space-y-4 rounded-xl border border-[var(--theme-sidebar-border)] bg-[var(--theme-sidebar-bg)] p-6">
+      <h3 class="text-lg font-semibold text-[var(--theme-foreground)]">🎨 UI Component Testing</h3>
       <div class="flex flex-wrap gap-2">
         <span
           class="rounded-full bg-indigo-500/20 px-3 py-1 text-xs uppercase tracking-wide text-indigo-200"
@@ -67,8 +67,8 @@
           >Alerts</span
         >
       </div>
-      <p class="text-sm text-slate-300">Themed components with automatic light/dark mode support</p>
-      <p class="text-xs text-slate-500">Located in <code>src/lib/components/ui/</code></p>
+      <p class="text-sm text-[var(--theme-foreground)]">Themed components with automatic light/dark mode support</p>
+      <p class="text-xs text-[var(--theme-sidebar-muted)]">Located in <code>src/lib/components/ui/</code></p>
       <a
         href="/components"
         class="inline-flex items-center gap-2 rounded-lg border border-indigo-500/60 bg-indigo-500/10 px-4 py-2 text-sm font-semibold text-indigo-200 transition hover:border-indigo-400 hover:text-indigo-50"
@@ -80,48 +80,48 @@
       </a>
     </article>
 
-    <article class="space-y-3 rounded-xl border border-slate-800 bg-slate-900/60 p-6">
-      <h3 class="text-lg font-semibold text-slate-100">📐 Design System</h3>
-      <ul class="space-y-1 text-sm text-slate-300">
+    <article class="space-y-3 rounded-xl border border-[var(--theme-sidebar-border)] bg-[var(--theme-sidebar-bg)] p-6">
+      <h3 class="text-lg font-semibold text-[var(--theme-foreground)]">📐 Design System</h3>
+      <ul class="space-y-1 text-sm text-[var(--theme-foreground)]">
         <li><strong>Colors:</strong> Blue, Green, Yellow, Red</li>
         <li><strong>Spacing:</strong> Tailwind scale (4px base)</li>
         <li><strong>Typography:</strong> Tailwind presets</li>
       </ul>
-      <p class="text-xs text-slate-500">See <code>tailwind.config.js</code> for configuration.</p>
+      <p class="text-xs text-[var(--theme-sidebar-muted)]">See <code>tailwind.config.js</code> for configuration.</p>
     </article>
 
-    <article class="space-y-3 rounded-xl border border-slate-800 bg-slate-900/60 p-6">
-      <h3 class="text-lg font-semibold text-slate-100">🛠️ Dev Tooling</h3>
-      <ul class="space-y-1 text-sm text-slate-300">
+    <article class="space-y-3 rounded-xl border border-[var(--theme-sidebar-border)] bg-[var(--theme-sidebar-bg)] p-6">
+      <h3 class="text-lg font-semibold text-[var(--theme-foreground)]">🛠️ Dev Tooling</h3>
+      <ul class="space-y-1 text-sm text-[var(--theme-foreground)]">
         <li><strong>Runtime:</strong> Bun (3× faster)</li>
         <li><strong>Builder:</strong> Vite + SvelteKit</li>
         <li><strong>Testing:</strong> Vitest + Playwright</li>
       </ul>
-      <p class="text-xs text-slate-500">Configured and ready to use.</p>
+      <p class="text-xs text-[var(--theme-sidebar-muted)]">Configured and ready to use.</p>
     </article>
   </section>
 
-  <section class="space-y-6 rounded-xl border border-slate-800 bg-slate-900/60 p-6">
+  <section class="space-y-6 rounded-xl border border-[var(--theme-sidebar-border)] bg-[var(--theme-sidebar-bg)] p-6">
     <div class="space-y-2">
-      <h3 class="text-2xl font-semibold text-slate-100">📋 Feature Roadmap</h3>
-      <p class="text-slate-300">Planned features for upcoming phases</p>
+      <h3 class="text-2xl font-semibold text-[var(--theme-foreground)]">📋 Feature Roadmap</h3>
+      <p class="text-[var(--theme-foreground)]">Planned features for upcoming phases</p>
     </div>
     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {#each [{ title: "📅 Timeline & Gantt", note: "Interactive timeline with dependency management and scheduling", phase: "Phase 2 · Priority" }, { title: "📈 Progress Tracker", note: "Real-time progress monitoring across project categories", phase: "Phase 2 · Priority" }, { title: "🎭 Character Portfolio", note: "Gallery and management for character costumes and variations", phase: "Phase 2 · Priority" }, { title: "💰 Budget Overview", note: "Team budget tracking and spending analysis", phase: "Phase 2 · Priority" }, { title: "🎯 Creator Marketplace", note: "Discover and book professional creators for shoots", phase: "Phase 1.5 · After validation" }, { title: "📱 Mobile Apps", note: "Flutter apps for iOS and Android with offline sync", phase: "Phase 2+ · Post web stability" }] as card (card.title)}
-        <article class="space-y-2 rounded-lg border border-slate-800/80 bg-slate-900/70 p-5">
-          <h4 class="text-lg font-semibold text-slate-100">{card.title}</h4>
-          <p class="text-sm text-slate-300">{card.note}</p>
-          <p class="text-xs uppercase tracking-wide text-slate-500">{card.phase}</p>
+        <article class="space-y-2 rounded-lg border border-[var(--theme-sidebar-border)]/80 bg-[var(--theme-sidebar-bg)] p-5">
+          <h4 class="text-lg font-semibold text-[var(--theme-foreground)]">{card.title}</h4>
+          <p class="text-sm text-[var(--theme-foreground)]">{card.note}</p>
+          <p class="text-xs uppercase tracking-wide text-[var(--theme-sidebar-muted)]">{card.phase}</p>
         </article>
       {/each}
     </div>
   </section>
 
-  <section class="rounded-xl border border-slate-800 bg-slate-900/60 p-6">
-    <h3 class="text-2xl font-semibold text-slate-100">ℹ️ Development Info</h3>
+  <section class="rounded-xl border border-[var(--theme-sidebar-border)] bg-[var(--theme-sidebar-bg)] p-6">
+    <h3 class="text-2xl font-semibold text-[var(--theme-foreground)]">ℹ️ Development Info</h3>
     <div class="mt-4 grid gap-6 md:grid-cols-2">
-      <div class="space-y-2 text-sm text-slate-300">
-        <h4 class="text-sm font-semibold uppercase tracking-wide text-slate-400">Tech Stack</h4>
+      <div class="space-y-2 text-sm text-[var(--theme-foreground)]">
+        <h4 class="text-sm font-semibold uppercase tracking-wide text-[var(--theme-sidebar-muted)]">Tech Stack</h4>
         <ul class="space-y-1">
           <li>Runtime: Bun (constitutionally required)</li>
           <li>Framework: SvelteKit 2.0</li>
@@ -131,8 +131,8 @@
           <li>Testing: Vitest + Playwright</li>
         </ul>
       </div>
-      <div class="space-y-2 text-sm text-slate-300">
-        <h4 class="text-sm font-semibold uppercase tracking-wide text-slate-400">Resources</h4>
+      <div class="space-y-2 text-sm text-[var(--theme-foreground)]">
+        <h4 class="text-sm font-semibold uppercase tracking-wide text-[var(--theme-sidebar-muted)]">Resources</h4>
         <ul class="space-y-1">
           <li><a class="text-sky-300 underline" href="/dashboard">Dashboard</a></li>
           <li>
