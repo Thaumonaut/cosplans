@@ -89,6 +89,25 @@ and are deleted only when the user account is deleted.
 - Public teams: Created via "Create Team" button in settings. User provides team name and
   optional description.
 
+**Team Member Management** (Public Teams Only):
+
+- **View Members**: All team members can view the full member list with names, emails, and roles.
+- **Change Roles**: Owners and admins can change member roles (owner, admin, member, viewer).
+  - Owner role cannot be changed directly (must use ownership transfer)
+  - Admins cannot change other admins' roles (only owner can)
+  - Cannot change your own role
+- **Remove Members**: Owners and admins can remove members from the team.
+  - Cannot remove the owner (must transfer ownership first)
+  - Removed members lose access to all team data immediately
+- **Transfer Ownership**: Current owner can transfer ownership to another team member.
+  - Must select a new owner before leaving the team
+  - Previous owner becomes an admin after transfer
+  - Ownership transfer is permanent and cannot be undone
+- **Leave Team**: Any member can leave a public team.
+  - If owner leaves, must transfer ownership to another member first
+  - If last member leaves, team is automatically deleted
+  - Personal teams cannot be left (deleted only with account deletion)
+
 **Solo User Support**: Users working independently use their personal team as a permanent solo
 workspace with full owner permissions. This ensures a consistent permission model and data
 architecture across all use cases—whether users collaborate in large teams or work solo on

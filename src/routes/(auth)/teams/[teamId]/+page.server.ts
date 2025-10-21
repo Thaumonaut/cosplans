@@ -20,7 +20,20 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 		.single();
 
 	if (teamError || !team) {
-		throw error(404, 'Team not found');
+		// Team not found or user doesn't have access - redirect to personal team
+		const { data: personalTeam } = await locals.supabase
+			.from('teams')
+			.select('id')
+			.eq('owner_id', user.id)
+			.eq('is_personal', true)
+			.single();
+
+		if (personalTeam) {
+			throw redirect(303, `/teams/${personalTeam.id}`);
+		}
+
+		// Fallback to dashboard
+		throw redirect(303, '/dashboard');
 	}
 
 	// Fetch team members with user profiles
@@ -98,6 +111,18 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 		})
 	);
 
+	// Sort members by role hierarchy: owner -> admin -> member -> viewer
+	const roleOrder = { owner: 0, admin: 1, member: 2, viewer: 3 };
+	enrichedMembers.sort((a, b) => {
+		const aOrder = roleOrder[a.role as keyof typeof roleOrder] ?? 999;
+		const bOrder = roleOrder[b.role as keyof typeof roleOrder] ?? 999;
+		if (aOrder !== bOrder) {
+			return aOrder - bOrder;
+		}
+		// If same role, sort alphabetically by display name
+		return (a.display_name || '').localeCompare(b.display_name || '');
+	});
+
 	// Fetch pending invitations (where accepted_at is NULL)
 	const { data: invitations, error: invitationsError } = await locals.supabase
 		.from('team_invitations')
@@ -113,7 +138,20 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	// Check user's role in this team
 	const userMember = enrichedMembers.find((m) => m.user_id === user.id);
 	if (!userMember) {
-		throw error(403, 'You are not a member of this team');
+		// User is not a member - redirect to their personal team
+		const { data: personalTeam } = await locals.supabase
+			.from('teams')
+			.select('id')
+			.eq('owner_id', user.id)
+			.eq('is_personal', true)
+			.single();
+
+		if (personalTeam) {
+			throw redirect(303, `/teams/${personalTeam.id}`);
+		}
+
+		// Fallback if no personal team found (shouldn't happen)
+		throw redirect(303, '/dashboard');
 	}
 
 	// Check permissions
@@ -497,5 +535,279 @@ export const actions: Actions = {
 				name: team.name
 			}
 		};
+	},
+
+	updateMemberRole: async ({ request, locals, params }) => {
+		const { user } = await locals.safeGetSession();
+		if (!user) {
+			throw redirect(303, '/login');
+		}
+
+		const { teamId } = params;
+		const formData = await request.formData();
+		const userId = formData.get('userId')?.toString();
+		const newRole = formData.get('role')?.toString();
+
+		if (!userId || !newRole) {
+			return fail(400, { error: 'Missing required fields' });
+		}
+
+		// Validate role
+		if (!['owner', 'admin', 'member', 'viewer'].includes(newRole)) {
+			return fail(400, { error: 'Invalid role' });
+		}
+
+		// Check if user has permission (must be owner or admin)
+		const { data: membership } = await locals.supabase
+			.from('team_members')
+			.select('role')
+			.eq('team_id', teamId)
+			.eq('user_id', user.id)
+			.single();
+
+		if (!membership || !['owner', 'admin'].includes(membership.role)) {
+			return fail(403, { error: 'You do not have permission to change roles' });
+		}
+
+		// Cannot change owner role
+		if (newRole === 'owner') {
+			return fail(400, { error: 'Cannot change to owner role. Use ownership transfer instead.' });
+		}
+
+		// Cannot change your own role
+		if (userId === user.id) {
+			return fail(400, { error: 'Cannot change your own role' });
+		}
+
+		// Admins cannot change other admins (only owner can)
+		if (membership.role === 'admin') {
+			const { data: targetMember } = await locals.supabase
+				.from('team_members')
+				.select('role')
+				.eq('team_id', teamId)
+				.eq('user_id', userId)
+				.single();
+
+			if (targetMember?.role === 'admin' || newRole === 'admin') {
+				return fail(403, { error: 'Only the owner can change admin roles' });
+			}
+		}
+
+		// Update the role
+		const { error } = await locals.supabase
+			.from('team_members')
+			.update({ role: newRole })
+			.eq('team_id', teamId)
+			.eq('user_id', userId);
+
+		if (error) {
+			return fail(500, { error: 'Failed to update role' });
+		}
+
+		return { roleUpdateSuccess: true, action: 'updateMemberRole' };
+	},
+
+	removeMember: async ({ request, locals, params }) => {
+		const { user } = await locals.safeGetSession();
+		if (!user) {
+			throw redirect(303, '/login');
+		}
+
+		const { teamId } = params;
+		const formData = await request.formData();
+		const userId = formData.get('userId')?.toString();
+
+		if (!userId) {
+			return fail(400, { error: 'Missing user ID' });
+		}
+
+		// Check if user has permission (must be owner or admin)
+		const { data: membership } = await locals.supabase
+			.from('team_members')
+			.select('role')
+			.eq('team_id', teamId)
+			.eq('user_id', user.id)
+			.single();
+
+		if (!membership || !['owner', 'admin'].includes(membership.role)) {
+			return fail(403, { error: 'You do not have permission to remove members' });
+		}
+
+		// Cannot remove the owner
+		const { data: targetMember } = await locals.supabase
+			.from('team_members')
+			.select('role')
+			.eq('team_id', teamId)
+			.eq('user_id', userId)
+			.single();
+
+		if (targetMember?.role === 'owner') {
+			return fail(400, { error: 'Cannot remove the owner. Transfer ownership first.' });
+		}
+
+		// Remove the member
+		const { error } = await locals.supabase
+			.from('team_members')
+			.delete()
+			.eq('team_id', teamId)
+			.eq('user_id', userId);
+
+		if (error) {
+			return fail(500, { error: 'Failed to remove member' });
+		}
+
+		return { removeMemberSuccess: true, action: 'removeMember' };
+	},
+
+	leaveTeam: async ({ request, locals, params }) => {
+		const { user } = await locals.safeGetSession();
+		if (!user) {
+			throw redirect(303, '/login');
+		}
+
+		const { teamId } = params;
+
+		// Check if this is a personal team
+		const { data: team } = await locals.supabase
+			.from('teams')
+			.select('is_personal, owner_id')
+			.eq('id', teamId)
+			.single();
+
+		if (team?.is_personal) {
+			return fail(400, { error: 'Cannot leave personal teams' });
+		}
+
+		// Check if user is the owner
+		if (team?.owner_id === user.id) {
+			return fail(400, { error: 'Owners must transfer ownership before leaving the team' });
+		}
+
+		// Remove user from team
+		const { error } = await locals.supabase
+			.from('team_members')
+			.delete()
+			.eq('team_id', teamId)
+			.eq('user_id', user.id);
+
+		if (error) {
+			return fail(500, { error: 'Failed to leave team' });
+		}
+
+		// Check if team is now empty and delete if so
+		const { data: remainingMembers } = await locals.supabase
+			.from('team_members')
+			.select('user_id')
+			.eq('team_id', teamId);
+
+		if (!remainingMembers || remainingMembers.length === 0) {
+			await locals.supabase
+				.from('teams')
+				.delete()
+				.eq('id', teamId);
+		}
+
+		// Redirect to user's personal team or dashboard
+		const { data: personalTeam } = await locals.supabase
+			.from('teams')
+			.select('id')
+			.eq('owner_id', user.id)
+			.eq('is_personal', true)
+			.single();
+
+		if (personalTeam) {
+			throw redirect(303, `/teams/${personalTeam.id}`);
+		}
+
+		throw redirect(303, '/dashboard');
+	},
+
+	transferOwnership: async ({ request, locals, params }) => {
+		const { user } = await locals.safeGetSession();
+		if (!user) {
+			throw redirect(303, '/login');
+		}
+
+		const { teamId } = params;
+		const formData = await request.formData();
+		const newOwnerId = formData.get('newOwnerId')?.toString();
+
+		if (!newOwnerId) {
+			return fail(400, { error: 'Must select a new owner', action: 'transferOwnership' });
+		}
+
+		// Check if current user is the owner
+		const { data: team } = await locals.supabase
+			.from('teams')
+			.select('owner_id, is_personal')
+			.eq('id', teamId)
+			.single();
+
+		if (!team) {
+			return fail(404, { error: 'Team not found', action: 'transferOwnership' });
+		}
+
+		if (team.owner_id !== user.id) {
+			return fail(403, { error: 'Only the owner can transfer ownership', action: 'transferOwnership' });
+		}
+
+		if (team.is_personal) {
+			return fail(400, { error: 'Cannot transfer ownership of personal teams', action: 'transferOwnership' });
+		}
+
+		// Verify new owner is a member of the team
+		const { data: newOwnerMembership } = await locals.supabase
+			.from('team_members')
+			.select('user_id, role')
+			.eq('team_id', teamId)
+			.eq('user_id', newOwnerId)
+			.single();
+
+		if (!newOwnerMembership) {
+			return fail(400, { error: 'New owner must be a member of the team', action: 'transferOwnership' });
+		}
+
+		// Start transaction: update team owner and update roles
+		// 1. Update team owner
+		const { error: teamError } = await locals.supabase
+			.from('teams')
+			.update({ owner_id: newOwnerId })
+			.eq('id', teamId);
+
+		if (teamError) {
+			console.error('Transfer ownership - team update error:', teamError);
+			return fail(500, { error: 'Failed to transfer ownership', action: 'transferOwnership' });
+		}
+
+		// 2. Update new owner's role to owner
+		const { error: newOwnerError } = await locals.supabase
+			.from('team_members')
+			.update({ role: 'owner' })
+			.eq('team_id', teamId)
+			.eq('user_id', newOwnerId);
+
+		if (newOwnerError) {
+			console.error('Transfer ownership - new owner role update error:', newOwnerError);
+			// Rollback team owner change
+			await locals.supabase
+				.from('teams')
+				.update({ owner_id: user.id })
+				.eq('id', teamId);
+			return fail(500, { error: 'Failed to update new owner role', action: 'transferOwnership' });
+		}
+
+		// 3. Update previous owner's role to admin
+		const { error: prevOwnerError } = await locals.supabase
+			.from('team_members')
+			.update({ role: 'admin' })
+			.eq('team_id', teamId)
+			.eq('user_id', user.id);
+
+		if (prevOwnerError) {
+			console.error('Failed to update previous owner role:', prevOwnerError);
+			// Don't fail the whole operation, just log it
+		}
+
+		return { transferOwnershipSuccess: true, action: 'transferOwnership' };
 	}
 };

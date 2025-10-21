@@ -48,6 +48,10 @@
 	// Track if we just submitted to prevent reactive override
 	let justSubmitted = false;
 
+	// Transfer ownership state
+	let showTransferOwnership = false;
+	let selectedNewOwner = '';
+
 	// Update saved state when data changes (on page load or navigation)
 	// But NOT when we just submitted (to prevent clearing)
 	$: if (!justSubmitted) {
@@ -270,15 +274,58 @@
 									<div>
 										<p class="text-sm font-medium" style="color: var(--theme-foreground);">
 											{member.display_name || 'Unknown User'}
+											{#if member.user_id === data.user.id}
+												<span class="text-xs" style="color: var(--theme-sidebar-muted);">(You)</span>
+											{/if}
 										</p>
 										<p class="text-xs" style="color: var(--theme-sidebar-muted);">
 											{member.email || ''}
 										</p>
 									</div>
 								</div>
-								<span class="px-2 py-1 text-xs font-medium rounded-full {getRoleBadgeClass(member.role)}">
-									{member.role}
-								</span>
+								
+								<div class="flex items-center gap-2">
+									<!-- Role Management (for public teams) -->
+									{#if !data.team.is_personal && data.permissions.canManageMembers && member.role !== 'owner' && member.user_id !== data.user.id}
+										<form method="POST" action="?/updateMemberRole" use:enhance class="inline">
+											<input type="hidden" name="userId" value={member.user_id} />
+											<select 
+												name="role" 
+												value={member.role}
+												on:change={(e) => e.currentTarget.form?.requestSubmit()}
+												class="px-2 py-1 text-xs font-medium rounded-full border cursor-pointer {getRoleBadgeClass(member.role)}"
+												style="border-color: var(--theme-sidebar-border);"
+											>
+												<option value="admin">admin</option>
+												<option value="member">member</option>
+												<option value="viewer">viewer</option>
+											</select>
+										</form>
+									{:else}
+										<span class="px-2 py-1 text-xs font-medium rounded-full {getRoleBadgeClass(member.role)}">
+											{member.role}
+										</span>
+									{/if}
+
+									<!-- Remove Member Button -->
+									{#if !data.team.is_personal && data.permissions.canManageMembers && member.role !== 'owner' && member.user_id !== data.user.id}
+										<form method="POST" action="?/removeMember" use:enhance class="inline">
+											<input type="hidden" name="userId" value={member.user_id} />
+											<button
+												type="submit"
+												class="px-2 py-1 text-xs font-medium rounded hover:bg-red-100 transition-colors"
+												style="color: #ef4444;"
+												on:click={(e) => {
+													if (!confirm(`Remove ${member.display_name} from the team?`)) {
+														e.preventDefault();
+													}
+												}}
+											>
+												Remove
+											</button>
+										</form>
+									{/if}
+								</div>
 							</div>
 						{/each}
 					</div>
@@ -618,13 +665,15 @@
 			</div>
 
 			<!-- Danger Zone -->
-			{#if data.permissions.canDeleteTeam}
+			{#if data.permissions.canDeleteTeam || !data.team.is_personal}
 			<div class="shadow rounded-lg p-6" style="background: var(--theme-sidebar-bg); border: 1px solid var(--theme-sidebar-border);">
 				<h2 class="text-xl font-semibold mb-4" style="color: #ef4444;">
 					Danger Zone
 				</h2>
 
 				<div class="space-y-4">
+					<!-- Delete Team (owners only) -->
+					{#if data.permissions.canDeleteTeam}
 					<div class="p-4 border rounded-lg" style="border-color: {data.team.is_personal ? 'var(--theme-sidebar-border)' : '#ef4444'};">
 						<h3 class="font-medium mb-2" style="color: var(--theme-foreground);">
 							Delete Team
@@ -656,6 +705,146 @@
 							</button>
 						{/if}
 					</div>
+					{/if}
+
+					<!-- Transfer Ownership (owners only, public teams) -->
+					{#if data.userRole === 'owner' && !data.team.is_personal && data.members.length > 1}
+						<div class="p-4 border rounded-lg" style="border-color: #f59e0b;">
+							<h3 class="font-medium mb-2" style="color: var(--theme-foreground);">
+								Transfer Ownership
+							</h3>
+							<p class="text-sm mb-4" style="color: var(--theme-sidebar-muted);">
+								Transfer ownership of this team to another member. You will become an admin after the transfer.
+							</p>
+
+							{#if form?.transferOwnershipSuccess && form?.action === 'transferOwnership'}
+								<div class="mb-4 p-4 rounded-lg" style="background: #10b981; color: white;">
+									Ownership transferred successfully!
+								</div>
+							{/if}
+
+							{#if form?.error && form?.action === 'transferOwnership'}
+								<div class="mb-4 p-4 rounded-lg" style="background: #ef4444; color: white;">
+									{form.error}
+								</div>
+							{/if}
+
+							{#if !showTransferOwnership}
+								<button
+									type="button"
+									on:click={() => showTransferOwnership = true}
+									class="px-4 py-2 rounded-lg font-medium text-white focus:outline-none focus:ring-2"
+									style="background: #f59e0b;"
+								>
+									Transfer Ownership
+								</button>
+							{:else}
+								<form method="POST" action="?/transferOwnership" use:enhance class="space-y-3">
+									<div>
+										<label for="newOwner" class="block text-sm font-medium mb-2" style="color: var(--theme-foreground);">
+											Select New Owner
+										</label>
+										<select
+											id="newOwner"
+											name="newOwnerId"
+											bind:value={selectedNewOwner}
+											required
+											class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2"
+											style="background: var(--theme-sidebar-bg); color: var(--theme-foreground); border-color: var(--theme-sidebar-border);"
+										>
+											<option value="">-- Select a member --</option>
+											{#each data.members.filter(m => m.user_id !== data.user.id) as member}
+												<option value={member.user_id}>
+													{member.display_name} ({member.role})
+												</option>
+											{/each}
+										</select>
+									</div>
+
+									<div class="flex gap-2">
+										<button
+											type="submit"
+											disabled={!selectedNewOwner}
+											class="px-4 py-2 rounded-lg font-medium text-white focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed"
+											style="background: #f59e0b;"
+											on:click={(e) => {
+												if (!confirm(`Transfer ownership to ${data.members.find(m => m.user_id === selectedNewOwner)?.display_name}? This action cannot be undone.`)) {
+													e.preventDefault();
+												}
+											}}
+										>
+											Confirm Transfer
+										</button>
+										<button
+											type="button"
+											on:click={() => {
+												showTransferOwnership = false;
+												selectedNewOwner = '';
+											}}
+											class="px-4 py-2 rounded-lg font-medium border focus:outline-none focus:ring-2"
+											style="color: var(--theme-foreground); border-color: var(--theme-sidebar-border); background: var(--theme-sidebar-bg);"
+										>
+											Cancel
+										</button>
+									</div>
+								</form>
+							{/if}
+						</div>
+					{/if}
+
+					<!-- Leave Team (for public teams) -->
+					{#if !data.team.is_personal}
+						<div class="mt-4 p-4 border rounded-lg" style="border-color: {data.userRole === 'owner' ? '#f59e0b' : 'var(--theme-sidebar-border)'};">
+							<h3 class="font-medium mb-2" style="color: var(--theme-foreground);">
+								Leave Team
+							</h3>
+							
+							{#if data.userRole === 'owner'}
+								<p class="text-sm mb-4" style="color: var(--theme-sidebar-muted);">
+									As the owner, you must transfer ownership to another member before leaving the team.
+								</p>
+								<button
+									type="button"
+									class="px-4 py-2 rounded-lg font-medium focus:outline-none opacity-50 cursor-not-allowed"
+									style="background: var(--theme-sidebar-border); color: var(--theme-sidebar-muted);"
+									disabled
+								>
+									Transfer Ownership First
+								</button>
+							{:else}
+								<p class="text-sm mb-4" style="color: var(--theme-sidebar-muted);">
+									You will lose access to all team data and shoots. This action cannot be undone.
+								</p>
+								<form method="POST" action="?/leaveTeam" use:enhance={() => {
+									return async ({ result }) => {
+										if (result.type === 'redirect') {
+											// Reload team switcher before redirect
+											if (typeof window !== 'undefined' && (window as any).reloadTeamSwitcher) {
+												await (window as any).reloadTeamSwitcher();
+											}
+											// Let the redirect happen
+											window.location.href = result.location;
+										} else {
+											await applyAction(result);
+										}
+									};
+								}}>
+									<button
+										type="submit"
+										class="px-4 py-2 rounded-lg font-medium text-white focus:outline-none focus:ring-2"
+										style="background: #f59e0b;"
+										on:click={(e) => {
+											if (!confirm('Are you sure you want to leave this team? You will lose access to all team data.')) {
+												e.preventDefault();
+											}
+										}}
+									>
+										Leave Team
+									</button>
+								</form>
+							{/if}
+						</div>
+					{/if}
 				</div>
 			</div>
 			{/if}
