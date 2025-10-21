@@ -156,9 +156,9 @@ Each user story delivers independently testable value and can be deployed separa
 
 ### Testing
 
-- [ ] T020 [P] Create component tests for ThemedCard in `tests/components/ThemedCard.test.ts`
-- [ ] T021 [P] Create component tests for ThemedInput in `tests/components/ThemedInput.test.ts`
-- [ ] T022 [P] Create component tests for ThemedButton in `tests/components/ThemedButton.test.ts`
+- [x] T020 [P] Create component tests for ThemedCard in `tests/components/ThemedCard.test.ts`
+- [x] T021 [P] Create component tests for ThemedInput in `tests/components/ThemedInput.test.ts`
+- [x] T022 [P] Create component tests for ThemedButton in `tests/components/ThemedButton.test.ts`
 
 ### Documentation & Cleanup
 
