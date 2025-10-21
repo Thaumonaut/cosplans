@@ -56,6 +56,7 @@
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.45.4",
     "@tailwindcss/typography": "^0.5.15",
+    "color2k": "^2.0.3",
     "date-fns": "^4.1.0",
     "lucide-svelte": "^0.447.0",
     "shadcn-svelte": "^1.0.8",

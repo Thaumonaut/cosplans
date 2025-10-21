@@ -19,7 +19,7 @@
 	{readonly}
 	{disabled}
 	class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2"
-	style="background: var(--theme-sidebar-bg); color: var(--theme-foreground); border-color: var(--theme-sidebar-border);"
+	style="background: var(--theme-input-bg); color: var(--theme-foreground); border-color: var(--theme-border);"
 	on:input
 	on:change
 	on:blur

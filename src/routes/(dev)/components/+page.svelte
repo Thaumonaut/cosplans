@@ -40,7 +40,8 @@
     </div>
 
     <!-- ThemedCard -->
-    <ThemedCard title="ThemedCard Component">
+    <div class="rounded-lg p-6" style="background: var(--theme-section-bg); border: 1px solid var(--theme-border-subtle); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);">
+      <h2 class="text-2xl font-semibold mb-4" style="color: var(--theme-foreground);">ThemedCard Component</h2>
       <div class="space-y-4">
         <p style="color: var(--theme-foreground);">
           A card container component with optional title and customizable padding.
@@ -59,16 +60,17 @@
             <p style="color: var(--theme-foreground);">This card uses p-8 padding.</p>
           </ThemedCard>
         </div>
-        <div class="mt-4 p-4 rounded" style="background: var(--theme-sidebar-hover);">
+        <div class="mt-4 p-4 rounded" style="background: var(--theme-code-bg);">
           <code class="text-sm" style="color: var(--theme-foreground);">
             &lt;ThemedCard title="Card Title"&gt;Content&lt;/ThemedCard&gt;
           </code>
         </div>
       </div>
-    </ThemedCard>
+    </div>
 
     <!-- ThemedInput -->
-    <ThemedCard title="ThemedInput Component">
+    <div class="rounded-lg p-6" style="background: var(--theme-section-bg); border: 1px solid var(--theme-border-subtle); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);">
+      <h2 class="text-2xl font-semibold mb-4" style="color: var(--theme-foreground);">ThemedInput Component</h2>
       <div class="space-y-4">
         <p style="color: var(--theme-foreground);">
           Text input fields with theme-aware styling. Supports all standard input types.
@@ -140,13 +142,13 @@
             />
           </div>
         </div>
-        <div class="mt-4 p-4 rounded" style="background: var(--theme-sidebar-hover);">
+        <div class="mt-4 p-4 rounded" style="background: var(--theme-code-bg);">
           <code class="text-sm" style="color: var(--theme-foreground);">
             &lt;ThemedInput type="text" name="field" bind:value={'{value}'} /&gt;
           </code>
         </div>
       </div>
-    </ThemedCard>
+    </div>
 
     <!-- ThemedTextarea -->
     <ThemedCard title="ThemedTextarea Component">
