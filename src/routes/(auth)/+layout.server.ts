@@ -16,6 +16,21 @@ export const load: LayoutServerLoad = async ({ locals, url }) => {
 
   console.log('Auth check passed for user:', user.email)
 
+  // CONSTITUTIONAL REQUIREMENT: Check if user has completed onboarding
+  // (except when already on onboarding page)
+  if (url.pathname !== '/onboarding') {
+    const { data: profile } = await locals.supabase
+      .from('user_profiles')
+      .select('onboarding_completed')
+      .eq('id', user.id)
+      .single()
+
+    if (!profile || !profile.onboarding_completed) {
+      console.log('Onboarding not completed, redirecting to onboarding')
+      throw redirect(303, '/onboarding')
+    }
+  }
+
   return {
     session,
     user

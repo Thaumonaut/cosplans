@@ -1,4 +1,46 @@
-# Team Architecture Changes - Proposal
+# Team Architecture Changes - Personal vs Public Teams
+
+**Status**: ✅ APPROVED - Constitution updated (v2.6.0)
+
+## Architecture Decision: Personal Teams vs Public Teams
+
+### Personal Teams
+- **Created**: Automatically during onboarding
+- **Members**: Solo only (owner cannot add members)
+- **Deletion**: Only when user account is deleted
+- **Purpose**: Permanent solo workspace for personal projects
+- **Badge**: **(Personal)** in team switcher
+- **Position**: Above divider in team list
+- **Label**: "PERSONAL" section header
+
+### Public Teams
+- **Created**: Manually via "Create Team" button in settings
+- **Members**: Multiple members with roles (owner, admin, member, viewer)
+- **Deletion**: By owner OR auto-deleted when last member leaves
+- **Purpose**: Collaborative workspace for team projects
+- **Badge**: **(Public)** in team switcher
+- **Position**: Below divider in team list
+- **Label**: "PUBLIC" section header with member counts
+
+### Team Switcher UI
+```
+PERSONAL ----------------------------
+My Personal Team Name
+
+PUBLIC ------------------------------
+My cool public team (2 members)
+Team of heroes (5 members)
+```
+
+### Database Schema
+- Added `is_personal` boolean column to `teams` table
+- Personal teams: `is_personal = true`
+- Public teams: `is_personal = false`
+- Index on `is_personal` for efficient queries
+
+---
+
+## Previous Architecture Discussion (Cross-Team Views)
 
 ## Current Architecture (As Built)
 

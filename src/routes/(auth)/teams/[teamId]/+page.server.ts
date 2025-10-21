@@ -1,5 +1,7 @@
 import { error, fail, redirect } from '@sveltejs/kit';
-import type { PageServerLoad, Actions } from './settings/$types';
+import type { PageServerLoad, Actions } from './$types';
+import { TeamJoinService } from '$lib/server/teams/join-service';
+import { TeamService } from '$lib/server/teams/team-service';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 	const { user } = await locals.safeGetSession();
@@ -46,19 +48,23 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	// Create a map of user_id to display_name from profiles
 	const profileMap = new Map(profiles?.map((p) => [p.user_id, p.display_name]) || []);
 
-	// Enrich members with display names using full fallback chain
+	// Enrich members with display names and emails using full fallback chain
 	const enrichedMembers = await Promise.all(
 		(members || []).map(async (m) => {
 			let displayName = profileMap.get(m.user_id);
+			let email = '';
 
-			// If no display name in profile (null, undefined, or empty), use fallback chain
-			if (!displayName || (typeof displayName === 'string' && displayName.trim() === '')) {
-				// Import admin client for auth fallback
-				const { getAdminClient } = await import('$lib/server/supabase/admin-client');
-				const adminClient = getAdminClient();
-				const { data: { user: authUser } } = await adminClient.auth.admin.getUserById(m.user_id);
+			// Import admin client for auth fallback
+			const { getAdminClient } = await import('$lib/server/supabase/admin-client');
+			const adminClient = getAdminClient();
+			const { data: { user: authUser } } = await adminClient.auth.admin.getUserById(m.user_id);
 
-				if (authUser) {
+			if (authUser) {
+				// Always get email from auth
+				email = authUser.email || '';
+
+				// If no display name in profile (null, undefined, or empty), use fallback chain
+				if (!displayName || (typeof displayName === 'string' && displayName.trim() === '')) {
 					// Try full_name from metadata
 					displayName = authUser.user_metadata?.full_name || authUser.user_metadata?.name;
 
@@ -77,26 +83,27 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 						displayName = authUser.email;
 					}
 				}
+			}
 
-				// Last resort: user ID (should never happen if auth user exists)
-				if (!displayName) {
-					displayName = `User ${m.user_id.substring(0, 8)}`;
-				}
+			// Last resort: user ID (should never happen if auth user exists)
+			if (!displayName) {
+				displayName = `User ${m.user_id.substring(0, 8)}`;
 			}
 
 			return {
 				...m,
-				display_name: displayName
+				display_name: displayName,
+				email: email
 			};
 		})
 	);
 
-	// Fetch pending invitations
+	// Fetch pending invitations (where accepted_at is NULL)
 	const { data: invitations, error: invitationsError } = await locals.supabase
 		.from('team_invitations')
 		.select('*')
 		.eq('team_id', teamId)
-		.eq('status', 'pending')
+		.is('accepted_at', null)
 		.order('created_at', { ascending: false });
 
 	if (invitationsError) {
@@ -417,5 +424,78 @@ export const actions: Actions = {
 		}
 
 		return { success: true, joinLinkToggled: true };
+	},
+
+	joinTeamWithCode: async ({ request, locals }) => {
+		const { user } = await locals.safeGetSession();
+
+		if (!user) {
+			throw redirect(303, '/login');
+		}
+
+		const formData = await request.formData();
+		const code = formData.get('code')?.toString()?.trim() || '';
+
+		const joinService = new TeamJoinService(locals.supabase);
+		const result = await joinService.joinTeamWithCode(user.id, code);
+
+		if (!result.success) {
+			return fail(400, { error: result.error });
+		}
+
+		// Return success with team info - let user choose whether to switch
+		return {
+			success: true,
+			joinedTeam: {
+				id: result.teamId,
+				name: result.teamName
+			}
+		};
+	},
+
+	createTeam: async ({ request, locals }) => {
+		const { user } = await locals.safeGetSession();
+
+		if (!user) {
+			throw redirect(303, '/login');
+		}
+
+		const formData = await request.formData();
+		const name = formData.get('name')?.toString()?.trim() || '';
+		const description = formData.get('description')?.toString()?.trim() || '';
+
+		// Validate team name
+		if (!name || name.length < 1 || name.length > 100) {
+			return fail(400, {
+				error: 'Team name must be between 1 and 100 characters',
+				name,
+				description
+			});
+		}
+
+		// Create public team (isPersonal = false)
+		const teamService = new TeamService(locals.supabase);
+		const { team, error } = await teamService.createTeam(
+			user.id,
+			name,
+			description || undefined,
+			false // isPersonal = false (public team)
+		);
+
+		if (error || !team) {
+			return fail(500, {
+				error: error?.message || 'Failed to create team',
+				name,
+				description
+			});
+		}
+
+		return {
+			success: true,
+			team: {
+				id: team.id,
+				name: team.name
+			}
+		};
 	}
 };

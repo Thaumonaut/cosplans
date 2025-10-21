@@ -61,20 +61,38 @@ and timelines requiring instant communication and updates.
 
 ### II.5. User Team Ownership Requirement
 
-Every user MUST be part of at least one team they own at all times. During account creation
-and onboarding, the system MUST automatically create a default team with the new user as
-owner. Users MAY create additional teams and MAY join existing teams as members, but they
-MUST always maintain ownership of at least one team.
+Every user MUST own exactly one **personal team** (solo workspace) at all times. During account
+creation and onboarding, the system MUST automatically create a personal team with the new user
+as the sole owner and member. Personal teams are permanent, cannot have additional members added,
+and are deleted only when the user account is deleted.
 
-**Team Deletion Rules**: A team can only be deleted when there is only one member remaining
-AND that member owns at least one other team. The system MUST prevent deletion of a user's
-last owned team. When a user attempts to delete their only owned team, the system MUST
-display an error message: "Cannot delete your only team. Create or join another team first."
+**Personal Teams vs Public Teams**:
 
-**Solo User Support**: Users working independently effectively operate as a "team of one"
-with full owner permissions. This ensures a consistent permission model and data architecture
-across all use cases—whether users collaborate in large teams or work solo on personal
-projects. All core features (shoots, costumes, props, schedules) are owned by a team.
+- **Personal Teams**: Created automatically during onboarding. Locked to single user (owner only).
+  Cannot add members. Deleted when user account is deleted. Serves as permanent solo workspace.
+  Badge: **(Personal)** in team switcher. Displayed above divider in team list.
+
+- **Public Teams**: Created manually post-onboarding via settings. Support multiple members with
+  roles (owner, admin, member, viewer). Can be deleted by owner OR auto-deleted when last member
+  leaves. Serve as collaborative workspaces. Badge: **(Public)** in team switcher. Displayed
+  below divider in team list.
+
+**Team Deletion Rules**:
+
+- Personal teams: Cannot be deleted manually. Only deleted when user account is deleted.
+- Public teams: Can be deleted by owner at any time. All members are removed upon deletion.
+- Public teams: Auto-deleted when last member leaves (no orphaned teams).
+
+**Team Creation**:
+
+- Personal teams: Created automatically during onboarding. User names their personal team.
+- Public teams: Created via "Create Team" button in settings. User provides team name and
+  optional description.
+
+**Solo User Support**: Users working independently use their personal team as a permanent solo
+workspace with full owner permissions. This ensures a consistent permission model and data
+architecture across all use cases—whether users collaborate in large teams or work solo on
+personal projects. All core features (shoots, costumes, props, schedules) are owned by a team.
 
 **Cross-Team Awareness and Management**: While the application maintains a primary team context
 for focused work, users MUST be able to view and manage shoots, tasks, and schedules from all

@@ -3,7 +3,9 @@
  * Handles team creation, retrieval, and management
  * 
  * Constitutional Requirements:
- * - Principle II.5: Every user MUST own at least one team
+ * - Principle II.5: Every user MUST own exactly one personal team
+ * - Personal teams: Solo workspace, created at onboarding, cannot add members
+ * - Public teams: Collaborative workspace, created post-onboarding, supports multiple members
  * - Principle II: Real-time collaboration support
  */
 
@@ -20,12 +22,14 @@ export class TeamService {
 	 * @param userId - ID of the user creating the team
 	 * @param name - Team name (1-100 characters)
 	 * @param description - Optional team description (0-500 characters)
+	 * @param isPersonal - Whether this is a personal team (default: false)
 	 * @returns Created team with member data
 	 */
 	async createTeam(
 		userId: string,
 		name: string,
-		description?: string
+		description?: string,
+		isPersonal = false
 	): Promise<{ team: Team; error: Error | null }> {
 		// Validate inputs
 		if (!name || name.length < 1 || name.length > 100) {
@@ -42,13 +46,31 @@ export class TeamService {
 			};
 		}
 
+		// CONSTITUTIONAL REQUIREMENT: User can only have ONE personal team
+		if (isPersonal) {
+			const { data: existingPersonalTeams } = await this.supabase
+				.from('teams')
+				.select('id')
+				.eq('owner_id', userId)
+				.eq('is_personal', true)
+				.is('archived_at', null);
+
+			if (existingPersonalTeams && existingPersonalTeams.length > 0) {
+				return {
+					team: null as any,
+					error: new Error('User already has a personal team. Only one personal team is allowed per user.')
+				};
+			}
+		}
+
 		// Create team
 		const { data: team, error: teamError } = await this.supabase
 			.from('teams')
 			.insert({
 				name,
 				description: description || null,
-				owner_id: userId
+				owner_id: userId,
+				is_personal: isPersonal
 			})
 			.select()
 			.single();
@@ -170,7 +192,8 @@ export class TeamService {
 
 	/**
 	 * Check if a user can delete a team
-	 * Constitutional requirement: Users must own at least one team
+	 * Constitutional requirement: Personal teams cannot be deleted
+	 * Public teams can be deleted by owner
 	 * 
 	 * @param userId - ID of the user
 	 * @param teamId - ID of the team to delete
@@ -180,7 +203,7 @@ export class TeamService {
 		// Check if user is the owner of this team
 		const { data: team } = await this.supabase
 			.from('teams')
-			.select('owner_id')
+			.select('owner_id, is_personal')
 			.eq('id', teamId)
 			.single();
 
@@ -188,21 +211,18 @@ export class TeamService {
 			return false;
 		}
 
-		// Count how many teams the user owns
-		const { data: ownedTeams } = await this.supabase
-			.from('teams')
-			.select('id')
-			.eq('owner_id', userId)
-			.is('archived_at', null);
+		// Personal teams cannot be deleted (constitutional requirement)
+		if (team.is_personal) {
+			return false;
+		}
 
-		// User must own at least one team (constitutional requirement)
-		// Can only delete if they own more than one team
-		return (ownedTeams?.length || 0) > 1;
+		// Public teams can be deleted by owner
+		return true;
 	}
 
 	/**
 	 * Soft delete a team (set archived_at timestamp)
-	 * Validates constitutional requirement: user must own at least one team
+	 * Validates constitutional requirement: personal teams cannot be deleted
 	 * 
 	 * @param userId - ID of the user
 	 * @param teamId - ID of the team to delete
@@ -218,7 +238,7 @@ export class TeamService {
 			return {
 				success: false,
 				error: new Error(
-					'Cannot delete team: You must own at least one team (constitutional requirement)'
+					'Cannot delete personal teams. Only public teams can be deleted.'
 				)
 			};
 		}

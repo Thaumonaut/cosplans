@@ -213,6 +213,25 @@
           </p>
         </div>
 
+        <!-- Join Code Field -->
+        <div class="border-t border-gray-200 pt-6">
+          <label for="joinCode" class="block text-sm font-medium text-gray-700">
+            Join an Existing Team (Optional)
+          </label>
+          <input
+            id="joinCode"
+            name="joinCode"
+            type="text"
+            maxlength="6"
+            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 uppercase font-mono"
+            placeholder="ABC123"
+            value={data.joinCode}
+          />
+          <p class="mt-1 text-sm text-gray-500">
+            Have a team join code? Enter it here to join an existing team in addition to creating your personal team.
+          </p>
+        </div>
+
         <div class="flex items-center">
           <input
             id="isPublicProfile"

@@ -8,8 +8,9 @@
 import { fail, redirect } from '@sveltejs/kit'
 import type { Actions, PageServerLoad } from './$types'
 import { TeamService } from '$lib/server/teams/team-service'
+import { TeamJoinService } from '$lib/server/teams/join-service'
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, url }) => {
   // SECURITY: Use safeGetSession which validates JWT via getUser()
   const { session, user } = await locals.safeGetSession()
 
@@ -45,10 +46,14 @@ export const load: PageServerLoad = async ({ locals }) => {
     fullName = `${firstName} ${lastName}`.trim()
   }
 
+  // Get join code from URL if present
+  const joinCode = url.searchParams.get('joinCode') || ''
+
   return {
     user,
     userEmail,
-    fullName
+    fullName,
+    joinCode
   }
 }
 
@@ -76,12 +81,13 @@ export const actions: Actions = {
       })
     }
 
-    // CONSTITUTIONAL REQUIREMENT: Create personal team (user must own at least one team)
+    // CONSTITUTIONAL REQUIREMENT: Create personal team (permanent solo workspace)
     const teamService = new TeamService(locals.supabase)
     const { team, error: teamError } = await teamService.createTeam(
       userId,
       teamName,
-      'My personal team on Cosplans'
+      'My personal team on Cosplans',
+      true // isPersonal = true
     )
 
     if (teamError || !team) {
@@ -97,174 +103,44 @@ export const actions: Actions = {
     // OPTIONAL: Join another team with code
     let joinedTeamId = null
     if (joinCode && joinCode.length === 6) {
-      console.log('🔍 Attempting to join team with code:', joinCode)
-
-      // Find join link by code
-      const { data: joinLink, error: linkError } = await locals.supabase
-        .from('team_join_links')
-        .select(`
-          *,
-          teams!inner(id, name)
-        `)
-        .eq('code', joinCode)
-        .eq('is_active', true)
-        .single()
-
-      if (joinLink && !linkError) {
-        // Check if expired
-        const isExpired = joinLink.expires_at && new Date(joinLink.expires_at) < new Date()
-        
-        // Check max uses
-        const maxUsesReached = joinLink.max_uses && joinLink.current_uses >= joinLink.max_uses
-        
-        // Check if already a member
-        const { data: existingMember } = await locals.supabase
-          .from('team_members')
-          .select('id')
-          .eq('team_id', joinLink.team_id)
-          .eq('user_id', userId)
-          .single()
-
-        if (!isExpired && !maxUsesReached && !existingMember) {
-          // Add user to team
-          const { error: memberError } = await locals.supabase.from('team_members').insert({
-            team_id: joinLink.team_id,
-            user_id: userId,
-            role: 'member',
-            joined_at: new Date().toISOString()
-          })
-
-          if (!memberError) {
-            // Increment use count
-            await locals.supabase
-              .from('team_join_links')
-              .update({ current_uses: joinLink.current_uses + 1 })
-              .eq('id', joinLink.id)
-
-            joinedTeamId = joinLink.team_id
-            console.log('✅ Also joined team via code:', joinedTeamId)
-          }
-        }
+      const joinService = new TeamJoinService(locals.supabase)
+      const result = await joinService.joinTeamWithCode(userId, joinCode)
+      
+      if (result.success) {
+        joinedTeamId = result.teamId
+        console.log('✅ Successfully joined team:', result.teamName)
+      } else {
+        console.log('❌ Failed to join team:', result.error)
+        // Non-fatal - continue with onboarding even if join fails
       }
     }
 
     // Mark onboarding as complete and save display name
+    // Use upsert to handle cases where profile might not exist
     const { error: profileError } = await locals.supabase
       .from('user_profiles')
-      .update({
+      .upsert({
+        id: userId,
         display_name: displayName || null,
         onboarding_completed: true,
         onboarding_completed_at: new Date().toISOString()
+      }, {
+        onConflict: 'id'
       })
-      .eq('id', userId)
 
     if (profileError) {
-      console.error('⚠️ Profile update error:', profileError)
-      // Non-fatal - team was created successfully
+      console.error('❌ CRITICAL: Profile update error:', profileError)
+      // This is critical - if profile isn't updated, user gets stuck in onboarding loop
+      return fail(500, {
+        error: 'Failed to complete onboarding. Please try again.',
+        teamName
+      })
     }
 
-    console.log('✅ Onboarding complete')
+    console.log('✅ Onboarding complete - profile updated successfully')
     
     // Redirect to the joined team if they used a code, otherwise their personal team
     const redirectTeamId = joinedTeamId || team.id
     throw redirect(303, `/teams/${redirectTeamId}`)
-  },
-
-  // Legacy action for backward compatibility (can be removed later)
-  joinTeam: async ({ request, locals }) => {
-    // SECURITY: Use safeGetSession which validates JWT via getUser()
-    const { session, user } = await locals.safeGetSession()
-
-    // Ensure user is authenticated
-    if (!session || !user) {
-      throw redirect(302, '/login')
-    }
-
-    const userId = user.id
-    const formData = await request.formData()
-    const code = formData.get('joinCode')?.toString()?.toUpperCase().trim()
-    const displayName = formData.get('displayName')?.toString()?.trim() || ''
-
-    if (!code || code.length !== 6) {
-      return fail(400, { error: 'Please enter a valid 6-character join code' })
-    }
-
-    // Find join link by code
-    const { data: joinLink, error: linkError } = await locals.supabase
-      .from('team_join_links')
-      .select(`
-        *,
-        teams!inner(id, name)
-      `)
-      .eq('code', code)
-      .eq('is_active', true)
-      .single()
-
-    if (linkError || !joinLink) {
-      return fail(404, { error: 'Invalid join code. Please check the code and try again.' })
-    }
-
-    // Check if expired
-    if (joinLink.expires_at) {
-      const expiresAt = new Date(joinLink.expires_at)
-      if (expiresAt < new Date()) {
-        return fail(400, { error: 'This join code has expired' })
-      }
-    }
-
-    // Check max uses
-    if (joinLink.max_uses && joinLink.current_uses >= joinLink.max_uses) {
-      return fail(400, { error: 'This join code has reached its maximum number of uses' })
-    }
-
-    // Check if already a member
-    const { data: existingMember } = await locals.supabase
-      .from('team_members')
-      .select('id')
-      .eq('team_id', joinLink.team_id)
-      .eq('user_id', userId)
-      .single()
-
-    if (existingMember) {
-      return fail(400, { error: `You are already a member of ${joinLink.teams.name}` })
-    }
-
-    // Add user to team
-    const { error: memberError } = await locals.supabase.from('team_members').insert({
-      team_id: joinLink.team_id,
-      user_id: userId,
-      role: 'member',
-      joined_at: new Date().toISOString()
-    })
-
-    if (memberError) {
-      console.error('Error adding team member:', memberError)
-      return fail(500, { error: 'Failed to join team' })
-    }
-
-    // Increment use count
-    await locals.supabase
-      .from('team_join_links')
-      .update({ current_uses: joinLink.current_uses + 1 })
-      .eq('id', joinLink.id)
-
-    // Mark onboarding as complete and save display name
-    const { error: profileError } = await locals.supabase
-      .from('user_profiles')
-      .update({
-        display_name: displayName || null,
-        onboarding_completed: true,
-        onboarding_completed_at: new Date().toISOString()
-      })
-      .eq('id', userId)
-
-    if (profileError) {
-      console.error('⚠️ Profile update error:', profileError)
-    }
-
-    console.log('✅ Onboarding complete via join code, redirecting to team:', joinLink.team_id)
-    
-    // Redirect to the joined team
-    throw redirect(303, `/teams/${joinLink.team_id}`)
   }
 }
