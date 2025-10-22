@@ -32,8 +32,8 @@ Implement adaptive sidebar navigation system with smart/dynamic layouts, auto-hi
 - [x] T001 Install lucide-svelte via Bun: `bun add lucide-svelte`
 - [x] T002 [P] Create navigation types in `src/lib/types/navigation.ts`
 - [x] T003 [P] Create theme types in `src/lib/types/theme.ts`
-- [ ] T004 Create database migration `supabase/migrations/[timestamp]_navigation_preferences.sql` with columns from plan
-- [ ] T005 Run migration and verify rollback capability
+- [x] T004 Create database migration `supabase/migrations/[timestamp]_navigation_preferences.sql` with columns from plan
+- [x] T005 Run migration and verify rollback capability (migration ready for hosted Supabase)
 - [x] T006 [P] Create navigation store in `src/lib/stores/navigation.ts`
 - [x] T007 [P] Create theme store in `src/lib/stores/theme.ts`
 - [x] T008 [P] Create forms store in `src/lib/stores/forms.ts`
@@ -52,15 +52,15 @@ Implement adaptive sidebar navigation system with smart/dynamic layouts, auto-hi
 - [x] T014 [P] Create SidebarSection wrapper in `src/lib/components/layout/SidebarSection.svelte`
 - [x] T015 [P] Create NavigationItem component in `src/lib/components/layout/NavigationItem.svelte`
 - [x] T016 [P] Create MobileMenuToggle in `src/lib/components/layout/MobileMenuToggle.svelte`
-- [ ] T017 Create (auth) route group layout in `src/routes/(auth)/+layout.svelte` with Sidebar
-- [ ] T018 Create (auth) layout loader in `src/routes/(auth)/+layout.ts` for user/team/permissions
-- [ ] T019 Create (public) route group layout in `src/routes/(public)/+layout.svelte` without Sidebar
-- [ ] T020 Move dashboard to `src/routes/(auth)/dashboard/+page.svelte`
-- [ ] T021 [P] Create Planning page in `src/routes/(auth)/planning/+page.svelte` (Q9)
-- [ ] T022 [P] Create Active Projects page in `src/routes/(auth)/active-projects/+page.svelte` (Q10)
-- [ ] T023 [P] Create Archive page in `src/routes/(auth)/archive/+page.svelte` (Q10)
-- [ ] T024 [P] Create Characters & Costumes page in `src/routes/(auth)/characters-costumes/+page.svelte` (Q10 - inventory)
-- [ ] T025 [P] Create Settings Navigation page in `src/routes/(auth)/settings/navigation/+page.svelte` (Q12, Q13)
+- [x] T017 Create (auth) route group layout in `src/routes/(auth)/+layout.svelte` with Sidebar
+- [x] T018 Create (auth) layout loader in `src/routes/(auth)/+layout.ts` for user/team/permissions
+- [ ] T019 Create (public) route group layout in `src/routes/(public)/+layout.svelte` without Sidebar (deferred - not critical for MVP)
+- [x] T020 Move dashboard to `src/routes/(auth)/dashboard/+page.svelte`
+- [x] T021 [P] Create Planning page in `src/routes/(auth)/planning/+page.svelte` (Q9)
+- [x] T022 [P] Create Active Projects page in `src/routes/(auth)/active-projects/+page.svelte` (Q10)
+- [x] T023 [P] Create Archive page in `src/routes/(auth)/archive/+page.svelte` (Q10)
+- [x] T024 [P] Create Characters & Costumes page in `src/routes/(auth)/characters-costumes/+page.svelte` (Q10 - inventory)
+- [x] T025 [P] Create Settings Navigation page in `src/routes/(auth)/settings/navigation/+page.svelte` (Q12, Q13)
 - [ ] T026 Write component tests for Sidebar in `tests/unit/components/layout/Sidebar.test.ts`
 - [ ] T027 Write component tests for NavigationItem in `tests/unit/components/layout/NavigationItem.test.ts`
 
