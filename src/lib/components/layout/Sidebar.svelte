@@ -10,6 +10,7 @@
   import { navigation as navigationStore } from "$lib/stores/navigation";
   import {
     MAIN_NAV_ITEMS,
+    DETAILS_NAV_ITEMS,
     NAVIGATION_SECTIONS,
     RESOURCE_NAV_ITEMS,
   } from "$lib/utils/navigation-items";
@@ -18,7 +19,7 @@
 
   export let showMobileToggle = true;
 
-  const allNavigationItems: NavigationItem[] = [...MAIN_NAV_ITEMS, ...RESOURCE_NAV_ITEMS];
+  const allNavigationItems: NavigationItem[] = [...MAIN_NAV_ITEMS, ...DETAILS_NAV_ITEMS, ...RESOURCE_NAV_ITEMS];
 
   // Touch gesture state for swipe-to-close on mobile
   let touchStartX = 0;
@@ -131,8 +132,9 @@
     >
       <div
         class="flex h-9 w-9 items-center justify-center flex-shrink-0 transition-all group-hover:scale-110"
+        style="color: var(--theme-sidebar-accent);"
       >
-        <CosplansLogo size="w-9 h-9" color="#19DA5A" />
+        <CosplansLogo size="w-9 h-9" color="currentColor" />
       </div>
       {#if !$navigationStore.isCollapsed}
         <span

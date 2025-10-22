@@ -1,5 +1,6 @@
 import type { HeaderAction, NavigationItem, NavigationSection } from "$lib/types/navigation";
 
+// Main Section
 export const MAIN_NAV_ITEMS: NavigationItem[] = [
   {
     id: "dashboard",
@@ -9,26 +10,25 @@ export const MAIN_NAV_ITEMS: NavigationItem[] = [
     group: "main",
   },
   {
-    id: "calendar",
-    label: "Calendar",
-    href: "/calendar",
-    icon: "CalendarDays",
+    id: "planning",
+    label: "Planning",
+    href: "/planning",
+    icon: "ClipboardList",
     group: "main",
   },
   {
-    id: "gallery",
-    label: "Gallery",
-    href: "/gallery",
-    icon: "Image",
+    id: "active-projects",
+    label: "In Progress",
+    href: "/active-projects",
+    icon: "Sparkles",
     group: "main",
   },
   {
-    id: "tasks",
-    label: "Tasks",
-    href: "/tasks",
-    icon: "ListTodo",
+    id: "archive",
+    label: "Archived",
+    href: "/archive",
+    icon: "Archive",
     group: "main",
-    requiresPermission: "tasks.read",
   },
   {
     id: "messages",
@@ -44,19 +44,53 @@ export const MAIN_NAV_ITEMS: NavigationItem[] = [
     icon: "UsersRound",
     group: "main",
   },
+];
+
+// Details Section
+export const DETAILS_NAV_ITEMS: NavigationItem[] = [
   {
-    id: "archive",
-    label: "Archive",
-    href: "/archive",
-    icon: "Archive",
-    group: "main",
+    id: "calendar",
+    label: "Calendar",
+    href: "/calendar",
+    icon: "CalendarDays",
+    group: "details",
+  },
+  {
+    id: "gallery",
+    label: "Gallery",
+    href: "/gallery",
+    icon: "Image",
+    group: "details",
+  },
+  {
+    id: "tasks",
+    label: "Tasks",
+    href: "/tasks",
+    icon: "ListTodo",
+    group: "details",
+    requiresPermission: "tasks.read",
+  },
+  {
+    id: "timeline",
+    label: "Timeline",
+    href: "/timeline",
+    icon: "ChevronRight",
+    group: "details",
+  },
+  {
+    id: "budget",
+    label: "Budget",
+    href: "/budget",
+    icon: "PiggyBank",
+    group: "details",
   },
 ];
 
+// Resources Section
 export const RESOURCE_NAV_ITEMS: NavigationItem[] = [
   {
-    id: "characters-costumes",
-    label: "Characters & Costumes",
+    id: "outfits",
+    label: "Outfits",
     href: "/characters-costumes",
     icon: "Shirt",
     group: "resources",
@@ -89,13 +123,6 @@ export const RESOURCE_NAV_ITEMS: NavigationItem[] = [
     icon: "Wrench",
     group: "resources",
   },
-  {
-    id: "budgeting",
-    label: "Budgeting",
-    href: "/budgeting",
-    icon: "PiggyBank",
-    group: "resources",
-  },
 ];
 
 // Settings items removed from sidebar navigation - now accessed via footer user profile button
@@ -118,11 +145,12 @@ export const HEADER_ACTIONS: HeaderAction[] = [
 
 export const NAVIGATION_SECTIONS: NavigationSection[] = [
   { id: "main", label: "Main", items: MAIN_NAV_ITEMS },
+  { id: "details", label: "Details", items: DETAILS_NAV_ITEMS },
   { id: "resources", label: "Resources", items: RESOURCE_NAV_ITEMS },
 ];
 
 export function findNavigationItem(id: string): NavigationItem | undefined {
-  return [...MAIN_NAV_ITEMS, ...RESOURCE_NAV_ITEMS].find((item) => item.id === id);
+  return [...MAIN_NAV_ITEMS, ...DETAILS_NAV_ITEMS, ...RESOURCE_NAV_ITEMS].find((item) => item.id === id);
 }
 
 export function getDefaultActiveItem(): string {
