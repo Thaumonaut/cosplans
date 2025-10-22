@@ -145,14 +145,14 @@
     return statusMap[status] || status;
   }
 
-  function getConnectionStatusClass(status: string): string {
-    const classMap: Record<string, string> = {
-      connected: "text-green-600 bg-green-100",
-      connecting: "text-yellow-600 bg-yellow-100",
-      disconnected: "text-gray-600 bg-gray-100",
-      error: "text-red-600 bg-red-100",
+  function getConnectionStatusStyle(status: string): string {
+    const styleMap: Record<string, string> = {
+      connected: "background: var(--theme-success); color: white;",
+      connecting: "background: var(--theme-warning); color: white;",
+      disconnected: "background: var(--theme-sidebar-muted); color: white;",
+      error: "background: var(--theme-error); color: white;",
     };
-    return classMap[status] || "text-gray-600 bg-gray-100";
+    return styleMap[status] || "background: var(--theme-sidebar-muted); color: white;";
   }
 </script>
 
@@ -169,13 +169,13 @@
             Dashboard
           </h1>
           <!-- Real-time status indicator -->
-          <Badge
-            className={`flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${getConnectionStatusClass($connectionStatus)}`}
-            variant="outline"
+          <span
+            class="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium"
+            style={getConnectionStatusStyle($connectionStatus)}
           >
             <span class="w-2 h-2 rounded-full bg-current inline-block"></span>
             {getConnectionStatusText($connectionStatus)}
-          </Badge>
+          </span>
         </div>
         <!-- Template Selector -->
         <div class="flex items-center gap-2">

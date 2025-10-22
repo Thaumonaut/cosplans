@@ -642,12 +642,12 @@
 
 			<!-- Danger Zone -->
 			{#if data.permissions.canDeleteTeam || !data.team.is_personal}
-			<div class="shadow rounded-lg p-6" style="background: var(--theme-sidebar-bg); border: 1px solid var(--theme-sidebar-border);">
+			<div class="shadow rounded-lg p-6" style="background: var(--theme-card-bg); border: 1px solid var(--theme-error);">
 				<h2 class="text-xl font-semibold mb-4" style="color: #ef4444;">
 					Danger Zone
 				</h2>
 
-				<div class="space-y-4">
+				<div class="space-y-4 bg-[var(--theme-sidebar-bg)]">
 					<!-- Delete Team (owners only) -->
 					{#if data.permissions.canDeleteTeam}
 					<div class="p-4 border rounded-lg" style="border-color: {data.team.is_personal ? 'var(--theme-sidebar-border)' : '#ef4444'};">

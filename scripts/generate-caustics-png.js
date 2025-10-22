@@ -11,7 +11,7 @@ async function generateCausticsPNG() {
 
   try {
     // Read the optimized SVG
-    const svgBuffer = readFileSync('./static/caustics-optimized.svg');
+    const svgBuffer = readFileSync('./static/caustics.svg');
 
     // Convert to PNG at 1920x1080 (full HD)
     await sharp(svgBuffer)

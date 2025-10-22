@@ -52,15 +52,32 @@
 <li>
   <a
     href={item.href ?? "#"}
-    class={`group flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--theme-sidebar-accent)] focus-visible:ring-offset-[var(--theme-sidebar-bg)] ${
+    class={`group flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--theme-focus)] focus-visible:ring-offset-[var(--theme-sidebar-bg)] border ${
       isActive
-        ? "bg-[var(--theme-sidebar-active)] text-[var(--theme-sidebar-text)]"
-        : "text-[var(--theme-sidebar-muted)] hover:bg-[var(--theme-sidebar-hover)] hover:text-[var(--theme-sidebar-text)]"
+        ? "bg-[var(--theme-sidebar-active)] border-[var(--theme-primary)]"
+        : "border-transparent"
     }`}
+    style={isActive
+      ? "color: var(--theme-primary);"
+      : "color: var(--theme-sidebar-muted);"}
+    onmouseenter={(e) => {
+      if (!isActive) {
+        e.currentTarget.style.color = 'var(--theme-hover)';
+        e.currentTarget.style.backgroundColor = 'color-mix(in srgb, var(--theme-hover) 8%, transparent)';
+        e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--theme-hover) 20%, transparent)';
+      }
+    }}
+    onmouseleave={(e) => {
+      if (!isActive) {
+        e.currentTarget.style.color = 'var(--theme-sidebar-muted)';
+        e.currentTarget.style.backgroundColor = 'transparent';
+        e.currentTarget.style.borderColor = 'transparent';
+      }
+    }}
     aria-current={isActive ? "page" : undefined}
     data-collapsed={collapsed}
-    on:click|preventDefault={handleSelect}
-    on:keydown={handleKeydown}
+    onclick={(e) => { e.preventDefault(); handleSelect(e); }}
+    onkeydown={handleKeydown}
   >
     <LucideIcon
       name={item.icon}

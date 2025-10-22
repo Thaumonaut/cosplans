@@ -26,11 +26,20 @@
   }
 
   // Group themes by mode
-  $: lightThemes = $theme.variants.filter((v) => v.mode === "light");
-  $: darkThemes = $theme.variants.filter((v) => v.mode === "dark");
+  $: defaultLightTheme = $theme.variants.find((v) => v.id === "light-default");
+  $: defaultDarkTheme = $theme.variants.find((v) => v.id === "dark-default");
+  $: lightThemes = $theme.variants.filter((v) => v.mode === "light" && v.id !== "light-default");
+  $: darkThemes = $theme.variants.filter((v) => v.mode === "dark" && v.id !== "dark-default");
   $: customTheme = $theme.custom;
   $: currentTheme = [...$theme.variants, customTheme].find((t) => t && t.id === $theme.activeId);
   $: currentLabel = currentTheme?.label ?? "Theme";
+  
+  // Get display label for theme (override defaults)
+  function getThemeLabel(variant: ThemeVariant): string {
+    if (variant.id === "light-default") return "Default Light";
+    if (variant.id === "dark-default") return "Default Dark";
+    return variant.label;
+  }
 </script>
 
 <Dropdown
@@ -42,9 +51,57 @@
   textColorClass={inHeader ? "text-[var(--theme-header-text)]" : "text-[var(--theme-sidebar-text)]"}
 >
   <div class="p-1 max-h-[400px] overflow-y-auto">
-    <!-- Light Themes -->
+    <!-- Default Themes -->
     <div
       class="px-2 py-1.5 text-xs font-semibold uppercase tracking-wider"
+      style="color: var(--theme-sidebar-muted);"
+    >
+      Default Themes
+    </div>
+    {#if defaultLightTheme}
+      <button
+        type="button"
+        class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-semibold transition-colors {$theme.activeId ===
+        defaultLightTheme.id
+          ? 'bg-[var(--theme-sidebar-active)]'
+          : 'hover:bg-[var(--theme-sidebar-hover)]'}"
+        style={$theme.activeId === defaultLightTheme.id
+          ? "color: var(--theme-sidebar-accent);"
+          : "color: var(--theme-foreground);"}
+        on:click={() => selectTheme(defaultLightTheme.id)}
+        role="menuitem"
+      >
+        <LucideIcon name={getThemeIcon(defaultLightTheme)} size={16} />
+        <span class="flex-1 text-left">{getThemeLabel(defaultLightTheme)}</span>
+        {#if $theme.activeId === defaultLightTheme.id}
+          <LucideIcon name="Check" size={16} class="ml-auto" />
+        {/if}
+      </button>
+    {/if}
+    {#if defaultDarkTheme}
+      <button
+        type="button"
+        class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-semibold transition-colors {$theme.activeId ===
+        defaultDarkTheme.id
+          ? 'bg-[var(--theme-sidebar-active)]'
+          : 'hover:bg-[var(--theme-sidebar-hover)]'}"
+        style={$theme.activeId === defaultDarkTheme.id
+          ? "color: var(--theme-sidebar-accent);"
+          : "color: var(--theme-foreground);"}
+        on:click={() => selectTheme(defaultDarkTheme.id)}
+        role="menuitem"
+      >
+        <LucideIcon name={getThemeIcon(defaultDarkTheme)} size={16} />
+        <span class="flex-1 text-left">{getThemeLabel(defaultDarkTheme)}</span>
+        {#if $theme.activeId === defaultDarkTheme.id}
+          <LucideIcon name="Check" size={16} class="ml-auto" />
+        {/if}
+      </button>
+    {/if}
+
+    <!-- Light Themes -->
+    <div
+      class="mt-2 px-2 py-1.5 text-xs font-semibold uppercase tracking-wider border-t border-[var(--theme-sidebar-border)]"
       style="color: var(--theme-sidebar-muted);"
     >
       Light Themes
@@ -63,7 +120,7 @@
         role="menuitem"
       >
         <LucideIcon name={getThemeIcon(themeVariant)} size={16} />
-        <span class="flex-1 text-left">{themeVariant.label}</span>
+        <span class="flex-1 text-left">{getThemeLabel(themeVariant)}</span>
         {#if $theme.activeId === themeVariant.id}
           <LucideIcon name="Check" size={16} class="ml-auto" />
         {/if}
@@ -91,9 +148,9 @@
         role="menuitem"
       >
         <LucideIcon name={getThemeIcon(themeVariant)} size={16} />
-        <span class="flex-1 text-left">{themeVariant.label}</span>
+        <span class="flex-1 text-left">{getThemeLabel(themeVariant)}</span>
         {#if $theme.activeId === themeVariant.id}
-          <LucideIcon name="Check" size={16} class="ml-auto" />
+          <LucideIcon name="Check" size={16} className="ml-auto" />
         {/if}
       </button>
     {/each}
