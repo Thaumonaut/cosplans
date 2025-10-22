@@ -136,7 +136,7 @@ As a team coordinator, I want to track the complete lifecycle of costumes and pr
 - How does system handle equipment with multiple conditions (e.g., camera body works but lens is damaged)? (Track condition per item, not per kit)
 - What happens when location address is invalid or changes? (Validate address on save, allow manual override, track address history)
 - How does system handle resources shared across multiple teams? (Resources are team-scoped, no cross-team sharing in MVP)
-- What happens when lifecycle state transition is invalid (e.g., "Sold" → "In Progress")? (Prevent invalid transitions, show allowed next states)
+- What happens when lifecycle state transition is invalid (e.g., "Sold" → "In Progress")? (Enforce strict transition rules with override confirmation - block invalid transitions but allow corrections via confirmation dialog showing reason and consequences)
 - How does system handle bulk operations (e.g., mark 10 costumes as "Stored")? (Support multi-select with bulk actions)
 - What happens when resource photos exceed storage limits? (Compress images, enforce max file size, show storage usage)
 - How does system handle resources without photos? (Show placeholder icon based on type, encourage photo upload)
@@ -153,7 +153,8 @@ As a team coordinator, I want to track the complete lifecycle of costumes and pr
 **Costume Management:**
 - **FR-001**: System MUST allow users to create, read, update, and delete costume entries within their team
 - **FR-002**: System MUST support costume lifecycle states: planned, acquiring, in-progress, ready, owned, sold, damaged, rented, lost, stored, loaned
-- **FR-003**: System MUST allow users to upload multiple photos per costume (minimum 5 photos)
+- **FR-002a**: System MUST enforce strict lifecycle state transition rules with override confirmation for corrections
+- **FR-003**: System MUST allow users to upload 1-10 photos per costume (minimum 1, maximum 10)
 - **FR-004**: System MUST track costume metadata: character name, series, costume type, estimated cost, actual cost, completion date, storage location
 - **FR-005**: System MUST allow users to filter costumes by status, character, series, or availability
 - **FR-006**: System MUST display costume availability status for shoot planning (available/unavailable)
@@ -166,6 +167,7 @@ As a team coordinator, I want to track the complete lifecycle of costumes and pr
 - **FR-011**: System MUST allow users to filter crew by role or favorite status
 - **FR-012**: System MUST enable click-to-email and click-to-call functionality for crew contact info
 - **FR-013**: System MUST allow marking crew members as favorites for quick access
+- **FR-013a**: System MUST suggest linking crew members to Cosplans accounts when email matches, requiring manual confirmation before linking
 
 **Equipment Management:**
 - **FR-014**: System MUST allow users to create, read, update, and delete equipment entries within their team
@@ -180,7 +182,7 @@ As a team coordinator, I want to track the complete lifecycle of costumes and pr
 - **FR-021**: System MUST allow users to create, read, update, and delete prop entries within their team
 - **FR-022**: System MUST support prop lifecycle states matching costume states (planned, owned, sold, damaged, loaned, etc.)
 - **FR-023**: System MUST track prop metadata: name, type, character/series, condition, storage location, estimated cost, actual cost
-- **FR-024**: System MUST allow users to upload multiple photos per prop
+- **FR-024**: System MUST allow users to upload 1-10 photos per prop (minimum 1, maximum 10)
 - **FR-025**: System MUST allow users to filter props by status, character, type, or availability
 - **FR-026**: System MUST track state-specific metadata for props (same as costumes)
 
@@ -188,19 +190,22 @@ As a team coordinator, I want to track the complete lifecycle of costumes and pr
 - **FR-027**: System MUST allow users to create, read, update, and delete location entries within their team
 - **FR-028**: System MUST track location metadata: name, address, type, accessibility notes, parking info, cost, favorite status
 - **FR-029**: System MUST support location types: studio, outdoor, convention, private residence, other
-- **FR-030**: System MUST allow users to upload multiple photos per location
+- **FR-030**: System MUST allow users to upload 1-10 photos per location (minimum 1, maximum 10)
 - **FR-031**: System MUST allow users to filter locations by type or favorite status
 - **FR-032**: System MUST display location address with map preview (if address provided)
 
 **Cross-Resource Requirements:**
 - **FR-033**: All resources MUST be scoped to teams (no cross-team resource sharing in MVP)
-- **FR-034**: System MUST support search across all resource types by name or description
+- **FR-034**: System MUST support real-time search across all resource types by name or description with 300ms debouncing
 - **FR-035**: System MUST support bulk operations (multi-select and bulk status changes)
 - **FR-036**: System MUST track creation date, last modified date, and created by user for all resources
 - **FR-037**: System MUST enforce team permissions (only team members can view/edit team resources)
 - **FR-038**: System MUST compress uploaded images to optimize storage and bandwidth
 - **FR-039**: System MUST provide resource usage statistics (total costumes, props, crew, equipment, locations)
 - **FR-040**: System MUST support exporting resource lists to CSV for backup/reporting
+- **FR-041**: System MUST soft-delete resources (mark as deleted, retain for 6 months, then permanently delete)
+- **FR-042**: System MUST provide archive view for deleted resources within 6-month retention period
+- **FR-043**: System MUST allow restoration of soft-deleted resources before permanent deletion
 
 ### Key Entities
 
@@ -212,6 +217,18 @@ As a team coordinator, I want to track the complete lifecycle of costumes and pr
 - **Resource Lifecycle State**: Tracks state transitions for costumes/props with timestamps, state-specific metadata (sale price, damage cost, borrower info), and history.
 - **Resource Photo**: Represents uploaded images for any resource type with order, caption, and thumbnail generation.
 - **Team**: All resources belong to a team and inherit team permissions. Resources are not shared across teams in MVP.
+
+## Clarifications
+
+### Session 2025-10-21
+
+- Q: What is the maximum number of photos allowed per resource (costume/prop/location)? → A: 1 minimum, 10 maximum photos per resource
+- Q: When a crew member in the directory has a Cosplans account, should the system automatically link them or require manual linking? → A: Manual linking with email-based suggestions - System suggests linking when email matches but requires user confirmation
+- Q: Should search be real-time (as-you-type) or require explicit search button click? → A: Real-time with debouncing (300ms delay after typing stops)
+- Q: Should the system enforce strict state transition rules or allow any transition with a warning? → A: Strict rules with override confirmation - Prevents invalid transitions but allows corrections via confirmation dialog
+- Q: Should deleted resources be permanently removed or soft-deleted (archived) for history preservation? → A: Soft delete with 6-month retention - Resources archived on deletion, retained for 6 months, then permanently deleted
+
+---
 
 ## Success Criteria *(mandatory)*
 
