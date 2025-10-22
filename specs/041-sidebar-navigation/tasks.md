@@ -83,15 +83,15 @@ Implement adaptive sidebar navigation system with smart/dynamic layouts, auto-hi
 4. ✅ Can switch teams via dropdown without full page navigation
 
 - [x] T028 [S1] Create TeamSwitcher component in `src/lib/components/layout/TeamSwitcher.svelte`
-- [ ] T029 [S1] Connect TeamSwitcher to team store for loading teams
-- [ ] T030 [S1] Implement team switch handler with smart redirect logic
-- [ ] T031 [S1] Add team member avatars to TeamSwitcher dropdown
-- [ ] T032 [P] [S1] Create UserMenu component in `src/lib/components/layout/UserMenu.svelte`
-- [ ] T033 [S1] Add user profile link and sign-out action to UserMenu
-- [ ] T034 [S1] Implement active page highlighting in NavigationItem based on current route
-- [ ] T035 [S1] Wire navigation store to track active item
-- [ ] T036 [S1] Add sticky positioning (250-280px width) to Sidebar for desktop
-- [ ] T037 [S1] Add Lucide icons to all navigation items
+- [x] T029 [S1] Connect TeamSwitcher to team store for loading teams
+- [x] T030 [S1] Implement team switch handler with smart redirect logic
+- [ ] T031 [S1] Add team member avatars to TeamSwitcher dropdown (enhancement - shows count for now)
+- [x] T032 [P] [S1] Create UserMenu component in `src/lib/components/layout/UserMenu.svelte`
+- [x] T033 [S1] Add user profile link and sign-out action to UserMenu
+- [x] T034 [S1] Implement active page highlighting in NavigationItem based on current route
+- [x] T035 [S1] Wire navigation store to track active item
+- [x] T036 [S1] Add sticky positioning (250-280px width) to Sidebar for desktop
+- [x] T037 [S1] Add Lucide icons to all navigation items
 - [ ] T038 [P] [S1] Write E2E test for team switching in `tests/e2e/team-switching.spec.ts`
 - [ ] T039 [P] [S1] Write E2E test for navigation highlighting in `tests/e2e/navigation.spec.ts`
 
