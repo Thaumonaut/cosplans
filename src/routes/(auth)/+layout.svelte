@@ -9,6 +9,8 @@
   import { navigation as navigationStore } from "$lib/stores/navigation";
   import { theme } from "$lib/stores/theme";
 
+  export let data;
+
   onMount(() => {
     if (browser) {
       theme.initialize();
@@ -20,6 +22,44 @@
   onMount(() => {
     navigationStore.setActiveItem(currentRoute.split("/")[1] ?? "dashboard");
   });
+
+  // Update navigation store with user data (with display name fallback chain)
+  $: if (data?.user) {
+    // Fallback chain for display name (following CRITICAL pattern from memory)
+    let displayName = data.profile?.display_name;
+    
+    if (!displayName || displayName.trim() === '') {
+      // Try OAuth metadata
+      displayName = data.user.user_metadata?.full_name || data.user.user_metadata?.name;
+      
+      // Try first_name + last_name
+      if (!displayName) {
+        const firstName = data.user.user_metadata?.first_name || data.user.user_metadata?.firstName || '';
+        const lastName = data.user.user_metadata?.last_name || data.user.user_metadata?.lastName || '';
+        const fullName = `${firstName} ${lastName}`.trim();
+        if (fullName) {
+          displayName = fullName;
+        }
+      }
+      
+      // Fall back to email
+      if (!displayName) {
+        displayName = data.user.email;
+      }
+      
+      // Last resort: truncated user ID
+      if (!displayName) {
+        displayName = `User ${data.user.id.substring(0, 8)}`;
+      }
+    }
+    
+    navigationStore.setUser({
+      id: data.user.id,
+      name: displayName,
+      email: data.user.email || '',
+      avatarUrl: data.profile?.avatar_url || data.user.user_metadata?.avatar_url || data.user.user_metadata?.picture
+    });
+  }
 
   function toggleMobileSidebar(open?: boolean) {
     navigationStore.toggleMobile(open);
