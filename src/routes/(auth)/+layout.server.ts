@@ -1,5 +1,6 @@
 import type { LayoutServerLoad } from './$types'
 import { redirect } from '@sveltejs/kit'
+import { getAdminClient } from '$lib/server/supabase/admin-client'
 
 export const load: LayoutServerLoad = async ({ locals, url }) => {
   console.log('Auth layout loading for:', url.pathname)
@@ -16,25 +17,36 @@ export const load: LayoutServerLoad = async ({ locals, url }) => {
 
   console.log('Auth check passed for user:', user.email)
 
-  // Fetch user profile for display name and onboarding status
-  const { data: profile } = await locals.supabase
-    .from('user_profiles')
-    .select('onboarding_completed, display_name, avatar_url')
-    .eq('id', user.id)
-    .single()
-
   // CONSTITUTIONAL REQUIREMENT: Check if user has completed onboarding
   // (except when already on onboarding page)
+  // Use admin client to bypass RLS issues in server context
   if (url.pathname !== '/onboarding') {
+    const adminClient = getAdminClient()
+    const { data: profile } = await adminClient
+      .from('user_profiles')
+      .select('onboarding_completed, display_name, avatar_url')
+      .eq('id', user.id)
+      .maybeSingle()
+
     if (!profile || !profile.onboarding_completed) {
       console.log('Onboarding not completed, redirecting to onboarding')
       throw redirect(303, '/onboarding')
     }
+    
+    console.log('Onboarding completed, allowing access to:', url.pathname)
+    
+    // Return profile data for client-side use
+    return {
+      session,
+      user,
+      profile
+    }
   }
 
+  // On onboarding page, don't fetch profile
   return {
     session,
     user,
-    profile
+    profile: null
   }
 }

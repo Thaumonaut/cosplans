@@ -93,7 +93,7 @@
         style="background: var(--theme-background); border-color: var(--theme-sidebar-border); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.2), 0 4px 6px -4px rgb(0 0 0 / 0.2);"
       >
         <a
-          href="/settings/account"
+          href="/settings"
           class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-[var(--theme-sidebar-hover)]"
           style="color: var(--theme-foreground);"
           on:click={() => (isOpen = false)}
