@@ -11,9 +11,27 @@ function applyTheme(variant: ThemeVariant) {
   if (!browser) return;
 
   const root = document.documentElement;
+  
+  // Clear optional background properties that may not exist in new theme
+  const optionalProps = [
+    '--theme-background-size',
+    '--theme-background-position',
+    '--theme-background-repeat',
+    '--theme-background-blend',
+    '--theme-background-pattern-opacity'
+  ];
+  
+  optionalProps.forEach(prop => {
+    if (!(prop in variant.cssVars)) {
+      root.style.removeProperty(prop);
+    }
+  });
+  
+  // Apply all theme variables
   Object.entries(variant.cssVars).forEach(([key, value]) => {
     root.style.setProperty(key, value);
   });
+  
   root.dataset.theme = variant.id;
   root.dataset.themeMode = variant.mode;
 }

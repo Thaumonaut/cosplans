@@ -27,28 +27,27 @@ const supabase: Handle = async ({ event, resolve }) => {
   });
 
   /**
-   * Unlike `supabase.auth.getSession()`, which returns the session _without_
-   * validating the JWT, this function also calls `getUser()` to validate the
-   * JWT before returning the session.
+   * Securely gets the user by validating the JWT via getUser().
+   * We don't use getSession() as it doesn't validate the JWT.
+   * For server-side auth, the validated user object is sufficient.
    */
   event.locals.safeGetSession = async () => {
-    const {
-      data: { session },
-    } = await event.locals.supabase.auth.getSession();
-    if (!session) {
-      return { session: null, user: null };
-    }
-
     const {
       data: { user },
       error,
     } = await event.locals.supabase.auth.getUser();
-    if (error) {
-      // JWT validation has failed
+    
+    if (error || !user) {
+      // JWT validation failed or no user
       return { session: null, user: null };
     }
 
-    return { session, user };
+    // Return user with a minimal session object
+    // The user object is validated and secure
+    return { 
+      session: { user }, // Minimal session with validated user
+      user 
+    };
   };
 
   return resolve(event, {
@@ -73,12 +72,12 @@ const authGuard: Handle = async ({ event, resolve }) => {
   }
 
   // Protected routes that require authentication
-  const protectedRoutes = ['/dashboard', '/timeline', '/progress', '/portfolio', '/budget'];
+  const protectedRoutes = ['/dashboard', '/timeline', '/progress', '/portfolio', '/budget', '/teams'];
   const isProtectedRoute = protectedRoutes.some(route => event.url.pathname.startsWith(route));
 
-  // if (isProtectedRoute && !session) {
-  //   redirect(303, '/auth/login');
-  // }
+  if (isProtectedRoute && !session) {
+    throw redirect(303, '/login');
+  }
 
   return resolve(event);
 };

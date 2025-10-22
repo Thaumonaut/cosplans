@@ -1,14 +1,23 @@
-# Feature Specification: Shoots & Teams Creation
+# Feature Specification: Teams Creation & Cross-Team Management
 
 **Feature Branch**: `021-shoots-teams-creation`  
 **Created**: October 16, 2025  
+**Updated**: October 20, 2025 (Added cross-team architecture: All Teams widget & dashboard)  
 **Status**: Draft  
 **Tier**: 0 - Foundation (Critical)  
 **Priority**: P0 (Must build early)
 
 ## Overview
 
-Shoots and Teams are the core organizational units in Cosplans. A Team is a group of collaborators (photographers, assistants, coordinators), and a Shoot is a planned event within a team context. This feature enables users to create these entities and add members. This is foundational because almost every other feature depends on existing shoots and teams.
+Teams are the core organizational unit in Cosplans. A Team is a group of collaborators (photographers, assistants, coordinators) who work together on photography projects. This feature enables users to create teams, invite members, and manage team membership across three levels of interaction:
+
+1. **Team-Scoped Dashboard** (Primary Workspace): Focused view for managing a single team's shoots, costumes, and schedules
+2. **All Teams Activity Widget**: Quick awareness of upcoming shoots across all teams without context switching
+3. **All Teams Dashboard**: Unified cross-team view with calendar, timeline, and task management for power users
+
+This is foundational because it satisfies the constitutional requirement that every user must own at least one team, and it unblocks user onboarding completion. The three-level architecture provides progressive disclosure: solo users work within single teams, multi-team users gain awareness through the widget, and power users leverage the full All Teams dashboard for complex coordination.
+
+**Scope Note**: Shoots functionality (creating and managing photography events within teams) has been deferred to the next feature phase to accelerate delivery of the auth onboarding blocker. This feature focuses exclusively on team infrastructure and cross-team navigation patterns.
 
 ---
 
@@ -51,58 +60,21 @@ Team owner wants to invite other users to join their team.
 
 ---
 
-### User Story 3 - Create a Shoot (Priority: P1)
+### User Story 5 - View Team Hierarchy (Priority: P2)
 
-Team member wants to create a new shoot event to plan and track a photography session.
+User wants to see all their teams organized and easily accessible.
 
-**Why this priority**: Shoots are central to the app's purpose. Users need to create shoots to use any other feature.
+**Why this priority**: Essential for navigation and team management. Slightly lower priority than creation.
 
-**Independent Test**: Team members can create shoots independently.
-
-**Acceptance Scenarios**:
-
-1. **Given** user is in a team, **When** user clicks "Create Shoot", **Then** shoot creation form is displayed
-2. **Given** user fills shoot title, date, location, **When** user submits, **Then** shoot is created in team
-3. **Given** shoot is created, **When** user navigates to team shoots, **Then** new shoot appears in list
-4. **Given** user sets future shoot date, **When** shoot is created, **Then** shoot appears in upcoming shoots
-5. **Given** user sets past shoot date, **When** shoot is created, **Then** shoot still appears (allows archiving past shoots)
-6. **Given** user attempts to create shoot without team, **When** user submits, **Then** system shows error "Select team first"
-
----
-
-### User Story 4 - Edit Shoot Details (Priority: P2)
-
-Team member wants to update shoot information as plans change.
-
-**Why this priority**: Important for managing shoot lifecycle but not critical for MVP.
-
-**Independent Test**: Users can update shoot details independently.
+**Independent Test**: Users can navigate team hierarchy independently.
 
 **Acceptance Scenarios**:
 
-1. **Given** user is team member on shoot, **When** user clicks edit, **Then** shoot form is shown with current values
-2. **Given** user updates shoot fields, **When** user saves, **Then** changes are persisted and all team members see updates in real-time
-3. **Given** shoot time is changed, **When** change is saved, **Then** team members are notified of time change
-4. **Given** user removes shoot date, **When** user saves, **Then** shoot is marked as unscheduled
-5. **Given** user with view-only permission attempts edit, **When** user tries to save, **Then** system shows error "Permission denied"
-
----
-
-### User Story 5 - View Team and Shoot Hierarchy (Priority: P2)
-
-User wants to see all their teams and shoots organized hierarchically.
-
-**Why this priority**: Essential for navigation and team/shoot management. Slightly lower priority than creation.
-
-**Independent Test**: Users can navigate team/shoot hierarchy independently.
-
-**Acceptance Scenarios**:
-
-1. **Given** user has multiple teams, **When** user navigates to Teams page, **Then** all teams are listed
-2. **Given** user is on team page, **When** user views shoots section, **Then** all team shoots are listed
-3. **Given** shoot is created, **When** user navigates to team, **Then** shoot appears in team's shoot list with date and status
-4. **Given** user is member of 5 teams, **When** user views dashboard, **Then** all teams are accessible from sidebar/navigation
-5. **Given** user filters shoots by date, **When** filter is applied, **Then** only shoots in date range are shown
+1. **Given** user has multiple teams, **When** user navigates to Teams page, **Then** all teams are listed with member counts
+2. **Given** user is on team page, **When** user views team details, **Then** team name, description, and members are displayed
+3. **Given** user is member of 5 teams, **When** user views dashboard, **Then** all teams are accessible from sidebar/navigation
+4. **Given** user has 100+ teams, **When** user views teams list, **Then** teams are paginated for performance
+5. **Given** user searches for team, **When** user enters team name, **Then** matching teams are filtered in real-time
 
 ---
 
@@ -121,6 +93,47 @@ Team owner wants to view team members, change their roles, and remove them if ne
 3. **Given** team owner removes member, **When** removal is confirmed, **Then** member loses access to team and its shoots
 4. **Given** member is removed, **When** user tries to access team, **Then** user receives "Access Denied" error
 5. **Given** pending invitation exists, **When** owner cancels it, **Then** invitation is marked expired and invitee doesn't receive it
+
+---
+
+### User Story 7 - All Teams Activity Widget (Priority: P2)
+
+User with multiple teams wants quick awareness of upcoming shoots across all teams without switching context.
+
+**Why this priority**: Provides cross-team awareness without overwhelming single-team users. Important for multi-team coordination but not critical for MVP.
+
+**Independent Test**: Widget displays correctly and links to All Teams dashboard independently of team context.
+
+**Acceptance Scenarios**:
+
+1. **Given** user is on team dashboard, **When** user views page, **Then** "All Teams Activity" widget shows 5 upcoming shoots from all teams
+2. **Given** widget shows shoots, **When** user views shoot items, **Then** each shoot displays team badge with team name and color
+3. **Given** user clicks widget shoot, **When** shoot is clicked, **Then** user navigates to that shoot's detail page in its team context
+4. **Given** user clicks "View All Teams Timeline", **When** link is clicked, **Then** user navigates to `/all-teams` dashboard
+5. **Given** user has no upcoming shoots, **When** user views widget, **Then** widget shows "No upcoming shoots across all teams" message
+6. **Given** user has only one team, **When** user views dashboard, **Then** widget is hidden (no need for cross-team awareness)
+
+---
+
+### User Story 8 - All Teams Dashboard (Priority: P3)
+
+User managing multiple teams wants a unified view to coordinate shoots, tasks, and schedules across all projects simultaneously.
+
+**Why this priority**: Power user feature for complex multi-team coordination. Lower priority as it serves advanced use cases.
+
+**Independent Test**: All Teams dashboard functions independently of team context switching.
+
+**Acceptance Scenarios**:
+
+1. **Given** user navigates to `/all-teams`, **When** page loads, **Then** calendar view shows shoots from all user's teams with color-coded team indicators
+2. **Given** user is on calendar view, **When** user switches to timeline view, **Then** Gantt chart displays all teams' shoots in parallel timelines
+3. **Given** user is on timeline view, **When** user switches to tasks view, **Then** aggregated task list shows tasks from all teams sorted by priority and due date
+4. **Given** user views calendar, **When** user clicks team filter dropdown, **Then** user can filter view to specific teams or "All Teams"
+5. **Given** user filters to specific team, **When** filter is applied, **Then** only that team's shoots/tasks are displayed
+6. **Given** user clicks shoot on calendar, **When** shoot is clicked, **Then** shoot detail modal opens showing team context and full shoot information
+7. **Given** user has 10+ teams, **When** user views timeline, **Then** timeline is scrollable and performant with all teams visible
+8. **Given** user switches team context in navigation, **When** user returns to All Teams page, **Then** All Teams page still shows all teams (not affected by context switch)
+9. **Given** user has no teams, **When** user navigates to `/all-teams`, **Then** user sees empty state with prompt to create first team
 
 ---
 
@@ -147,43 +160,28 @@ Team owner wants to view team members, change their roles, and remove them if ne
 - **FR-005**: System MUST create pending invitation that expires after 7 days
 - **FR-006**: System MUST allow invitee to accept invitation via email link
 - **FR-007**: System MUST auto-create account for invited user if they don't have one (store pending user in system)
-- **FR-008**: System MUST track team member roles (owner, admin, coordinator, member, viewer)
-- **FR-009**: System MUST allow team owner to change member roles
-- **FR-010**: System MUST allow team owner to remove members from team
-- **FR-011**: System MUST allow authenticated user to create a shoot within a team
-- **FR-012**: System MUST associate shoot with team upon creation
-- **FR-013**: System MUST allow shoot creator to be marked as shoot lead/organizer
-- **FR-014**: System MUST store shoot details: title, description, date, time, location, thumbnail/cover image
-- **FR-015**: System MUST allow team members to edit shoot details (permissions-dependent)
-- **FR-016**: System MUST prevent non-team members from accessing team data
-- **FR-017**: System MUST display team members and their current roles
-- **FR-018**: System MUST display pending invitations with expiration dates
-- **FR-019**: System MUST allow canceling pending invitations
-- **FR-020**: System MUST display all shoots in a team, filterable by date/status
-- **FR-021**: System MUST support team archive/unarchive (soft delete)
-- **FR-022**: System MUST support shoot archive/unarchive (soft delete)
+- **FR-008**: System MUST track team member roles (owner, admin, member)
+- **FR-009**: System MUST allow team owner or admin to change member roles
+- **FR-010**: System MUST allow team owner or admin to remove members from team
+- **FR-011**: System MUST prevent non-team members from accessing team data
+- **FR-012**: System MUST display team members and their current roles
+- **FR-013**: System MUST display pending invitations with expiration dates
+- **FR-014**: System MUST allow canceling pending invitations
+- **FR-015**: System MUST support team archive/unarchive (soft delete)
 
 ### Key Entities
 
 - **Team**: Represents a group of collaborators
   - Attributes: id, name, description, owner_id, created_at, updated_at, archived_at, image_url
-  - Relationships: has_many Users (via TeamMembers), has_many Shoots, has_many TeamInvitations
+  - Relationships: has_many Users (via TeamMembers), has_many TeamInvitations
 
 - **TeamMember**: Represents membership of a user in a team
-  - Attributes: id, team_id, user_id, role (owner/admin/coordinator/member/viewer), joined_at
-  - Relationships: belongs_to Team, belongs_to User
+  - Attributes: id, team_id, user_id, role (owner/admin/member), joined_at, invited_by, last_active, custom_permissions, created_at, updated_at
+  - Relationships: belongs_to Team, belongs_to User, belongs_to User (invited_by)
 
 - **TeamInvitation**: Represents pending team membership invitation
   - Attributes: id, team_id, email, role, token, created_at, expires_at, accepted_at
   - Relationships: belongs_to Team
-
-- **Shoot**: Represents a planned photography event
-  - Attributes: id, team_id, title, description, date, time, location, status, created_by_id, created_at, updated_at, archived_at, thumbnail_url
-  - Relationships: belongs_to Team, belongs_to User (creator), has_many Photos, has_many Notes
-
-- **ShootMember**: Optional - tracks which specific team members are assigned to a shoot
-  - Attributes: id, shoot_id, user_id, role (photographer/assistant/makeup/etc), assigned_at
-  - Relationships: belongs_to Shoot, belongs_to User
 
 ---
 
@@ -194,13 +192,12 @@ Team owner wants to view team members, change their roles, and remove them if ne
 - **SC-001**: User can create team in under 1 minute
 - **SC-002**: Team invitation email is sent within 10 seconds of invite action
 - **SC-003**: Invitee can accept invitation and join team in under 2 minutes
-- **SC-004**: User can create shoot in under 2 minutes
-- **SC-005**: User can add 10 team members in under 5 minutes
-- **SC-006**: All team members see shoot/team updates in real-time (within 1 second)
-- **SC-007**: System supports 1000+ teams per user without performance degradation
-- **SC-008**: 99% of team operations complete in under 500ms
-- **SC-009**: Invitation acceptance works for users with and without existing accounts
-- **SC-010**: Team member count can scale to 1000+ members without performance issues
+- **SC-004**: User can add 10 team members in under 5 minutes
+- **SC-005**: All team members see team updates in real-time (within 1 second)
+- **SC-006**: System supports 1000+ teams per user without performance degradation
+- **SC-007**: 99% of team operations complete in under 500ms
+- **SC-008**: Invitation acceptance works for users with and without existing accounts
+- **SC-009**: Team member count can scale to 1000+ members without performance issues
 
 ---
 
@@ -209,28 +206,33 @@ Team owner wants to view team members, change their roles, and remove them if ne
 - Email delivery works reliably (handled by auth service, see Auth spec)
 - Each user has unique email for invitation purposes
 - Team names can contain Unicode characters and special characters
-- Shoot dates can be in past, present, or future
 - Team owner cannot be removed (must transfer ownership first)
 - Soft delete (archiving) is used instead of hard delete for historical tracking
-- Real-time updates use existing sync mechanism (see Realtime & Offline spec)
+- Real-time updates use existing sync mechanism (Supabase Realtime)
 
 ---
 
 ## Dependencies
 
-- **Depends on**: Authentication system (Auth spec) - must know which user is creating teams/shoots
-- **Blocks**: Permissions system refinement, Shoot planning features, Team communication
+- **Depends on**: Authentication system (Auth spec 020) - must know which user is creating teams
+- **Blocks**: User onboarding completion (constitutional requirement)
+- **Enables**: Shoot planning features (next phase), Team communication
 - **Related to**: Permissions & Access Control spec (member roles)
 
 ---
 
-## Out of Scope (For Future Phases)
+## Out of Scope (For This Phase)
 
+### Deferred to Next Feature (Shoots)
+- Shoot creation and management
+- Shoot details (title, date, location, etc.)
+- Shoot member assignments
+- Shoot archiving
+
+### Future Phases
 - Team hierarchy/sub-teams
 - Team templates
-- Duplicate team/shoot functionality
+- Duplicate team functionality
 - Advanced member filtering/search
 - Team analytics
 - Member skill tracking
-- Shift/slot management for shoots
-- Shoot capacity limits

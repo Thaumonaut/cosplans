@@ -1,10 +1,11 @@
 <script lang="ts">
-  export let className: string = "";
+	// Wrapper for dashboard components - uses ThemedCard
+	export let className: string = '';
 </script>
 
-<div
-  class={`rounded-xl border shadow-sm ${className}`.trim()}
-  style="background: var(--theme-sidebar-bg); color: var(--theme-foreground); border-color: var(--theme-sidebar-border);"
+<div 
+	class="shadow rounded-lg {className}" 
+	style="background: var(--theme-sidebar-bg); border: 1px solid var(--theme-sidebar-border);"
 >
-  <slot />
+	<slot />
 </div>

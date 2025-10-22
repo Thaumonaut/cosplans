@@ -2,6 +2,7 @@
   import { createEventDispatcher } from "svelte";
   import LucideIcon from "$lib/components/icons/LucideIcon.svelte";
   import { navigation as navigationStore } from "$lib/stores/navigation";
+  import { currentTeam } from "$lib/stores/team";
 
   export let collapsed = false;
 
@@ -101,15 +102,17 @@
           <span>Account Settings</span>
         </a>
 
-        <a
-          href="/settings/team"
-          class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-[var(--theme-sidebar-hover)]"
-          style="color: var(--theme-foreground);"
-          on:click={() => (isOpen = false)}
-        >
-          <LucideIcon name="Users" size={16} />
-          <span>Team Settings</span>
-        </a>
+        {#if $currentTeam}
+          <a
+            href="/teams/{$currentTeam.id}"
+            class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-[var(--theme-sidebar-hover)]"
+            style="color: var(--theme-foreground);"
+            on:click={() => (isOpen = false)}
+          >
+            <LucideIcon name="Users" size={16} />
+            <span>Team Settings</span>
+          </a>
+        {/if}
 
         <hr style="border-color: var(--theme-sidebar-border); margin: 0.25rem 0;" />
 

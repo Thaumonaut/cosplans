@@ -1,18 +1,37 @@
 <!--
 Sync Impact Report:
-- Version change: 2.4.0 → 2.5.0
-- Modified principles: Added Principle II.5 (User Team Ownership Requirement)
-- Added sections: User Team Ownership, Team Deletion Rules, Solo User Support
+- Version change: 2.5.0 → 3.0.0 (MAJOR: New core principles added)
+- Modified principles: 
+  * Added Principle I.5 (Reduce Overwhelm via Prioritization)
+  * Added Principle II.7 (Community Trust & Accountability - Reputation System)
+  * Added Principle III.5 (Flexible & Fair Monetization)
+  * Added Principle VI.7 (Spec-Driven Development Workflow)
+  * Added Principle VII.5 (Dependency-First Development)
+  * Added Principle VIII.5 (Solo Developer Efficiency & Cost Optimization)
+  * Updated Principle V.5 (AI is Assistive, Not Creative)
+- Added sections: 
+  * Reputation System (tier-based accountability)
+  * Temp/Event Teams (short-lived collaboration)
+  * Monetization Strategy (0% commission, $5 Growth Premium)
+  * Spec-Driven Workflow (GitHub Spec Kit mandate)
+  * Cost Optimization (Cloudflare R2, Workers)
+  * AI Credit System (opt-in, cost-based)
+  * Phased Release Strategy
 - Removed sections: None
-- Specs affected: 020-user-management-and-access (onboarding must create team), 021-shoots-teams-creation (team deletion validation)
+- Specs affected: All future specs must follow spec-driven workflow
 - Templates requiring updates:
-  * ✅ spec-template.md - already supports user onboarding requirements
-  * ✅ tasks-template.md - already supports onboarding tasks
-  * ⚠ quickstart.md - may need team creation workflow documentation
+  * ⚠ spec-template.md - add reputation system requirements
+  * ⚠ plan-template.md - add cost optimization checkpoints
+  * ⚠ tasks-template.md - add dependency-first task ordering
+  * ⚠ quickstart.md - document spec-driven workflow
 - Follow-up TODOs:
-  * Verify team deletion logic prevents users from deleting their last owned team
-  * Ensure onboarding flow creates default team for all signup methods (email, OAuth)
-  * Add database constraint: users must own at least one team
+  * Implement reputation calculation engine (Cloudflare Worker)
+  * Build temp team creation and auto-archive system
+  * Set up Stripe Connect for marketplace payments
+  * Implement max 3 active projects limit for free tier
+  * Create AI credit tracking system
+  * Set up Cloudflare R2 for media storage
+  * Implement XMP metadata export feature
 -->
 
 
@@ -50,6 +69,43 @@ iOS, accelerating Phases 2-3 development. Cosplayers need mobile access for on-l
 work, but web-responsive design serves this initially while building toward native app
 performance.
 
+### I.5. Reduce Overwhelm via Prioritization
+
+Features MUST enforce prioritization to prevent project overload. Free tier users MUST be
+limited to **3 active projects maximum** to encourage focus and completion. An unlimited
+**Idea Bank** MUST be provided for storing future project concepts without cluttering active
+work. UI MUST be clean, progress-oriented, and emphasize "next actions" over comprehensive
+task lists.
+
+**Active Projects vs Idea Bank**:
+
+- **Active Projects** (max 3 for free tier): Full project management with tasks, schedules,
+  budgets, crew assignments, and progress tracking. These are projects actively being worked
+  on with deadlines and deliverables.
+- **Idea Bank** (unlimited): Lightweight storage for future costume ideas with minimal
+  details (character name, reference images, rough notes). No task management or scheduling.
+  Easy promotion to active project when ready to start work.
+
+**Prioritization Features**:
+
+- Visual indicators showing active project slots (e.g., "2/3 active projects")
+- "Quick win" tags for morale-boosting small projects
+- Complexity ratings (beginner-friendly vs advanced builds)
+- Time estimates (weekend project vs 6-month build)
+- Convention deadline urgency filters
+- Automatic archiving when projects marked complete
+
+**Conversion Hook**: The 3-project limit is the primary driver for free-to-paid conversion.
+Premium tier ($5/month) unlocks unlimited active projects while maintaining the Idea Bank
+for all users.
+
+**Rationale**: Cosplayers frequently experience project overload from having too many
+simultaneous builds, leading to stress, incomplete costumes, and burnout. Enforced
+prioritization through active project limits helps users focus on completion rather than
+accumulation. The Idea Bank prevents loss of inspiration while keeping active work
+manageable. This addresses the core problem statement: "reduce stress from project overload
+when you have many ideas."
+
 ### II. Real-Time Collaboration
 
 Team members MUST be able to view and edit shared data in real-time. Changes to shoots,
@@ -61,20 +117,88 @@ and timelines requiring instant communication and updates.
 
 ### II.5. User Team Ownership Requirement
 
-Every user MUST be part of at least one team they own at all times. During account creation
-and onboarding, the system MUST automatically create a default team with the new user as
-owner. Users MAY create additional teams and MAY join existing teams as members, but they
-MUST always maintain ownership of at least one team.
+Every user MUST own exactly one **personal team** (solo workspace) at all times. During account
+creation and onboarding, the system MUST automatically create a personal team with the new user
+as the sole owner and member. Personal teams are permanent, cannot have additional members added,
+and are deleted only when the user account is deleted.
 
-**Team Deletion Rules**: A team can only be deleted when there is only one member remaining
-AND that member owns at least one other team. The system MUST prevent deletion of a user's
-last owned team. When a user attempts to delete their only owned team, the system MUST
-display an error message: "Cannot delete your only team. Create or join another team first."
+**Personal Teams vs Public Teams**:
 
-**Solo User Support**: Users working independently effectively operate as a "team of one"
-with full owner permissions. This ensures a consistent permission model and data architecture
-across all use cases—whether users collaborate in large teams or work solo on personal
-projects. All core features (shoots, costumes, props, schedules) exist within a team context.
+- **Personal Teams**: Created automatically during onboarding. Locked to single user (owner only).
+  Cannot add members. Deleted when user account is deleted. Serves as permanent solo workspace.
+  Badge: **(Personal)** in team switcher. Displayed above divider in team list.
+
+- **Public Teams**: Created manually post-onboarding via settings. Support multiple members with
+  roles (owner, admin, member, viewer). Can be deleted by owner OR auto-deleted when last member
+  leaves. Serve as collaborative workspaces. Badge: **(Public)** in team switcher. Displayed
+  below divider in team list.
+
+**Team Deletion Rules**:
+
+- Personal teams: Cannot be deleted manually. Only deleted when user account is deleted.
+- Public teams: Can be deleted by owner at any time. All members are removed upon deletion.
+- Public teams: Auto-deleted when last member leaves (no orphaned teams).
+
+**Team Creation**:
+
+- Personal teams: Created automatically during onboarding. User names their personal team.
+- Public teams: Created via "Create Team" button in settings. User provides team name and
+  optional description.
+  - Join link and code are automatically generated upon team creation
+  - After creation, user is shown a modal with options to invite others:
+    - Share join link (copy to clipboard)
+    - Share join code (copy to clipboard)
+    - Skip and continue to team page
+  - Join link and code remain accessible in team settings
+
+**Team Member Management** (Public Teams Only):
+
+- **View Members**: All team members can view the full member list with names, emails, and roles.
+- **Change Roles**: Owners and admins can change member roles (owner, admin, member, viewer).
+  - Owner role cannot be changed directly (must use ownership transfer)
+  - Admins cannot change other admins' roles (only owner can)
+  - Cannot change your own role
+- **Remove Members**: Owners and admins can remove members from the team.
+  - Cannot remove the owner (must transfer ownership first)
+  - Removed members lose access to all team data immediately
+- **Transfer Ownership**: Current owner can transfer ownership to another team member.
+  - Must select a new owner before leaving the team
+  - Previous owner becomes an admin after transfer
+  - Ownership transfer is permanent and cannot be undone
+- **Leave Team**: Any member can leave a public team.
+  - If owner leaves, must transfer ownership to another member first
+  - If last member leaves, team is automatically deleted
+  - Personal teams cannot be left (deleted only with account deletion)
+
+**Solo User Support**: Users working independently use their personal team as a permanent solo
+workspace with full owner permissions. This ensures a consistent permission model and data
+architecture across all use cases—whether users collaborate in large teams or work solo on
+personal projects. All core features (shoots, costumes, props, schedules) are owned by a team.
+
+**Cross-Team Awareness and Management**: While the application maintains a primary team context
+for focused work, users MUST be able to view and manage shoots, tasks, and schedules from all
+their teams in a unified "All Teams" dashboard. The system provides three levels of team views:
+
+1. **Team-Scoped Dashboard** (Primary Workspace): Default view showing detailed shoot management,
+   costumes, props, and schedules for the currently selected team. Full features and focused
+   context for day-to-day operations.
+
+2. **All Teams Activity Widget**: Compact widget displayed on team dashboards showing upcoming
+   shoots from all user's teams. Provides quick awareness of cross-team commitments without
+   requiring context switching. Links to the full All Teams dashboard.
+
+3. **All Teams Dashboard** (Cross-Team Management): Dedicated page (`/all-teams`) providing
+   unified views across all teams:
+   - Calendar View: Shows shoots from all teams with color-coded team indicators
+   - Timeline View: Gantt-style visualization for identifying overlapping shoots and conflicts
+   - Task Management: Aggregated task list from all teams with filtering and priority sorting
+   - Team Filtering: Filter views to specific teams while maintaining cross-team context
+
+**Team Context Switching**: The team dropdown in the navigation allows users to switch their
+primary team context, which updates the team-scoped dashboard and all team-specific pages.
+This context switch does NOT affect the All Teams dashboard, which always shows data from all
+user's teams. Team switching is designed for focused work within a single team, while the All
+Teams dashboard is designed for holistic planning across multiple projects.
 
 **Rationale**: The application is fundamentally team-centric in its architecture and data
 model. All features are designed around team workflows and team-scoped data. Requiring every
@@ -83,6 +207,13 @@ feature access. Solo cosplayers benefit from the same powerful features as colla
 teams without added complexity. The team ownership requirement prevents edge cases where
 users have no context to create or view content, and ensures proper cleanup when teams
 disband (remaining member must join/create another team before deletion).
+
+Users participating in multiple cosplay teams need both focused team workspaces and holistic
+cross-team views. The three-level architecture (team dashboard, quick widget, all teams page)
+provides progressive disclosure: casual users work within single teams, active multi-team
+members use the widget for awareness, and power users leverage the full All Teams dashboard
+for complex coordination. This approach prevents overwhelming solo users while empowering
+multi-team users to manage complex scheduling across multiple projects.
 
 ### III. External Integration Integrity
 
@@ -574,7 +705,7 @@ collection (not monetization) differentiate Cosplans from exploitative social pl
 ### Authentication & Session Management
 
 OAuth MUST be the primary authentication mechanism. Supported OAuth providers MUST include
-Google, Instagram/Facebook, and X/Twitter (formerly Twitter). Email authentication with
+Google, Instagram/Facebook, X/Twitter (formerly Twitter), and Twitch. Email authentication with
 passkey/WebAuthn MUST be available as primary credential option for users without social
 accounts. Two-factor authentication (2FA) MUST be optional for all users and strongly
 recommended for team admins; 2FA adoption MAY become mandatory for admin roles in Phase 2
@@ -585,7 +716,8 @@ after user feedback.
 1. **Google OAuth**: Standard OAuth flow via Google Sign-In
 2. **Instagram/Facebook OAuth**: Meta-managed credentials (Instagram Business accounts)
 3. **X/Twitter OAuth**: Standard OAuth flow via X Sign-In
-4. **Email + Passkey**: Primary credential for non-social-account users; WebAuthn-based
+4. **Twitch OAuth**: Standard OAuth flow via Twitch Sign-In (cosplay streaming community)
+5. **Email + Passkey**: Primary credential for non-social-account users; WebAuthn-based
 
 **Email Authentication Requirements**: Email authentication MUST use passkey/WebAuthn as
 the primary authentication factor. If user does not have passkey enrolled, email/password
@@ -613,14 +745,16 @@ expire after 24 hours. Account deletion MUST require confirmation email within 7
 prevent accidental loss.
 
 **Social Account Linking**: Users MAY link multiple social accounts (Google, Instagram/
-Facebook, X/Twitter) to the same Cosplans account. When multiple social accounts are linked,
+Facebook, X/Twitter, Twitch) to the same Cosplans account. When multiple social accounts are linked,
 user can sign in with any of them. Email/passkey account MAY also be linked to social
 accounts.
 
-**Rationale**: OAuth via social media (Google, Instagram, X) reduces friction for cosplay
-community members who already use these platforms daily. Passkeys and 2FA provide
-defense-in-depth for users without social accounts or preferring passwordless auth.
-Instagram/Facebook integration aligns with social media planning features (Principle V.5);
+**Rationale**: OAuth via social media (Google, Instagram, X) and streaming platforms (Twitch) 
+reduces friction for cosplay community members who already use these platforms daily. Twitch 
+is particularly relevant as many cosplayers stream costume creation, attend conventions, and 
+have active communities on the platform. Passkeys and 2FA provide defense-in-depth for users 
+without social accounts or preferring passwordless auth. Instagram/Facebook integration aligns 
+with social media planning features (Principle V.5);
 users can authenticate with the same social account they manage content from. Session
 management balances security (inactivity timeout) with usability (not requiring constant
 re-authentication). Multi-account linking flexibility accommodates users who switch between
@@ -840,8 +974,8 @@ development while maintaining code quality and architecture integrity:
 **Core Framework & UI**:
 
 - SvelteKit (web framework) - built-in server-side rendering, API routes, file-based routing, and SSG
-- Tailwind CSS (styling) - utility-first CSS framework
-- Shadcn/svelte (component library) - accessible, copy-paste components built on Radix UI
+- Tailwind CSS v3 (styling) - utility-first CSS framework (v3 stable, v4 has SSR compatibility issues)
+- Flowbite Svelte (component library) - native Svelte components built for Tailwind CSS, 50+ accessible components
 - Lucide Svelte (icons) - clean SVG icon library
   - **Icon Import Requirement**: When using Lucide icons in components, ALL icons MUST be explicitly imported in three places:
     1. Import statement in `/src/lib/components/icons/LucideIcon.svelte` from 'lucide-svelte'
@@ -913,7 +1047,8 @@ development while maintaining code quality and architecture integrity:
 - ❌ Redux, Pinia, Zustand - state management overkill; use SvelteKit load() + writable stores
 - ❌ Third-party analytics vendors - use custom PostgreSQL analytics per Principle IX
 - ❌ Auth0, Okta - Supabase Auth is sufficient; avoids vendor lock-in
-- ❌ Material Design, Bootstrap - Shadcn/svelte is lighter and more customizable
+- ❌ Material Design, Bootstrap - Flowbite Svelte is lighter, native to Svelte, and more customizable
+- ❌ Tailwind CSS v4 - Has SSR compatibility issues with SvelteKit; use stable v3
 
 **Implementation Time Savings**: Using recommended packages reduces Phase 1 MVP timeline from
 180-220 working days to 60-80 working days (100-140 days saved, ~55% time reduction).
@@ -1059,4 +1194,4 @@ constitution or implementation accordingly. Major principle changes (new core te
 removal of existing principles) require documented rationale and alignment with user
 feedback.
 
-**Version**: 2.4.0 | **Ratified**: 2025-10-16 | **Last Amended**: 2025-10-18 (Test observability principle added, spec 043 created)
+**Version**: 3.0.0 | **Ratified**: 2025-10-16 | **Last Amended**: 2025-10-21 (Major update: Added reputation system, temp teams, monetization strategy, spec-driven workflow, dependency-first development, and cost optimization principles)

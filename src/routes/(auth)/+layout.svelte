@@ -25,9 +25,26 @@
     navigationStore.toggleMobile(open);
   }
 
-  function handleSignOut() {
-    // TODO: implement sign-out
-    console.log("Sign out clicked");
+  async function handleSignOut() {
+    try {
+      // POST to logout endpoint
+      const response = await fetch('/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      
+      if (response.redirected) {
+        window.location.href = response.url
+      } else if (response.ok) {
+        window.location.href = '/login'
+      }
+    } catch (error) {
+      console.error('Logout error:', error)
+      // Fallback: redirect to login anyway
+      window.location.href = '/login'
+    }
   }
 
   function toggleSidebarCollapse() {
