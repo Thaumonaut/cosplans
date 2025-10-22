@@ -1,0 +1,25 @@
+{
+  "name": "Cosplans - Cosplay Planning Platform",
+  "short_name": "Cosplans",
+  "description": "Plan shoots, manage costumes, coordinate teams, and track your cosplay projects all in one place.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#19DA5A",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/cosplans_logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "32x32",
+      "type": "image/svg+xml"
+    }
+  ],
+  "categories": ["productivity", "photography", "entertainment"],
+  "screenshots": []
+}
