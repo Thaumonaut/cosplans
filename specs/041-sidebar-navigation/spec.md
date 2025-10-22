@@ -154,6 +154,212 @@ The Cosplans application needs a professional sidebar navigation system that pro
 
 **Route Structure**: Sidebar navigation supports both authenticated routes (dashboard, calendar, gallery, etc.) and public routes. Public routes (landing page, about, help, contact, features) are accessible without authentication but are NOT included in the sidebar navigation (sidebar only appears for authenticated users). Public pages use separate layout without sidebar.
 
+**Q8: Adaptive Navigation & Layout Presets (2025-10-21)**  
+**Answer**: Hybrid approach - Smart/dynamic navigation by default with optional preset override for power users
+
+**Impact**: Navigation adapts automatically to reduce overwhelm while allowing explicit control:
+
+**Phase 1 (MVP) - Smart/Dynamic Navigation:**
+- **Personal Team (Solo Mode)**: Simplified navigation focused on individual workflow
+  - Main: Dashboard, My Cosplays (Characters & Costumes), Idea Bank, Gallery/Moodboards, Time Tracking, Archive
+  - Hides: Team coordination features (Crew, Locations, Equipment, Budgeting, Messages)
+- **Shared Team (Team Mode)**: Full navigation with all coordination tools
+  - All current navigation items visible
+  - Team-focused features prominent
+- **Auto-hide unused sections**: After 30 days of non-use, sections can be collapsed by default
+
+**Phase 2 (Enhancement) - Optional Preset Override:**
+- Settings → "Navigation Layout" preference
+- Options: "Auto (Recommended)", "Minimal", "Full", "Photographer Focus", "Coordinator Focus"
+- Most users never need to touch this - smart defaults work
+- Power users can customize to their exact workflow
+
+**Benefits:**
+- Aligns with Constitution Principle #1: "Reduce Overwhelm"
+- Zero configuration for new users - works immediately
+- Adapts to actual usage patterns automatically
+- Serves both solo hobbyists and team coordinators equally well
+- Progressive disclosure - features revealed as needed
+- Optional explicit control for power users
+
+**Implementation Notes:**
+- Navigation items stored in configuration with `showInPersonalTeam` and `showInSharedTeam` flags
+- User preference stored in profile: `navigation_layout: 'auto' | 'minimal' | 'full' | 'photographer' | 'coordinator'`
+- Default is 'auto' which uses team context to determine layout
+- Usage analytics track which features are accessed to inform auto-hide behavior
+
+**Q9: Idea Bank / Pre-Production Feature (2025-10-21)**  
+**Answer**: The "Idea Bank" is a comprehensive Pre-Production/Planning workspace for cosplays not yet in active development.
+
+**Navigation Placement**: Main Section, position 2 (right after Dashboard)
+```
+Main Section:
+├─ Dashboard
+├─ Planning (or "Ideas") ← NEW
+├─ Active Projects (Characters & Costumes)
+├─ Gallery
+├─ Calendar
+└─ Archive
+```
+
+**Route**: `/planning` or `/ideas`
+
+**Content**: Each planning item contains:
+- Character name + series/source
+- Mood board (reference images)
+- Notes, estimated costs, interest level, difficulty, tags
+- Pattern storage, tutorial links
+- Required items (props, wigs, etc.)
+- Location ideas, intended use (con/shoot)
+
+**Promotion Flow**:
+- Unlimited planning items (no limit)
+- "Start Project" → checks active project count
+- If at 3 active: prompt to pause one or cancel
+- On promotion: moves to Active Projects, removed from Planning
+
+**Impact**: New route, new nav item, `projects` table with status field (`planning | active | paused | completed | archived`)
+
+**Q10: Navigation Naming & Project Lifecycle (2025-10-21)**  
+**Answer**: Three distinct sections for the cosplay lifecycle:
+
+**Navigation Structure**:
+```
+Main Section:
+├─ Dashboard
+├─ Planning (ideas/pre-production, unlimited)
+├─ Active Projects (in progress, max 3)
+├─ Gallery
+├─ Calendar
+├─ Archive (completed projects)
+
+Resources Section:
+├─ Characters & Costumes (physical costume inventory)
+├─ Props
+├─ Locations
+└─ etc.
+```
+
+**Purpose & Flow**:
+- **Planning**: Pre-production workspace for future cosplays
+- **Active Projects**: Current WIP cosplays (max 3 limit enforced)
+- **Archive**: Completed projects (moved automatically on completion)
+- **Characters & Costumes**: Physical costume inventory management (separate from projects)
+
+**Project Lifecycle**:
+```
+Planning → [Promote] → Active Projects → [Complete] → Archive
+                                              ↓
+                            (Physical costume added to inventory)
+                                              ↓
+                                   Characters & Costumes
+```
+
+**Impact**: Clarifies that Characters & Costumes is for inventory, not project tracking. Archive is for completed project history.
+
+**Q11: Time Tracking Feature Scope (2025-10-21)**  
+**Answer**: Time tracking is for project management and estimation - tracking how long different tasks take and predicting when an overall project will be complete.
+
+**Purpose**:
+- **Task Duration Tracking**: Record actual time spent on individual tasks
+- **Estimate vs Actual**: Compare estimated time with actual time spent
+- **Project Completion Prediction**: Calculate when project will be complete based on remaining tasks, historical data, available hours per week
+- **Workload Management**: For teams, see who's overloaded and balance assignments
+
+**Key Features**:
+1. **Task-Level Tracking**: Start/stop timer, manual time entry, estimates vs actuals
+2. **Project-Level Analytics**: Completion percentage, estimated completion date, "Can I finish before [con]?" calculator
+3. **Team Features** (optional): Time tracking per member, workload balancing, productivity metrics
+
+**Navigation Placement**: 
+- **Not a dedicated nav item** - integrated into project/task views
+- Timer widget on task cards
+- Dashboard shows time summary
+- Analytics page shows historical data
+
+**Impact**: No new nav item needed. Feature integrated into existing Dashboard, Active Projects, and Tasks pages.
+
+**Q12: Auto-hide Behavior & User Control (2025-10-21)**  
+**Answer**: Combination of overflow menu + manual pin/unpin control
+
+**How it works**:
+- **"Unused" definition**: Zero clicks/visits to section in last 30 days
+- After 30 days, section moves to "More..." overflow menu
+- Users can manually pin sections to prevent auto-hide
+- Users can manually move sections to/from overflow
+
+**Navigation Structure Example**:
+```
+Main Section:
+├─ Dashboard (always visible)
+├─ Planning (pinned by user)
+├─ Active Projects (pinned by user)
+├─ Gallery (auto-visible, frequently used)
+└─ More... (collapsible overflow)
+    ├─ Tasks (hidden, not used in 30 days)
+    ├─ Messages (hidden, not used in 30 days)
+    └─ Archive (hidden, not used in 30 days)
+```
+
+**User Control**:
+- Pin/unpin sections (pin icon next to name)
+- "Customize Navigation" settings page
+- Disable auto-hide entirely (power user option)
+- Hidden sections still searchable via command palette
+
+**Visual Design**:
+- "More..." button with count badge (e.g., "More... (4)")
+- Click to reveal hidden sections
+- Hidden sections with notifications show badge on "More..." button
+
+**Implementation**:
+- `hidden_nav_sections: string[]` in user profile
+- `pinned_nav_sections: string[]` in user profile
+- `last_accessed_sections: { [sectionId]: timestamp }` for tracking
+
+**Impact**: Reduces nav clutter while maintaining full access. First-time users see all sections (no auto-hide for first 30 days).
+
+**Q13: Navigation Layout Preference Storage & Sync (2025-10-21)**  
+**Answer**: Hybrid approach - global default + per-team overrides
+
+**Preference Hierarchy**:
+1. **Global Default**: User sets preferred layout in Settings (applies to all teams)
+2. **Per-Team Override**: User can override global default for specific teams
+3. **Auto Mode**: Smart/dynamic navigation based on team type
+
+**Storage Structure**:
+```typescript
+// User Profile (global default)
+user_profiles {
+  navigation_layout: 'auto' | 'minimal' | 'full' | 'photographer' | 'coordinator'
+  // Default: 'auto'
+}
+
+// Team Members (per-team overrides)
+team_members {
+  navigation_layout_override: 'auto' | 'minimal' | 'full' | 'photographer' | 'coordinator' | null
+  // null = use global default
+}
+```
+
+**Resolution Logic**:
+1. Check for per-team override in `team_members` table
+2. If null, fall back to global default in `user_profiles`
+3. If 'auto', apply smart/dynamic navigation based on team type
+
+**User Experience**:
+- **Settings Page**: "Default Layout" applies to all teams
+- **Team Settings**: "Navigation Layout for this team" overrides global default
+- **Cross-device sync**: YES - stored in Supabase, syncs across devices
+- **Real-time**: Changes apply immediately across all tabs/devices
+
+**Team Admin Control**:
+- Admins CANNOT force layouts on members
+- Admins CAN set "recommended" layout (shows as suggestion)
+- Members can always ignore recommendation
+
+**Impact**: Flexible preference system that balances simplicity (global default) with flexibility (per-team overrides). Requires two database columns: `user_profiles.navigation_layout` and `team_members.navigation_layout_override`.
+
 ---
 
 ## Requirements
