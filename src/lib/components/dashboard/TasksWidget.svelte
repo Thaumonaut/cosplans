@@ -108,7 +108,16 @@
   onMount(async () => {
     try {
       loading = true;
-      tasks = mockTasks.filter((t) => t.team_id === teamId && !t.completed);
+      // Fetch real tasks data from API
+      const response = await fetch(`/api/tasks/team/${teamId}`);
+      if (response.ok) {
+        const data = await response.json();
+        tasks = data.tasks || [];
+      } else {
+        // Fallback to filtered mock data if API fails
+        tasks = mockTasks.filter((t) => t.team_id === teamId && !t.completed);
+        console.warn('Failed to fetch tasks data, using mock data');
+      }
       error = null;
     } catch (err) {
       error = "Failed to load tasks";

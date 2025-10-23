@@ -42,17 +42,28 @@
   onMount(async () => {
     try {
       loading = true;
-      // In a real app, this would aggregate progress from multiple shoots
-      // const { data, error: fetchError } = await supabase
-      //   .from('progress_trackers')
-      //   .select(`
-      //     *,
-      //     shoots!inner(team_id)
-      //   `)
-      //   .eq('shoots.team_id', teamId);
-
-      // For now, use mock data
-      progressData = mockProgressData;
+      // Fetch real progress data from API
+      const response = await fetch(`/api/progress/team/${teamId}`);
+      if (response.ok) {
+        const data = await response.json();
+        progressData = {
+          overall_progress: Math.round(data.overall_progress || 0),
+          categories: [
+            { name: "Costumes", progress: Math.round(data.costume_progress || 0), color: "bg-green-500" },
+            { name: "Props", progress: Math.round(data.props_progress || 0), color: "bg-yellow-500" },
+            { name: "Location", progress: Math.round(data.location_progress || 0), color: "bg-blue-500" },
+            { name: "Team", progress: Math.round(data.team_progress || 0), color: "bg-purple-500" },
+            { name: "Editing", progress: Math.round(data.editing_progress || 0), color: "bg-red-500" },
+            { name: "Checklist", progress: Math.round(data.checklist_progress || 0), color: "bg-indigo-500" },
+          ],
+          outstanding_tasks: data.outstanding_tasks || [],
+          recent_updates: [], // TODO: Fetch from separate API when available
+        };
+      } else {
+        // Fallback to mock data if API fails
+        progressData = mockProgressData;
+        console.warn('Failed to fetch progress data, using mock data');
+      }
       error = null;
     } catch (err) {
       error = "Failed to load progress data";
