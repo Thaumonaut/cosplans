@@ -8,6 +8,17 @@
 
 This document defines the complete database schema for the Resource Management System, including all 5 resource types (Costumes, Crew, Equipment, Props, Locations) and supporting tables.
 
+## UX Pattern: Unified Detail Pages
+
+All resource types use a **unified detail page** pattern for both creating and editing:
+
+- **Route**: `/resource/[id]` where `id` can be "new" for creation or a UUID for editing
+- **Inline Editing**: All fields are editable in-place with placeholder text
+- **Click-to-Edit**: Clicking placeholder or existing text makes field editable
+- **Auto-Save**: Changes save on blur or Enter key
+- **Visual Feedback**: Unsaved changes highlighted, loading states shown
+- **No Separate Forms**: Create and edit use the same view with different states
+
 ---
 
 ## Entity Relationship Diagram
@@ -141,6 +152,8 @@ CREATE TRIGGER update_costumes_updated_at
 
 Directory of people who work with the team (photographers, assistants, models, etc.).
 
+**UI Note**: The `previous_roles` field is displayed as a **read-only comma-separated list** on both the list and detail pages. It shows the history of roles this person has performed (e.g., "Photographer, Assistant, Model"). This field is not directly editable through the UI - it's managed through project assignments.
+
 ```sql
 CREATE TABLE crew_members (
   -- Primary Key
@@ -152,9 +165,7 @@ CREATE TABLE crew_members (
   
   -- Core Fields
   name TEXT NOT NULL,
-  role TEXT NOT NULL CHECK (role IN (
-    'photographer', 'assistant', 'makeup_artist', 'model', 'coordinator', 'other'
-  )),
+  previous_roles TEXT[] DEFAULT '{}', -- Array of roles they've performed (photographer, assistant, model, makeup_artist, coordinator, other)
   
   -- Contact Info
   email TEXT,
@@ -170,7 +181,7 @@ CREATE TABLE crew_members (
   -- Search
   search_vector tsvector GENERATED ALWAYS AS (
     setweight(to_tsvector('english', coalesce(name, '')), 'A') ||
-    setweight(to_tsvector('english', coalesce(role, '')), 'B') ||
+    setweight(to_tsvector('english', coalesce(array_to_string(previous_roles, ' '), '')), 'B') ||
     setweight(to_tsvector('english', coalesce(notes, '')), 'C')
   ) STORED,
   
@@ -184,7 +195,7 @@ CREATE TABLE crew_members (
 
 -- Indexes
 CREATE INDEX idx_crew_team ON crew_members(team_id) WHERE deleted_at IS NULL;
-CREATE INDEX idx_crew_role ON crew_members(role) WHERE deleted_at IS NULL;
+CREATE INDEX idx_crew_roles ON crew_members USING GIN(previous_roles) WHERE deleted_at IS NULL;
 CREATE INDEX idx_crew_favorite ON crew_members(is_favorite) WHERE is_favorite = TRUE AND deleted_at IS NULL;
 CREATE INDEX idx_crew_search ON crew_members USING GIN(search_vector);
 CREATE INDEX idx_crew_deleted ON crew_members(deleted_at) WHERE deleted_at IS NOT NULL;

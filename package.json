@@ -53,9 +53,11 @@
   },
   "dependencies": {
     "@casl/ability": "^6.7.1",
+    "@hookform/resolvers": "^5.2.2",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.45.4",
     "@tailwindcss/typography": "^0.5.15",
+    "browser-image-compression": "^2.0.2",
     "color2k": "^2.0.3",
     "date-fns": "^4.1.0",
     "lucide-svelte": "^0.447.0",

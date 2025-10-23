@@ -227,3 +227,59 @@ tests/
 
 **Justification**: Deferring real-time collaboration allows faster MVP delivery while still meeting all other constitutional requirements. Resource management is primarily individual/async work (adding costumes, updating inventory) rather than simultaneous collaborative editing.
 
+---
+
+## UI Refactoring (October 23, 2025)
+
+### Current State
+All 5 resource list pages have been improved with:
+- ✅ Stats cards at top (4 per page)
+- ✅ ThemedCard sections
+- ✅ Better empty states
+- ✅ Info boxes at bottom
+- ✅ Theme-compliant styling
+
+### Identified Improvements
+
+**1. Shared Layout Component**
+- Created `ResourceListLayout.svelte` - provides consistent structure for all resource pages
+- Created `StatCard.svelte` - reusable stat card component
+- Benefits: Reduces code duplication, ensures consistency, easier maintenance
+
+**2. Help Icon Instead of Info Box**
+- Replace bottom info card with (?) icon next to title
+- Shows tooltip on hover with same information
+- Cleaner, less cluttered UI
+
+**3. Enhanced Filtering**
+- Add filter components to all pages (currently only Costumes and Crew have filters)
+- Equipment: Filter by type, condition, ownership
+- Props: Filter by type, status, character/series  
+- Locations: Filter by type, favorites
+
+**4. Actionable Stats**
+- Make stat cards clickable to filter by that metric
+- Add trend indicators (up/down)
+- Customize metrics per resource type for more relevance
+
+### Migration Plan
+
+**Phase 1: Shared Components** ✅
+- [x] Create ResourceListLayout.svelte
+- [x] Create StatCard.svelte
+
+**Phase 2: Refactor Pages**
+- [ ] Refactor one page as example (Equipment)
+- [ ] Apply to remaining pages (Costumes, Crew, Props, Locations)
+- [ ] Remove info boxes, add help icons
+
+**Phase 3: Add Filters**
+- [ ] Create FilterBar component
+- [ ] Add to Equipment, Props, Locations
+- [ ] Wire up server-side filtering
+
+**Phase 4: Enhance Stats**
+- [ ] Make stats clickable
+- [ ] Add trend indicators
+- [ ] Improve relevance per resource type
+

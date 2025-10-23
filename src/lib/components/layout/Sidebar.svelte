@@ -132,9 +132,8 @@
     >
       <div
         class="flex h-9 w-9 items-center justify-center flex-shrink-0 transition-all group-hover:scale-110"
-        style="color: var(--theme-sidebar-accent);"
       >
-        <CosplansLogo size="w-9 h-9" color="currentColor" />
+        <CosplansLogo variant="segmented" size="w-9 h-9" />
       </div>
       {#if !$navigationStore.isCollapsed}
         <span

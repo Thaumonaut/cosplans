@@ -18,10 +18,10 @@ This document defines the complete implementation plan for the Resource Manageme
 
 Initialize project structure and dependencies for resource management system.
 
-- [ ] T001 Install browser-image-compression for photo uploads
-- [ ] T002 Install additional Zod validation schemas for resource types
-- [ ] T003 Create src/lib/types/resources.ts for TypeScript definitions
-- [ ] T004 Create src/lib/utils/lifecycle-states.ts for state machine validation
+- [x] T001 Install browser-image-compression for photo uploads
+- [x] T002 Install additional Zod validation schemas for resource types
+- [x] T003 Create src/lib/types/resources.ts for TypeScript definitions
+- [x] T004 Create src/lib/utils/lifecycle-states.ts for state machine validation
 
 ---
 
@@ -29,14 +29,14 @@ Initialize project structure and dependencies for resource management system.
 
 Implement core infrastructure required by all resource types before user story development.
 
-- [ ] T005 Create database migration for all 8 resource management tables
-- [ ] T006 Create Supabase Storage bucket for resource photos with RLS policies
-- [ ] T007 Create src/lib/components/resources/ResourceCard.svelte base component
-- [ ] T008 Create src/lib/components/resources/ResourceList.svelte with search/filter
-- [ ] T009 Create src/lib/components/resources/PhotoUpload.svelte with compression
-- [ ] T010 Create src/lib/components/resources/LifecycleStateBadge.svelte
-- [ ] T011 Create src/lib/server/resources/photo-service.ts for upload/compression
-- [ ] T012 Create src/lib/utils/resource-search.ts for full-text search utilities
+- [x] T005 Create database migration for all 8 resource management tables
+- [x] T006 Create Supabase Storage bucket for resource photos with RLS policies
+- [x] T007 Create src/lib/components/resources/ResourceCard.svelte base component
+- [x] T008 Create src/lib/components/resources/ResourceList.svelte with search/filter
+- [x] T009 Create src/lib/components/resources/PhotoUpload.svelte with compression
+- [x] T010 Create src/lib/components/resources/LifecycleStateBadge.svelte
+- [x] T011 Create src/lib/server/resources/photo-service.ts for upload/compression
+- [x] T012 Create src/lib/utils/resource-search.ts for full-text search utilities
 
 ---
 
@@ -47,18 +47,18 @@ Implement costume management with full lifecycle tracking, photos, and search.
 **Goal**: Users can track costumes through complete lifecycle with photos and details  
 **Independent Test**: Create costume → add photos → set lifecycle states → search/filter → view details
 
-- [ ] T013 [US1] Create src/routes/(auth)/costumes/+page.svelte list view
-- [ ] T014 [US1] Create src/routes/(auth)/costumes/+page.server.ts with search/filter
-- [ ] T015 [US1] Create src/routes/(auth)/costumes/new/+page.svelte form
-- [ ] T016 [US1] Create src/routes/(auth)/costumes/new/+page.server.ts create action
-- [ ] T017 [US1] Create src/routes/(auth)/costumes/[id]/+page.svelte detail/edit view
-- [ ] T018 [US1] Create src/routes/(auth)/costumes/[id]/+page.server.ts loader & actions
-- [ ] T019 [US1] Create src/lib/server/resources/costume-service.ts CRUD operations
-- [ ] T020 [US1] Create CostumeCard.svelte extending ResourceCard with lifecycle states
-- [ ] T021 [US1] Implement costume lifecycle state transitions with validation
-- [ ] T022 [US1] Add costume search with PostgreSQL full-text search
+- [x] T013 [US1] Create src/routes/(auth)/costumes/+page.svelte list view
+- [x] T014 [US1] Create src/routes/(auth)/costumes/+page.server.ts with search/filter
+- [x] T015 [US1] Create src/routes/(auth)/costumes/new/+page.svelte form
+- [x] T016 [US1] Create src/routes/(auth)/costumes/new/+page.server.ts create action
+- [x] T017 [US1] Create src/routes/(auth)/costumes/[id]/+page.svelte detail/edit view
+- [x] T018 [US1] Create src/routes/(auth)/costumes/[id]/+page.server.ts loader & actions
+- [x] T019 [US1] Create src/lib/server/resources/costume-service.ts CRUD operations
+- [x] T020 [US1] Create CostumeCard.svelte extending ResourceCard with lifecycle states
+- [x] T021 [US1] Implement costume lifecycle state transitions with validation
+- [x] T022 [US1] Add costume search with PostgreSQL full-text search
 - [ ] T023 [US1] Implement costume photo upload with compression
-- [ ] T024 [US1] Add costume availability status calculation (available/unavailable)
+- [x] T024 [US1] Add costume availability status calculation (available/unavailable)
 - [ ] T025 [US1] Create costume bulk operations (multi-select, bulk status changes)
 
 ---
@@ -70,17 +70,17 @@ Implement crew member management with contact info, roles, and account linking.
 **Goal**: Teams can maintain directory of external collaborators with contact details  
 **Independent Test**: Add crew → set roles → search/filter → view contact info → link accounts
 
-- [ ] T026 [US2] Create src/routes/(auth)/crew/+page.svelte directory view
-- [ ] T027 [US2] Create src/routes/(auth)/crew/+page.server.ts with role filtering
-- [ ] T028 [US2] Create src/routes/(auth)/crew/new/+page.svelte add crew form
-- [ ] T029 [US2] Create src/routes/(auth)/crew/new/+page.server.ts create action
-- [ ] T030 [US2] Create src/routes/(auth)/crew/[id]/+page.svelte detail/edit view
-- [ ] T031 [US2] Create src/routes/(auth)/crew/[id]/+page.server.ts loader & actions
-- [ ] T032 [US2] Create src/lib/server/resources/crew-service.ts CRUD operations
+- [x] T026 [US2] Create src/routes/(auth)/crew/+page.svelte directory view
+- [x] T027 [US2] Create src/routes/(auth)/crew/+page.server.ts with role filtering
+- [x] T028 [US2] Create src/routes/(auth)/crew/new/+page.svelte add crew form
+- [x] T029 [US2] Create src/routes/(auth)/crew/new/+page.server.ts create action
+- [x] T030 [US2] Create src/routes/(auth)/crew/[id]/+page.svelte detail/edit view
+- [x] T031 [US2] Create src/routes/(auth)/crew/[id]/+page.server.ts loader & actions
+- [x] T032 [US2] Create src/lib/server/resources/crew-service.ts CRUD operations
 - [ ] T033 [US2] Create CrewCard.svelte with role badges and contact info
-- [ ] T034 [US2] Implement crew role filtering (photographer, assistant, etc.)
-- [ ] T035 [US2] Add click-to-email and click-to-call functionality
-- [ ] T036 [US2] Implement favorite crew member functionality
+- [x] T034 [US2] Implement crew role filtering (photographer, assistant, etc.)
+- [x] T035 [US2] Add click-to-email and click-to-call functionality
+- [x] T036 [US2] Implement favorite crew member functionality
 - [ ] T037 [US2] Create crew account linking with email-based suggestions
 - [ ] T038 [US2] Create crew_account_links table and RLS policies
 

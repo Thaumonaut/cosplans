@@ -30,8 +30,21 @@ const supabase: Handle = async ({ event, resolve }) => {
    * Securely gets the user by validating the JWT via getUser().
    * We don't use getSession() as it doesn't validate the JWT.
    * For server-side auth, the validated user object is sufficient.
+   * 
+   * PERFORMANCE: This function implements request-scoped caching.
+   * The first call validates the JWT, subsequent calls return cached data.
+   * This significantly reduces authentication overhead on pages with multiple
+   * server actions or load functions.
    */
+  let cachedSession: { session: any; user: any } | null = null;
+  let sessionFetched = false;
+
   event.locals.safeGetSession = async () => {
+    // Return cached result if already fetched in this request
+    if (sessionFetched) {
+      return cachedSession!;
+    }
+
     const {
       data: { user },
       error,
@@ -39,15 +52,18 @@ const supabase: Handle = async ({ event, resolve }) => {
     
     if (error || !user) {
       // JWT validation failed or no user
-      return { session: null, user: null };
+      cachedSession = { session: null, user: null };
+    } else {
+      // Return user with a minimal session object
+      // The user object is validated and secure
+      cachedSession = { 
+        session: { user }, // Minimal session with validated user
+        user 
+      };
     }
 
-    // Return user with a minimal session object
-    // The user object is validated and secure
-    return { 
-      session: { user }, // Minimal session with validated user
-      user 
-    };
+    sessionFetched = true;
+    return cachedSession;
   };
 
   return resolve(event, {
