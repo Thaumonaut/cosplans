@@ -220,6 +220,23 @@ As a developer maintaining the system, I want this specification to supersede an
 - **FR-071**: System MUST display both system-suggested and user-set difficulty ratings to help users learn which types of projects they find challenging
 - **FR-072**: System MUST allow filtering characters by difficulty rating and skill tags to find appropriate next projects
 
+**Materials / Craft Supplies Management:**
+- **FR-073**: System MUST support dual-mode material management: "Shopping List" (planning phase) and "Inventory" (owned materials)
+- **FR-074**: System MUST allow users to create shopping list entries for materials needed with: material name, category, quantity needed, unit of measure, estimated cost, priority (high/medium/low), and notes
+- **FR-075**: System MUST provide "Mark as Purchased" action on shopping list items that moves item to inventory with actual purchase details: actual cost, purchase date, vendor link, quantity purchased
+- **FR-076**: System MUST allow users to create inventory entries directly (for materials already owned or donated)
+- **FR-077**: System MUST categorize materials by type dropdown: Fabrics, Foam, Paints & Finishes, Adhesives, Hardware (zippers/snaps/velcro/elastic), Wig Supplies, Thermoplastics (Worbla/Thibra), Electronics (LEDs/batteries/wiring), 3D Printing Filament, Other
+- **FR-078**: System MUST track material consumption with: starting quantity, current quantity, unit of measure (yards, meters, sheets, bottles, pieces, kg, etc.), and manual deduction support
+- **FR-079**: System MUST support per-project material allocation: link materials to characters/outfits with quantity used and cost allocated (e.g., "Saber outfit used 2 yards of black satin = $10 allocated")
+- **FR-080**: System MUST track material metadata: material name, category, color/variant, brand, purchase cost, cost per unit (auto-calculated: total cost / quantity), vendor link, purchase date, storage location (optional text field), and notes
+- **FR-081**: System MUST aggregate material costs per character: sum all allocated material costs from linked resources to show total materials spent on that character
+- **FR-082**: System MUST support linking materials to tools (optional): materials can specify which tool they're supplies for (e.g., "Thread Spool #3 → Brother Sewing Machine", "Glue sticks → Glue Gun #2")
+- **FR-083**: System MUST allow uploading 1-5 reference photos per material entry to Cloudflare R2 (for visual identification, color matching, texture reference)
+- **FR-084**: System MUST warn users when material inventory is low: display "Low Stock" badge when current quantity < 20% of starting quantity
+- **FR-085**: System MUST support filtering materials by: category, in-stock vs out-of-stock, linked character, linked tool, vendor, and storage location
+- **FR-086**: System MUST calculate total inventory value: sum of all materials' current quantity × cost per unit
+- **FR-087**: System MUST support bulk actions on shopping list: mark multiple items as purchased, delete multiple items, export to PDF for store visit
+
 ### Key Entities
 
 - **Character**: Central organizational entity representing a character to cosplay. Contains character name, series, source medium, appearance description, personality notes, aliases, reference images (R2 URLs). Acts as hub for linking all related resources (outfits, wigs, props, accessories). Tracks completion percentage based on linked resources.
@@ -248,6 +265,10 @@ As a developer maintaining the system, I want this specification to supersede an
 
 - **Difficulty Assessment**: Hybrid difficulty tracking with system-suggested rating (1-5 based on resource count, task complexity, material types) and user-override rating. Includes optional skill challenge tags to identify which techniques user finds difficult for personal growth tracking.
 
+- **Material / Craft Supply**: Consumable crafting resource tracked in dual modes (Shopping List → Inventory). Contains material name, category (Fabrics/Foam/Paints/Adhesives/Hardware/Wig Supplies/Thermoplastics/Electronics/3D Filament), color/variant, brand, quantity tracking (starting, current, unit of measure), cost tracking (purchase cost, cost per unit), vendor link, purchase date, optional tool link (for supplies), storage location (text), reference photos (1-5 R2 URLs), and notes. Supports per-project allocation (link to character/outfit with quantity used and cost allocated). Displays low stock warnings at < 20% remaining.
+
+- **Material-Resource Allocation**: Junction entity linking materials to resources (characters, outfits, wigs, accessories, props) with usage tracking: quantity used, cost allocated, date used, and allocation notes. Enables per-project cost breakdowns and total materials cost aggregation per character.
+
 ## Clarifications
 
 ### Session 2025-10-24
@@ -267,6 +288,10 @@ As a developer maintaining the system, I want this specification to supersede an
 - Q: How should conventions/events be integrated into planning? → A: Event entity with character associations (standalone Events/Conventions with dates; link multiple characters to events; view event-level progress dashboard showing all characters for that convention)
 - Q: How should vendor/shop information be tracked for budgeting and future planning? → A: Dedicated vendor entity (standalone Vendors/Shops with name, URL, contact info, rating, category, notes; link resources to vendors; view purchase history per vendor for informed reordering decisions)
 - Q: How should project difficulty/skill level be tracked given it varies by person? → A: Hybrid difficulty assessment (system suggests difficulty 1-5 based on objective factors like resource count, task complexity, material types; user can override with their own rating 1-5 and add skill tags like "complex sewing", "advanced foam work", "intricate wig styling" to explain personal challenges)
+- Q: How should materials/craft supplies be managed for both planning and inventory tracking? → A: Dual-mode workflow (Shopping List for planning "I need 3 yards fabric" → Mark as Purchased → moves to Inventory with actual cost/quantity; supports manual depletion "used 2 yards on Saber"; per-project allocation tracks which character/outfit used what materials for cost breakdowns)
+- Q: What material categories are needed for cosplay crafting? → A: 9 core categories cover most use cases: Fabrics, Foam (EVA/craft), Paints & Finishes, Adhesives, Hardware (zippers/snaps/velcro), Wig Supplies (wefts/dye/products), Thermoplastics (Worbla/Thibra), Electronics (LEDs/batteries/wiring/Arduino), 3D Printing Filament; "Other" for edge cases
+- Q: Should tools (sewing machines, heat guns) be tracked as materials or separate entity? → A: Separate Tools entity (non-consumable, tracked for ownership/maintenance); Materials can optionally link to Tools for supply tracking (e.g., "Thread → Sewing Machine", "Glue sticks → Glue Gun")
+- Q: How should material costs be allocated to projects for commission quotes and budgeting? → A: Per-project allocation junction table (material links to character/outfit with quantity used and cost allocated; character budget auto-aggregates all allocated material costs; supports commission cost breakdowns)
 
 ## Success Criteria *(mandatory)*
 
@@ -286,6 +311,12 @@ As a developer maintaining the system, I want this specification to supersede an
 - **SC-012**: Pattern file uploads (up to 5MB) complete in under 10 seconds
 - **SC-013**: Character aliases/alternate names support finds characters 95%+ of the time when users search by any known name
 - **SC-014**: Resource unlinking from characters completes without data loss in 100% of cases
+- **SC-015**: Users can create shopping list with 10 materials in under 3 minutes
+- **SC-016**: Users can mark shopping list item as purchased and move to inventory in under 15 seconds per item
+- **SC-017**: Users can link material to character/outfit with quantity used in under 30 seconds
+- **SC-018**: Character detail page displays aggregated material costs with zero calculation errors
+- **SC-019**: Low stock warnings appear when material quantity drops below 20% of starting amount
+- **SC-020**: Shopping list exports to PDF in under 5 seconds for offline store visit
 
 ## Assumptions
 
