@@ -1,9 +1,15 @@
-# Feature Specification: Character-Centric Resource Model
+# Feature Specification: Comprehensive Resource Management System (Character-Centric Model)
+
+> ✅ **SINGLE SOURCE OF TRUTH FOR RESOURCE MANAGEMENT**  
+> This specification consolidates and supersedes specs 045, 046, and 047.  
+> It provides a unified, character-centric approach to managing all cosplay resources (characters, costumes, wigs, props, accessories, makeup, equipment, locations, crew, tasks, and craft supplies).  
+> **All future resource management development should reference THIS spec.**
 
 **Feature Branch**: `048-character-resource-model`  
 **Created**: October 24, 2025  
-**Status**: Draft  
-**Input**: User description: "I want to update the spec to clarify that wigs will be their own category. Wigs, as well as accessories and props and outfit, can be linked to a character. I also want a specific character section useful for when brainstorming ideas for new cosplay. Wigs will be able to track tasks for completion, due date, material requirements, and cost. Character will track the series and character name and relevant details about the character. The outfit (costume) section will be update to be what version of the character (video game, manga, anime, movie, tv show, etc.) as well as saving patterns, alteration notes, tasks, and other details for crafting a cosplay outfit"
+**Status**: **Active** (Consolidated from specs 045, 046, 047)  
+**Consolidation Date**: October 24, 2025  
+**Original Input**: User description: "I want to update the spec to clarify that wigs will be their own category. Wigs, as well as accessories and props and outfit, can be linked to a character. I also want a specific character section useful for when brainstorming ideas for new cosplay. Wigs will be able to track tasks for completion, due date, material requirements, and cost. Character will track the series and character name and relevant details about the character. The outfit (costume) section will be update to be what version of the character (video game, manga, anime, movie, tv show, etc.) as well as saving patterns, alteration notes, tasks, and other details for crafting a cosplay outfit"
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -274,33 +280,145 @@ As a developer maintaining the system, I want this specification to supersede an
 
 ## Integration Notes
 
-This specification refactors and consolidates the resource management model from specs 045 and 047:
+### 🔄 Consolidation Notice
 
-**Supersedes/Modifies:**
-1. **Spec 045** - Resource Management System:
-   - Adds Character entity as organizational hub
-   - Separates Wigs from Accessories category
-   - Enhances Costume entity with version, patterns, tasks
+**This specification supersedes and consolidates specs 045, 046, and 047 into a single, comprehensive resource management system.**
 
-2. **Spec 047** - Resource Management System Expansion:
-   - Character entity addresses "brainstorming" need mentioned in 047
-   - Wig separation and enhancement fulfills wig management needs
-   - Pattern storage and outfit versioning integrate with 047 patterns feature
+### What This Spec Consolidates
 
-**Key Architectural Changes:**
-- **From**: Flat resource lists (costumes, props, accessories separate)
-- **To**: Character-centric model (character as hub, resources link to character)
+#### From Spec 045 (Resource Management System):
+✅ **Retained & Enhanced:**
+- Costumes/Outfits (enhanced with version, patterns, tasks, character linking)
+- Props catalog (enhanced with character linking)
+- Equipment inventory (maintained as-is)
+- Crew directory (maintained as-is)
+- Location library (maintained as-is)
+- Lifecycle tracking for all resources (maintained as-is)
 
-**Data Model Changes:**
-- New `characters` table
-- New `wigs` table (migrate from accessories)
-- Enhanced `costumes` table (add version, patterns, tasks fields)
-- New junction tables: `character_wigs`, `character_props`, `character_accessories`, `character_costumes`
-- New `wig_tasks`, `wig_materials`, `outfit_tasks` tables
+✅ **Refactored:**
+- Accessories (maintained as separate category, enhanced with character linking)
+- Wigs (separated from accessories into dedicated category with task/cost tracking)
 
-**Migration Strategy:**
-1. Create character, wig, junction tables
-2. Migrate existing accessories tagged as "wig" to wigs table
-3. Add version/pattern fields to costumes table
-4. Update UI to character-centric navigation
-5. Maintain backward compatibility with direct resource access (resource pages still work without character context)
+#### From Spec 046 (Costume Accessories):
+✅ **Fully Integrated:**
+- Dedicated accessories management page (now with character linking)
+- Makeup-specific tracking (expiration dates, usage levels, skin tone matching)
+- Accessory-to-costume linking (now character-to-accessory linking)
+- Maintenance schedules for accessories (integrated into new model)
+- Usage history tracking (integrated into new model)
+
+#### From Spec 047 (Resource Expansion):
+✅ **Retained:**
+- Standalone task management (general tasks page)
+- Craft supplies and materials management (maintained as separate feature)
+- Pattern storage (integrated into enhanced outfit entity)
+
+✅ **Already Implemented (Retrospective Documentation):**
+- Series autocomplete with external APIs (AniList, RAWG, TMDB, Google Books)
+- Character autocomplete with autofill
+- Source medium field (replacing costume type)
+- Component linking (inline dropdowns for wigs/makeup/props/equipment)
+- Photo uploads on costume detail pages
+- Task checklists within costume pages
+- Delete confirmation dialogs
+
+### Key Architectural Changes
+
+**From**: Flat resource lists (costumes, props, accessories managed separately)  
+**To**: Character-centric model (character as organizational hub, resources link to characters)
+
+**Before (Specs 045/046/047):**
+```
+Resources:
+├── Costumes (flat list)
+├── Props (flat list)
+├── Accessories (flat list, includes wigs)
+├── Makeup (flat list)
+├── Equipment (flat list)
+└── Locations (flat list)
+```
+
+**After (Spec 048):**
+```
+Characters (central hub):
+└── Links to:
+    ├── Outfits (1:1, with version/patterns/tasks)
+    ├── Wigs (M:N, dedicated category with tasks/materials/cost)
+    ├── Props (M:N, character-linkable)
+    ├── Accessories (M:N, character-linkable)
+    └── Makeup (M:N, character-linkable)
+
+Standalone Resources (not character-specific):
+├── Equipment
+├── Locations
+├── Crew
+├── Tasks (general)
+└── Craft Supplies
+```
+
+### Data Model Changes
+
+**New Tables:**
+- `characters` - Central organizational entity
+- `wigs` - Dedicated wig category (migrated from accessories)
+- `wig_tasks` - Task tracking for wigs
+- `wig_materials` - Material requirements for wigs
+- `outfit_tasks` - Construction tasks for outfits (if not already exists)
+- `character_wigs` - Junction table (many-to-many)
+- `character_props` - Junction table (many-to-many)
+- `character_accessories` - Junction table (many-to-many)
+- `character_costumes` - Junction table (one-to-one, but using junction for consistency)
+
+**Enhanced Tables:**
+- `costumes` → Add: `version`, `pattern_files_r2_urls`, `alteration_notes`, `crafting_notes`, `character_id` (nullable)
+- `props` → Add: `character_id` (nullable, via junction)
+- `accessories` → Add: `character_id` (nullable, via junction)
+
+**Maintained Tables (from 045/047):**
+- `equipment` (no changes)
+- `locations` (no changes)
+- `crew` (no changes)
+- `tasks` (standalone tasks from 047)
+- `craft_supplies` (from 047)
+
+### Migration Strategy
+
+**Phase 1: Data Model Setup**
+1. Create `characters` table
+2. Create `wigs` table with enhanced fields
+3. Create junction tables for character-resource linking
+4. Add version/pattern fields to `costumes` table
+
+**Phase 2: Data Migration**
+1. Identify existing accessories marked as "wig" type
+2. Migrate wig records to new `wigs` table
+3. Update references in other tables
+4. Preserve all existing data (zero data loss)
+
+**Phase 3: UI Updates**
+1. Create Characters page (list and detail views)
+2. Create Wigs page (separate from accessories)
+3. Update Costumes page with version/pattern fields
+4. Add character linking UI to all compatible resources
+5. Maintain backward compatibility (resource pages work without character context)
+
+**Phase 4: Feature Enhancements**
+1. Implement character-centric navigation
+2. Add character completion percentage calculation
+3. Implement wig task tracking
+4. Implement outfit task tracking
+5. Add pattern file upload with R2 storage
+
+**Phase 5: Integration & Polish**
+1. Ensure all resource types can link to characters
+2. Test character deletion with unlinking
+3. Verify search and filtering across new model
+4. Update documentation and help text
+5. Performance optimization for character detail pages
+
+### Backward Compatibility
+
+- Direct resource access maintained (costume/prop/accessory pages still work independently)
+- Character linking is optional (resources can exist without character association)
+- Existing resources continue to function (no breaking changes)
+- Users can gradually adopt character-centric workflow

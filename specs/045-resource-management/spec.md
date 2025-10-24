@@ -1,8 +1,13 @@
 # Feature Specification: Resource Management System
 
+> ⚠️ **SUPERSEDED BY SPEC 048 (Character-Centric Resource Model)**  
+> This specification has been consolidated into [spec 048-character-resource-model](../048-character-resource-model/spec.md), which provides a comprehensive, character-centric approach to resource management.  
+> **This spec is retained for historical reference only.**  
+> See [spec 048 Integration Notes](../048-character-resource-model/spec.md#integration-notes) for details on what was retained, enhanced, or refactored.
+
 **Feature Branch**: `045-resource-management`  
 **Created**: October 21, 2025  
-**Status**: Draft  
+**Status**: ~~Draft~~ **SUPERSEDED** (Consolidated into Spec 048)  
 **Input**: Resource management pages for managing costumes (previous and in progress outfits), crew members (people you are working with or have previously worked with), Props, equipment, locations, and other resources defined in the constitution
 
 ## User Scenarios & Testing *(mandatory)*

@@ -1,8 +1,15 @@
 # Feature Specification: Resource Management System Expansion
 
+> ⚠️ **SUPERSEDED BY SPEC 048 (Character-Centric Resource Model)**  
+> This specification has been consolidated into [spec 048-character-resource-model](../048-character-resource-model/spec.md).  
+> **What was retained**: Standalone task management and craft supplies features are maintained as separate features in spec 048.  
+> **What was integrated**: Pattern storage is now part of the enhanced outfit entity in spec 048. Accessories/makeup pages are integrated with character linking.  
+> **This spec is retained for historical reference only.**  
+> See [spec 048 Integration Notes](../048-character-resource-model/spec.md#integration-notes) for complete consolidation details.
+
 **Feature Branch**: `047-resource-expansion`  
 **Created**: October 24, 2025  
-**Status**: Draft  
+**Status**: ~~Draft~~ **SUPERSEDED** (Consolidated into Spec 048)  
 **Input**: User description: "I want to make sure that my specs are up to date for the resource pages. I had made changes while implementing but I don't think we updated the spec to match those changes. I also wanted to add to the spec files a new page or two for managing general tasks (we have tasks for props and outfits but maybe someone wants to create a tasks to reach out to someone or something else related but not specific to a resource), managing accessories (rings, earrings, necklaces, etc) and managing makeup (references, styles, products, etc.). I also want to make sure there is a place on the outfits for storing templates and patterns people might use when sewing their own cosplay. Also a section for managing misc resources like foam used to make props and paints etc"
 
 ## User Scenarios & Testing *(mandatory)*

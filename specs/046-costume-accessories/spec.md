@@ -1,6 +1,14 @@
+# Feature Specification: Costume Accessories
+
+> ⚠️ **SUPERSEDED BY SPEC 048 (Character-Centric Resource Model)**  
+> This specification has been consolidated into [spec 048-character-resource-model](../048-character-resource-model/spec.md).  
+> All accessories and makeup features from this spec have been integrated with character linking, and wigs have been promoted to a dedicated top-level category.  
+> **This spec is retained for historical reference only.**  
+> See [spec 048 Integration Notes](../048-character-resource-model/spec.md#integration-notes) for details.
+
 **Feature Branch**: `046-costume-accessories`
 **Created**: October 23, 2025
-**Status**: Draft
+**Status**: ~~Draft~~ **SUPERSEDED** (Consolidated into Spec 048)
 **Input**: Add accessories and makeup resource management for tracking small costume-related items like colored contacts, jewelry, makeup, wigs, and other accessories that enhance costumes but are managed separately
 
 ## User Scenarios & Testing *(mandatory)*
