@@ -38,7 +38,7 @@ All paths relative to repository root (`C:\Projects\Web\Vibe Coding\cosplans\`):
 - [x] T002 Create `src/lib/components/wigs/` directory for wig components
 - [x] T003 [P] Update `src/lib/types/resources.ts` to add Character, Wig, CharacterWig junction types
 - [x] T004 [P] Install JetBrains Mono font and update `app.html` with Google Fonts link per ui-design.md
-- [x] T005 [P] Update existing `light-green` theme in `src/lib/utils/theme-variants.ts` to use exact logo colors (#19DA5A, #21F96A, #008F31)
+- [x] T005 [P] ~~Update existing `light-green` theme in `src/lib/utils/theme-variants.ts` to use exact logo colors~~ **REVERTED** - Keeping original theme colors due to readability concerns (logo colors can be adjusted later)
 - [x] T006 Review `theme-integration-guide.md` and ensure all new components will use CSS custom properties
 
 **Checkpoint**: ✅ Foundation ready - character implementation can begin
