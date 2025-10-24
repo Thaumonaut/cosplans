@@ -1,15 +1,27 @@
 <!--
 Sync Impact Report:
-- Version change: 2.5.0 → 3.0.0 (MAJOR: New core principles added)
+- Version change: 3.0.0 → 3.1.0 (MINOR: UI/UX principles and resource model formalized)
 - Modified principles: 
-  * Added Principle I.5 (Reduce Overwhelm via Prioritization)
-  * Added Principle II.7 (Community Trust & Accountability - Reputation System)
-  * Added Principle III.5 (Flexible & Fair Monetization)
-  * Added Principle VI.7 (Spec-Driven Development Workflow)
-  * Added Principle VII.5 (Dependency-First Development)
-  * Added Principle VIII.5 (Solo Developer Efficiency & Cost Optimization)
-  * Updated Principle V.5 (AI is Assistive, Not Creative)
-- Added sections: 
+  * Added Principle V.6 (Inline Editing & Minimalist Data Entry)
+  * Added Principle V.7 (Character-Centric Resource Model)
+- Previous additions (v3.0.0):
+  * Principle I.5 (Reduce Overwhelm via Prioritization)
+  * Principle II.7 (Community Trust & Accountability - Reputation System)
+  * Principle III.5 (Flexible & Fair Monetization)
+  * Principle VI.7 (Spec-Driven Development Workflow)
+  * Principle VII.5 (Dependency-First Development)
+  * Principle VIII.5 (Solo Developer Efficiency & Cost Optimization)
+  * Principle V.5 (AI is Assistive, Not Creative)
+- Added sections (v3.1.0): 
+  * Inline editing design requirements (NO traditional forms, document-style layout)
+  * Flyout pattern for resource details (600px expandable, mobile fullscreen)
+  * Inline editing patterns (click to edit, blur to save, placeholder-driven)
+  * Visual reduction strategies (minimal borders, subtle backgrounds, embrace whitespace)
+  * Character as organizational hub (links to wigs/outfits/props/accessories)
+  * Resource relationship model (many-to-many via junction tables)
+  * Database schema for character-centric model
+  * External API integration requirements (AniList, RAWG, TMDB, Google Books)
+- Previous sections (v3.0.0):
   * Reputation System (tier-based accountability)
   * Temp/Event Teams (short-lived collaboration)
   * Monetization Strategy (0% commission, $5 Growth Premium)
@@ -18,13 +30,22 @@ Sync Impact Report:
   * AI Credit System (opt-in, cost-based)
   * Phased Release Strategy
 - Removed sections: None
-- Specs affected: All future specs must follow spec-driven workflow
+- Specs affected: 
+  * Spec 048 (Character-Resource Model) codifies V.6 and V.7 principles
+  * All future resource UIs MUST follow inline editing and flyout patterns
+  * All future specs must follow spec-driven workflow (VI.7)
 - Templates requiring updates:
-  * ⚠ spec-template.md - add reputation system requirements
-  * ⚠ plan-template.md - add cost optimization checkpoints
-  * ⚠ tasks-template.md - add dependency-first task ordering
-  * ⚠ quickstart.md - document spec-driven workflow
+  * ⚠ ui-design.md - ensure all mockups use inline editing and flyout patterns
+  * ⚠ spec-template.md - add inline editing UI requirements checklist
+  * ⚠ spec-template.md - add reputation system requirements (v3.0.0)
+  * ⚠ plan-template.md - add cost optimization checkpoints (v3.0.0)
+  * ⚠ tasks-template.md - add dependency-first task ordering (v3.0.0)
+  * ⚠ quickstart.md - document spec-driven workflow (v3.0.0)
 - Follow-up TODOs:
+  * Apply flyout pattern to all remaining resource detail pages (Props, Equipment, Outfits, Crew, Locations, Accessories)
+  * Implement character detail page as full-page hub (exception to flyout pattern)
+  * Refactor all traditional forms to inline editing interface
+  * Build reusable InlineEditField component library
   * Implement reputation calculation engine (Cloudflare Worker)
   * Build temp team creation and auto-archive system
   * Set up Stripe Connect for marketplace payments
@@ -301,6 +322,91 @@ follower growth. Supporting content calendars aligned with shoots enables teams 
 "shoot → edit → post" timelines holistically. Built-in hashtag and caption templates reduce
 friction for non-technical team members. Approval workflows prevent low-quality or off-brand
 posts while enabling team collaboration.
+
+### V.6. Inline Editing & Minimalist Data Entry
+
+All data entry interfaces MUST prioritize inline editing over traditional form fields to reduce visual clutter and stress. The system MUST present data as an evolving document with editable text fields, NOT as empty text boxes and input controls. Resource detail views MUST use placeholder text that is replaced with user values, creating a clean, readable interface that grows organically as users add information.
+
+**Design Requirements**:
+
+- **NO traditional forms**: Avoid pages filled with empty text boxes, dropdowns, and input controls
+- **Inline editing**: All fields editable in-place with single-click activation
+- **Placeholder-driven**: Empty fields show descriptive placeholder text, not empty boxes
+- **Document-style layout**: Information presented as readable paragraphs and sections, not forms
+- **Progressive disclosure**: Show fields as users need them, hide complexity until required
+- **Unified create/edit**: Same interface for creating and editing resources (flyout pattern)
+- **Visual hierarchy**: Use typography, spacing, and color to guide attention, not form borders
+
+**Flyout Pattern for Resource Details**:
+
+- All resource detail views (Wigs, Props, Equipment, Outfits, Crew, Locations, Accessories) MUST use expandable flyout panels that slide from the right
+- Flyouts MUST maintain context by keeping the overview page visible with blurred backdrop
+- Default flyout width: 600px (desktop), expandable to fullscreen for deep work
+- Mobile: Always fullscreen with slide-up animation and swipe-down to dismiss
+- Flyout header MUST include: resource name, status badge, expand/collapse button, menu (edit/delete)
+- Metadata section MUST use 2×2 grid layout for key fields (status, due date, budget, etc.)
+- Content organized in collapsible sections: Basic Info, Cost Tracking, Maintenance, Linked Resources
+- **Exception**: Character detail pages use full-page hub layout (not flyouts) because they serve as dashboards for multiple linked resources
+
+**Inline Editing Patterns**:
+
+- **Text fields**: Click text to edit, blur to save, Enter to confirm, Escape to cancel
+- **Dropdowns**: Present as readable text labels (e.g., "Status: In Progress"), click to reveal inline dropdown
+- **Numbers**: Display as formatted text (e.g., "$45.00"), click to edit with number input
+- **Dates**: Show as readable format (e.g., "March 15, 2024"), click to open date picker
+- **Textareas**: Auto-expand as user types, no fixed height boxes
+- **Multi-select**: Display as tag chips with remove buttons, click "Add" to reveal search/select
+
+**Visual Reduction Strategies**:
+
+- Remove all visible borders except on active editing state
+- Use subtle background colors to distinguish sections
+- Replace submit buttons with auto-save or single "Save" action button
+- Hide optional fields until user requests them ("Show advanced options")
+- Use icons sparingly, rely on clear labels and hierarchy
+- Embrace whitespace to create breathing room
+
+**Rationale**: Cosplay planning is already stressful with tight deadlines, complex logistics, and creative pressure. Traditional form-heavy interfaces add visual noise and cognitive load. Inline editing creates a calm, document-like experience where users focus on content, not interface controls. This approach mirrors successful tools like Notion, Linear, and Airtable that prioritize readability and reduce visual clutter. The flyout pattern maintains spatial context while providing focused editing space, reducing the mental overhead of navigation.
+
+### V.7. Character-Centric Resource Model
+
+The system MUST organize all cosplay resources (wigs, outfits, props, accessories, equipment, materials) around the central concept of **Characters**. Characters serve as organizational hubs linking related resources, tracking completion progress, managing budgets, and providing unified views of all assets needed for a costume. This model reflects the real-world cosplay workflow where creators think in terms of "building Character X" rather than managing disconnected items.
+
+**Character as Hub**:
+
+- Characters MUST link to multiple resources: outfits (1:1), wigs (many-to-many), props (many-to-many), accessories (many-to-many)
+- Character detail pages MUST display all linked resources grouped by type with visual cards
+- Character completion percentage MUST be calculated from linked resource statuses
+- Character budget tracking MUST support two modes: Personal (spending limit) and Commission (cost breakdown for client quotes)
+- Characters MUST store reference images from external APIs (AniList, RAWG, TMDB, Google Books) plus user uploads
+- Character search on outfit/wig/prop forms MUST autofill details from API (series, source medium, appearance description)
+
+**Resource Relationships**:
+
+- **Wigs**: Reusable across multiple characters (many-to-many via character_wigs junction table)
+- **Outfits**: Tied to specific character variation (one-to-one, includes version/medium tracking)
+- **Props**: Reusable across multiple characters (many-to-many via character_props junction table)
+- **Accessories**: Reusable across multiple characters (many-to-many via character_accessories junction table)
+- **Materials**: Allocated to characters via allocation table (tracks quantity used per character)
+- **Equipment**: Team-wide resources (photography gear), not character-specific
+
+**Database Schema**:
+
+- `characters` table: Central hub with character_name, series, source_medium, reference_images[], budget_mode, budget_limit, completion_percentage
+- `wigs` table: Independent wig tracking with color, length, fiber_type, status, cost breakdown, maintenance tracking
+- `character_wigs` junction: Links wigs to characters (many-to-many) with optional notes
+- Similar junction tables for props and accessories (character_props, character_accessories)
+- `outfits` table: Foreign key to characters (one-to-one), includes version/variation field
+
+**External API Integration**:
+
+- **Character create/edit pages** MUST have SeriesAutocomplete and CharacterAutocomplete components
+- **Outfit/wig/prop pages** MUST have simple character dropdown linking to local characters
+- API search MUST query: AniList (anime/manga), RAWG (video games), TMDB (movies/TV), Google Books
+- API results MUST autofill: series, source_medium, appearance_description, reference_images (from imageUrl)
+- Users MUST be able to create characters first, then link them to resources (not inline character creation during resource creation)
+
+**Rationale**: Cosplayers organize work around characters, not individual resources. A creator building "Tifa from Final Fantasy VII" thinks about the complete costume (wig + outfit + props + accessories) as a unified project, not disconnected inventory items. The character-centric model mirrors this mental model, reducing cognitive overhead and providing natural progress tracking. Junction tables enable realistic reuse patterns (e.g., one wig used for multiple characters, props shared across costumes). Budget tracking at the character level enables both personal project planning and commission quoting. External API integration reduces data entry friction by auto-filling character details from trusted sources.
 
 ### VI. Test-Driven Development
 
