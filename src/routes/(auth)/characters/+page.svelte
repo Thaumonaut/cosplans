@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { HelpCircle } from 'lucide-svelte';
+	import CharacterCard from '$lib/components/characters/CharacterCard.svelte';
 	
 	// Props
 	export let data: PageData;
@@ -211,31 +212,10 @@
 				</p>
 			</div>
 		{:else}
-			<!-- Character Grid (Coming in T028-T034) -->
-			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+			<!-- Character Grid -->
+			<div class="flex flex-wrap gap-6">
 				{#each filteredCharacters() as character (character.id)}
-					<div
-						class="rounded-lg p-4 border"
-						style="background: var(--theme-card-bg); border-color: var(--theme-border);"
-					>
-						<h3 class="font-semibold text-lg mb-2" style="color: var(--theme-foreground);">
-							{character.character_name}
-						</h3>
-						<p class="text-sm" style="color: var(--theme-sidebar-muted);">
-							{character.series}
-						</p>
-						<div class="mt-4">
-							<div class="text-xs mb-1" style="color: var(--theme-sidebar-muted);">
-								{character.completion_percentage || 0}% Complete
-							</div>
-							<div class="w-full h-2 rounded-full" style="background: var(--theme-border-subtle);">
-								<div
-									class="h-2 rounded-full transition-all duration-300"
-									style="background: var(--theme-primary); width: {character.completion_percentage || 0}%;"
-								></div>
-							</div>
-						</div>
-					</div>
+					<CharacterCard {character} />
 				{/each}
 			</div>
 		{/if}

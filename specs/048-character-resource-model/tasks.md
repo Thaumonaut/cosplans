@@ -105,13 +105,13 @@ All paths relative to repository root (`C:\Projects\Web\Vibe Coding\cosplans\`):
 
 ### Character Card Component
 
-- [ ] T028 [P] [US1] Create `src/lib/components/characters/CharacterCard.svelte` with 280×360px dimensions per ui-design.md
-- [ ] T029 [US1] In CharacterCard, display primary reference image (280×200px object-cover) or placeholder if no images
-- [ ] T030 [US1] Add glassmorphism overlay on hover with quick actions (Edit, Delete) using `var(--theme-card-bg)` with backdrop-filter
-- [ ] T031 [US1] Display character name (H3, JetBrains Mono SemiBold), series (secondary text), source medium badge
-- [ ] T032 [US1] Show completion percentage with progress bar (gentle green gradient `var(--theme-primary)` to `var(--theme-accent)`)
-- [ ] T033 [US1] Add smooth hover lift animation (-4px translate, shadow-lg, 200ms ease-out per stress-reducing design)
-- [ ] T034 [US1] On card click, navigate to `/characters/[id]` detail page
+- [x] T028 [P] [US1] Create `src/lib/components/characters/CharacterCard.svelte` with 280×360px dimensions per ui-design.md
+- [x] T029 [US1] In CharacterCard, display primary reference image (280×200px object-cover) or placeholder if no images
+- [x] T030 [US1] Add glassmorphism overlay on hover with quick actions (Edit, Delete) using `var(--theme-card-bg)` with backdrop-filter
+- [x] T031 [US1] Display character name (H3, JetBrains Mono SemiBold), series (secondary text), source medium badge
+- [x] T032 [US1] Show completion percentage with progress bar (gentle green gradient `var(--theme-primary)`)
+- [x] T033 [US1] Add smooth hover lift animation (-4px translate, shadow-lg, 200ms ease-out per stress-reducing design)
+- [x] T034 [US1] On card click, navigate to `/characters/[id]` detail page
 
 ### Character Detail Page (MVP: No Linked Resources Yet)
 
