@@ -34,7 +34,7 @@
 	
 	// Reactive filtered wigs
 	let filteredWigs = $derived(() => {
-		let results = data.wigs || [];
+		let results = (data.wigs || []) as typeof data.wigs;
 		
 		// Search filter
 		if (debouncedSearchQuery.trim()) {

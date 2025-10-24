@@ -278,6 +278,8 @@ export interface Wig extends BaseResource {
   vendor_id?: string // FK to vendors table (nullable)
   updated_by?: string
   search_vector: string
+  // Joined data (not in DB, populated by queries)
+  linked_characters?: Array<{ id: string; character_name: string; series?: string }>
 }
 
 // Character-Wig junction table

@@ -92,17 +92,13 @@
 			
 			const response = await fetch('?/create', {
 				method: 'POST',
-				body: formData,
-				redirect: 'manual'
+				body: formData
 			});
 			
-			// Handle redirect
-			if (response.status >= 300 && response.status < 400) {
-				const location = response.headers.get('location');
-				if (location) {
-					window.location.href = location;
-					return;
-				}
+			// Check if response is a redirect (SvelteKit will handle it)
+			if (response.redirected) {
+				window.location.href = response.url;
+				return;
 			}
 			
 			if (!response.ok) {
@@ -110,6 +106,9 @@
 				errorMessage = result.error || 'Failed to create wig';
 				return;
 			}
+			
+			// Success - should have redirected by now
+			window.location.href = '/wigs';
 		} catch (err) {
 			console.error('Error creating wig:', err);
 			errorMessage = 'Failed to create wig. Please try again.';

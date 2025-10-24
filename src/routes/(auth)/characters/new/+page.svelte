@@ -73,28 +73,25 @@
 			formData.append('reference_images', JSON.stringify([selectedApiImage]));
 		}
 			
-			const response = await fetch('?/create', {
-				method: 'POST',
-				body: formData,
-				redirect: 'manual'
-			});
-			
-			// Handle redirect
-			if (response.status >= 300 && response.status < 400) {
-				const location = response.headers.get('location');
-				if (location) {
-					window.location.href = location;
-					return;
-				}
-			}
-			
-			if (!response.ok) {
-				const result = await response.json();
-				errorMessage = result.error || 'Failed to create character';
-				return;
-			}
-			
-			// Success - redirect will be handled by server
+		const response = await fetch('?/create', {
+			method: 'POST',
+			body: formData
+		});
+		
+		// Check if response is a redirect (SvelteKit will handle it)
+		if (response.redirected) {
+			window.location.href = response.url;
+			return;
+		}
+		
+		if (!response.ok) {
+			const result = await response.json();
+			errorMessage = result.error || 'Failed to create character';
+			return;
+		}
+		
+		// Success - should have redirected by now
+		window.location.href = '/characters';
 		} catch (err) {
 			console.error('Error creating character:', err);
 			errorMessage = 'Failed to create character. Please try again.';
