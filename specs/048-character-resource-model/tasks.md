@@ -93,15 +93,15 @@ All paths relative to repository root (`C:\Projects\Web\Vibe Coding\cosplans\`):
 
 ### Character Overview Page
 
-- [ ] T019 [P] [US1] Create `src/routes/(auth)/characters/+page.svelte` with grid layout per ui-design.md (clean, spacious, 64px section gaps)
-- [ ] T020 [P] [US1] Create `src/routes/(auth)/characters/+page.server.ts` load function to fetch characters via character-service
-- [ ] T021 [US1] In characters overview page, add page header with JetBrains Mono Bold H1 "CHARACTERS" per ui-design.md typography
-- [ ] T022 [US1] Add hint icon next to heading with tooltip explaining character hub concept (stress-reducing design, not info card)
-- [ ] T023 [US1] Add search input with 300ms debounce for real-time filtering by character name, series, or aliases
-- [ ] T024 [US1] Add filter dropdown for source medium (Anime, Manga, Video Game, Movie, TV Show, Book, Comic, Stage, Original)
-- [ ] T025 [US1] Add filter dropdown for completion status (All, 0-25%, 26-50%, 51-75%, 76-99%, 100%)
-- [ ] T026 [US1] Add "Create Character" button (primary style with logo green #19DA5A, gentle hover to #21F96A)
-- [ ] T027 [US1] Display empty state when no characters exist: illustration + "Create your first character to start planning" with primary action button
+- [x] T019 [P] [US1] Create `src/routes/(auth)/characters/+page.svelte` with grid layout per ui-design.md (clean, spacious, 64px section gaps)
+- [x] T020 [P] [US1] Create `src/routes/(auth)/characters/+page.server.ts` load function to fetch characters via character-service
+- [x] T021 [US1] In characters overview page, add page header with JetBrains Mono Bold H1 "CHARACTERS" per ui-design.md typography
+- [x] T022 [US1] Add hint icon next to heading with tooltip explaining character hub concept (stress-reducing design, not info card)
+- [x] T023 [US1] Add search input with 300ms debounce for real-time filtering by character name, series, or aliases
+- [x] T024 [US1] Add filter dropdown for source medium (Anime, Manga, Video Game, Movie, TV Show, Book, Comic, Stage, Original)
+- [x] T025 [US1] Add filter dropdown for completion status (All, 0-25%, 26-50%, 51-75%, 76-99%, 100%)
+- [x] T026 [US1] Add "Create Character" button (primary style with theme green var(--theme-primary))
+- [x] T027 [US1] Display empty state when no characters exist: illustration + "Create your first character to start planning" with primary action button
 
 ### Character Card Component
 
