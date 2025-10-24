@@ -1,4 +1,5 @@
 import { characterService } from '$lib/server/resources/character-service';
+import { getAdminClient } from '$lib/server/supabase/admin-client';
 import type { Actions } from './$types';
 import { error, fail, redirect } from '@sveltejs/kit';
 
@@ -34,8 +35,20 @@ export const actions: Actions = {
 		const budgetLimitStr = formData.get('budget_limit')?.toString();
 		const budgetLimit = budgetLimitStr ? parseFloat(budgetLimitStr) : undefined;
 		
-		// Get team_id from session (assuming it's stored in locals or can be fetched)
-		const teamId = locals.currentTeamId || session.user.id; // Fallback to user ID if no team
+		// Get user's first team (or default team) - same pattern as other pages
+		const adminClient = getAdminClient();
+		const { data: memberships } = await adminClient
+			.from('team_members')
+			.select('team_id')
+			.eq('user_id', session.user.id)
+			.limit(1)
+			.single();
+		
+		if (!memberships) {
+			return fail(400, { error: 'No team found. Please create or join a team first.' });
+		}
+		
+		const teamId = memberships.team_id;
 		
 		try {
 			// Check for duplicate (character_name + series combination)

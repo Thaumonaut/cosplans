@@ -1,28 +1,46 @@
 import { characterService } from '$lib/server/resources/character-service';
+import { getAdminClient } from '$lib/server/supabase/admin-client';
 import type { PageServerLoad, Actions } from './$types';
 import { error, fail, redirect } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
-	const session = await locals.safeGetSession();
+	const { session, user } = await locals.safeGetSession();
 	
-	if (!session?.user) {
+	if (!session || !user) {
 		throw error(401, 'Unauthorized');
 	}
 	
-	try {
-		const character = await characterService.getById(params.id);
-		
-		if (!character) {
-			throw error(404, 'Character not found');
-		}
-		
-		return {
-			character
-		};
-	} catch (err) {
-		console.error('Error loading character:', err);
-		throw error(500, 'Failed to load character');
+	// Verify user has access to this character via team membership
+	const adminClient = getAdminClient();
+	const { data: character, error: characterError } = await adminClient
+		.from('characters')
+		.select(`
+			*,
+			teams!inner(id, name)
+		`)
+		.eq('id', params.id)
+		.single();
+	
+	if (characterError || !character) {
+		console.error('[Character Detail] Error:', characterError);
+		throw error(404, 'Character not found');
 	}
+	
+	// Verify user is member of this character's team
+	const { data: membership } = await adminClient
+		.from('team_members')
+		.select('team_id')
+		.eq('user_id', user.id)
+		.eq('team_id', character.team_id)
+		.single();
+	
+	if (!membership) {
+		throw error(403, 'You do not have access to this character');
+	}
+	
+	return {
+		character
+	};
 };
 
 export const actions: Actions = {
