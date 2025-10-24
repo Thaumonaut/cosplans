@@ -323,6 +323,48 @@ As a developer maintaining the system, I want this specification to supersede an
 - **FR-147**: Post-event reminders MUST be dismissible: user can mark as done or snooze for later
 - **FR-148**: System MUST track last cleaned/maintained date per resource for future care scheduling
 
+**UI/UX Requirements (Information Architecture & Layout):**
+- **FR-149**: System MUST implement mobile-first responsive design for all resource pages: touch-friendly targets (44px minimum), collapsible sections, bottom navigation, swipe gestures
+- **FR-150**: Character detail page MUST use hub layout: character summary card at top, linked resources grouped by type below (Outfits, Wigs, Props, Accessories), progress indicators prominent, budget summary visible
+- **FR-151**: All resource overview pages MUST use card-based layouts with consistent information density: primary image/photo, title, status badge, key metadata (cost, linked character, completion %), action buttons
+- **FR-152**: All resource detail pages MUST follow consistent layout pattern: hero section (photo gallery + key stats), tabbed content (Details, Tasks, Materials, Photos, History), sticky action bar
+- **FR-153**: Material allocation UI MUST use inline modal pattern: click "Add Material" → modal with search + quantity input + cost calculation → preview before save → update character budget in real-time
+- **FR-154**: Budget display MUST adapt to mode: Personal mode shows progress bar (spent vs limit with 80%/100% warnings), Commission mode shows cost breakdown table (materials + labor + markup = quote)
+- **FR-155**: Photo galleries MUST support 1-10 photos with: primary photo display, thumbnail strip, lightbox view, drag-to-reorder, upload progress indicators, compression warnings (>5MB)
+- **FR-156**: Task lists MUST use checkbox pattern with: drag-to-reorder, due date badges (overdue in red, due soon in yellow), progress bar (X of Y complete), quick-add input at bottom
+- **FR-157**: Search/filter controls MUST use faceted search pattern: search input with debounce (300ms), filter chips (dismissible), saved filter presets, result count display, clear all action
+- **FR-158**: Data tables (materials inventory, purchase history, rate history) MUST be responsive: card layout on mobile (<768px), table on desktop, sortable columns, pagination (25/50/100 per page)
+
+**UI/UX Requirements (Progressive Disclosure & Visual Hierarchy):**
+- **FR-159**: System MUST use progressive disclosure to reduce overwhelm: summary cards show 3-5 key fields, "Show More" expands to full details, advanced features hidden behind "Advanced" section
+- **FR-160**: Character detail MUST prioritize by user goal: completion percentage and next actions at top, detailed resource lists below fold, budget/events in sidebar (desktop) or tabs (mobile)
+- **FR-161**: Resource creation flows MUST use smart defaults: pre-fill character link from context, default status to "Planned", optional fields collapsed initially, "Quick Create" vs "Full Form" options
+- **FR-162**: Complex forms (outfit with patterns, wig with styling) MUST use stepped progression: Basic Info → Photos → Tasks → Materials → Review, save draft at any step, progress indicator
+- **FR-163**: Linked resource pickers (character linking, material allocation) MUST show contextual previews: thumbnail + name + key stat (e.g., "Black Satin - 3 yards available"), recent items first
+- **FR-164**: Empty states MUST guide action: illustration + descriptive text + primary action button (e.g., "No wigs yet → Get started with your first wig"), tutorial links for complex features
+- **FR-165**: Status indicators MUST use consistent color system: success (green), warning (yellow), error (red), info (blue), neutral (gray), with icons for accessibility
+
+**UI/UX Requirements (Mobile & Touch Patterns):**
+- **FR-166**: Navigation MUST adapt to screen size: desktop uses sidebar (collapsible sections per spec 041), mobile uses bottom tab bar (5 primary tabs) + hamburger menu (secondary items)
+- **FR-167**: Swipe gestures MUST be supported on mobile: swipe card left for quick actions (edit, delete), swipe right to mark complete, swipe down to refresh lists, pinch to zoom photos
+- **FR-168**: Touch targets MUST meet accessibility standards: 44×44px minimum, 8px spacing between targets, visual feedback on touch (ripple or scale), error tolerance for fat fingers
+- **FR-169**: Long-press MUST trigger contextual actions: long-press card for quick menu (edit, duplicate, delete, share), long-press photo for download/delete, long-press text for copy
+- **FR-170**: Modals MUST be mobile-friendly: full-screen on mobile (<768px), slide up animation, swipe-down to dismiss, close button top-right, actions bottom (fixed bar)
+
+**UI/UX Requirements (Performance & Feedback):**
+- **FR-171**: Loading states MUST provide feedback: skeleton screens for lists (shimmer effect), progress bars for uploads, spinner for mutations, optimistic updates where safe (task checkbox)
+- **FR-172**: Error states MUST be actionable: error message with explanation, retry button, fallback action (e.g., "Upload failed → Save draft and retry later"), error log for debugging
+- **FR-173**: Success feedback MUST be subtle: toast notifications (3s auto-dismiss), success checkmark animation, updated data reflects immediately, undo option for destructive actions (5s window)
+- **FR-174**: Offline support MUST degrade gracefully: cached data displays with "Offline" badge, mutations queue for sync, critical features work offline (view, task checkbox), sync indicator
+- **FR-175**: Performance MUST be optimized for mobile: lazy load images below fold, virtualize long lists (100+ items), debounce search/filter, compress photos before upload
+
+**UI/UX Requirements (Accessibility & Inclusive Design):**
+- **FR-176**: Keyboard navigation MUST be fully supported: tab order logical, focus indicators visible, shortcuts documented (e.g., Ctrl+K for search), escape closes modals, arrow keys navigate lists
+- **FR-177**: Screen reader support MUST be comprehensive: semantic HTML (nav, main, article), ARIA labels for icons, live regions for notifications, form labels explicit, error associations
+- **FR-178**: Color contrast MUST meet WCAG AA: 4.5:1 for normal text, 3:1 for large text, status not conveyed by color alone (icons + text), theme switcher supports high contrast mode
+- **FR-179**: Text MUST be readable: 16px minimum body text, 1.5 line height, max 75 characters per line, resizable up to 200% without horizontal scroll, dyslexia-friendly font option
+- **FR-180**: Interactions MUST have alternatives: keyboard shortcuts have button equivalents, gestures have button fallbacks, required fields clearly marked, error prevention (confirmation dialogs)
+
 ### Key Entities
 
 - **Character**: Central organizational entity representing a character to cosplay. Contains character name, series, source medium, appearance description, personality notes, aliases, reference images (R2 URLs). Acts as hub for linking all related resources (outfits, wigs, props, accessories). Tracks completion percentage based on linked resources.
