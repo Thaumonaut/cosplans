@@ -3,7 +3,7 @@
 **Branch**: `048-character-resource-model` | **Date**: October 24, 2025 | **Spec**: [spec.md](./spec.md)  
 **Input**: Feature specification from `/specs/048-character-resource-model/spec.md`
 
-**Note**: This plan covers the comprehensive resource management system consolidating specs 045, 046, and 047 into a unified character-centric model with 12 resource types and 148 functional requirements.
+**Note**: This plan covers the comprehensive resource management system consolidating specs 045, 046, and 047 into a unified character-centric model with 12 resource types and 180 functional requirements (148 data/business logic + 32 UI/UX).
 
 ## Summary
 
@@ -56,9 +56,27 @@ This feature implements a comprehensive, character-centric resource management s
 
 **Scale/Scope**: 
 - 12 resource types with consistent CRUD patterns
-- 148 functional requirements across 7 major feature areas
+- 180 functional requirements across 8 major feature areas (including 32 UI/UX FRs)
 - 5 junction tables for many-to-many relationships
 - Universal systems: Receipts, Post-Event Care, Material Allocation
+
+**UI/UX Requirements (FR-149 to FR-180)**:
+- Mobile-first responsive design (44px touch targets, swipe gestures, bottom nav)
+- Component library: Cards, forms, modals, badges, progress indicators
+- Interaction patterns: Quick actions, drag-drop, command palette (Cmd+K), filters
+- Animations: Page transitions, micro-interactions, celebrations (confetti on 100%)
+- Accessibility: Keyboard nav, screen readers, WCAG AA contrast, readable text
+- Performance: Skeleton screens, lazy load, virtualized lists, optimistic updates
+- **Theme Integration**: All UI MUST use existing CSS custom properties (`--theme-*`) for colors, NOT hardcoded values
+- **Design Document**: See `ui-design.md` for comprehensive visual system and component specifications
+
+**Existing Theme System**:
+- **Technology**: CSS custom properties (CSS variables) for dynamic theming
+- **Built-in Themes**: 8 theme variants (light-default, light-green, light-warm, light-cool, dark-default, dark-cozy, dark-cosmic, dark-fantasy)
+- **Custom Theme Support**: Users can create custom themes via theme builder
+- **CSS Variables**: ~40 properties covering backgrounds, borders, sidebar, header, status colors, interactions
+- **Key Variables**: `--theme-primary`, `--theme-accent`, `--theme-background`, `--theme-foreground`, `--theme-sidebar-*`, `--theme-card-bg`, `--theme-success/error/warning/info`
+- **Integration Requirement**: New UI components MUST reference theme variables, not hardcoded hex colors
 
 ## Constitution Check
 
@@ -113,11 +131,13 @@ This feature implements a comprehensive, character-centric resource management s
 
 ```text
 specs/048-character-resource-model/
-├── spec.md              # Feature specification (148 FRs)
+├── spec.md              # Feature specification (180 FRs: 148 business + 32 UI/UX)
 ├── plan.md              # This file (implementation plan)
-├── research.md          # Phase 0 output (technical research)
+├── ui-design.md         # UI/UX design document (comprehensive visual system)
+├── research.md          # Phase 0 output (technical research + theme integration)
 ├── data-model.md        # Phase 1 output (database schema)
 ├── quickstart.md        # Phase 1 output (developer guide)
+├── theme-integration-guide.md  # Phase 1 output (component styling with theme variables)
 ├── contracts/           # Phase 1 output (API contracts)
 │   └── openapi.yaml     # REST API spec for resources
 ├── tasks.md             # Phase 2 output (task breakdown - NOT YET CREATED)
@@ -152,7 +172,7 @@ src/
 │   │   │   ├── TaskList.svelte               # NEW: Shared task component
 │   │   │   ├── PhotoGallery.svelte           # ENHANCE: Support 1-10 photos
 │   │   │   └── PostEventCareReminder.svelte  # NEW: Wash/clean reminders
-│   │   └── ui/                   # Existing themed components
+│   │   └── ui/                   # Existing themed components (ALL use CSS custom properties)
 │   ├── server/
 │   │   └── resources/
 │   │       ├── character-service.ts        # NEW: Character CRUD + completion calc
@@ -213,14 +233,16 @@ tests/
 
 > **Fill ONLY if Constitution Check has violations that must be justified**
 
-**⚠️ COMPLEXITY WARNING**: This feature has exceptionally high scope (148 FRs, 12 resource types). Justification for constitutional compliance despite complexity:
+**⚠️ COMPLEXITY WARNING**: This feature has exceptionally high scope (180 FRs, 12 resource types + comprehensive UI/UX). Justification for constitutional compliance despite complexity:
 
 **VIII.5 Solo Developer Efficiency Concern**:
-- **Issue**: 12 resource types = significant implementation surface
+- **Issue**: 12 resource types + 32 UI/UX requirements = significant implementation surface
 - **Justification**: 
   - Consolidates 3 separate specs (045, 046, 047) avoiding future rework
   - Establishes consistent patterns reused across all resources (CRUD, tasks, photos, vendor linking)
-  - Universal systems (receipts, material allocation) reduce per-resource complexity
+  - Universal systems (receipts, material allocation, theme integration) reduce per-resource complexity
+  - **UI/UX leverage**: Existing theme system (8 variants) + component library allows rapid UI development
+  - All new components use existing CSS custom properties - NO new theming infrastructure needed
   - Phased implementation via dependency ordering spreads work across sprints
 - **Mitigation Strategy**:
   - Phase 1: Foundation (Materials, Vendors, Tools - no dependencies)
@@ -238,7 +260,8 @@ tests/
 - Weather API → (location warnings)
 
 **Complexity Score**: 9/10 (Very High)  
-**Risk Level**: Medium (high scope mitigated by clear patterns and phasing)
+**Risk Level**: Medium (high scope mitigated by clear patterns, existing theme system, and phasing)  
+**UI/UX Impact**: Moderate (leverages existing theme system, no new theming infrastructure required)
 
 ## Phase 0: Research
 
@@ -307,6 +330,22 @@ tests/
    - **Decision criteria**: Migration complexity, schema flexibility, current vs future needs
    - **Output**: Vendor schema design + marketplace extension plan
 
+9. **UI Theme System Integration** (NEW):
+   - **Question**: How to implement vibrant, youth-oriented UI design (per ui-design.md) while maintaining compatibility with all 8 existing themes?
+   - **Requirements**:
+     - All components MUST use CSS custom properties (`--theme-*`) NOT hardcoded colors
+     - Gradients in ui-design.md (purple-pink, mesh gradients) map to existing `--theme-primary` + `--theme-accent`
+     - Glassmorphism effects use `--theme-card-bg` (already has opacity in themes)
+     - Status colors map to existing `--theme-success/error/warning/info`
+     - New components work in both light and dark mode
+   - **Challenge**: ui-design.md specifies specific hex colors (#8B5CF6 purple, #EC4899 pink) - how to make these theme-aware?
+   - **Options**:
+     - **A**: Extend theme variants with new variables (--theme-gradient-start, --theme-gradient-end) - requires migration
+     - **B**: Use existing --theme-primary + --theme-accent everywhere - simpler, works now
+     - **C**: Hybrid: Use existing variables, add new variables only for complex gradients (e.g., mesh backgrounds)
+   - **Decision criteria**: Backwards compatibility, theme customization flexibility, implementation complexity
+   - **Output**: Component styling pattern + theme variable mapping guide + updated theme types if needed
+
 ### Research Outputs
 
 **Generated in**: `research.md` (created by this plan execution)
@@ -321,7 +360,17 @@ tests/
 - **Alternatives Considered**: [what else was evaluated]
 - **Integration Pattern**: [code pattern + caching strategy]
 
-[... repeat for all 8 research questions]
+[... repeat for all 9 research questions]
+
+## Decision 9: UI Theme System Integration
+- **Chosen**: [Option A/B/C]
+- **Theme Variable Mapping**:
+  - Brand gradient → `var(--theme-primary)` to `var(--theme-accent)`
+  - Card backgrounds → `var(--theme-card-bg)`
+  - Status colors → `var(--theme-success/error/warning/info)`
+  - [... complete mapping]
+- **Component Styling Pattern**: [Example Svelte component with theme variables]
+- **New Theme Variables**: [If Option A or C chosen]
 ```
 
 ## Phase 1: Design & Contracts
@@ -433,6 +482,36 @@ tests/
 
 **Generated in**: `quickstart.md`
 
+### UI Theme Integration Guide
+
+**Purpose**: Document how to style new components using the existing theme system
+
+**Contents**:
+1. **Theme Variable Reference**: Complete list of available `--theme-*` variables with examples
+2. **Component Styling Patterns**: 
+   - Card components: Use `var(--theme-card-bg)` for backgrounds
+   - Buttons: Use `var(--theme-primary)` and `var(--theme-primary-hover)`
+   - Gradients: Combine `var(--theme-primary)` → `var(--theme-accent)`
+   - Status indicators: Use `var(--theme-success/error/warning/info)`
+3. **Glassmorphism Pattern**: How to use existing `rgba()` backgrounds + backdrop-filter
+4. **Dark/Light Mode**: Testing components across all 8 themes
+5. **Bad Examples**: What NOT to do (hardcoded hex colors, theme-specific logic)
+6. **Good Examples**: Svelte component snippets with proper theme variable usage
+
+**Example snippet**:
+```svelte
+<!-- ❌ BAD: Hardcoded colors -->
+<button style="background: #8B5CF6; color: white;">Save</button>
+
+<!-- ✅ GOOD: Theme variables -->
+<button style="background: var(--theme-primary); color: var(--theme-foreground);">Save</button>
+
+<!-- ✅ GREAT: Gradient using theme variables -->
+<button style="background: linear-gradient(135deg, var(--theme-primary), var(--theme-accent));">Save</button>
+```
+
+**Generated in**: `theme-integration-guide.md`
+
 ### Agent Context Update
 
 **Command**: `.specify/scripts/powershell/update-agent-context.ps1 -AgentType cursor-agent`
@@ -456,8 +535,11 @@ tests/
 This plan document is complete. The next command is `/speckit.tasks` to generate the task breakdown.
 
 **Files generated**:
-- ✅ `plan.md` (this file)
-- ⏭️ `research.md` (awaiting research execution)
+- ✅ `spec.md` (180 functional requirements)
+- ✅ `plan.md` (this file - updated with theme integration)
+- ✅ `ui-design.md` (comprehensive visual system + component library)
+- ⏭️ `research.md` (awaiting research execution - includes theme integration decision)
 - ⏭️ `data-model.md` (awaiting design)
+- ⏭️ `theme-integration-guide.md` (awaiting design - component styling patterns)
 - ⏭️ `contracts/openapi.yaml` (awaiting design)
 - ⏭️ `quickstart.md` (awaiting design)
