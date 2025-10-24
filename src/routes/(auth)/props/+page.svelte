@@ -4,8 +4,6 @@
   import LifecycleStateBadge from '$lib/components/resources/LifecycleStateBadge.svelte';
   export let data;
   
-  let showHelp = false;
-  
   // Calculate stats
   $: stats = {
     total: data.props.length,
@@ -13,6 +11,8 @@
     ready: data.props.filter(p => p.status === 'ready' || p.status === 'owned').length,
     inProgress: data.props.filter(p => p.status === 'in_progress' || p.status === 'planned').length
   };
+  
+  let showHelp = false;
 </script>
 
 <div class="space-y-6">
@@ -20,9 +20,7 @@
   <div class="flex items-center justify-between">
     <div>
       <div class="flex items-center gap-3">
-        <h1 class="text-3xl font-bold" style="color: var(--theme-foreground);">
-          Props Catalog
-        </h1>
+        <h1 class="text-3xl font-bold" style="color: var(--theme-foreground);">Props Catalog</h1>
         <button
           type="button"
           class="relative p-1 rounded-full transition-colors hover:bg-[var(--theme-sidebar-hover)]"
@@ -38,8 +36,8 @@
               style="background: var(--theme-background); border-color: var(--theme-sidebar-border); color: var(--theme-foreground);"
             >
               <p class="text-sm" style="color: var(--theme-sidebar-muted);">
-                Track costume accessories and props with lifecycle states and storage. 
-                Organize props by character and series, and monitor their condition and availability.
+                Manage costume accessories, weapons, and other props. Track lifecycle states from planning through completion, 
+                organize by character or series, and monitor storage locations to keep everything organized.
               </p>
             </div>
           {/if}

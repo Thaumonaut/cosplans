@@ -21,7 +21,7 @@
 	class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2"
 	style="background: var(--theme-input-bg); color: var(--theme-foreground); border-color: var(--theme-border);"
 	on:input
-	onchange
-	onblur
-	onfocus
+	on:change
+	on:blur
+	on:focus
 ></textarea>

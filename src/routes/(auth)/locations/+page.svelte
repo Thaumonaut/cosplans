@@ -3,8 +3,6 @@
   import { Plus, MapPin, Star, Building, Map, Navigation, HelpCircle } from 'lucide-svelte';
   export let data;
   
-  let showHelp = false;
-  
   // Calculate stats
   $: stats = {
     total: data.locations.length,
@@ -12,6 +10,8 @@
     favorites: data.locations.filter(l => l.is_favorite).length,
     withAddress: data.locations.filter(l => l.address).length
   };
+  
+  let showHelp = false;
 </script>
 
 <div class="space-y-6">
@@ -19,9 +19,7 @@
   <div class="flex items-center justify-between">
     <div>
       <div class="flex items-center gap-3">
-        <h1 class="text-3xl font-bold" style="color: var(--theme-foreground);">
-          Location Library
-        </h1>
+        <h1 class="text-3xl font-bold" style="color: var(--theme-foreground);">Location Library</h1>
         <button
           type="button"
           class="relative p-1 rounded-full transition-colors hover:bg-[var(--theme-sidebar-hover)]"
@@ -37,8 +35,9 @@
               style="background: var(--theme-background); border-color: var(--theme-sidebar-border); color: var(--theme-foreground);"
             >
               <p class="text-sm" style="color: var(--theme-sidebar-muted);">
-                Maintain a library of shoot locations with photos, addresses, and accessibility notes. 
-                Track contact information, parking details, and other important logistics for each location.
+                Maintain a comprehensive library of shoot locations including studios, outdoor spaces, and convention centers. 
+                Store addresses, contact information, parking details, and accessibility notes. Mark favorites for quick access 
+                to your go-to locations.
               </p>
             </div>
           {/if}
