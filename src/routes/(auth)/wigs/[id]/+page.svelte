@@ -1,368 +1,511 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { Trash2, Sparkles } from 'lucide-svelte';
+	import { goto } from '$app/navigation';
+	import { X, Plus } from 'lucide-svelte';
+	import ResourceFlyout from '$lib/components/ui/ResourceFlyout.svelte';
+	import FlyoutSection from '$lib/components/ui/FlyoutSection.svelte';
+	import MetadataField from '$lib/components/ui/MetadataField.svelte';
 	import InlineEditField from '$lib/components/ui/InlineEditField.svelte';
 	import ThemedTextarea from '$lib/components/ui/ThemedTextarea.svelte';
-	import CharacterPicker from '$lib/components/shared/CharacterPicker.svelte';
-	
-	// Props
-	type Props = {
-		data: PageData;
-	};
+	import { Calendar, DollarSign, Tag } from 'lucide-svelte';
+
+	type Props = { data: PageData };
 	let { data }: Props = $props();
-	
-	// State
-	let wig = $state(data.wig);
-	let showDeleteConfirm = $state(false);
+
+	const isNew = data.isNew;
 	let isSaving = $state(false);
+	let errorMessage = $state('');
 	
-	// Wig status options
-	const statusOptions = [
-		{ value: 'planned', label: 'Planned', color: '#3b82f6' },
-		{ value: 'ordered', label: 'Ordered', color: '#8b5cf6' },
-		{ value: 'received', label: 'Received', color: '#06b6d4' },
-		{ value: 'in_progress', label: 'In Progress', color: '#f59e0b' },
-		{ value: 'completed', label: 'Completed', color: 'var(--theme-success)' },
-		{ value: 'needs_restyling', label: 'Needs Restyling', color: '#f97316' },
-		{ value: 'damaged', label: 'Damaged', color: 'var(--theme-error)' }
-	];
-	
+	// Form state
+	let wigName = $state(data.wig?.wig_name || '');
+	let color = $state(data.wig?.color || '');
+	let length = $state(data.wig?.length || 'medium');
+	let fiberType = $state(data.wig?.fiber_type || 'synthetic');
+	let baseWigBrand = $state(data.wig?.base_wig_brand || '');
+	let status = $state(data.wig?.status || 'planned');
+	let baseWigCost = $state<number | null>(data.wig?.base_wig_cost || null);
+	let stylingCost = $state<number | null>(data.wig?.styling_cost || null);
+	let condition = $state(data.wig?.condition || '');
+	let maintenanceNotes = $state(data.wig?.maintenance_notes || '');
+	let storageLocation = $state(data.wig?.storage_location || '');
+	let storageMethod = $state(data.wig?.storage_method || '');
+	let linkedCharacterIds = $state<string[]>(
+		data.linkedCharacters?.map((c: any) => c.id) || []
+	);
+
 	const lengthOptions = [
 		{ value: 'short', label: 'Short' },
 		{ value: 'medium', label: 'Medium' },
 		{ value: 'long', label: 'Long' },
 		{ value: 'extra_long', label: 'Extra Long' }
 	];
-	
+
 	const fiberTypeOptions = [
 		{ value: 'synthetic', label: 'Synthetic' },
 		{ value: 'human_hair', label: 'Human Hair' },
 		{ value: 'blend', label: 'Blend' }
 	];
-	
+
+	const statusOptions = [
+		{ value: 'planned', label: 'Planned' },
+		{ value: 'ordered', label: 'Ordered' },
+		{ value: 'received', label: 'Received' },
+		{ value: 'in_progress', label: 'In Progress' },
+		{ value: 'completed', label: 'Completed' },
+		{ value: 'needs_restyling', label: 'Needs Restyling' },
+		{ value: 'damaged', label: 'Damaged' }
+	];
+
 	const conditionOptions = [
+		{ value: '', label: 'Not set' },
 		{ value: 'pristine', label: 'Pristine' },
 		{ value: 'good', label: 'Good' },
 		{ value: 'needs_care', label: 'Needs Care' },
 		{ value: 'damaged', label: 'Damaged' }
 	];
-	
-	// Save changes to server
-	async function saveChanges(field: string, value: any) {
-		if (isSaving) return;
-		
+
+	// Total cost
+	let totalCost = $derived((baseWigCost || 0) + (stylingCost || 0));
+
+	// Character management
+	function addCharacter(characterId: string) {
+		if (!linkedCharacterIds.includes(characterId)) {
+			linkedCharacterIds = [...linkedCharacterIds, characterId];
+		}
+	}
+
+	function removeCharacter(characterId: string) {
+		linkedCharacterIds = linkedCharacterIds.filter(id => id !== characterId);
+	}
+
+	// Save (create or update)
+	async function handleSave() {
+		// Validation
+		if (!wigName.trim()) {
+			errorMessage = 'Wig name is required';
+			return;
+		}
+		if (!color.trim()) {
+			errorMessage = 'Color is required';
+			return;
+		}
+
 		isSaving = true;
+		errorMessage = '';
+
 		try {
 			const formData = new FormData();
-			formData.append(field, value?.toString() || '');
-			
-			const response = await fetch('?/update', {
-				method: 'POST',
-				body: formData,
-				redirect: 'manual'
-			});
-			
-			if (response.status >= 300 && response.status < 400) {
-				const location = response.headers.get('location');
-				if (location) {
-					window.location.href = location;
-					return;
-				}
+			formData.append('wig_name', wigName);
+			formData.append('color', color);
+			formData.append('length', length);
+			formData.append('fiber_type', fiberType);
+			if (baseWigBrand) formData.append('base_wig_brand', baseWigBrand);
+			formData.append('status', status);
+			if (baseWigCost !== null) formData.append('base_wig_cost', baseWigCost.toString());
+			if (stylingCost !== null) formData.append('styling_cost', stylingCost.toString());
+			if (condition) formData.append('condition', condition);
+			if (maintenanceNotes) formData.append('maintenance_notes', maintenanceNotes);
+			if (storageLocation) formData.append('storage_location', storageLocation);
+			if (storageMethod) formData.append('storage_method', storageMethod);
+			if (linkedCharacterIds.length > 0) {
+				formData.append('character_ids', JSON.stringify(linkedCharacterIds));
 			}
-			
-			if (!response.ok) {
-				const result = await response.json();
-				alert(result.error || 'Failed to save changes');
+
+			const action = isNew ? '?/create' : '?/update';
+			const response = await fetch(action, {
+				method: 'POST',
+				body: formData
+			});
+
+			if (response.redirected) {
+				window.location.href = response.url;
 				return;
 			}
-			
-			// Update local state
-			wig = { ...wig, [field]: value };
+
+			if (!response.ok) {
+				const result = await response.json();
+				errorMessage = result.error || `Failed to ${isNew ? 'create' : 'update'} wig`;
+				return;
+			}
+
+			// Success
+			if (!isNew) {
+				// Update local state
+				alert('Wig updated successfully');
+			} else {
+				// Should have redirected
+				window.location.href = '/wigs';
+			}
 		} catch (err) {
-			console.error('Error saving:', err);
-			alert('Failed to save changes');
+			console.error('Error saving wig:', err);
+			errorMessage = `Failed to ${isNew ? 'create' : 'update'} wig. Please try again.`;
 		} finally {
 			isSaving = false;
 		}
 	}
-	
-	// Delete wig
-	async function confirmDelete() {
-		const formData = new FormData();
-		
-		const response = await fetch('?/delete', {
-			method: 'POST',
-			body: formData,
-			redirect: 'manual'
-		});
-		
-		if (response.status >= 300 && response.status < 400) {
-			const location = response.headers.get('location');
-			if (location) {
-				window.location.href = location;
-				return;
+
+	// Delete
+	async function handleDelete() {
+		if (!confirm('Are you sure you want to delete this wig?')) return;
+
+		try {
+			const response = await fetch('?/delete', { method: 'POST' });
+			if (response.redirected) {
+				window.location.href = response.url;
 			}
-		}
-		
-		if (!response.ok) {
+		} catch (err) {
+			console.error('Error deleting wig:', err);
 			alert('Failed to delete wig');
 		}
 	}
-	
-	const currentStatus = $derived(statusOptions.find(s => s.value === wig.status) || statusOptions[0]);
+
+	function handleClose() {
+		goto('/wigs');
+	}
 </script>
 
-<div class="min-h-screen pb-16" style="background: var(--theme-background);">
-	<!-- Hero Section with Wig Color -->
-	<div class="relative h-64" style="background-color: {wig.color};">
-		<!-- Gradient overlay -->
-		<div class="absolute inset-0" style="background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, var(--theme-background) 100%);"></div>
-		
-		<!-- Wig Info -->
-		<div class="relative h-full flex items-end px-6 pb-6">
-			<div class="flex items-end gap-6">
-				<!-- Color Swatch (120×120px circle) -->
-				<div class="w-30 h-30 rounded-full border-4 shadow-lg" style="background-color: {wig.color}; border-color: var(--theme-card-bg);">
-					<div class="w-full h-full rounded-full flex items-center justify-center">
-						<Sparkles class="w-12 h-12 text-white drop-shadow" />
-					</div>
-				</div>
-				
-				<!-- Name & Details -->
-				<div class="pb-2">
-					<h1 class="text-5xl font-bold mb-2" style="font-family: var(--font-display, 'JetBrains Mono', monospace); color: var(--theme-foreground);">
-						{wig.wig_name}
-					</h1>
-					<p class="text-xl" style="color: var(--theme-sidebar-muted);">
-						{wig.color} • {lengthOptions.find(l => l.value === wig.length)?.label} • {fiberTypeOptions.find(f => f.value === wig.fiber_type)?.label}
-					</p>
-					<div class="inline-block mt-2 px-3 py-1 rounded text-sm font-semibold" style="background-color: {currentStatus.color}20; color: {currentStatus.color};">
-						{currentStatus.label}
-					</div>
-				</div>
-			</div>
+<ResourceFlyout
+	isOpen={true}
+	title={isNew ? 'New Wig' : wigName || 'Wig Details'}
+	status={status}
+	onClose={handleClose}
+>
+	{#snippet menu()}
+		{#if !isNew}
+			<button class="menu-item" onclick={handleSave} disabled={isSaving}>
+				{isSaving ? 'Saving...' : 'Save Changes'}
+			</button>
+			<button class="menu-item danger" onclick={handleDelete}>
+				Delete Wig
+			</button>
+		{/if}
+	{/snippet}
+
+	<!-- Error Message -->
+	{#if errorMessage}
+		<div class="mb-4 p-3 rounded-lg" style="background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; color: #ef4444;">
+			{errorMessage}
 		</div>
-	</div>
-	
-	<!-- Stats Row (32px padding) -->
-	<div class="px-6 py-8">
-		<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-			<!-- Cost Card -->
-			<div class="rounded-lg p-6 border" style="background: var(--theme-card-bg); border-color: var(--theme-border);">
-				<div class="text-sm mb-2" style="color: var(--theme-sidebar-muted);">Total Cost</div>
-				<div class="text-3xl font-bold" style="font-family: var(--font-display, 'JetBrains Mono', monospace); color: var(--theme-foreground);">
-					${wig.total_cost?.toFixed(2) || '0.00'}
-				</div>
-				<div class="mt-2 text-xs" style="color: var(--theme-sidebar-muted);">
-					Base: ${wig.base_wig_cost?.toFixed(2) || '0.00'} + Styling: ${wig.styling_cost?.toFixed(2) || '0.00'}
-				</div>
-			</div>
-			
-			<!-- Condition Card -->
-			<div class="rounded-lg p-6 border" style="background: var(--theme-card-bg); border-color: var(--theme-border);">
-				<div class="text-sm mb-2" style="color: var(--theme-sidebar-muted);">Condition</div>
-				<div class="text-2xl font-bold" style="font-family: var(--font-display, 'JetBrains Mono', monospace); color: var(--theme-foreground);">
-					{conditionOptions.find(c => c.value === wig.condition)?.label || 'Not set'}
-				</div>
-				{#if wig.last_washed_date}
-					<div class="mt-2 text-xs" style="color: var(--theme-sidebar-muted);">
-						Last washed: {new Date(wig.last_washed_date).toLocaleDateString()}
-					</div>
-				{/if}
-			</div>
-			
-			<!-- Storage Card -->
-			<div class="rounded-lg p-6 border" style="background: var(--theme-card-bg); border-color: var(--theme-border);">
-				<div class="text-sm mb-2" style="color: var(--theme-sidebar-muted);">Storage</div>
-				<div class="text-lg font-semibold" style="color: var(--theme-foreground);">
-					{wig.storage_location || 'Not specified'}
-				</div>
-				{#if wig.storage_method}
-					<div class="mt-2 text-xs" style="color: var(--theme-sidebar-muted);">
-						Method: {wig.storage_method}
-					</div>
-				{/if}
-			</div>
+	{/if}
+
+	<!-- Metadata Grid -->
+	<div class="metadata-grid">
+		<div class="metadata-field-custom">
+			<label class="field-label">Status</label>
+			<select
+				bind:value={status}
+				class="field-select"
+				style="background: var(--theme-input-bg); border-color: var(--theme-border); color: var(--theme-foreground);"
+			>
+				{#each statusOptions as opt}
+					<option value={opt.value}>{opt.label}</option>
+				{/each}
+			</select>
 		</div>
+
+		<MetadataField
+			icon={DollarSign}
+			label="Total Cost"
+			value={`$${totalCost.toFixed(2)}`}
+		/>
 	</div>
-	
-	<!-- Details Section (64px gap) -->
-	<div class="px-6 pb-8">
-		<h2 class="text-2xl font-bold mb-6" style="font-family: var(--font-display, 'JetBrains Mono', monospace); color: var(--theme-foreground);">
-			DETAILS
-		</h2>
-		
-		<div class="rounded-lg p-8 border space-y-6" style="background: var(--theme-card-bg); border-color: var(--theme-border);">
-			<!-- Wig Name -->
-			<div>
-				<label class="block text-sm font-medium mb-2" style="color: var(--theme-sidebar-muted);">Wig Name</label>
-				<InlineEditField
-					value={wig.wig_name}
-					on:save={(e) => saveChanges('wig_name', e.detail)}
-				/>
-			</div>
-			
-			<!-- Color -->
-			<div>
-				<label class="block text-sm font-medium mb-2" style="color: var(--theme-sidebar-muted);">Color</label>
-				<InlineEditField
-					value={wig.color}
-					on:save={(e) => saveChanges('color', e.detail)}
-				/>
-			</div>
-			
-			<!-- Length -->
-			<div>
-				<div class="block text-sm font-medium mb-2" style="color: var(--theme-sidebar-muted);">Length</div>
-				<select
-					value={wig.length}
-					onchange={(e) => saveChanges('length', e.currentTarget.value)}
-					class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2"
-					style="background: var(--theme-input-bg); border-color: var(--theme-border); color: var(--theme-foreground);"
-				>
-					{#each lengthOptions as option}
-						<option value={option.value}>{option.label}</option>
-					{/each}
-				</select>
-			</div>
-			
-			<!-- Fiber Type -->
-			<div>
-				<div class="block text-sm font-medium mb-2" style="color: var(--theme-sidebar-muted);">Fiber Type</div>
-				<select
-					value={wig.fiber_type}
-					onchange={(e) => saveChanges('fiber_type', e.currentTarget.value)}
-					class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2"
-					style="background: var(--theme-input-bg); border-color: var(--theme-border); color: var(--theme-foreground);"
-				>
-					{#each fiberTypeOptions as option}
-						<option value={option.value}>{option.label}</option>
-					{/each}
-				</select>
-			</div>
-			
-			<!-- Base Wig Brand -->
-			<div>
-				<label class="block text-sm font-medium mb-2" style="color: var(--theme-sidebar-muted);">Base Wig Brand</label>
-				<InlineEditField
-					value={wig.base_wig_brand || ''}
-					on:save={(e) => saveChanges('base_wig_brand', e.detail)}
-					placeholder="e.g., Arda Wigs, Epic Cosplay"
-				/>
-			</div>
-			
-			<!-- Status -->
-			<div>
-				<div class="block text-sm font-medium mb-2" style="color: var(--theme-sidebar-muted);">Status</div>
-				<select
-					value={wig.status}
-					onchange={(e) => saveChanges('status', e.currentTarget.value)}
-					class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2"
-					style="background: var(--theme-input-bg); border-color: var(--theme-border); color: var(--theme-foreground);"
-				>
-					{#each statusOptions as option}
-						<option value={option.value}>{option.label}</option>
-					{/each}
-				</select>
-			</div>
-			
-			<!-- Condition -->
-			<div>
-				<div class="block text-sm font-medium mb-2" style="color: var(--theme-sidebar-muted);">Condition</div>
-				<select
-					value={wig.condition || ''}
-					onchange={(e) => saveChanges('condition', e.currentTarget.value)}
-					class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2"
-					style="background: var(--theme-input-bg); border-color: var(--theme-border); color: var(--theme-foreground);"
-				>
-					<option value="">Not set</option>
-					{#each conditionOptions as option}
-						<option value={option.value}>{option.label}</option>
-					{/each}
-				</select>
-			</div>
-			
-			<!-- Maintenance Notes -->
-			<div>
-				<label class="block text-sm font-medium mb-2" style="color: var(--theme-sidebar-muted);">Maintenance Notes</label>
-				<ThemedTextarea
-					name="maintenance_notes"
-					value={wig.maintenance_notes || ''}
-					on:blur={(e) => {
-						const target = e.currentTarget as HTMLTextAreaElement;
-						if (target) saveChanges('maintenance_notes', target.value);
-					}}
-					placeholder="Care instructions, styling notes..."
-					rows={4}
-				/>
-			</div>
-		</div>
-	</div>
-	
-	<!-- Linked Characters Section -->
-	<div class="px-6 pb-8">
-		<h2 class="text-2xl font-bold mb-6" style="font-family: var(--font-display, 'JetBrains Mono', monospace); color: var(--theme-foreground);">
-			LINKED CHARACTERS
-		</h2>
-		
-		<div class="rounded-lg p-6 border" style="background: var(--theme-card-bg); border-color: var(--theme-border);">
-			<p class="text-sm mb-4" style="color: var(--theme-sidebar-muted);">
-				Link this wig to characters to track which costumes use it
-			</p>
-			<CharacterPicker
-				characters={data.characters}
-				placeholder="Link to a character..."
-				showCreateLink={true}
+
+	<!-- Basic Info Section -->
+	<FlyoutSection title="Basic Information">
+		<div class="space-y-4">
+			<InlineEditField
+				label="Wig Name *"
+				bind:value={wigName}
+				placeholder="e.g., Long Silver Wig"
+				required={true}
 			/>
-			<div class="mt-4 text-xs" style="color: var(--theme-sidebar-muted);">
-				💡 Character linking coming soon! This will let you track which characters use this wig.
+
+			<InlineEditField
+				label="Color *"
+				bind:value={color}
+				placeholder="e.g., Silver, Blonde, Black"
+				required={true}
+			/>
+
+			<div class="inline-field">
+				<label class="inline-label">Length *</label>
+				<select
+					bind:value={length}
+					class="inline-select"
+					style="background: var(--theme-input-bg); border-color: var(--theme-border); color: var(--theme-foreground);"
+				>
+					{#each lengthOptions as opt}
+						<option value={opt.value}>{opt.label}</option>
+					{/each}
+				</select>
+			</div>
+
+			<div class="inline-field">
+				<label class="inline-label">Fiber Type *</label>
+				<select
+					bind:value={fiberType}
+					class="inline-select"
+					style="background: var(--theme-input-bg); border-color: var(--theme-border); color: var(--theme-foreground);"
+				>
+					{#each fiberTypeOptions as opt}
+						<option value={opt.value}>{opt.label}</option>
+					{/each}
+				</select>
+			</div>
+
+			<InlineEditField
+				label="Base Wig Brand"
+				bind:value={baseWigBrand}
+				placeholder="e.g., Arda Wigs, Epic Cosplay"
+			/>
+		</div>
+	</FlyoutSection>
+
+	<!-- Cost Section -->
+	<FlyoutSection title="Cost Tracking">
+		<div class="space-y-4">
+			<InlineEditField
+				label="Base Wig Cost"
+				bind:value={baseWigCost}
+				type="number"
+				placeholder="0.00"
+			/>
+
+			<InlineEditField
+				label="Styling Cost"
+				bind:value={stylingCost}
+				type="number"
+				placeholder="0.00"
+			/>
+
+			<div class="p-3 rounded-lg" style="background: var(--theme-sidebar-hover);">
+				<div class="flex justify-between items-center">
+					<span class="font-semibold" style="color: var(--theme-foreground);">Total Cost</span>
+					<span class="text-lg font-bold" style="color: var(--theme-primary);">
+						${totalCost.toFixed(2)}
+					</span>
+				</div>
 			</div>
 		</div>
-	</div>
-	
-	<!-- Delete Button -->
-	<div class="px-6 pb-16">
-		<button
-			type="button"
-			onclick={() => showDeleteConfirm = true}
-			class="px-6 py-3 rounded-lg font-semibold transition-colors duration-200"
-			style="background: var(--theme-error); color: white;"
-		>
-			<Trash2 class="w-5 h-5 inline-block mr-2" />
-			Delete Wig
-		</button>
-	</div>
-</div>
+	</FlyoutSection>
 
-<!-- Delete Confirmation Modal -->
-{#if showDeleteConfirm}
-	<div class="fixed inset-0 z-50 flex items-center justify-center p-4" style="background: rgba(0, 0, 0, 0.5);">
-		<div class="rounded-lg p-6 max-w-md w-full shadow-xl" style="background: var(--theme-card-bg); border: 1px solid var(--theme-border);">
-			<h3 class="text-xl font-bold mb-4" style="font-family: var(--font-display, 'JetBrains Mono', monospace); color: var(--theme-foreground);">
-				Delete Wig?
-			</h3>
-			<p class="mb-6" style="color: var(--theme-sidebar-muted);">
-				This will remove "{wig.wig_name}" and unlink it from any characters. This action cannot be undone.
+	<!-- Maintenance Section -->
+	<FlyoutSection title="Maintenance & Storage">
+		<div class="space-y-4">
+			<div class="inline-field">
+				<label class="inline-label">Condition</label>
+				<select
+					bind:value={condition}
+					class="inline-select"
+					style="background: var(--theme-input-bg); border-color: var(--theme-border); color: var(--theme-foreground);"
+				>
+					{#each conditionOptions as opt}
+						<option value={opt.value}>{opt.label}</option>
+					{/each}
+				</select>
+			</div>
+
+			<div class="space-y-2">
+				<label class="inline-label">Maintenance Notes</label>
+				<ThemedTextarea
+					bind:value={maintenanceNotes}
+					placeholder="Track washing, repairs, restyling..."
+					rows={3}
+				/>
+			</div>
+
+			<InlineEditField
+				label="Storage Location"
+				bind:value={storageLocation}
+				placeholder="e.g., Wig closet, Box 3"
+			/>
+
+			<InlineEditField
+				label="Storage Method"
+				bind:value={storageMethod}
+				placeholder="e.g., Wig head, Hairnet in box"
+			/>
+		</div>
+	</FlyoutSection>
+
+	<!-- Linked Characters Section -->
+	<FlyoutSection title="Linked Characters">
+		<div class="space-y-3">
+			<p class="text-sm" style="color: var(--theme-sidebar-muted);">
+				Link this wig to characters (wigs can be reused across multiple characters)
 			</p>
-			<div class="flex gap-3">
-				<button
-					type="button"
-					onclick={() => showDeleteConfirm = false}
-					class="flex-1 px-4 py-2 rounded-lg border font-semibold transition-colors duration-200"
-					style="border-color: var(--theme-border); color: var(--theme-foreground);"
-				>
-					Cancel
-				</button>
-				<button
-					type="button"
-					onclick={confirmDelete}
-					class="flex-1 px-4 py-2 rounded-lg font-semibold transition-colors duration-200"
-					style="background: var(--theme-error); color: white;"
-				>
-					Delete
-				</button>
-			</div>
-		</div>
-	</div>
-{/if}
 
+			{#if data.characters.length > 0}
+				<select
+					class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2"
+					style="background: var(--theme-input-bg); border-color: var(--theme-border); color: var(--theme-foreground);"
+					onchange={(e) => {
+						const target = e.target as HTMLSelectElement;
+						if (target.value) {
+							addCharacter(target.value);
+							target.value = '';
+						}
+					}}
+				>
+					<option value="">Add a character...</option>
+					{#each data.characters.filter(c => !linkedCharacterIds.includes(c.id)) as character}
+						<option value={character.id}>{character.character_name} ({character.series})</option>
+					{/each}
+				</select>
+
+				{#if linkedCharacterIds.length > 0}
+					<div class="flex flex-wrap gap-2 mt-3">
+						{#each linkedCharacterIds as characterId}
+							{@const character = data.characters.find(c => c.id === characterId)}
+							{#if character}
+								<div
+									class="flex items-center gap-2 px-3 py-1.5 rounded-lg"
+									style="background: var(--theme-sidebar-hover); border: 1px solid var(--theme-border);"
+								>
+									<span class="text-sm" style="color: var(--theme-foreground);">
+										{character.character_name}
+									</span>
+									<button
+										type="button"
+										onclick={() => removeCharacter(characterId)}
+										class="p-0.5 rounded hover:bg-[var(--theme-sidebar-bg)] transition-colors"
+										aria-label="Remove character"
+									>
+										<X size={14} style="color: var(--theme-sidebar-muted);" />
+									</button>
+								</div>
+							{/if}
+						{/each}
+					</div>
+				{/if}
+			{:else}
+				<p class="text-sm" style="color: var(--theme-sidebar-muted);">
+					No characters available. <a href="/characters/new" class="underline" style="color: var(--theme-primary);">Create a character first</a>.
+				</p>
+			{/if}
+		</div>
+	</FlyoutSection>
+
+	<!-- Action Button (for new wigs) -->
+	{#if isNew}
+		<div class="sticky bottom-0 p-4 border-t" style="background: var(--theme-sidebar-bg); border-color: var(--theme-border);">
+			<button
+				onclick={handleSave}
+				disabled={isSaving}
+				class="w-full px-6 py-3 rounded-lg font-semibold transition-colors duration-200 disabled:opacity-50"
+				style="background: var(--theme-primary); color: white;"
+			>
+				{isSaving ? 'Creating...' : 'Create Wig'}
+			</button>
+		</div>
+	{/if}
+</ResourceFlyout>
+
+<style>
+	.metadata-grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 12px;
+		margin-bottom: 24px;
+	}
+
+	.metadata-field-custom {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		padding: 12px;
+		border-radius: 8px;
+		background: var(--theme-sidebar-bg);
+		border: 1px solid var(--theme-border);
+	}
+
+	.field-label {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		font-size: 12px;
+		font-weight: 500;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		color: var(--theme-sidebar-muted);
+	}
+
+	.field-select {
+		font-size: 14px;
+		font-weight: 600;
+		color: var(--theme-foreground);
+		font-family: var(--font-display, 'JetBrains Mono', monospace);
+		border: none;
+		padding: 4px 0;
+		background: transparent;
+	}
+
+	.field-select:focus {
+		outline: none;
+	}
+
+	.inline-field {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.inline-label {
+		font-size: 14px;
+		font-weight: 500;
+		color: var(--theme-sidebar-muted);
+	}
+
+	.inline-select {
+		width: 100%;
+		px: 12px;
+		py: 8px;
+		border-radius: 6px;
+		border: 1px solid var(--theme-border);
+		font-size: 14px;
+		transition: all 150ms ease;
+	}
+
+	.inline-select:focus {
+		outline: none;
+		border-color: var(--theme-primary);
+		ring: 2px;
+		ring-color: rgba(var(--theme-primary-rgb), 0.2);
+	}
+
+	@media (max-width: 640px) {
+		.metadata-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	:global(.menu-item) {
+		width: 100%;
+		padding: 8px 12px;
+		text-align: left;
+		background: none;
+		border: none;
+		border-radius: 4px;
+		font-size: 14px;
+		color: var(--theme-foreground);
+		cursor: pointer;
+		transition: background 150ms ease;
+	}
+
+	:global(.menu-item:hover) {
+		background: var(--theme-sidebar-hover);
+	}
+
+	:global(.menu-item:disabled) {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
+	:global(.menu-item.danger) {
+		color: #ef4444;
+	}
+
+	:global(.menu-item.danger:hover) {
+		background: rgba(239, 68, 68, 0.1);
+	}
+</style>

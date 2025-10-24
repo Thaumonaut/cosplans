@@ -127,8 +127,8 @@
 		</select>
 		<a
 			href="/wigs/new"
-			class="px-6 py-2 rounded-lg font-semibold transition-colors duration-200"
-			style="background: var(--theme-primary); color: white; hover:background: var(--theme-primary-hover);"
+			class="px-6 py-2 rounded-lg font-semibold transition-colors duration-200 hover:opacity-90"
+			style="background: var(--theme-primary); color: white;"
 		>
 			Create Wig
 		</a>
