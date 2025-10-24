@@ -2,10 +2,11 @@
 
 **Feature**: Comprehensive Resource Management System (Spec 048)  
 **Target Audience**: Ages 13-40, cosplay community (creators, photographers, commissioners)  
-**Design Philosophy**: Fresh + Technical - "Adventurer's Tunic" meets precision planning tools  
-**Brand Identity**: Organized adventure, maker precision, hopeful optimism (JetBrains Mono + vibrant green)  
-**Aesthetic**: High-low tech (monospace structure + organic creativity), clean palette with energetic green accents  
-**Inspiration**: Solarpunk, tech-optimism, outdoor adventure, systematic craftsmanship
+**Design Philosophy**: Clean, Calm, Organized - Reduce stress through clarity and breathing room  
+**Brand Identity**: Peaceful planning, systematic simplicity, stress-free craftsmanship (JetBrains Mono + refreshing green)  
+**Aesthetic**: Minimalist structure (generous whitespace, clear hierarchy), gentle green accents for visual calm  
+**Core Goal**: Make planning feel **manageable and refreshing**, NOT overwhelming or stressful  
+**Inspiration**: Calm workspaces, organized studios, peaceful outdoor settings, systematic clarity
 
 ---
 
@@ -126,11 +127,12 @@
 --status-error: #EF4444;         /* Red - Errors */
 ```
 
-**Design Intent** (Inspired by "Adventurer's Tunic"):
-- **Fresh, clean, minimal** - Light backgrounds, crisp typography
-- **Vibrant green accents** - Logo green as energetic primary color
-- **JetBrains Mono headings** - Technical precision meets adventure
-- **"Ready for any quest"** - Optimistic, capable, organized
+**Design Intent** (Stress-Reducing, Calm Organization):
+- **Fresh, clean, spacious** - Generous whitespace, uncluttered layouts, breathing room
+- **Gentle green accents** - Logo green used sparingly for calm visual interest (not aggressive)
+- **JetBrains Mono headings** - Clear hierarchy, systematic organization, easy scanning
+- **Refreshing, not overwhelming** - Calm, capable, manageable, stress-free planning
+- **Visual calm** - Soft transitions, subtle animations, no jarring elements
 
 
 **Light Mode** (Adventurer's Tunic - Default):
@@ -301,13 +303,16 @@ Inter SemiBold (H4):          Details & Information
 Inter Regular (Body):         This character has 3 linked wigs and 5 accessories ready for your next photoshoot.
 ```
 
-**Aesthetic Achieved**:
-- 🤖 **Technical precision** (monospace structure)
-- 🌿 **Nature harmony** (vibrant green accents)
-- 🎯 **Organized capability** (clean, systematic)
-- ✨ **Modern optimism** (fresh Adventurer's Tunic palette)
+**Aesthetic Achieved** (Stress-Reducing Design):
+- 🧘 **Calm organization** (clear structure without overwhelm)
+- 🌿 **Refreshing simplicity** (gentle green accents, clean backgrounds)
+- 📋 **Systematic clarity** (monospace headings for easy scanning)
+- ✨ **Peaceful productivity** (generous whitespace, smooth transitions)
+- 💆 **Stress-free planning** (manageable, not overwhelming)
 
-### Spacing System
+### Spacing System (Generous Whitespace for Calm)
+
+**Philosophy**: Generous spacing reduces visual clutter and stress. Give elements room to breathe.
 
 **8px Base Grid**:
 ```css
@@ -324,12 +329,18 @@ Inter Regular (Body):         This character has 3 linked wigs and 5 accessories
 --space-20: 5rem;     /* 80px */
 ```
 
-**Component Spacing**:
-- **Cards**: 24px padding (space-6)
-- **Sections**: 48px gap (space-12)
-- **Form fields**: 16px gap (space-4)
-- **Button groups**: 8px gap (space-2)
-- **List items**: 12px gap (space-3)
+**Component Spacing** (Generous for Breathing Room):
+- **Cards**: 32px padding (space-8) - Comfortable, not cramped
+- **Sections**: 64px gap (space-16) - Clear separation, reduces overwhelm
+- **Form fields**: 20px gap (space-5) - Easy to scan
+- **Button groups**: 12px gap (space-3) - Clear targets, no accidental clicks
+- **List items**: 16px gap (space-4) - Comfortable reading, not dense
+
+**Stress-Reducing Spacing Rules**:
+- Never pack content tightly - always prioritize breathing room
+- Section breaks should feel distinct (use larger gaps)
+- Cards should have generous internal padding
+- Forms should feel spacious and easy to navigate
 
 ### Border Radius
 
@@ -867,68 +878,73 @@ Status ▼
 
 ---
 
-## Animation & Micro-interactions
+## Animation & Transitions (Calm, Smooth, Stress-Free)
 
-### Page Transitions
+**Philosophy**: All animations should feel **smooth, calming, and purposeful** - never jarring or distracting. They reduce stress by providing gentle feedback without overwhelming the user.
+
+### Page Transitions (Gentle & Smooth)
 
 **Route Changes**:
-- Fade out current page (150ms)
-- Fade in new page (200ms)
-- Delay: 50ms between (prevents flash)
+- Gentle fade out (200ms ease-out)
+- Gentle fade in (250ms ease-out)
+- Delay: 50ms between (prevents flash, feels natural)
+- **Goal**: Seamless, calm navigation
 
 **Modal Open/Close**:
 ```css
-/* Open */
+/* Open - Gentle slide + fade */
 @keyframes modal-open {
   from {
     opacity: 0;
-    transform: translateY(20px) scale(0.95);
+    transform: translateY(12px);  /* Subtle movement, not dramatic */
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
   }
 }
-/* Duration: 300ms, easing: cubic-bezier(0.16, 1, 0.3, 1) */
+/* Duration: 250ms, easing: ease-out (smooth, not bouncy) */
 ```
 
-### Micro-interactions
+### Micro-interactions (Subtle Feedback)
 
-**Button Press**:
+**Button Press** (Gentle acknowledgment):
 ```css
 .btn:active {
-  transform: scale(0.98);
-  transition: transform 100ms ease-out;
+  transform: scale(0.98);      /* Subtle press, not aggressive */
+  transition: transform 120ms ease-out;
+  opacity: 0.9;                /* Slight dimming for feedback */
 }
 ```
 
-**Checkbox Check**:
+**Checkbox Check** (Smooth, not bouncy):
 ```css
 @keyframes check {
-  0% {
-    transform: scale(0);
+  from {
+    opacity: 0;
+    transform: scale(0.9);     /* Gentle scale, not bouncy */
   }
-  50% {
-    transform: scale(1.2);
-  }
-  100% {
+  to {
+    opacity: 1;
     transform: scale(1);
   }
 }
-/* Duration: 400ms, easing: cubic-bezier(0.68, -0.55, 0.27, 1.55) */
+/* Duration: 200ms, easing: ease-out (smooth, calming) */
 ```
 
-**Completion Celebration**:
+**Completion Feedback** (Calm satisfaction, not celebration):
 - When character completion hits 100%:
-  1. Confetti explosion (3s)
-  2. Progress bar fills with shimmer
-  3. Toast: "🎉 {Character Name} is complete!"
-  4. Optional: Sound effect (toggle in settings)
+  1. Gentle green glow around progress bar (fade in 500ms)
+  2. Soft checkmark icon appears (smooth fade)
+  3. Quiet toast: "✓ {Character Name} is complete"
+  4. NO confetti, NO sound effects - keep it calm and professional
+  5. **Goal**: Satisfying acknowledgment without stress or overwhelm
 
-**Photo Upload Success**:
-- Checkmark appears (scale + rotate animation)
-- Photo card border pulses green (2 pulses)
-- Thumbnail fades in (300ms)
+**Photo Upload Success** (Smooth feedback):
+- Checkmark fades in smoothly (300ms ease-out)
+- Photo card border gentle green highlight (one smooth transition, no pulsing)
+- Thumbnail fades in (350ms)
+- **Goal**: Clear feedback without being distracting
 
 ### Loading States
 
