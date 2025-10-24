@@ -132,7 +132,10 @@ As a developer maintaining the system, I want this specification to supersede an
 - **FR-002**: System MUST track character metadata: character name, series name, source medium (anime/manga/game/movie/TV/book/comic/stage/original), appearance description, personality notes, reference images (1-10 images)
 - **FR-003**: System MUST support character aliases/alternate names via comma-separated text field for flexible searching (users enter aliases as "Saber, Artoria Pendragon, Altria Pendragon"; search finds character by any alias)
 - **FR-004**: System MUST allow users to upload 1-10 reference images per character to Cloudflare R2 storage
+- **FR-004a**: System MUST allow users to add reference links with structured metadata: link type (Tutorial, Pattern Source, Inspiration, Commission Example), URL, title, and notes; support unlimited reference links per character
 - **FR-005**: System MUST display character detail page as hub showing all linked resources (outfits, wigs, props, accessories) with status indicators
+- **FR-005a**: System MUST support dual-mode budget tracking per character: "Personal" mode (set budget limit, track estimated vs actual costs, warn at 80% and 100%) and "Commission" mode (track billable hours, material costs, markup percentage for generating client quotes)
+- **FR-005b**: System MUST automatically aggregate costs from all linked resources (outfits, wigs, props, accessories, materials) and display total actual cost vs budget/estimate
 - **FR-006**: System MUST calculate character completion percentage as: (number of completed resources / total linked resources) × 100, where completed means resource status is "Completed" or "Owned" or equivalent terminal state
 - **FR-007**: System MUST allow users to filter characters by series, source medium, or completion status
 - **FR-008**: System MUST support character search across name, series, and aliases with real-time filtering
@@ -190,6 +193,31 @@ As a developer maintaining the system, I want this specification to supersede an
 - **FR-052**: System MUST use last-write-wins strategy for concurrent edits; when saving changes, system MUST check if resource was modified since user loaded it and display toast notification showing who made the previous change and when (e.g., "Your changes saved (overwrote changes by Alice from 2 minutes ago)")
 - **FR-053**: System MUST enforce soft scalability limits per team: 500 characters maximum, 200 wigs maximum, 1000 total resources maximum; display warning when approaching limits (90%) and prevent creation at limits with user-friendly message
 
+**Event/Convention Management:**
+- **FR-054**: System MUST allow users to create, read, update, and delete event entries (conventions, photoshoots, competitions) within their team
+- **FR-055**: System MUST track event metadata: event name, type (convention/photoshoot/competition/other), start date, end date, location, notes, and event URL
+- **FR-056**: System MUST allow linking multiple characters to an event (many-to-many relationship)
+- **FR-057**: System MUST display event dashboard showing all linked characters with their completion status and days remaining until event
+- **FR-058**: System MUST calculate event readiness: percentage of linked characters that are complete/ready
+- **FR-059**: System MUST show countdown to event on character detail pages when character is linked to upcoming events
+- **FR-060**: System MUST allow filtering characters by linked event to see "all characters for Anime Expo 2026"
+
+**Vendor/Shop Management:**
+- **FR-061**: System MUST allow users to create, read, update, and delete vendor/shop entries within their team
+- **FR-062**: System MUST track vendor metadata: vendor name, website URL, contact email, phone, category (fabric/foam/wig/prop/pattern/general), rating (1-5 stars), and notes
+- **FR-063**: System MUST allow linking resources (outfits, wigs, props, accessories, craft supplies) to vendors when purchased
+- **FR-064**: System MUST track purchase details per resource-vendor link: purchase date, order number, cost, and purchase-specific notes
+- **FR-065**: System MUST display vendor detail page showing all purchases from that vendor with total spent and average rating-per-purchase
+- **FR-066**: System MUST allow users to rate individual purchases from a vendor (separate from overall vendor rating)
+- **FR-067**: System MUST allow filtering resources by vendor to see "everything I bought from Arda Wigs"
+
+**Difficulty/Skill Assessment:**
+- **FR-068**: System MUST calculate suggested difficulty (1-5) for characters based on objective factors: number of linked resources, total task count, presence of complex materials (worbla/thermoplastics), wig styling complexity
+- **FR-069**: System MUST allow users to override suggested difficulty with their own rating (1-5) based on personal skill level
+- **FR-070**: System MUST support optional skill challenge tags per character: "Complex Sewing", "Advanced Foam Work", "Intricate Wig Styling", "Armor Crafting", "Electronics/LEDs", "Painting/Weathering", "Pattern Drafting", "Custom"
+- **FR-071**: System MUST display both system-suggested and user-set difficulty ratings to help users learn which types of projects they find challenging
+- **FR-072**: System MUST allow filtering characters by difficulty rating and skill tags to find appropriate next projects
+
 ### Key Entities
 
 - **Character**: Central organizational entity representing a character to cosplay. Contains character name, series, source medium, appearance description, personality notes, aliases, reference images (R2 URLs). Acts as hub for linking all related resources (outfits, wigs, props, accessories). Tracks completion percentage based on linked resources.
@@ -210,6 +238,14 @@ As a developer maintaining the system, I want this specification to supersede an
 
 - **Outfit Task**: Represents construction tasks for outfits with title, description, due date, status. Linked to specific outfit.
 
+- **Event/Convention**: Represents conventions, photoshoots, competitions with name, type, dates, location, notes. Links to multiple characters for event-based planning. Tracks event readiness based on character completion status.
+
+- **Vendor/Shop**: Represents vendors and shops with name, URL, contact info, category, rating, notes. Links to resources via purchases. Tracks purchase history with dates, order numbers, costs, and per-purchase ratings for informed reordering decisions.
+
+- **Purchase Record**: Junction entity linking resources to vendors with purchase-specific details: purchase date, order number, cost, rating, and notes. Enables purchase history tracking per vendor.
+
+- **Difficulty Assessment**: Hybrid difficulty tracking with system-suggested rating (1-5 based on resource count, task complexity, material types) and user-override rating. Includes optional skill challenge tags to identify which techniques user finds difficult for personal growth tracking.
+
 ## Clarifications
 
 ### Session 2025-10-24
@@ -224,6 +260,11 @@ As a developer maintaining the system, I want this specification to supersede an
 - Q: How should the system handle concurrent edits to the same character/wig/outfit by multiple team members? → A: Last-write-wins with timestamp notification (always allow save; show toast notification like "Your changes saved (overwrote changes by [User] from 2 minutes ago)" to maintain awareness)
 - Q: Should the spec use "Costume" or "Outfit" terminology consistently? → A: Standardize on "Outfit" throughout (aligns with functional requirements FR-031 to FR-041 and better reflects version tracking capability)
 - Q: What are the upper scalability limits for characters, wigs, and total resources per team? → A: 500 characters, 200 wigs, 1000 total resources per team (soft limits; start here and adjust based on real-world usage patterns)
+- Q: How should character reference links be managed beyond uploaded images? → A: Structured reference types with metadata (links categorized by type: Tutorial, Pattern Source, Inspiration, Commission Example; with notes field per link; supports both URLs and file uploads)
+- Q: How should character budget tracking work for both personal cosplayers and commissioners? → A: Dual-mode budget tracking (toggle between "Personal" mode with budget limits and cost tracking, and "Commission" mode with billable hours tracking, material costs, and markup percentage for client quotes)
+- Q: How should conventions/events be integrated into planning? → A: Event entity with character associations (standalone Events/Conventions with dates; link multiple characters to events; view event-level progress dashboard showing all characters for that convention)
+- Q: How should vendor/shop information be tracked for budgeting and future planning? → A: Dedicated vendor entity (standalone Vendors/Shops with name, URL, contact info, rating, category, notes; link resources to vendors; view purchase history per vendor for informed reordering decisions)
+- Q: How should project difficulty/skill level be tracked given it varies by person? → A: Hybrid difficulty assessment (system suggests difficulty 1-5 based on objective factors like resource count, task complexity, material types; user can override with their own rating 1-5 and add skill tags like "complex sewing", "advanced foam work", "intricate wig styling" to explain personal challenges)
 
 ## Success Criteria *(mandatory)*
 
