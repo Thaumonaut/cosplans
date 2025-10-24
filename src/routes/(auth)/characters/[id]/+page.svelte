@@ -1,11 +1,9 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { goto } from '$app/navigation';
-	import { Trash2, Image as ImageIcon } from 'lucide-svelte';
+	import { Trash2, Image as ImageIcon, Heart, Sparkles, Package } from 'lucide-svelte';
 	import InlineEditField from '$lib/components/ui/InlineEditField.svelte';
 	import ThemedTextarea from '$lib/components/ui/ThemedTextarea.svelte';
-	import SeriesAutocomplete from '$lib/components/costumes/SeriesAutocomplete.svelte';
-	import CharacterAutocomplete from '$lib/components/costumes/CharacterAutocomplete.svelte';
 	
 	// Props
 	type Props = {
@@ -17,6 +15,7 @@
 	let character = $state(data.character);
 	let showDeleteConfirm = $state(false);
 	let isSaving = $state(false);
+	let activeTab = $state<'details' | 'photos' | 'resources'>('details');
 	
 	// Source medium options
 	const sourceMediumOptions = [
