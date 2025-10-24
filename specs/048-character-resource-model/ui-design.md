@@ -2,7 +2,8 @@
 
 **Feature**: Comprehensive Resource Management System (Spec 048)  
 **Target Audience**: Ages 13-40, cosplay community (creators, photographers, commissioners)  
-**Design Philosophy**: Vibrant, modern, gamified - Make planning as exciting as the craft itself
+**Design Philosophy**: Vibrant green branding, modern, gamified - Make planning as exciting as the craft itself  
+**Brand Identity**: Fresh, outdoorsy, fantasy-inspired green (matching logo) with nature/adventure vibes
 
 ---
 
@@ -61,7 +62,7 @@
 - Mesh gradients for backgrounds
 - Gradient text for headings
 - **Use for**: Status badges, progress bars, hero sections, accent elements
-- **Colors**: Purple→Pink→Orange for completion, Blue→Cyan for info, Green→Lime for success
+- **Colors**: Bright Green→Light Green→Dark Green for brand, Blue→Cyan for info, Green→Lime for success, Purple→Pink (alternative theme)
 
 **Neumorphism** (Subtle 3D):
 - Soft shadows, raised/inset elements
@@ -92,18 +93,20 @@
 
 ### Color Palette
 
-**Primary Brand Colors**:
+**Primary Brand Colors** (Matching Logo):
 ```css
-/* Main Brand (Purple-Pink Gradient) */
---brand-primary: #8B5CF6;        /* Vibrant purple */
---brand-secondary: #EC4899;      /* Hot pink */
---brand-gradient: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+/* Main Brand (Vibrant Green Gradient - from logo) */
+--brand-primary: #19DA5A;        /* Bright green (logo primary) */
+--brand-secondary: #21F96A;      /* Lighter bright green (logo highlight) */
+--brand-dark: #008F31;           /* Darker green (logo shadow) */
+--brand-gradient: linear-gradient(135deg, #19DA5A 0%, #21F96A 50%, #008F31 100%);
 
 /* Accent Colors */
 --accent-cyan: #06B6D4;          /* Bright cyan for info */
---accent-lime: #84CC16;          /* Lime green for success */
 --accent-amber: #F59E0B;         /* Warm amber for warnings */
 --accent-rose: #F43F5E;          /* Rose for errors */
+--accent-purple: #8B5CF6;        /* Purple (alternative theme) */
+--accent-pink: #EC4899;          /* Pink (alternative theme) */
 ```
 
 **Dark Mode (Default)**:
@@ -122,7 +125,7 @@
 /* Borders */
 --border-subtle: #262626;        /* Dividers */
 --border-default: #404040;       /* Input borders */
---border-focus: #8B5CF6;         /* Focused state */
+--border-focus: #19DA5A;         /* Focused state (brand green) */
 ```
 
 **Light Mode (Variant)**:
@@ -141,7 +144,7 @@
 /* Borders */
 --border-subtle: #E5E5E5;
 --border-default: #D4D4D4;
---border-focus: #8B5CF6;
+--border-focus: #19DA5A;         /* Brand green */
 ```
 
 **Status Colors** (Consistent across themes):
@@ -149,14 +152,14 @@
 /* Resource Status */
 --status-planned: #3B82F6;       /* Blue */
 --status-in-progress: #F59E0B;   /* Amber */
---status-completed: #10B981;     /* Green */
+--status-completed: #19DA5A;     /* Brand green (matches logo) */
 --status-on-hold: #6B7280;       /* Gray */
 --status-damaged: #EF4444;       /* Red */
 
 /* Budget Warnings */
---budget-ok: #10B981;            /* < 80% */
---budget-warning: #F59E0B;       /* 80-99% */
---budget-exceeded: #EF4444;      /* >= 100% */
+--budget-ok: #19DA5A;            /* Brand green (< 80%) */
+--budget-warning: #F59E0B;       /* Amber (80-99%) */
+--budget-exceeded: #EF4444;      /* Red (>= 100%) */
 ```
 
 ### Typography

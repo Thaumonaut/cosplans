@@ -76,6 +76,7 @@ This feature implements a comprehensive, character-centric resource management s
 - **Custom Theme Support**: Users can create custom themes via theme builder
 - **CSS Variables**: ~40 properties covering backgrounds, borders, sidebar, header, status colors, interactions
 - **Key Variables**: `--theme-primary`, `--theme-accent`, `--theme-background`, `--theme-foreground`, `--theme-sidebar-*`, `--theme-card-bg`, `--theme-success/error/warning/info`
+- **Brand Identity**: **Vibrant green** (matching logo: #19DA5A → #21F96A → #008F31) for fresh, outdoorsy, fantasy-inspired feel
 - **Integration Requirement**: New UI components MUST reference theme variables, not hardcoded hex colors
 
 ## Constitution Check
@@ -331,20 +332,21 @@ tests/
    - **Output**: Vendor schema design + marketplace extension plan
 
 9. **UI Theme System Integration** (NEW):
-   - **Question**: How to implement vibrant, youth-oriented UI design (per ui-design.md) while maintaining compatibility with all 8 existing themes?
+   - **Question**: How to implement vibrant green branding (per logo) while maintaining compatibility with all 8 existing themes?
    - **Requirements**:
      - All components MUST use CSS custom properties (`--theme-*`) NOT hardcoded colors
-     - Gradients in ui-design.md (purple-pink, mesh gradients) map to existing `--theme-primary` + `--theme-accent`
+     - Brand green gradient (#19DA5A → #21F96A → #008F31 from logo) maps to existing `--theme-primary` + `--theme-accent`
      - Glassmorphism effects use `--theme-card-bg` (already has opacity in themes)
-     - Status colors map to existing `--theme-success/error/warning/info`
+     - Status colors map to existing `--theme-success/error/warning/info` (use brand green for success/completion)
      - New components work in both light and dark mode
-   - **Challenge**: ui-design.md specifies specific hex colors (#8B5CF6 purple, #EC4899 pink) - how to make these theme-aware?
+     - Existing themes (light-green, dark-cozy) already use green palettes
+   - **Challenge**: ui-design.md specifies logo greens (#19DA5A, #21F96A, #008F31) - how to make these theme-aware?
    - **Options**:
-     - **A**: Extend theme variants with new variables (--theme-gradient-start, --theme-gradient-end) - requires migration
-     - **B**: Use existing --theme-primary + --theme-accent everywhere - simpler, works now
-     - **C**: Hybrid: Use existing variables, add new variables only for complex gradients (e.g., mesh backgrounds)
-   - **Decision criteria**: Backwards compatibility, theme customization flexibility, implementation complexity
-   - **Output**: Component styling pattern + theme variable mapping guide + updated theme types if needed
+     - **A**: Update existing light-green/dark themes to match exact logo colors - requires theme variant updates
+     - **B**: Use existing --theme-primary + --theme-accent everywhere (already green in light-green theme) - simpler
+     - **C**: Create new "light-logo" theme as default with exact logo colors, keep others as variants
+   - **Decision criteria**: Logo color accuracy, backwards compatibility, theme customization flexibility
+   - **Output**: Component styling pattern + theme variable mapping guide + potentially updated light-green theme to match logo
 
 ### Research Outputs
 
