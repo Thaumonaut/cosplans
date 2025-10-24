@@ -237,6 +237,25 @@ As a developer maintaining the system, I want this specification to supersede an
 - **FR-086**: System MUST calculate total inventory value: sum of all materials' current quantity × cost per unit
 - **FR-087**: System MUST support bulk actions on shopping list: mark multiple items as purchased, delete multiple items, export to PDF for store visit
 
+**Tools Management (Cosplay Creation Tools):**
+- **FR-088**: System MUST allow users to create, read, update, and delete tool entries within their team (separate from Equipment which is for photography gear)
+- **FR-089**: System MUST track tool metadata: tool name, tool type dropdown (Sewing Machine, Heat Gun, Dremel/Rotary Tool, Airbrush, 3D Printer, Cutting Mat, Iron/Heat Press, Mannequin/Dress Form, Other), brand, model, serial number
+- **FR-090**: System MUST track tool condition: dropdown (Excellent, Good, Fair, Poor, Needs Repair) with visual indicators
+- **FR-091**: System MUST track tool ownership status: dropdown (Owned, Rented, Borrowed, Loaned Out) with optional "borrowed from" or "loaned to" text field
+- **FR-092**: System MUST track tool purchase details: purchase date, purchase cost, vendor link (to Vendors table), receipt upload (to R2), warranty expiration date
+- **FR-093**: System MUST support uploading 1-5 reference photos per tool to Cloudflare R2 (for identification, documentation, insurance)
+- **FR-094**: System MUST track tool storage location (optional text field): "Workshop shelf A", "Closet bin 3", "Stored at friend's studio"
+- **FR-095**: System MUST support maintenance tracking Phase 1 (MVP): maintenance notes (free text), last serviced date, next service due date
+- **FR-096**: System MUST display linked supplies on tool detail page: show all materials linked to this tool (from FR-082) with current stock levels (e.g., "Thread: 5 spools, Glue sticks: 30, Bobbins: 12")
+- **FR-097**: System MUST warn when tool-linked supplies are low: if material linked to tool is below 20% stock, show warning on tool detail page "Low on thread - restock soon"
+- **FR-098**: System MUST support tool notes: free text for usage tips, settings, troubleshooting, project history
+- **FR-099**: System MUST allow filtering tools by: type, condition, ownership status, vendor, and has linked supplies
+- **FR-100**: System MUST calculate total tool inventory value: sum of all owned tools' purchase costs
+
+**Tool Maintenance (Phase 2 - Future Enhancement):**
+- **FR-101**: System SHOULD support full maintenance log table (defer to Phase 2): structured history with maintenance date, type (cleaning/repair/calibration), cost, performed by, notes
+- **FR-102**: System SHOULD send maintenance reminders (defer to Phase 2): notify user when next service due date approaches (7 days before, 1 day before)
+
 ### Key Entities
 
 - **Character**: Central organizational entity representing a character to cosplay. Contains character name, series, source medium, appearance description, personality notes, aliases, reference images (R2 URLs). Acts as hub for linking all related resources (outfits, wigs, props, accessories). Tracks completion percentage based on linked resources.
@@ -269,6 +288,8 @@ As a developer maintaining the system, I want this specification to supersede an
 
 - **Material-Resource Allocation**: Junction entity linking materials to resources (characters, outfits, wigs, accessories, props) with usage tracking: quantity used, cost allocated, date used, and allocation notes. Enables per-project cost breakdowns and total materials cost aggregation per character.
 
+- **Tool**: Non-consumable cosplay creation tool (distinct from Equipment which is photography gear). Contains tool name, type (Sewing Machine/Heat Gun/Dremel/Airbrush/3D Printer/Cutting Mat/Iron/Mannequin), brand, model, serial number, condition (Excellent/Good/Fair/Poor/Needs Repair), ownership status (Owned/Rented/Borrowed/Loaned Out), purchase details (date, cost, vendor link, receipt R2 URL, warranty expiration), storage location (text), maintenance tracking (notes, last serviced, next due), reference photos (1-5 R2 URLs), usage notes. Tool detail page displays linked supplies (materials with tool_id FK) with stock levels and low stock warnings. Phase 2 adds full maintenance log.
+
 ## Clarifications
 
 ### Session 2025-10-24
@@ -292,6 +313,8 @@ As a developer maintaining the system, I want this specification to supersede an
 - Q: What material categories are needed for cosplay crafting? → A: 9 core categories cover most use cases: Fabrics, Foam (EVA/craft), Paints & Finishes, Adhesives, Hardware (zippers/snaps/velcro), Wig Supplies (wefts/dye/products), Thermoplastics (Worbla/Thibra), Electronics (LEDs/batteries/wiring/Arduino), 3D Printing Filament; "Other" for edge cases
 - Q: Should tools (sewing machines, heat guns) be tracked as materials or separate entity? → A: Separate Tools entity (non-consumable, tracked for ownership/maintenance); Materials can optionally link to Tools for supply tracking (e.g., "Thread → Sewing Machine", "Glue sticks → Glue Gun")
 - Q: How should material costs be allocated to projects for commission quotes and budgeting? → A: Per-project allocation junction table (material links to character/outfit with quantity used and cost allocated; character budget auto-aggregates all allocated material costs; supports commission cost breakdowns)
+- Q: Should cosplay creation tools (sewing machines, heat guns) be separate from photography equipment? → A: Separate Tools entity (distinct from Equipment which is photography gear; Tools are for cosplay creation, Equipment is for photoshoot production; similar tracking but different contexts and workflows)
+- Q: How should tool supplies (thread for sewing machines, glue for glue guns) be tracked? → A: Materials link to Tools optionally (materials table has optional tool_id FK; tool detail page shows all linked supplies with stock levels; warns when supplies are low; no separate tool supplies table needed)
 
 ## Success Criteria *(mandatory)*
 
@@ -317,6 +340,9 @@ As a developer maintaining the system, I want this specification to supersede an
 - **SC-018**: Character detail page displays aggregated material costs with zero calculation errors
 - **SC-019**: Low stock warnings appear when material quantity drops below 20% of starting amount
 - **SC-020**: Shopping list exports to PDF in under 5 seconds for offline store visit
+- **SC-021**: Users can create tool entry with photos and purchase details in under 2 minutes
+- **SC-022**: Tool detail page displays linked supplies with accurate stock levels and warnings
+- **SC-023**: Users can add maintenance notes and service dates in under 30 seconds
 
 ## Assumptions
 
