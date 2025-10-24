@@ -40,11 +40,12 @@
 				src={primaryImage}
 				alt={character.character_name}
 				class="w-full h-full object-cover"
+				loading="lazy"
 			/>
 		{:else}
-			<!-- Placeholder with character initial -->
-			<div class="w-full h-full flex items-center justify-center">
-				<span class="text-6xl font-bold" style="color: var(--theme-sidebar-muted); font-family: var(--font-display, 'JetBrains Mono', monospace);">
+			<!-- Placeholder with character initial and gradient background -->
+			<div class="w-full h-full flex items-center justify-center" style="background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%); opacity: 0.15;">
+				<span class="text-6xl font-bold" style="color: var(--theme-foreground); font-family: var(--font-display, 'JetBrains Mono', monospace); opacity: 1;">
 					{character.character_name.charAt(0).toUpperCase()}
 				</span>
 			</div>
