@@ -141,18 +141,23 @@ As a developer maintaining the system, I want this specification to supersede an
 - **FR-008**: System MUST support character search across name, series, and aliases with real-time filtering
 - **FR-009**: System MUST allow character deletion with automatic resource unlinking (all linked resources kept with character association removed, no data loss)
 
-**Wig Category (Separate from Accessories):**
+**Wig Management (Separate from Accessories):**
 - **FR-010**: System MUST provide dedicated Wigs page separate from accessories with wig-specific management
 - **FR-011**: System MUST allow users to create, read, update, and delete wig entries within their team
-- **FR-012**: System MUST track wig metadata: wig name, color, length (short/medium/long/extra-long), fiber type (synthetic/human-hair/blend), base wig brand/model, purchase cost, status (planned/ordered/received/in-progress/completed/needs-restyling/damaged) with free transition between any statuses
-- **FR-013**: System MUST support optional character linking for wigs (one wig can link to multiple characters if reusable)
+- **FR-012**: System MUST track wig metadata: wig name, color, length (short/medium/long/extra-long), fiber type (synthetic/human-hair/blend), base wig brand/model, status (planned/ordered/received/in-progress/completed/needs-restyling/damaged) with free transition between any statuses
+- **FR-013**: System MUST support many-to-many character linking for wigs: one wig can link to multiple characters if reusable (e.g., "Long silver wig" used for Saber, Weiss, Altria)
 - **FR-014**: System MUST allow users to track wig styling tasks with title, description, due date, status (pending/in-progress/completed)
-- **FR-015**: System MUST allow users to list material requirements for wigs (weft packs, dye, styling products, tools) with quantities and purchase status
-- **FR-016**: System MUST calculate total wig cost: base wig cost + material costs
+- **FR-015**: System MUST allow linking materials to wigs for styling supplies (wefts, dye, styling products) with quantities and costs via material-resource allocation table (FR-079)
+- **FR-016**: System MUST calculate total wig cost: base wig cost + allocated material costs (from FR-079)
 - **FR-017**: System MUST allow users to upload 1-10 progress photos per wig to Cloudflare R2 storage
-- **FR-018**: System MUST track wig completion date and time spent when status changes to "Completed" using hybrid approach: automatic calculation from status change timestamps (elapsed time) with optional manual override field for users to enter actual hours worked
+- **FR-018**: System MUST track wig completion date and time spent using hybrid approach: automatic calculation from status change timestamps with optional manual override
 - **FR-019**: System MUST allow users to add styling notes and techniques to wig entries for future reference
 - **FR-020**: System MUST display wig tasks on wig detail page with deadline countdown and overdue warnings
+- **FR-020a**: System MUST track wig condition: dropdown (Pristine, Good, Needs Care, Damaged) for maintenance awareness
+- **FR-020b**: System MUST track wig maintenance: last washed date (optional), maintenance notes (free text), repair history (notes field)
+- **FR-020c**: System MUST track wig storage: storage location (text field), storage method (text field) for organization
+- **FR-020d**: System MUST track wig source and commissioning: source type dropdown (Retailer, Commission, Marketplace, Self-Styled), vendor/creator link, base wig cost, styling cost, overall cost (single field), styling credits (text)
+- **FR-020e**: System MUST support post-event care reminders: after event ends, remind user to wash/maintain wigs linked to that event with optional link to wig care tutorial
 
 **Resource-to-Character Linking:**
 - **FR-021**: System MUST allow linking outfits to characters (one outfit to one character)
@@ -256,25 +261,93 @@ As a developer maintaining the system, I want this specification to supersede an
 - **FR-101**: System SHOULD support full maintenance log table (defer to Phase 2): structured history with maintenance date, type (cleaning/repair/calibration), cost, performed by, notes
 - **FR-102**: System SHOULD send maintenance reminders (defer to Phase 2): notify user when next service due date approaches (7 days before, 1 day before)
 
+**Accessories Management (Style/Appearance Items):**
+- **FR-103**: System MUST allow users to create, read, update, and delete accessory entries within their team
+- **FR-104**: System MUST track accessory metadata: accessory name, category dropdown (Jewelry, Belts & Sashes, Bags & Pouches, Footwear, Headpieces, Gloves, Small Armor, Scarves & Capes, Eyewear, Other), description
+- **FR-105**: System MUST support many-to-many character linking for accessories: one accessory can link to multiple characters if reusable
+- **FR-106**: System MUST allow tracking accessory construction tasks with title, description, due date, status (pending/in-progress/completed) for made accessories
+- **FR-107**: System MUST allow linking materials to accessories for crafting (foam, paint, fabric) with quantities and costs via material-resource allocation table (FR-079)
+- **FR-108**: System MUST allow uploading 1-10 progress photos per accessory to Cloudflare R2 storage
+- **FR-109**: System MUST support construction notes: free text for techniques, weathering, lessons learned
+- **FR-110**: System MUST track accessory status: dropdown (Idea, Planning, In Progress, On Hold, Needs Repair, Ready for Use, Retired) with free status transitions
+- **FR-111**: System MUST track accessory cost breakdown: total cost, allocated material costs (from FR-079), purchase/commission cost
+- **FR-112**: System MUST track accessory ownership status: dropdown (Owned, Need to Buy, Borrowed, On Loan) with optional "from/to" text field for tracking who
+- **FR-113**: System MUST track accessory origin: source type dropdown (Self-Made, Purchased-Retailer, Commissioned, Marketplace, Borrowed), vendor/creator link, purchase details
+- **FR-114**: System MUST support uploading receipts for purchased accessories to Cloudflare R2
+- **FR-115**: System MUST calculate accessory completion date and construction time using hybrid approach (automatic + manual override)
+
+**Enhanced Props Management (Functional/Tool Items):**
+- **FR-116**: System MUST migrate props from text character_series field to character FK (many-to-many relationship) for consistency with other resources
+- **FR-117**: System MUST allow linking materials to props for construction with quantities and costs via material-resource allocation table (FR-079)
+- **FR-118**: System MUST allow tracking prop construction tasks with title, description, due date, status (parallel to accessories)
+- **FR-119**: System MUST allow uploading 1-10 progress photos per prop to Cloudflare R2 storage (leverage existing resource_photos table)
+- **FR-120**: System MUST track prop ownership status: dropdown (Owned, Need to Buy, Borrowed, On Loan) parallel to accessories
+- **FR-121**: System MUST track prop origin: source type dropdown (Self-Made, Purchased-Retailer, Commissioned, Marketplace, Borrowed), vendor/creator link
+- **FR-122**: System MUST support uploading receipts for purchased props to Cloudflare R2
+- **FR-123**: System MUST track prop cost breakdown: total cost, allocated material costs, purchase/commission cost
+- **FR-124**: System MUST support prop construction notes for techniques and lessons learned
+
+**Enhanced Equipment Management (Photography Gear):**
+- **FR-125**: System MUST allow uploading 1-5 reference photos per equipment item to Cloudflare R2 (for identification, insurance documentation)
+- **FR-126**: System MUST support linking equipment to vendors via vendor_id FK for purchase tracking
+- **FR-127**: System MUST support uploading equipment purchase receipts to Cloudflare R2
+- **FR-128**: System MUST track equipment maintenance: Phase 1 MVP uses maintenance notes (free text), last serviced date; Phase 2 adds full maintenance log
+- **FR-129**: System MUST track equipment warranty: warranty expiration date field for tracking coverage
+- **FR-130**: Equipment detail page MUST display purchase history, maintenance notes, and vendor information
+
+**Enhanced Crew Management:**
+- **FR-131**: System MUST allow uploading 1 profile photo per crew member to Cloudflare R2 (for identification, roster visualization)
+- **FR-132**: System MUST track crew rate history: table linking crew member to events with rate paid, rate type (hourly/daily/project/flat), booking source (text), booking URL, event date, notes
+- **FR-133**: System MUST display rate history on crew detail page showing previous bookings and rates for budget planning
+- **FR-134**: Crew-to-Vendor linking and marketplace availability DEFERRED to future marketplace feature (separate spec)
+
+**Enhanced Locations Management:**
+- **FR-135**: System MUST allow uploading 1-10 reference photos per location to Cloudflare R2 (for location scouting, reference, previous shoots)
+- **FR-136**: System MUST track location costs: table linking location to cost types (rental_hourly, rental_daily, permit, deposit) with amount, currency, minimum duration, website URL, notes
+- **FR-137**: System MUST display cost information on location detail page with links to booking/permit websites
+- **FR-138**: System MUST track location restrictions: free text notes field for rules, hours, prohibitions, requirements
+- **FR-139**: System MUST integrate with weather forecasting (from spec 051): display weather forecast for upcoming events at this location, send warnings if bad weather predicted
+- **FR-140**: System MUST allow dismissing weather warnings: user can acknowledge and proceed despite warning if weather is desired or acceptable
+
+**Enhanced Vendor Management:**
+- **FR-141**: System MUST support uploading receipts/invoices per purchase to Cloudflare R2: link receipt to resource-vendor purchase record (FR-064)
+- **FR-142**: Vendor detail page MUST display all receipts uploaded for purchases from that vendor with download capability
+
+**Universal Receipt/Invoice Management:**
+- **FR-143**: System MUST provide universal Receipts table linking to all resource types (outfits, wigs, accessories, props, equipment, tools, materials) with: resource type, resource ID, vendor ID, R2 storage path, file type (pdf/jpg/png), purchase date, total cost, order number, notes
+- **FR-144**: All resource detail pages with purchases MUST display associated receipts with download/view capability
+- **FR-145**: Receipt uploads MUST support PDF, JPG, PNG formats up to 10MB per file
+
+**Post-Event Care Reminders:**
+- **FR-146**: After event ends, system MUST remind users to wash/clean resources used in event: wigs, outfits, accessories linked to event with care tutorial links
+- **FR-147**: Post-event reminders MUST be dismissible: user can mark as done or snooze for later
+- **FR-148**: System MUST track last cleaned/maintained date per resource for future care scheduling
+
 ### Key Entities
 
 - **Character**: Central organizational entity representing a character to cosplay. Contains character name, series, source medium, appearance description, personality notes, aliases, reference images (R2 URLs). Acts as hub for linking all related resources (outfits, wigs, props, accessories). Tracks completion percentage based on linked resources.
 
-- **Wig**: Dedicated resource category for wig management (separated from accessories). Contains wig name, color, length, fiber type, base wig brand, character links (many-to-many), status, tasks, material requirements, costs, styling notes, progress photos (R2 URLs). Tracks completion and time spent.
+- **Wig**: Dedicated resource category separated from accessories. Contains wig name, color, length, fiber type, base wig brand/model, character links (many-to-many for reusable wigs), status, styling tasks, material links (via allocation table), base/styling/total costs, progress photos (1-10 R2 URLs), styling notes, condition (Pristine/Good/Needs Care/Damaged), maintenance tracking (last washed, notes, repairs), storage (location, method), source type (Retailer/Commission/Marketplace/Self-Styled), vendor link, styling credits, completion/time tracking. Supports post-event care reminders.
 
-- **Outfit** (formerly "Costume"): Enhanced entity with added fields: version/variation (required if character-linked), pattern files (R2 URLs), pattern metadata, alteration notes, construction tasks, crafting notes, completion tracking.
+- **Outfit** (formerly "Costume"): Enhanced entity with version/variation field (required if character-linked), pattern files (PDF/JPG/PNG to R2), pattern metadata (name/brand/number/size/cost), alteration notes, construction tasks, material links (via allocation table), cost breakdown (base/materials/patterns/commission), crafting notes, time tracking (automatic + manual override), completion tracking. Links to one character (one-to-one).
 
-- **Character-Resource Link**: Junction entities linking characters to resources:
+- **Accessory**: Style/appearance items worn on body. Contains accessory name, category (Jewelry/Belts/Bags/Footwear/Headpieces/Gloves/SmallArmor/Scarves/Eyewear), character links (many-to-many), construction tasks, material links (via allocation table), progress photos (1-10 R2 URLs), construction notes, status (Idea/Planning/InProgress/OnHold/NeedsRepair/Ready/Retired), cost breakdown (total/materials/purchase/commission), ownership status (Owned/NeedToBuy/Borrowed/OnLoan with from/to tracking), source type (SelfMade/Purchased/Commissioned/Marketplace/Borrowed), vendor link, receipt uploads, completion/time tracking.
+
+- **Prop**: Functional/tool items used by character (weapons, shields, magical artifacts). Enhanced to match Accessories with: character links (many-to-many via FK migration), construction tasks, material links, progress photos (1-10 R2 URLs), construction notes, ownership status, source type, vendor link, receipt uploads, cost breakdown, completion/time tracking. Distinct from Accessories by function (tool/protection/narrative vs style/appearance).
+
+- **Equipment**: Photography gear (cameras/lenses/lighting/audio/tripods). Enhanced with: reference photos (1-5 R2 URLs), vendor linking, receipt uploads, maintenance tracking (Phase 1: notes + dates, Phase 2: full log), warranty expiration, purchase history display.
+
+- **Crew Member**: Team collaborators (photographers/makeup artists/commissioners). Enhanced with: profile photo (1 R2 URL), rate history tracking (per event), contact info, portfolio links, previous roles, favorites. Marketplace linking deferred to future spec.
+
+- **Location**: Shoot locations (studio/outdoor/convention/private). Enhanced with: reference photos (1-10 R2 URLs), cost tracking (rental/permit/deposit), restrictions notes, booking links, weather integration (forecast + warnings with dismiss capability).
+
+- **Character-Resource Links**: Junction entities linking characters to resources:
   - Character-Outfit: One-to-one (one outfit to one character)
-  - Character-Wig: Many-to-many (wigs can be reused across characters)
-  - Character-Prop: Many-to-many (props can be reused)
-  - Character-Accessory: Many-to-many (accessories can be reused)
+  - Character-Wig: Many-to-many (wigs reusable across characters)
+  - Character-Prop: Many-to-many (props reusable across characters)
+  - Character-Accessory: Many-to-many (accessories reusable across characters)
 
-- **Wig Task**: Represents styling tasks for wigs with title, description, due date, status. Linked to specific wig.
-
-- **Wig Material Requirement**: Represents materials needed for wig with name, quantity, cost, purchase status. Linked to specific wig.
-
-- **Outfit Task**: Represents construction tasks for outfits with title, description, due date, status. Linked to specific outfit.
+- **Resource Tasks**: Represents construction/styling tasks for resources (wigs, outfits, accessories, props) with title, description, due date, status (pending/in-progress/completed). Separate task tables per resource type for data integrity.
 
 - **Event/Convention**: Represents conventions, photoshoots, competitions with name, type, dates, location, notes. Links to multiple characters for event-based planning. Tracks event readiness based on character completion status.
 
@@ -289,6 +362,12 @@ As a developer maintaining the system, I want this specification to supersede an
 - **Material-Resource Allocation**: Junction entity linking materials to resources (characters, outfits, wigs, accessories, props) with usage tracking: quantity used, cost allocated, date used, and allocation notes. Enables per-project cost breakdowns and total materials cost aggregation per character.
 
 - **Tool**: Non-consumable cosplay creation tool (distinct from Equipment which is photography gear). Contains tool name, type (Sewing Machine/Heat Gun/Dremel/Airbrush/3D Printer/Cutting Mat/Iron/Mannequin), brand, model, serial number, condition (Excellent/Good/Fair/Poor/Needs Repair), ownership status (Owned/Rented/Borrowed/Loaned Out), purchase details (date, cost, vendor link, receipt R2 URL, warranty expiration), storage location (text), maintenance tracking (notes, last serviced, next due), reference photos (1-5 R2 URLs), usage notes. Tool detail page displays linked supplies (materials with tool_id FK) with stock levels and low stock warnings. Phase 2 adds full maintenance log.
+
+- **Receipt/Invoice**: Universal entity linking to all purchasable resources (outfits, wigs, accessories, props, equipment, tools, materials). Contains resource type, resource ID, vendor ID, R2 storage path (PDF/JPG/PNG up to 10MB), file type, purchase date, total cost, order number, notes, uploaded timestamp, uploaded by user. Enables return/warranty lookups, insurance documentation, and vendor purchase history.
+
+- **Crew Rate History**: Tracks previous rates paid per crew member. Contains crew member ID, optional event ID, rate amount, rate type (hourly/daily/project/flat), booking source (text), booking URL, event date, notes, created timestamp. Enables budget planning and rate comparison for future bookings.
+
+- **Location Cost**: Tracks location rental/permit fees. Contains location ID, cost type (rental_hourly/rental_daily/permit/deposit), amount, currency, minimum duration (minutes), website URL, notes, updated timestamp. Enables budget planning for location bookings.
 
 ## Clarifications
 
@@ -315,6 +394,19 @@ As a developer maintaining the system, I want this specification to supersede an
 - Q: How should material costs be allocated to projects for commission quotes and budgeting? → A: Per-project allocation junction table (material links to character/outfit with quantity used and cost allocated; character budget auto-aggregates all allocated material costs; supports commission cost breakdowns)
 - Q: Should cosplay creation tools (sewing machines, heat guns) be separate from photography equipment? → A: Separate Tools entity (distinct from Equipment which is photography gear; Tools are for cosplay creation, Equipment is for photoshoot production; similar tracking but different contexts and workflows)
 - Q: How should tool supplies (thread for sewing machines, glue for glue guns) be tracked? → A: Materials link to Tools optionally (materials table has optional tool_id FK; tool detail page shows all linked supplies with stock levels; warns when supplies are low; no separate tool supplies table needed)
+- Q: How should wigs track maintenance and care for longevity? → A: Condition dropdown (Pristine/Good/Needs Care/Damaged), last washed date, maintenance notes, repair history notes; post-event reminders to wash/clean wigs after conventions with care tutorial links
+- Q: Should one wig be usable for multiple characters? → A: Yes via many-to-many character linking (one wig can link to multiple characters if style is reusable across characters like "long silver wig" for Saber, Weiss, Altria)
+- Q: How should commissioned vs self-styled wigs be tracked? → A: Source type dropdown (Retailer/Commission/Marketplace/Self-Styled) with vendor link, base wig cost + styling cost tracked separately but overall cost as single field, styling credits text for attribution
+- Q: What's the difference between Accessories and Props? → A: Accessories are style/appearance items worn on body (jewelry, bags, belts, boots, headpieces); Props are functional/tool items used by character (swords, shields, staffs, magical artifacts); dividing line is function (style vs tool/narrative)
+- Q: Should Accessories have full tracking like Props? → A: Yes - both need tasks, materials, photos, cost breakdown, ownership status, source tracking for consistency and to support made accessories (crowns, armor pieces, weathered jewelry)
+- Q: Should Props be upgraded to match Accessories? → A: Yes - migrate character_series text to character FK (many-to-many), add materials linking, tasks, ownership status, source tracking, receipt uploads for consistency across resources
+- Q: Should Equipment (photography gear) and Tools (cosplay creation) be separate? → A: Yes separate entities - Equipment is photography gear for shoots (cameras, lenses), Tools are cosplay creation tools (sewing machines, heat guns); different contexts and workflows
+- Q: Should all resources support photos for identification? → A: Yes - all resources should support 1-10 reference photos (1-5 for Equipment/Tools, 1 for Crew, 1-10 for others) for visual identification, insurance documentation, and quick visual scanning
+- Q: Should all purchased resources support receipt uploads? → A: Yes - universal Receipts table links to all resource types for returns, warranties, insurance claims, and vendor purchase history
+- Q: How should Crew rates be tracked for budget planning? → A: Crew Rate History table tracks previous rates paid with rate type (hourly/daily/project), booking source/URL, event link for historical comparison and future budget estimates
+- Q: How should Location costs (rental, permits) be tracked? → A: Location Cost table tracks cost types (rental_hourly/daily/permit/deposit) with amounts, duration, website links for booking/budgeting
+- Q: Should weather forecasting integrate with Locations for outdoor shoots? → A: Yes from spec 051 - display forecast for upcoming events at location, send warnings if bad weather predicted, allow user to dismiss if weather is desired/acceptable
+- Q: Should post-event care be tracked for wigs and outfits? → A: Yes - after event ends, remind users to wash wigs and clean outfits linked to that event with care tutorial links, track last cleaned date per resource
 
 ## Success Criteria *(mandatory)*
 
@@ -343,6 +435,17 @@ As a developer maintaining the system, I want this specification to supersede an
 - **SC-021**: Users can create tool entry with photos and purchase details in under 2 minutes
 - **SC-022**: Tool detail page displays linked supplies with accurate stock levels and warnings
 - **SC-023**: Users can add maintenance notes and service dates in under 30 seconds
+- **SC-024**: Users can create accessory entry with tasks, materials, and photos in under 3 minutes
+- **SC-025**: Users can upload receipt for purchase in under 15 seconds with auto-link to vendor
+- **SC-026**: Prop detail page displays linked materials with accurate cost allocation
+- **SC-027**: Equipment detail page shows vendor info, warranty status, and receipts correctly
+- **SC-028**: Crew rate history displays previous bookings with rates for budget comparison
+- **SC-029**: Location detail page shows costs, restrictions, and weather forecast for upcoming events
+- **SC-030**: Post-event care reminders appear within 24 hours of event end
+- **SC-031**: Users can dismiss weather warnings and proceed with booking despite forecast
+- **SC-032**: Universal receipts display correctly on all resource types that support purchases
+- **SC-033**: Tool detail page shows linked supplies with accurate stock warnings
+- **SC-034**: Wig condition tracking helps 80%+ users maintain wigs longer (via survey)
 
 ## Assumptions
 
@@ -356,6 +459,17 @@ As a developer maintaining the system, I want this specification to supersede an
 - Character reference images follow same constraints as other images (5MB limit, auto-compression)
 - Character-to-resource linking is intuitive to cosplay community (common mental model)
 - Most outfits have 1-5 pattern files
+- Most materials are purchased in bulk (5+ yards fabric, 10+ foam sheets) for multiple projects
+- Tools are long-term investments (5+ year lifespan) maintained regularly
+- Accessories range from simple (purchased items) to complex (10+ tasks for armor pieces, crowns)
+- Props construction complexity varies widely (simple staff = 3 tasks, complex sword = 20+ tasks)
+- Equipment lifespan is 3-7 years with regular maintenance
+- Crew members are booked 2-4 weeks in advance for events
+- Locations require 1-4 weeks advance booking depending on type
+- Users attend 2-6 events per year (conventions, photoshoots, competitions)
+- Most receipts are digital (PDF) rather than scanned physical receipts
+- Weather forecasts are checked 7-10 days before outdoor shoots
+- Post-event care is often delayed 1-2 weeks after events (hence reminders needed)
 
 ## Dependencies
 
