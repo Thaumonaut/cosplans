@@ -71,7 +71,8 @@ export const actions: Actions = {
 		const maintenanceNotes = formData.get('maintenance_notes')?.toString() || undefined;
 		const storageLocation = formData.get('storage_location')?.toString() || undefined;
 		const storageMethod = formData.get('storage_method')?.toString() || undefined;
-		const characterId = formData.get('character_id')?.toString() || undefined;
+		const characterIdsStr = formData.get('character_ids')?.toString();
+		const characterIds: string[] = characterIdsStr ? JSON.parse(characterIdsStr) : [];
 		
 		// Get user's team
 		const adminClient = getAdminClient();
@@ -107,12 +108,17 @@ export const actions: Actions = {
 				created_by: session.user.id
 			});
 			
-			// Link to character if specified
-			if (characterId) {
+			// Link to characters if specified
+			if (characterIds.length > 0) {
 				try {
-					await wigService.linkToCharacter(wig.id, characterId);
+					// Link to each character
+					await Promise.all(
+						characterIds.map(characterId => 
+							wigService.linkToCharacter(wig.id, characterId)
+						)
+					);
 				} catch (linkErr) {
-					console.error('Error linking wig to character:', linkErr);
+					console.error('Error linking wig to characters:', linkErr);
 					// Non-fatal, continue
 				}
 			}

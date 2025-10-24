@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import ThemedTextarea from '$lib/components/ui/ThemedTextarea.svelte';
-	import CharacterPicker from '$lib/components/shared/CharacterPicker.svelte';
+	import { X } from 'lucide-svelte';
 	import type { PageData } from './$types';
 	
 	// Props
@@ -23,7 +23,7 @@
 	let maintenanceNotes = $state('');
 	let storageLocation = $state('');
 	let storageMethod = $state('');
-	let linkedCharacterId = $state<string | null>(null);
+	let linkedCharacterIds = $state<string[]>([]);
 	let isSubmitting = $state(false);
 	let errorMessage = $state('');
 	
@@ -57,6 +57,17 @@
 		{ value: 'damaged', label: 'Damaged' }
 	];
 	
+	// Character management
+	function addCharacter(characterId: string) {
+		if (!linkedCharacterIds.includes(characterId)) {
+			linkedCharacterIds = [...linkedCharacterIds, characterId];
+		}
+	}
+	
+	function removeCharacter(characterId: string) {
+		linkedCharacterIds = linkedCharacterIds.filter(id => id !== characterId);
+	}
+	
 	// Submit form
 	async function handleSubmit(e: Event) {
 		e.preventDefault();
@@ -88,7 +99,9 @@
 			if (maintenanceNotes) formData.append('maintenance_notes', maintenanceNotes);
 			if (storageLocation) formData.append('storage_location', storageLocation);
 			if (storageMethod) formData.append('storage_method', storageMethod);
-			if (linkedCharacterId) formData.append('character_id', linkedCharacterId);
+			if (linkedCharacterIds.length > 0) {
+				formData.append('character_ids', JSON.stringify(linkedCharacterIds));
+			}
 			
 			const response = await fetch('?/create', {
 				method: 'POST',
@@ -307,24 +320,72 @@
 				</div>
 			</div>
 			
-			<!-- Link to Character Card -->
+			<!-- Link to Characters Card -->
 			<div class="rounded-lg p-8 border" style="background: var(--theme-card-bg); border-color: var(--theme-border);">
 				<h2 class="text-xl font-bold mb-6" style="font-family: var(--font-display, 'JetBrains Mono', monospace); color: var(--theme-foreground);">
-					LINK TO CHARACTER
+					LINK TO CHARACTERS
 				</h2>
 				
 				<div class="space-y-4">
 					<p class="text-sm" style="color: var(--theme-sidebar-muted);">
-						Optional: Link this wig to a character to track which costumes use it
+						Optional: Link this wig to one or more characters (wigs can be reused across characters)
 					</p>
-					<CharacterPicker
-						characters={data.characters}
-						bind:selectedCharacterId={linkedCharacterId}
-						placeholder="Select a character (optional)..."
-						showCreateLink={true}
-						on:select={(e) => linkedCharacterId = e.detail.characterId}
-						on:clear={() => linkedCharacterId = null}
-					/>
+					
+					<!-- Character selector -->
+					<div class="space-y-3">
+						<select
+							class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2"
+							style="background: var(--theme-input-bg); border-color: var(--theme-border); color: var(--theme-foreground);"
+							onchange={(e) => {
+								const target = e.target as HTMLSelectElement;
+								if (target.value) {
+									addCharacter(target.value);
+									target.value = '';
+								}
+							}}
+						>
+							<option value="">Select a character to add...</option>
+							{#each data.characters.filter(c => !linkedCharacterIds.includes(c.id)) as character}
+								<option value={character.id}>{character.character_name} ({character.series})</option>
+							{/each}
+						</select>
+						
+						<!-- Linked characters list -->
+						{#if linkedCharacterIds.length > 0}
+							<div class="space-y-2">
+								<p class="text-sm font-medium" style="color: var(--theme-foreground);">Linked Characters:</p>
+								<div class="flex flex-wrap gap-2">
+									{#each linkedCharacterIds as characterId}
+										{@const character = data.characters.find(c => c.id === characterId)}
+										{#if character}
+											<div
+												class="flex items-center gap-2 px-3 py-1.5 rounded-lg"
+												style="background: var(--theme-sidebar-hover); border: 1px solid var(--theme-border);"
+											>
+												<span class="text-sm" style="color: var(--theme-foreground);">
+													{character.character_name}
+												</span>
+												<button
+													type="button"
+													onclick={() => removeCharacter(characterId)}
+													class="p-0.5 rounded hover:bg-[var(--theme-sidebar-bg)] transition-colors"
+													aria-label="Remove character"
+												>
+													<X size={14} style="color: var(--theme-sidebar-muted);" />
+												</button>
+											</div>
+										{/if}
+									{/each}
+								</div>
+							</div>
+						{/if}
+						
+						{#if data.characters.length === 0}
+							<p class="text-sm" style="color: var(--theme-sidebar-muted);">
+								No characters available. <a href="/characters/new" class="underline" style="color: var(--theme-primary);">Create a character first</a>.
+							</p>
+						{/if}
+					</div>
 				</div>
 			</div>
 			
