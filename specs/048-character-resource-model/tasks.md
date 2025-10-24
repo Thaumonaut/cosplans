@@ -55,21 +55,21 @@ All paths relative to repository root (`C:\Projects\Web\Vibe Coding\cosplans\`):
 
 ### Database Migration
 
-- [ ] T007 Create migration file `supabase/migrations/[timestamp]_characters_and_wigs.sql` for characters, wigs, junction tables
-- [ ] T008 In migration, create `characters` table with columns: id (uuid), team_id (uuid FK), character_name (text), series (text), source_medium (text enum), appearance_description (text), personality_notes (text), aliases (text), reference_images (text[] for R2 URLs), budget_mode (text enum: personal/commission), budget_limit (numeric), completion_percentage (numeric), created_at, updated_at, created_by, updated_by
-- [ ] T009 [P] In migration, create `wigs` table with columns: id (uuid), team_id (uuid FK), wig_name (text), color (text), length (text enum), fiber_type (text enum), base_wig_brand (text), status (text enum), base_wig_cost (numeric), styling_cost (numeric), total_cost (numeric), condition (text enum), last_washed_date (timestamptz), maintenance_notes (text), storage_location (text), storage_method (text), source_type (text enum), vendor_id (uuid FK nullable), created_at, updated_at
-- [ ] T010 [P] In migration, create `character_wigs` junction table with columns: id (uuid), character_id (uuid FK), wig_id (uuid FK), notes (text), created_at
-- [ ] T011 In migration, add Row Level Security (RLS) policies for characters table: SELECT (team member), INSERT (team member), UPDATE (team member), DELETE (team owner/admin)
-- [ ] T012 [P] In migration, add RLS policies for wigs table (same pattern as characters)
-- [ ] T013 [P] In migration, add RLS policies for character_wigs table (same pattern)
-- [ ] T014 Run migration with `bun run db:migrate` and verify tables created in Supabase dashboard
-- [ ] T015 Add database types to `src/lib/types/resources.ts`: Character, Wig, CharacterWig matching migration schema
+- [x] T007 Create migration file `supabase/migrations/[timestamp]_characters_and_wigs.sql` for characters, wigs, junction tables
+- [x] T008 In migration, create `characters` table with columns: id (uuid), team_id (uuid FK), character_name (text), series (text), source_medium (text enum), appearance_description (text), personality_notes (text), aliases (text), reference_images (text[] for R2 URLs), budget_mode (text enum: personal/commission), budget_limit (numeric), completion_percentage (numeric), created_at, updated_at, created_by, updated_by
+- [x] T009 [P] In migration, create `wigs` table with columns: id (uuid), team_id (uuid FK), wig_name (text), color (text), length (text enum), fiber_type (text enum), base_wig_brand (text), status (text enum), base_wig_cost (numeric), styling_cost (numeric), total_cost (numeric), condition (text enum), last_washed_date (timestamptz), maintenance_notes (text), storage_location (text), storage_method (text), source_type (text enum), vendor_id (uuid FK nullable), created_at, updated_at
+- [x] T010 [P] In migration, create `character_wigs` junction table with columns: id (uuid), character_id (uuid FK), wig_id (uuid FK), notes (text), created_at
+- [x] T011 In migration, add Row Level Security (RLS) policies for characters table: SELECT (team member), INSERT (team member), UPDATE (team member), DELETE (team owner/admin)
+- [x] T012 [P] In migration, add RLS policies for wigs table (same pattern as characters)
+- [x] T013 [P] In migration, add RLS policies for character_wigs table (same pattern)
+- [x] T014 Run migration with `bunx supabase db push` and verify tables created in Supabase dashboard
+- [x] T015 Add database types to `src/lib/types/resources.ts`: Character, Wig, CharacterWig matching migration schema (Already completed in T003)
 
 ### Server Services
 
-- [ ] T016 [P] Create `src/lib/server/resources/character-service.ts` with CRUD methods (create, getById, list, update, delete, searchByName, searchBySeries, filterBySourceMedium, calculateCompletionPercentage)
-- [ ] T017 [P] Create `src/lib/server/resources/wig-service.ts` with CRUD methods (create, getById, list, update, delete, filterByCharacter, filterByStatus)
-- [ ] T018 Create `src/lib/server/resources/allocation-service.ts` stub (for future material allocation, currently returns empty arrays)
+- [x] T016 [P] Create `src/lib/server/resources/character-service.ts` with CRUD methods (create, getById, list, update, delete, searchByName, searchBySeries, filterBySourceMedium, calculateCompletionPercentage, findDuplicate)
+- [x] T017 [P] Create `src/lib/server/resources/wig-service.ts` with CRUD methods (create, getById, list, update, delete, filterByCharacter, filterByStatus, linkToCharacter, unlinkFromCharacter, getLinkedCharacters)
+- [x] T018 Create `src/lib/server/resources/allocation-service.ts` stub (for future material allocation, currently returns empty arrays)
 
 **Checkpoint**: ✅ Database and services ready - UI implementation can now begin in parallel
 
