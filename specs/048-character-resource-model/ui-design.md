@@ -2,8 +2,10 @@
 
 **Feature**: Comprehensive Resource Management System (Spec 048)  
 **Target Audience**: Ages 13-40, cosplay community (creators, photographers, commissioners)  
-**Design Philosophy**: Vibrant green branding, modern, gamified - Make planning as exciting as the craft itself  
-**Brand Identity**: Fresh, outdoorsy, fantasy-inspired green (matching logo) with nature/adventure vibes
+**Design Philosophy**: Fresh + Technical - "Adventurer's Tunic" meets precision planning tools  
+**Brand Identity**: Organized adventure, maker precision, hopeful optimism (JetBrains Mono + vibrant green)  
+**Aesthetic**: High-low tech (monospace structure + organic creativity), clean palette with energetic green accents  
+**Inspiration**: Solarpunk, tech-optimism, outdoor adventure, systematic craftsmanship
 
 ---
 
@@ -93,91 +95,106 @@
 
 ### Color Palette
 
-**Primary Brand Colors** (Matching Logo):
-```css
-/* Main Brand (Vibrant Green Gradient - from logo) */
---brand-primary: #19DA5A;        /* Bright green (logo primary) */
---brand-secondary: #21F96A;      /* Lighter bright green (logo highlight) */
---brand-dark: #008F31;           /* Darker green (logo shadow) */
---brand-gradient: linear-gradient(135deg, #19DA5A 0%, #21F96A 50%, #008F31 100%);
+**Adventurer's Tunic Color Palette** (Fresh, Clean, Ready for Adventure):
 
-/* Accent Colors */
---accent-cyan: #06B6D4;          /* Bright cyan for info */
---accent-amber: #F59E0B;         /* Warm amber for warnings */
---accent-rose: #F43F5E;          /* Rose for errors */
---accent-purple: #8B5CF6;        /* Purple (alternative theme) */
---accent-pink: #EC4899;          /* Pink (alternative theme) */
+```css
+/* Primary Brand Colors (Logo Green - Vibrant & Fresh) */
+--brand-primary: #19DA5A;        /* Bright green (logo primary) - Buttons, links, primary actions */
+--brand-accent: #21F96A;         /* Light green (logo highlight) - Hover states, active elements */
+--brand-dark: #008F31;           /* Deep green (logo shadow) - Dark accents, pressed states */
+
+/* Fresh Green Tones (Supporting Palette) */
+--green-50: #F0FDF4;             /* Lightest green - Subtle backgrounds, hover states */
+--green-100: #DCFCE7;            /* Very light green - Active states, selected items */
+--green-200: #BBF7D0;            /* Light green - Muted accents */
+--green-600: #16A34A;            /* Medium green - Secondary actions */
+--green-700: #15803D;            /* Dark green - Text on light backgrounds */
+--green-900: #14532D;            /* Darkest green - Headers, strong text */
+
+/* Clean Neutrals (Slate Gray Family) */
+--slate-50: #F8FAFC;             /* Off-white - Nested backgrounds */
+--slate-100: #F1F5F9;            /* Very light gray - Dividers */
+--slate-200: #E2E8F0;            /* Light gray - Borders */
+--slate-400: #94A3B8;            /* Medium gray - Muted text */
+--slate-600: #475569;            /* Dark gray - Secondary text */
+--slate-900: #0F172A;            /* Almost black - Primary text */
+
+/* Status Colors (Fresh & Clear) */
+--status-success: #19DA5A;       /* Logo green - Completion, success */
+--status-info: #3B82F6;          /* Bright blue - Info states */
+--status-warning: #F59E0B;       /* Amber - Warnings */
+--status-error: #EF4444;         /* Red - Errors */
 ```
 
-**Dark Mode (Default)**:
-```css
-/* Backgrounds */
---bg-primary: #0a0a0a;           /* Deep black */
---bg-secondary: #171717;         /* Elevated surfaces */
---bg-tertiary: #262626;          /* Cards, modals */
---bg-hover: #404040;             /* Interactive hover */
+**Design Intent** (Inspired by "Adventurer's Tunic"):
+- **Fresh, clean, minimal** - Light backgrounds, crisp typography
+- **Vibrant green accents** - Logo green as energetic primary color
+- **JetBrains Mono headings** - Technical precision meets adventure
+- **"Ready for any quest"** - Optimistic, capable, organized
 
-/* Text */
---text-primary: #FAFAFA;         /* High contrast white */
---text-secondary: #A3A3A3;       /* Muted gray */
---text-tertiary: #737373;        /* Disabled, hints */
+
+**Light Mode** (Adventurer's Tunic - Default):
+```css
+/* Backgrounds (Fresh, Clean Whites & Light Greens) */
+--bg-primary: #FFFFFF;           /* Pure white - Main background */
+--bg-pattern: #DDF9E7;           /* Light mint green - Page background with subtle radial patterns */
+--bg-section: #FFFFFF;           /* White - Section containers */
+--bg-card: #F1FFF6;              /* Very light green tint - Cards */
+--bg-card-nested: #F8FAFC;       /* Off-white - Nested cards */
+--bg-input: #FFFFFF;             /* White - Form inputs */
+--bg-hover: #F0FDF4;             /* Lightest green - Hover states */
+--bg-active: #DCFCE7;            /* Light green - Active/selected states */
+
+/* Text (Clean, High Contrast) */
+--text-primary: #0F172A;         /* Dark slate - Primary text (body text, headings) */
+--text-secondary: #475569;       /* Medium slate - Secondary text, labels */
+--text-tertiary: #64748B;        /* Light slate - Muted text, hints, placeholders */
 
 /* Borders */
---border-subtle: #262626;        /* Dividers */
---border-default: #404040;       /* Input borders */
---border-focus: #19DA5A;         /* Focused state (brand green) */
+--border-subtle: #F1F5F9;        /* Very light - Subtle dividers */
+--border-default: #E2E8F0;       /* Light gray - Default borders */
+--border-strong: #CBD5E1;        /* Medium gray - Strong borders */
+--border-focus: #19DA5A;         /* BRIGHT logo green - Focus rings! */
 ```
 
-**Light Mode (Variant)**:
+**Dark Mode** (Night Adventurer - Variant):
 ```css
-/* Backgrounds */
---bg-primary: #FFFFFF;
---bg-secondary: #F5F5F5;
---bg-tertiary: #E5E5E5;
---bg-hover: #D4D4D4;
+/* Backgrounds (Clean Dark with Subtle Green Tint) */
+--bg-primary: #0A0E0A;           /* Very dark with green hint */
+--bg-secondary: #141814;         /* Slightly elevated */
+--bg-tertiary: #1F241F;          /* Cards, modals */
+--bg-hover: #2A312A;             /* Hover states */
+--bg-active: #354035;            /* Active states */
 
-/* Text */
---text-primary: #0a0a0a;
---text-secondary: #525252;
---text-tertiary: #A3A3A3;
+/* Text (Off-white, High Contrast on Dark) */
+--text-primary: #F8FAFC;         /* Off-white - Primary text */
+--text-secondary: #CBD5E1;       /* Light gray - Secondary text */
+--text-tertiary: #94A3B8;        /* Medium gray - Muted text */
 
 /* Borders */
---border-subtle: #E5E5E5;
---border-default: #D4D4D4;
---border-focus: #19DA5A;         /* Brand green */
-```
-
-**Status Colors** (Consistent across themes):
-```css
-/* Resource Status */
---status-planned: #3B82F6;       /* Blue */
---status-in-progress: #F59E0B;   /* Amber */
---status-completed: #19DA5A;     /* Brand green (matches logo) */
---status-on-hold: #6B7280;       /* Gray */
---status-damaged: #EF4444;       /* Red */
-
-/* Budget Warnings */
---budget-ok: #19DA5A;            /* Brand green (< 80%) */
---budget-warning: #F59E0B;       /* Amber (80-99%) */
---budget-exceeded: #EF4444;      /* Red (>= 100%) */
+--border-subtle: #1F241F;        /* Dark - Subtle dividers */
+--border-default: #2A312A;       /* Medium dark - Borders */
+--border-strong: #354035;        /* Lighter - Strong borders */
+--border-focus: #21F96A;         /* BRIGHT logo green (lighter for dark mode)! */
 ```
 
 ### Typography
 
-**Font Stack**:
+**Font Stack** (Technical Precision + Clean Readability):
 ```css
-/* Primary (UI Text) */
+/* Headings (Monospace - Tech Precision) */
+--font-display: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Consolas', monospace;
+/* JetBrains Mono: Clean, readable monospace with excellent weight range (100-800)
+   Provides "high-low tech" aesthetic - precise tools for creative craftsmanship
+   Pairs beautifully with vibrant green for solarpunk/tech-optimism vibe */
+
+/* Body Text (Sans-Serif - Clean & Readable) */
 --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+/* Inter: Professional, readable, excellent for UI and long-form content */
 
-/* Headings (Organic, Curvy - Matching Logo) */
---font-display: 'Fredoka', 'Baloo 2', 'Comfortaa', 'Inter', sans-serif;
-/* Primary: Fredoka (700 Bold) - Rounded, organic, nature-inspired curves
-   Fallback 1: Baloo 2 (800 ExtraBold) - Very curvy, playful fantasy vibe
-   Fallback 2: Comfortaa - Rounded geometric, professional
-   Fallback 3: Inter - System default */
-
-/* Monospace (Code, Numbers) */
+/* Numbers & Code (Monospace) */
 --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+/* Same as headings for consistency */
 ```
 
 **Type Scale** (1.25 ratio):
@@ -195,20 +212,25 @@
 
 **Font Weights**:
 ```css
-/* Body Text (Inter) */
---weight-normal: 400;
---weight-medium: 500;
---weight-semibold: 600;
+/* Display Headings (JetBrains Mono) */
+--weight-bold: 700;           /* Primary - H1, H2, H3 */
+--weight-extrabold: 800;      /* Optional - Extra large H1 on landing pages */
+--weight-semibold: 600;       /* H4, emphasized headings */
+--weight-medium: 500;         /* H5, H6 */
 
-/* Display Headings (Fredoka) */
---weight-bold: 700;           /* Primary - H1, H2 */
---weight-extrabold: 800;      /* Optional - Extra emphasis (use sparingly) */
+/* Body Text (Inter) */
+--weight-normal: 400;         /* Body text, paragraphs */
+--weight-medium: 500;         /* Labels, emphasized inline text */
+--weight-semibold: 600;       /* Buttons, strong emphasis */
 
 /* Usage Guide:
-   - H1, H2: Fredoka Bold (700) - Strong presence, matches logo curves
-   - H3, H4: Fredoka SemiBold (600) or Inter SemiBold (600) - Versatile
-   - H5, H6, Body: Inter Regular/Medium (400/500) - Clean, readable
-   - Emphasis: Inter SemiBold (600) - Inline emphasis in body text
+   - H1: JetBrains Mono Bold (700) - 3rem (48px) - Strong, technical presence
+   - H2: JetBrains Mono Bold (700) - 2.25rem (36px) - Section headings
+   - H3: JetBrains Mono SemiBold (600) - 1.875rem (30px) - Subsections
+   - H4: Inter SemiBold (600) - 1.25rem (20px) - Card titles
+   - H5, H6: Inter Medium (500) - 1.125rem/1rem - Small headings
+   - Body: Inter Regular (400) - 1rem (16px) - Readable content
+   - Buttons: Inter SemiBold (600) - Strong call-to-action
 */
 ```
 
@@ -216,11 +238,16 @@
 ```html
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-<!-- Optional fallback fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 ```
+
+**Why JetBrains Mono for Headings?**
+- ✅ **Technical precision** meets creative planning
+- ✅ **Monospace adds structure** - Organized, systematic, capable
+- ✅ **Excellent readability** at all sizes (designed for code, optimized for screen)
+- ✅ **Weight range (100-800)** - Flexible for all heading levels
+- ✅ **Modern tech aesthetic** - Pairs with solarpunk/maker culture vibe
+- ✅ **Creates contrast** with Inter body text - Clear hierarchy
 
 **Line Heights**:
 ```css
@@ -229,30 +256,56 @@
 --leading-relaxed: 1.75;  /* Long-form content */
 ```
 
-**Display Font Comparison** (Matching Logo Aesthetic):
-
-| Font | Sample | Characteristics | Best For |
-|------|--------|-----------------|----------|
-| **Fredoka Bold** | Character Resources | ● Organic, rounded curves<br>● Professional + playful<br>● Nature-inspired feel | H1, H2, Page titles |
-| **Baloo 2 ExtraBold** | Character Resources | ● Very curvy, flowing<br>● Whimsical, fantasy vibe<br>● High personality | H1 only (heroes, landing) |
-| **Comfortaa** | Character Resources | ● Geometric rounded<br>● Clean, modern<br>● Friendly but subtle | H3, H4, Subheadings |
-| **Inter SemiBold** | Character Resources | ● Neutral, readable<br>● Professional<br>● Fallback option | Body, labels, UI text |
-
-**Logo Aesthetic Match**:
-- **Fredoka**: ⭐⭐⭐⭐⭐ (Organic curves, bold presence, nature vibe)
-- **Baloo 2**: ⭐⭐⭐⭐⭐ (Very curvy, fantasy feel, playful)
-- **Comfortaa**: ⭐⭐⭐○○ (Rounded but more geometric)
-- **Cal Sans** (original): ⭐⭐○○○ (Modern geometric, doesn't match logo curves)
-
-**Recommended Hierarchy**:
+**Font Hierarchy** (Final):
 ```css
-h1 { font-family: var(--font-display); font-weight: 700; } /* Fredoka Bold */
-h2 { font-family: var(--font-display); font-weight: 700; } /* Fredoka Bold */
-h3 { font-family: var(--font-display); font-weight: 600; } /* Fredoka SemiBold */
-h4 { font-family: var(--font-sans); font-weight: 600; }    /* Inter SemiBold */
-h5, h6 { font-family: var(--font-sans); font-weight: 500; } /* Inter Medium */
-body { font-family: var(--font-sans); font-weight: 400; }   /* Inter Regular */
+h1 { 
+  font-family: var(--font-display); 
+  font-weight: 700; 
+  font-size: 3rem;
+  letter-spacing: -0.02em;  /* Tight tracking for monospace headings */
+}
+
+h2 { 
+  font-family: var(--font-display); 
+  font-weight: 700; 
+  font-size: 2.25rem;
+  letter-spacing: -0.01em;
+}
+
+h3 { 
+  font-family: var(--font-display); 
+  font-weight: 600; 
+  font-size: 1.875rem;
+}
+
+h4, h5, h6 { 
+  font-family: var(--font-sans); 
+  font-weight: 600; 
+  font-size: 1.25rem; /* h4 */
+}
+
+body { 
+  font-family: var(--font-sans); 
+  font-weight: 400; 
+  font-size: 1rem;
+  line-height: 1.5;
+}
 ```
+
+**Visual Example**:
+```
+JetBrains Mono Bold (H1):     CHARACTER RESOURCES
+JetBrains Mono Bold (H2):     LINKED RESOURCES
+JetBrains Mono SemiBold (H3): WIGS & ACCESSORIES
+Inter SemiBold (H4):          Details & Information
+Inter Regular (Body):         This character has 3 linked wigs and 5 accessories ready for your next photoshoot.
+```
+
+**Aesthetic Achieved**:
+- 🤖 **Technical precision** (monospace structure)
+- 🌿 **Nature harmony** (vibrant green accents)
+- 🎯 **Organized capability** (clean, systematic)
+- ✨ **Modern optimism** (fresh Adventurer's Tunic palette)
 
 ### Spacing System
 
