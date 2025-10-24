@@ -190,7 +190,7 @@
             <button
               type="button"
               class="absolute inset-y-0 right-0 pr-3 flex items-center"
-              on:click={() => togglePasswordVisibility('password')}
+              onclick={() => togglePasswordVisibility('password')}
             >
               {#if showPassword}
                 <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -321,7 +321,7 @@
             <button
               type="button"
               class="absolute inset-y-0 right-0 pr-3 flex items-center"
-              on:click={() => togglePasswordVisibility('confirm')}
+              onclick={() => togglePasswordVisibility('confirm')}
             >
               {#if showConfirmPassword}
                 <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

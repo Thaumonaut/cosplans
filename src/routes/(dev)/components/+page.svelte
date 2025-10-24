@@ -354,7 +354,7 @@
           Confirmation dialog for destructive or important actions.
         </p>
         <div class="space-y-3">
-          <ThemedButton variant="danger" on:click={() => showModal = true}>
+          <ThemedButton variant="danger" onclick={() => showModal = true}>
             Open Confirm Modal
           </ThemedButton>
           {#if modalResult}

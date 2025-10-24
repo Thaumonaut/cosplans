@@ -68,7 +68,7 @@
         style={$theme.activeId === defaultLightTheme.id
           ? "color: var(--theme-sidebar-accent);"
           : "color: var(--theme-foreground);"}
-        on:click={() => selectTheme(defaultLightTheme.id)}
+        onclick={() => selectTheme(defaultLightTheme.id)}
         role="menuitem"
       >
         <LucideIcon name={getThemeIcon(defaultLightTheme)} size={16} />
@@ -88,7 +88,7 @@
         style={$theme.activeId === defaultDarkTheme.id
           ? "color: var(--theme-sidebar-accent);"
           : "color: var(--theme-foreground);"}
-        on:click={() => selectTheme(defaultDarkTheme.id)}
+        onclick={() => selectTheme(defaultDarkTheme.id)}
         role="menuitem"
       >
         <LucideIcon name={getThemeIcon(defaultDarkTheme)} size={16} />
@@ -116,7 +116,7 @@
         style={$theme.activeId === themeVariant.id
           ? "color: var(--theme-sidebar-accent);"
           : "color: var(--theme-foreground);"}
-        on:click={() => selectTheme(themeVariant.id)}
+        onclick={() => selectTheme(themeVariant.id)}
         role="menuitem"
       >
         <LucideIcon name={getThemeIcon(themeVariant)} size={16} />
@@ -144,7 +144,7 @@
         style={$theme.activeId === themeVariant.id
           ? "color: var(--theme-sidebar-accent);"
           : "color: var(--theme-foreground);"}
-        on:click={() => selectTheme(themeVariant.id)}
+        onclick={() => selectTheme(themeVariant.id)}
         role="menuitem"
       >
         <LucideIcon name={getThemeIcon(themeVariant)} size={16} />
@@ -172,7 +172,7 @@
         style={$theme.activeId === "custom"
           ? "color: var(--theme-sidebar-accent);"
           : "color: var(--theme-foreground);"}
-        on:click={() => selectTheme("custom")}
+        onclick={() => selectTheme("custom")}
         role="menuitem"
       >
         <LucideIcon name="Palette" size={16} />
@@ -188,7 +188,7 @@
       <button
         type="button"
         class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-[var(--theme-sidebar-accent)] transition-colors hover:bg-[var(--theme-sidebar-hover)]"
-        on:click={createCustomTheme}
+        onclick={() => createCustomTheme()}
         role="menuitem"
       >
         <LucideIcon name="Palette" size={16} />

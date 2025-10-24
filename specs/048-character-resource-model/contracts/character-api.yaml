@@ -1,0 +1,698 @@
+openapi: 3.0.3
+info:
+  title: Character-Centric Resource Management API
+  description: API for managing characters, wigs, and enhanced costumes with resource linking
+  version: 1.0.0
+  contact:
+    name: Cosplans API Team
+
+servers:
+  - url: /api
+    description: API routes (SvelteKit server routes)
+
+tags:
+  - name: Characters
+    description: Character CRUD and completion tracking
+  - name: Wigs
+    description: Wig management with tasks and materials
+  - name: Resource Linking
+    description: Link resources to characters
+  - name: Costumes
+    description: Enhanced costume management with versions and patterns
+
+paths:
+  /characters:
+    get:
+      summary: List characters
+      tags: [Characters]
+      parameters:
+        - name: teamId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: series
+          in: query
+          schema:
+            type: string
+        - name: sourceMedium
+          in: query
+          schema:
+            type: string
+            enum: [anime, manga, video_game, movie, tv_show, book, comic, stage_production, original]
+        - name: search
+          in: query
+          description: Search across name, aliases, and series
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of characters with completion percentages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  characters:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CharacterSummary'
+    
+    post:
+      summary: Create character
+      tags: [Characters]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCharacterRequest'
+      responses:
+        '201':
+          description: Character created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Character'
+  
+  /characters/{id}:
+    get:
+      summary: Get character detail with all linked resources
+      tags: [Characters]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Character with linked resources
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CharacterDetail'
+    
+    patch:
+      summary: Update character
+      tags: [Characters]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCharacterRequest'
+      responses:
+        '200':
+          description: Character updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Character'
+    
+    delete:
+      summary: Delete character (auto-unlinks resources)
+      tags: [Characters]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Character deleted, resources unlinked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  unlinkedResources:
+                    type: object
+                    properties:
+                      costumes:
+                        type: integer
+                      wigs:
+                        type: integer
+                      props:
+                        type: integer
+                      accessories:
+                        type: integer
+  
+  /wigs:
+    get:
+      summary: List wigs
+      tags: [Wigs]
+      parameters:
+        - name: teamId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [planned, ordered, received, in_progress, completed, needs_restyling, damaged]
+        - name: characterId
+          in: query
+          description: Filter wigs linked to specific character
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: List of wigs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  wigs:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/WigSummary'
+    
+    post:
+      summary: Create wig
+      tags: [Wigs]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWigRequest'
+      responses:
+        '201':
+          description: Wig created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wig'
+  
+  /wigs/{id}:
+    get:
+      summary: Get wig detail with tasks and materials
+      tags: [Wigs]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Wig with tasks and materials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WigDetail'
+    
+    patch:
+      summary: Update wig (status, time override)
+      tags: [Wigs]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateWigRequest'
+      responses:
+        '200':
+          description: Wig updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wig'
+  
+  /characters/{id}/link-costume:
+    post:
+      summary: Link costume to character
+      tags: [Resource Linking]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [costumeId]
+              properties:
+                costumeId:
+                  type: string
+                  format: uuid
+      responses:
+        '200':
+          description: Costume linked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  newCompletionPercentage:
+                    type: integer
+  
+  /characters/{id}/link-wig:
+    post:
+      summary: Link wig to character (many-to-many)
+      tags: [Resource Linking]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [wigId]
+              properties:
+                wigId:
+                  type: string
+                  format: uuid
+      responses:
+        '200':
+          description: Wig linked
+  
+  /characters/{id}/unlink/{resourceType}/{resourceId}:
+    delete:
+      summary: Unlink resource from character
+      tags: [Resource Linking]
+      parameters:
+        - name: id
+          in: path
+          description: Character ID
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: resourceType
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [costume, wig, prop, accessory]
+        - name: resourceId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Resource unlinked
+
+components:
+  schemas:
+    Character:
+      type: object
+      required: [id, teamId, characterName, seriesName, sourceMedium]
+      properties:
+        id:
+          type: string
+          format: uuid
+        teamId:
+          type: string
+          format: uuid
+        characterName:
+          type: string
+          maxLength: 200
+        seriesName:
+          type: string
+          maxLength: 200
+        sourceMedium:
+          type: string
+          enum: [anime, manga, video_game, movie, tv_show, book, comic, stage_production, original]
+        aliases:
+          type: string
+          description: Comma-separated alternate names
+          maxLength: 500
+          example: "Saber, Artoria Pendragon, Altria Pendragon"
+        appearanceDescription:
+          type: string
+        personalityNotes:
+          type: string
+        referenceImages:
+          type: array
+          maxItems: 10
+          items:
+            type: object
+            properties:
+              url:
+                type: string
+                format: uri
+              filename:
+                type: string
+        completionPercentage:
+          type: integer
+          minimum: 0
+          maximum: 100
+        completionCalculatedAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    
+    CharacterSummary:
+      allOf:
+        - $ref: '#/components/schemas/Character'
+        - type: object
+          properties:
+            resourceCounts:
+              type: object
+              properties:
+                costumes:
+                  type: integer
+                wigs:
+                  type: integer
+                props:
+                  type: integer
+                accessories:
+                  type: integer
+    
+    CharacterDetail:
+      allOf:
+        - $ref: '#/components/schemas/Character'
+        - type: object
+          properties:
+            linkedCostumes:
+              type: array
+              items:
+                $ref: '#/components/schemas/CostumeSummary'
+            linkedWigs:
+              type: array
+              items:
+                $ref: '#/components/schemas/WigSummary'
+            linkedProps:
+              type: array
+              items:
+                type: object
+                # Prop schema from existing system
+            linkedAccessories:
+              type: array
+              items:
+                type: object
+                # Accessory schema from existing system
+    
+    CreateCharacterRequest:
+      type: object
+      required: [teamId, characterName, seriesName, sourceMedium]
+      properties:
+        teamId:
+          type: string
+          format: uuid
+        characterName:
+          type: string
+        seriesName:
+          type: string
+        sourceMedium:
+          type: string
+          enum: [anime, manga, video_game, movie, tv_show, book, comic, stage_production, original]
+        aliases:
+          type: string
+        appearanceDescription:
+          type: string
+        personalityNotes:
+          type: string
+        referenceImages:
+          type: array
+          items:
+            type: object
+            properties:
+              url:
+                type: string
+              filename:
+                type: string
+    
+    UpdateCharacterRequest:
+      type: object
+      properties:
+        characterName:
+          type: string
+        seriesName:
+          type: string
+        sourceMedium:
+          type: string
+        aliases:
+          type: string
+        appearanceDescription:
+          type: string
+        personalityNotes:
+          type: string
+        referenceImages:
+          type: array
+          items:
+            type: object
+    
+    Wig:
+      type: object
+      required: [id, teamId, wigName, status]
+      properties:
+        id:
+          type: string
+          format: uuid
+        teamId:
+          type: string
+          format: uuid
+        wigName:
+          type: string
+          maxLength: 200
+        color:
+          type: string
+        length:
+          type: string
+          enum: [short, medium, long, extra_long]
+        fiberType:
+          type: string
+          enum: [synthetic, human_hair, blend]
+        baseWigBrand:
+          type: string
+        baseWigModel:
+          type: string
+        status:
+          type: string
+          enum: [planned, ordered, received, in_progress, completed, needs_restyling, damaged]
+        baseWigCost:
+          type: number
+          format: decimal
+        currency:
+          type: string
+          default: USD
+        timeSpentAuto:
+          type: integer
+          description: Automatically calculated time in minutes
+        timeSpentManual:
+          type: integer
+          description: User-entered time override in minutes
+          nullable: true
+        stylingNotes:
+          type: string
+        progressPhotos:
+          type: array
+          maxItems: 10
+          items:
+            type: object
+            properties:
+              url:
+                type: string
+              filename:
+                type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    
+    WigSummary:
+      allOf:
+        - $ref: '#/components/schemas/Wig'
+        - type: object
+          properties:
+            characterLinks:
+              type: array
+              items:
+                type: object
+                properties:
+                  characterId:
+                    type: string
+                    format: uuid
+                  characterName:
+                    type: string
+            totalCost:
+              type: number
+              description: Base cost + sum of material costs
+    
+    WigDetail:
+      allOf:
+        - $ref: '#/components/schemas/Wig'
+        - type: object
+          properties:
+            tasks:
+              type: array
+              items:
+                $ref: '#/components/schemas/WigTask'
+            materials:
+              type: array
+              items:
+                $ref: '#/components/schemas/WigMaterial'
+            totalCost:
+              type: number
+    
+    WigTask:
+      type: object
+      required: [id, wigId, title, status]
+      properties:
+        id:
+          type: string
+          format: uuid
+        wigId:
+          type: string
+          format: uuid
+        title:
+          type: string
+        description:
+          type: string
+        dueDate:
+          type: string
+          format: date
+        status:
+          type: string
+          enum: [pending, in_progress, completed]
+        completedAt:
+          type: string
+          format: date-time
+          nullable: true
+    
+    WigMaterial:
+      type: object
+      required: [id, wigId, materialName]
+      properties:
+        id:
+          type: string
+          format: uuid
+        wigId:
+          type: string
+          format: uuid
+        materialName:
+          type: string
+        quantity:
+          type: string
+        cost:
+          type: number
+          format: decimal
+        currency:
+          type: string
+        purchased:
+          type: boolean
+        purchaseLink:
+          type: string
+          format: uri
+    
+    CreateWigRequest:
+      type: object
+      required: [teamId, wigName]
+      properties:
+        teamId:
+          type: string
+          format: uuid
+        wigName:
+          type: string
+        color:
+          type: string
+        length:
+          type: string
+        fiberType:
+          type: string
+        baseWigBrand:
+          type: string
+        baseWigCost:
+          type: number
+        characterIds:
+          type: array
+          description: Optional initial character links
+          items:
+            type: string
+            format: uuid
+    
+    UpdateWigRequest:
+      type: object
+      properties:
+        wigName:
+          type: string
+        status:
+          type: string
+        timeSpentManual:
+          type: integer
+          description: User override for time spent (minutes)
+        stylingNotes:
+          type: string
+        progressPhotos:
+          type: array
+          items:
+            type: object
+    
+    CostumeSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        version:
+          type: string
+          description: Required when linked to character
+        status:
+          type: string
+        patternFiles:
+          type: array
+          items:
+            type: object
+            properties:
+              url:
+                type: string
+              filename:
+                type: string
+              brand:
+                type: string
+              patternNumber:
+                type: string
+

@@ -136,17 +136,17 @@ Button with theme-aware variants.
 </script>
 
 <!-- Primary button (uses theme accent color) -->
-<ThemedButton type="submit" variant="primary" on:click={handleSubmit}>
+<ThemedButton type="submit" variant="primary" onclick={handleSubmit}>
   Save Changes
 </ThemedButton>
 
 <!-- Secondary button (transparent with border) -->
-<ThemedButton variant="secondary" on:click={handleCancel}>
+<ThemedButton variant="secondary" onclick={handleCancel}>
   Cancel
 </ThemedButton>
 
 <!-- Danger button (uses theme error color) -->
-<ThemedButton variant="danger" on:click={handleDelete}>
+<ThemedButton variant="danger" onclick={handleDelete}>
   Delete
 </ThemedButton>
 
@@ -172,7 +172,7 @@ Button with theme-aware variants.
 - `disabled` (optional): Disable button
 - `fullWidth` (optional): Make button full width
 
-**Events:** Supports `on:click`
+**Events:** Supports `onclick`
 
 ---
 
@@ -335,7 +335,7 @@ Success/error/warning/info messages.
       <ThemedButton type="submit" variant="primary">
         Create Team
       </ThemedButton>
-      <ThemedButton variant="secondary" on:click={() => history.back()}>
+      <ThemedButton variant="secondary" onclick={() => history.back()}>
         Cancel
       </ThemedButton>
     </div>

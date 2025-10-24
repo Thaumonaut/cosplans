@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from "$app/stores";
 
+  import CosplansLogo from "$lib/components/icons/CosplansLogo.svelte";
   import LucideIcon from "$lib/components/icons/LucideIcon.svelte";
   import MobileMenuToggle from "$lib/components/layout/MobileMenuToggle.svelte";
   import SidebarSection from "$lib/components/layout/SidebarSection.svelte";
@@ -9,6 +10,7 @@
   import { navigation as navigationStore } from "$lib/stores/navigation";
   import {
     MAIN_NAV_ITEMS,
+    DETAILS_NAV_ITEMS,
     NAVIGATION_SECTIONS,
     RESOURCE_NAV_ITEMS,
   } from "$lib/utils/navigation-items";
@@ -17,7 +19,7 @@
 
   export let showMobileToggle = true;
 
-  const allNavigationItems: NavigationItem[] = [...MAIN_NAV_ITEMS, ...RESOURCE_NAV_ITEMS];
+  const allNavigationItems: NavigationItem[] = [...MAIN_NAV_ITEMS, ...DETAILS_NAV_ITEMS, ...RESOURCE_NAV_ITEMS];
 
   // Touch gesture state for swipe-to-close on mobile
   let touchStartX = 0;
@@ -102,7 +104,7 @@
   }
 </script>
 
-<svelte:window on:resize={() => navigationStore.toggleMobile(false)} on:keydown={handleKeyDown} />
+<svelte:window on:resize={() => navigationStore.toggleMobile(false)} onkeydown={handleKeyDown} />
 
 <aside
   class={`relative flex h-full flex-col transition-[width] duration-200 ease-in-out ${
@@ -129,27 +131,9 @@
       style="color: var(--theme-sidebar-text);"
     >
       <div
-        class="flex h-9 w-9 items-center justify-center rounded-lg flex-shrink-0 transition-all group-hover:scale-110"
-        style="border: 2px solid var(--theme-sidebar-accent); background: var(--theme-sidebar-hover);"
+        class="flex h-9 w-9 items-center justify-center flex-shrink-0 transition-all group-hover:scale-110"
       >
-        <svg
-          class="w-5 h-5"
-          style="color: var(--theme-sidebar-accent);"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          stroke-width="2.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <!-- Camera icon with sparkles -->
-          <path
-            d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"
-          />
-          <circle cx="12" cy="13" r="4" />
-          <!-- Sparkle accent -->
-          <path d="M12 2v2M12 20v2M20 12h2M2 12h2" opacity="0.6" stroke-width="2" />
-        </svg>
+        <CosplansLogo variant="segmented" size="w-9 h-9" />
       </div>
       {#if !$navigationStore.isCollapsed}
         <span

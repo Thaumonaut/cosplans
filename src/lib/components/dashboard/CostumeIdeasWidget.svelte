@@ -161,7 +161,7 @@
         type="text"
         placeholder="Search characters, series, or tags..."
         value={searchQuery}
-        on:input={handleSearch}
+        oninput={(e) => handleSearch(e)}
         class="w-full px-4 py-2 pl-10 rounded-lg border focus:outline-none focus:ring-2 focus:ring-offset-0"
         style="background: var(--theme-sidebar-bg); color: var(--theme-foreground); border-color: var(--theme-sidebar-border); focus:ring-color: var(--theme-sidebar-accent);"
         aria-label="Search costume ideas"
@@ -188,28 +188,28 @@
         <Button
           size="sm"
           variant={selectedPriority === 'all' ? 'solid' : 'ghost'}
-          on:click={() => handlePriorityFilter('all')}
+          onclick={() => handlePriorityFilter('all')}
         >
           All Priority
         </Button>
         <Button
           size="sm"
           variant={selectedPriority === 'high' ? 'solid' : 'ghost'}
-          on:click={() => handlePriorityFilter('high')}
+          onclick={() => handlePriorityFilter('high')}
         >
           High
         </Button>
         <Button
           size="sm"
           variant={selectedPriority === 'medium' ? 'solid' : 'ghost'}
-          on:click={() => handlePriorityFilter('medium')}
+          onclick={() => handlePriorityFilter('medium')}
         >
           Medium
         </Button>
         <Button
           size="sm"
           variant={selectedPriority === 'low' ? 'solid' : 'ghost'}
-          on:click={() => handlePriorityFilter('low')}
+          onclick={() => handlePriorityFilter('low')}
         >
           Low
         </Button>
@@ -219,28 +219,28 @@
         <Button
           size="sm"
           variant={selectedStatus === 'all' ? 'solid' : 'ghost'}
-          on:click={() => handleStatusFilter('all')}
+          onclick={() => handleStatusFilter('all')}
         >
           All Status
         </Button>
         <Button
           size="sm"
           variant={selectedStatus === 'idea' ? 'solid' : 'ghost'}
-          on:click={() => handleStatusFilter('idea')}
+          onclick={() => handleStatusFilter('idea')}
         >
           Ideas
         </Button>
         <Button
           size="sm"
           variant={selectedStatus === 'planning' ? 'solid' : 'ghost'}
-          on:click={() => handleStatusFilter('planning')}
+          onclick={() => handleStatusFilter('planning')}
         >
           Planning
         </Button>
         <Button
           size="sm"
           variant={selectedStatus === 'ready' ? 'solid' : 'ghost'}
-          on:click={() => handleStatusFilter('ready')}
+          onclick={() => handleStatusFilter('ready')}
         >
           Ready
         </Button>

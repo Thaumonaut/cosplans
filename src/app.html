@@ -2,8 +2,37 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%sveltekit.assets%/favicon.png" />
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="%sveltekit.assets%/favicon.svg" />
+    <link rel="icon" type="image/png" href="%sveltekit.assets%/favicon.png" />
+    <link rel="apple-touch-icon" href="%sveltekit.assets%/apple-touch-icon.png" />
+    <link rel="manifest" href="%sveltekit.assets%/manifest.json" />
+    
+    <!-- Google Fonts: JetBrains Mono (headings) + Inter (body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    
+    <!-- Viewport -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <!-- App Metadata -->
+    <meta name="description" content="Cosplay planning and shoot management platform for cosplayers, photographers, and creative teams." />
+    <meta name="theme-color" content="#19DA5A" />
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Cosplans - Cosplay Planning Made Easy" />
+    <meta property="og:description" content="Plan shoots, manage costumes, coordinate teams, and track your cosplay projects all in one place." />
+    <meta property="og:image" content="%sveltekit.assets%/cosplans_logo.svg" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Cosplans - Cosplay Planning Made Easy" />
+    <meta name="twitter:description" content="Plan shoots, manage costumes, coordinate teams, and track your cosplay projects all in one place." />
+    <meta name="twitter:image" content="%sveltekit.assets%/cosplans_logo.svg" />
+    
     %sveltekit.head%
   </head>
   <body data-sveltekit-preload-data="hover">

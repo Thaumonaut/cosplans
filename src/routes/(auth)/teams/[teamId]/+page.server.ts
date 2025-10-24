@@ -2,6 +2,7 @@ import { error, fail, redirect } from '@sveltejs/kit';
 import type { PageServerLoad, Actions } from './$types';
 import { TeamJoinService } from '$lib/server/teams/join-service';
 import { TeamService } from '$lib/server/teams/team-service';
+import { getAdminClient } from '$lib/server/supabase/admin-client';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 	const { user } = await locals.safeGetSession();
@@ -61,15 +62,16 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 	// Create a map of user_id to display_name from profiles
 	const profileMap = new Map(profiles?.map((p) => [p.user_id, p.display_name]) || []);
 
+	// Get admin client once for all lookups
+	const adminClient = getAdminClient();
+
 	// Enrich members with display names and emails using full fallback chain
 	const enrichedMembers = await Promise.all(
 		(members || []).map(async (m) => {
 			let displayName = profileMap.get(m.user_id);
 			let email = '';
 
-			// Import admin client for auth fallback
-			const { getAdminClient } = await import('$lib/server/supabase/admin-client');
-			const adminClient = getAdminClient();
+			// Use admin client for auth fallback
 			const { data: { user: authUser } } = await adminClient.auth.admin.getUserById(m.user_id);
 
 			if (authUser) {

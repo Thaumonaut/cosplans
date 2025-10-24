@@ -178,7 +178,7 @@
       </p>
     </div>
 
-    <Button variant="default" on:click={() => showCreateModal = true}>
+    <Button variant="default" onclick={() => showCreateModal = true}>
       <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
       </svg>
@@ -189,7 +189,7 @@
   <!-- Filter Tabs -->
   <div class="flex gap-2 border-b" style="border-color: var(--theme-sidebar-border);">
     <button
-      on:click={() => filter = 'pending'}
+      onclick={() => filter = 'pending'}
       class="px-4 py-2 font-medium text-sm transition-colors relative"
       class:active={filter === 'pending'}
       style="color: {filter === 'pending' ? 'var(--theme-sidebar-accent)' : 'var(--theme-sidebar-muted)'};"
@@ -206,7 +206,7 @@
     </button>
     
     <button
-      on:click={() => filter = 'active'}
+      onclick={() => filter = 'active'}
       class="px-4 py-2 font-medium text-sm transition-colors relative"
       class:active={filter === 'active'}
       style="color: {filter === 'active' ? 'var(--theme-sidebar-accent)' : 'var(--theme-sidebar-muted)'};"
@@ -223,7 +223,7 @@
     </button>
 
     <button
-      on:click={() => filter = 'all'}
+      onclick={() => filter = 'all'}
       class="px-4 py-2 font-medium text-sm transition-colors relative"
       class:active={filter === 'all'}
       style="color: {filter === 'all' ? 'var(--theme-sidebar-accent)' : 'var(--theme-sidebar-muted)'};"
@@ -351,7 +351,7 @@
                     <Button
                       variant="default"
                       size="sm"
-                      on:click={() => claimOpenHandoff(handoff.id)}
+                      onclick={() => claimOpenHandoff(handoff.id)}
                     >
                       I'll Take It
                     </Button>
@@ -359,14 +359,14 @@
                     <Button
                       variant="ghost"
                       size="sm"
-                      on:click={() => declineHandoff(handoff.id)}
+                      onclick={() => declineHandoff(handoff.id)}
                     >
                       Decline
                     </Button>
                     <Button
                       variant="default"
                       size="sm"
-                      on:click={() => acceptHandoff(handoff.id)}
+                      onclick={() => acceptHandoff(handoff.id)}
                     >
                       Accept
                     </Button>
@@ -374,7 +374,7 @@
                     <Button
                       variant="default"
                       size="sm"
-                      on:click={() => completeHandoff(handoff.id)}
+                      onclick={() => completeHandoff(handoff.id)}
                     >
                       Mark Complete
                     </Button>

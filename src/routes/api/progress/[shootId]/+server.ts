@@ -7,7 +7,7 @@ import type { RequestHandler } from './$types';
  */
 export const GET: RequestHandler = async ({ params, locals }) => {
   const { shootId } = params;
-  
+
   if (!locals.user) {
     throw error(401, 'Unauthorized');
   }
@@ -29,39 +29,51 @@ export const GET: RequestHandler = async ({ params, locals }) => {
       throw error(403, 'Forbidden');
     }
 
-    // Fetch progress tracker data
-    const { data: progressData, error: progressError } = await locals.supabase
-      .from('progress_trackers')
-      .select('*')
-      .eq('shoot_id', shootId)
-      .single();
+    // Calculate fresh progress data using optimized function
+    const { data: freshProgress, error: calcError } = await locals.supabase
+      .rpc('calculate_shoot_progress_optimized', { p_shoot_id: shootId });
 
-    if (progressError) {
-      // If no progress tracker exists, create one with default values
-      const { data: newProgress, error: createError } = await locals.supabase
-        .from('progress_trackers')
-        .insert({
-          shoot_id: shootId,
-          costume_progress: 0,
-          props_progress: 0,
-          location_progress: 0,
-          team_progress: 0,
-          checklist_progress: 0,
-          editing_progress: 0,
-          overall_progress: 0,
-          outstanding_tasks: []
-        })
-        .select()
-        .single();
-
-      if (createError) {
-        throw error(500, 'Failed to create progress tracker');
-      }
-
-      return json(newProgress);
+    if (calcError) {
+      console.error('Error calculating progress:', calcError);
+      throw error(500, 'Failed to calculate progress');
     }
 
-    return json(progressData);
+    // Update progress tracker with fresh data
+    const { data: updatedProgress, error: updateError } = await locals.supabase
+      .from('progress_trackers')
+      .upsert({
+        shoot_id: shootId,
+        costume_progress: freshProgress[0]?.costume_progress || 0,
+        props_progress: freshProgress[0]?.props_progress || 0,
+        location_progress: freshProgress[0]?.location_progress || 0,
+        team_progress: freshProgress[0]?.team_progress || 0,
+        checklist_progress: freshProgress[0]?.checklist_progress || 0,
+        editing_progress: freshProgress[0]?.editing_progress || 0,
+        overall_progress: freshProgress[0]?.overall_progress || 0,
+        calculation_timestamp: new Date().toISOString(),
+      }, {
+        onConflict: 'shoot_id',
+        ignoreDuplicates: false
+      })
+      .select()
+      .single();
+
+    if (updateError) {
+      console.error('Error updating progress tracker:', updateError);
+      // Don't fail the request, just log the error
+    }
+
+    return json(updatedProgress || {
+      shoot_id: shootId,
+      costume_progress: freshProgress[0]?.costume_progress || 0,
+      props_progress: freshProgress[0]?.props_progress || 0,
+      location_progress: freshProgress[0]?.location_progress || 0,
+      team_progress: freshProgress[0]?.team_progress || 0,
+      checklist_progress: freshProgress[0]?.checklist_progress || 0,
+      editing_progress: freshProgress[0]?.editing_progress || 0,
+      overall_progress: freshProgress[0]?.overall_progress || 0,
+      calculation_timestamp: new Date().toISOString(),
+    });
   } catch (err) {
     console.error('Error fetching progress:', err);
     throw error(500, 'Internal server error');
@@ -74,7 +86,7 @@ export const GET: RequestHandler = async ({ params, locals }) => {
  */
 export const POST: RequestHandler = async ({ params, locals }) => {
   const { shootId } = params;
-  
+
   if (!locals.user) {
     throw error(401, 'Unauthorized');
   }
@@ -96,50 +108,41 @@ export const POST: RequestHandler = async ({ params, locals }) => {
       throw error(403, 'Forbidden');
     }
 
-    // Calculate progress from various sources
-    // TODO: Implement actual calculation logic from related entities
-    
-    // For now, fetch current data and return it
-    const { data: progressData, error: progressError } = await locals.supabase
-      .from('progress_trackers')
-      .select('*')
-      .eq('shoot_id', shootId)
-      .single();
+    // Calculate fresh progress using optimized function
+    const { data: freshProgress, error: calcError } = await locals.supabase
+      .rpc('calculate_shoot_progress_optimized', { p_shoot_id: shootId });
 
-    if (progressError) {
-      throw error(404, 'Progress tracker not found');
+    if (calcError) {
+      console.error('Error calculating progress:', calcError);
+      throw error(500, 'Failed to calculate progress');
     }
 
-    // Calculate overall progress as weighted average
-    const categories = [
-      progressData.costume_progress,
-      progressData.props_progress,
-      progressData.location_progress,
-      progressData.team_progress,
-      progressData.checklist_progress,
-      progressData.editing_progress
-    ];
-    
-    const overall = Math.round(
-      categories.reduce((sum, val) => sum + val, 0) / categories.length
-    );
-
-    // Update overall progress
-    const { data: updated, error: updateError } = await locals.supabase
+    // Update progress tracker
+    const { data: updatedProgress, error: updateError } = await locals.supabase
       .from('progress_trackers')
-      .update({
-        overall_progress: overall,
-        calculation_timestamp: new Date().toISOString()
+      .upsert({
+        shoot_id: shootId,
+        costume_progress: freshProgress[0]?.costume_progress || 0,
+        props_progress: freshProgress[0]?.props_progress || 0,
+        location_progress: freshProgress[0]?.location_progress || 0,
+        team_progress: freshProgress[0]?.team_progress || 0,
+        checklist_progress: freshProgress[0]?.checklist_progress || 0,
+        editing_progress: freshProgress[0]?.editing_progress || 0,
+        overall_progress: freshProgress[0]?.overall_progress || 0,
+        calculation_timestamp: new Date().toISOString(),
+      }, {
+        onConflict: 'shoot_id',
+        ignoreDuplicates: false
       })
-      .eq('shoot_id', shootId)
       .select()
       .single();
 
     if (updateError) {
+      console.error('Error updating progress tracker:', updateError);
       throw error(500, 'Failed to update progress');
     }
 
-    return json(updated);
+    return json(updatedProgress);
   } catch (err) {
     console.error('Error recalculating progress:', err);
     throw error(500, 'Internal server error');

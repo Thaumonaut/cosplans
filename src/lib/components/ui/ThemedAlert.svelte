@@ -28,7 +28,7 @@
 	{#if dismissible}
 		<button
 			type="button"
-			on:click={handleDismiss}
+			onclick={() => handleDismiss()}
 			class="ml-4 text-white hover:opacity-80 transition-opacity"
 			aria-label="Dismiss"
 		>

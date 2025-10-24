@@ -245,7 +245,7 @@
       </div>
       <p class="text-sm" style="color: var(--theme-sidebar-text);">{error}</p>
       <button
-        on:click={() => window.location.reload()}
+        onclick={() => window.location.reload()}
         class="mt-2 text-xs"
         style="color: var(--theme-sidebar-accent);"
       >
@@ -319,7 +319,7 @@
         </p>
         <div class="flex items-center gap-2">
           <button
-            on:click={() => navigateWeek(-1)}
+            onclick={() => navigateWeek(-1)}
             class="p-1.5 rounded-lg transition-all hover:opacity-70"
             style="color: var(--theme-sidebar-text); background: var(--theme-sidebar-hover);"
             aria-label="Previous week"
@@ -334,7 +334,7 @@
             </svg>
           </button>
           <button
-            on:click={() => navigateWeek(1)}
+            onclick={() => navigateWeek(1)}
             class="p-1.5 rounded-lg transition-all hover:opacity-70"
             style="color: var(--theme-sidebar-text); background: var(--theme-sidebar-hover);"
             aria-label="Next week"

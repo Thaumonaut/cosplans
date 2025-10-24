@@ -59,7 +59,7 @@
     <button
       type="button"
       class="oauth-button google"
-      on:click={() => handleOAuthLogin('google')}
+      onclick={() => handleOAuthLogin('google')}
       disabled={loading}
       aria-label="Sign in with Google"
     >
@@ -76,7 +76,7 @@
     <button
       type="button"
       class="oauth-button facebook"
-      on:click={() => handleOAuthLogin('facebook')}
+      onclick={() => handleOAuthLogin('facebook')}
       disabled={loading}
       aria-label="Sign in with Facebook"
     >
@@ -90,7 +90,7 @@
     <button
       type="button"
       class="oauth-button twitter"
-      on:click={() => handleOAuthLogin('twitter')}
+      onclick={() => handleOAuthLogin('twitter')}
       disabled={loading}
       aria-label="Sign in with X (Twitter)"
     >
@@ -104,7 +104,7 @@
     <button
       type="button"
       class="oauth-button twitch"
-      on:click={() => handleOAuthLogin('twitch')}
+      onclick={() => handleOAuthLogin('twitch')}
       disabled={loading}
       aria-label="Sign in with Twitch"
     >

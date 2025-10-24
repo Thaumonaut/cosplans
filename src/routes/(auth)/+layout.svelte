@@ -8,6 +8,9 @@
   import ThemeSwitcher from "$lib/components/layout/ThemeSwitcher.svelte";
   import { navigation as navigationStore } from "$lib/stores/navigation";
   import { theme } from "$lib/stores/theme";
+  import { PanelLeftClose, PanelLeftOpen } from "lucide-svelte";
+
+  export let data;
 
   onMount(() => {
     if (browser) {
@@ -20,6 +23,44 @@
   onMount(() => {
     navigationStore.setActiveItem(currentRoute.split("/")[1] ?? "dashboard");
   });
+
+  // Update navigation store with user data (with display name fallback chain)
+  $: if (data?.user) {
+    // Fallback chain for display name (following CRITICAL pattern from memory)
+    let displayName = data.profile?.display_name;
+    
+    if (!displayName || displayName.trim() === '') {
+      // Try OAuth metadata
+      displayName = data.user.user_metadata?.full_name || data.user.user_metadata?.name;
+      
+      // Try first_name + last_name
+      if (!displayName) {
+        const firstName = data.user.user_metadata?.first_name || data.user.user_metadata?.firstName || '';
+        const lastName = data.user.user_metadata?.last_name || data.user.user_metadata?.lastName || '';
+        const fullName = `${firstName} ${lastName}`.trim();
+        if (fullName) {
+          displayName = fullName;
+        }
+      }
+      
+      // Fall back to email
+      if (!displayName) {
+        displayName = data.user.email;
+      }
+      
+      // Last resort: truncated user ID
+      if (!displayName) {
+        displayName = `User ${data.user.id.substring(0, 8)}`;
+      }
+    }
+    
+    navigationStore.setUser({
+      id: data.user.id,
+      name: displayName,
+      email: data.user.email || '',
+      avatarUrl: data.profile?.avatar_url || data.user.user_metadata?.avatar_url || data.user.user_metadata?.picture
+    });
+  }
 
   function toggleMobileSidebar(open?: boolean) {
     navigationStore.toggleMobile(open);
@@ -84,7 +125,7 @@
   {#if $navigationStore.isOpen}
     <div
       class="fixed inset-0 z-30 bg-black/50 backdrop-blur-sm md:hidden"
-      on:click={() => toggleMobileSidebar(false)}
+      onclick={() => toggleMobileSidebar(false)}
       aria-hidden="true"
     ></div>
   {/if}
@@ -109,33 +150,13 @@
           type="button"
           class="hidden rounded-md p-2 transition-all md:inline-flex focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 hover:brightness-90"
           style="color: var(--theme-header-muted);"
-          on:click={toggleSidebarCollapse}
+          onclick={() => toggleSidebarCollapse()}
           aria-label={$navigationStore.isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {#if $navigationStore.isCollapsed}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg
-            >
+            <PanelLeftOpen size={18} />
           {:else}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"><path d="m15 18-6-6 6-6" /></svg
-            >
+            <PanelLeftClose size={18} />
           {/if}
         </button>
       </div>
@@ -145,7 +166,7 @@
           type="button"
           class="group inline-flex items-center gap-2 rounded-md px-2 py-2 text-sm font-medium transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 hover:brightness-90"
           style="color: var(--theme-header-text);"
-          on:click={handleSignOut}
+          onclick={() => handleSignOut()}
           aria-label="Sign out"
         >
           <span class="hidden sm:inline">Sign Out</span>

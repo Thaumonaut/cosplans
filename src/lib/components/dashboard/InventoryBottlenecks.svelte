@@ -332,7 +332,7 @@
                     <Button
                       variant="ghost"
                       size="sm"
-                      on:click={() => assignToMe(item.id)}
+                      onclick={() => assignToMe(item.id)}
                     >
                       Assign to Me
                     </Button>
@@ -340,7 +340,7 @@
                   <Button
                     variant="default"
                     size="sm"
-                    on:click={() => resolveBottleneck(item.id)}
+                    onclick={() => resolveBottleneck(item.id)}
                   >
                     Mark Resolved
                   </Button>

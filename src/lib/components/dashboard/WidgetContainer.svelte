@@ -47,10 +47,10 @@
   class="widget-container"
   class:dragging={isDragging}
   draggable="true"
-  on:dragstart={handleDragStart}
-  on:dragend={handleDragEnd}
-  on:dragover={handleDragOver}
-  on:drop={handleDrop}
+  ondragstart={(e) => handleDragStart(e)}
+  ondragend={(e) => handleDragEnd(e)}
+  ondragover={(e) => handleDragOver(e)}
+  ondrop={(e) => handleDrop(e)}
   role="group"
   aria-label="Dashboard widget"
 >

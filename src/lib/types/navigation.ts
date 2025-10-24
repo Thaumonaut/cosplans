@@ -1,4 +1,4 @@
-export type NavigationGroup = "main" | "resources" | "settings" | "header-actions";
+export type NavigationGroup = "main" | "details" | "resources" | "settings" | "header-actions";
 
 export type NavigationBadgeType = "error" | "warning" | "info";
 
@@ -15,6 +15,7 @@ export type LucideIconName =
   | "ChevronLeft"
   | "ChevronRight"
   | "ChevronUp"
+  | "ClipboardList"
   | "Home"
   | "Image"
   | "LayoutDashboard"
@@ -80,7 +81,7 @@ export interface SidebarState {
 }
 
 export interface NavigationSection {
-  id: Extract<NavigationGroup, "main" | "resources" | "settings">;
+  id: Extract<NavigationGroup, "main" | "details" | "resources" | "settings">;
   label: string;
   items: NavigationItem[];
 }

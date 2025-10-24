@@ -133,7 +133,7 @@
   <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
   <div
     class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
-    on:click={handleBackdropClick}
+    onclick={(e) => handleBackdropClick(e)}
   >
     <div
       class="w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-lg shadow-2xl"
@@ -151,7 +151,7 @@
           Customize Dashboard
         </h2>
         <button
-          on:click={handleClose}
+          onclick={() => handleClose()}
           class="p-2 rounded-lg hover:bg-opacity-10"
           style="color: var(--theme-header-text);"
           aria-label="Close"
@@ -172,7 +172,7 @@
           <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
             {#each templates as template}
               <button
-                on:click={() => handleTemplateChange(template.value)}
+                onclick={() => handleTemplateChange(template.value)}
                 class="p-4 rounded-lg border-2 text-left transition-all"
                 class:selected={localTemplate === template.value}
                 style="background: var(--theme-sidebar-hover); border-color: {localTemplate === template.value ? 'var(--theme-sidebar-accent)' : 'var(--theme-sidebar-border)'};"
@@ -214,7 +214,7 @@
                   <Button
                     size="icon"
                     variant="ghost"
-                    on:click={() => moveWidgetUp(widget.id)}
+                    onclick={() => moveWidgetUp(widget.id)}
                     disabled={widget.position === 0}
                     aria-label="Move up"
                   >
@@ -226,7 +226,7 @@
                   <Button
                     size="icon"
                     variant="ghost"
-                    on:click={() => moveWidgetDown(widget.id)}
+                    onclick={() => moveWidgetDown(widget.id)}
                     disabled={widget.position === localWidgets.length - 1}
                     aria-label="Move down"
                   >
@@ -238,7 +238,7 @@
                   <Button
                     size="icon"
                     variant="ghost"
-                    on:click={() => toggleWidgetVisibility(widget.id)}
+                    onclick={() => toggleWidgetVisibility(widget.id)}
                     aria-label={widget.visible ? 'Hide' : 'Show'}
                   >
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -253,7 +253,7 @@
                   <Button
                     size="icon"
                     variant="ghost"
-                    on:click={() => removeWidget(widget.id)}
+                    onclick={() => removeWidget(widget.id)}
                     aria-label="Remove"
                     style="color: var(--theme-error, #ef4444);"
                   >
@@ -277,7 +277,7 @@
                   <Button
                     size="sm"
                     variant="ghost"
-                    on:click={() => addWidget(widgetType.type)}
+                    onclick={() => addWidget(widgetType.type)}
                   >
                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -296,10 +296,10 @@
         class="flex justify-end gap-3 px-6 py-4 border-t"
         style="background: var(--theme-header-bg); border-color: var(--theme-sidebar-border);"
       >
-        <Button variant="ghost" on:click={handleClose}>
+        <Button variant="ghost" onclick={() => handleClose()}>
           Cancel
         </Button>
-        <Button variant="solid" on:click={handleSave}>
+        <Button variant="solid" onclick={() => handleSave()}>
           Save Changes
         </Button>
       </div>

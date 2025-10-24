@@ -112,7 +112,7 @@
       { key: 'editing', label: 'Editing' }
     ] as category}
       <button
-        on:click={() => selectedCategory = category.key}
+        onclick={() => selectedCategory = category.key}
         class="px-3 py-1.5 rounded-lg text-sm font-medium transition-all"
         class:selected={selectedCategory === category.key}
         style="background: {selectedCategory === category.key ? getCategoryColor(category.key) : 'var(--theme-sidebar-hover)'}; color: {selectedCategory === category.key ? 'white' : 'var(--theme-sidebar-text)'};"

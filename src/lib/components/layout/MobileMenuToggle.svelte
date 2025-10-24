@@ -17,7 +17,7 @@
   class="inline-flex items-center justify-center rounded-md border border-[var(--theme-sidebar-border)] bg-[var(--theme-sidebar-bg)] p-2 text-[var(--theme-sidebar-text)] shadow-sm transition-colors hover:bg-[var(--theme-sidebar-hover)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-sidebar-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-sidebar-bg)]"
   aria-label={label}
   aria-expanded={open}
-  on:click={handleClick}
+  onclick={() => handleClick()}
 >
   {#if open}
     <X size={22} aria-hidden="true" />

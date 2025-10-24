@@ -3,12 +3,16 @@
 **Branch**: `041-sidebar-navigation` | **Date**: 2025-10-16 | **Spec**: [spec.md](./spec.md)
 **Input**: Feature specification from `/specs/041-sidebar-navigation/spec.md`
 
-**Status**: ✅ Clarification Complete (7 questions resolved)
+**Status**: ✅ Clarification Complete (13 questions resolved - Q1-Q13)
 
 ## Summary
 
-Implement persistent sidebar navigation system for the Cosplans application with:
-- **18 navigation items** across 3 sections (Main: 6, Resources: 7, Settings: 3) + header actions
+Implement **adaptive sidebar navigation system** for the Cosplans application with:
+- **Adaptive Navigation**: Smart/dynamic layout based on team context (personal vs shared)
+- **New Routes**: Planning (/planning), Active Projects, Archive for project lifecycle
+- **Auto-hide System**: Overflow menu ("More...") for unused sections with manual pin/unpin
+- **Preference System**: Global default + per-team overrides, synced via Supabase
+- **Navigation Presets**: Auto (Recommended), Minimal, Full, Photographer Focus, Coordinator Focus
 - **Team switcher** at top with smart redirect and unsaved changes protection
 - **Mobile-responsive** design: overlay on <768px with swipe-to-close
 - **Theme system** with multiple light/dark variants + custom theme option
@@ -54,16 +58,18 @@ Implement persistent sidebar navigation system for the Cosplans application with
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-✅ **Principle I (Web-First Mobile-Responsive)**: Sidebar designed mobile-first with overlay pattern, touch-friendly (44px targets), works on 320px+ screens  
-✅ **Principle II (Real-Time Collaboration)**: Notification badges update in real-time via WebSocket, team switch syncs data instantly  
-✅ **Principle III (External Integration)**: No external integrations needed for sidebar itself  
-✅ **Principle V (Visual-First)**: Navigation icons use Lucide for consistent visual language  
-✅ **Principle VI (Test-Driven Development)**: Tests required for: navigation state, team switching, mobile overlay, keyboard nav, theme persistence  
-✅ **Principle VII (Roles & Permissions)**: Navigation items respect permission-based visibility (admin-only sections hidden)  
-✅ **Principle IX (Bun Runtime)**: All commands use Bun (bun install lucide-svelte, bun run dev)  
-✅ **Technical Architecture**: Uses SvelteKit file-based router (constitutional mandate), shadcn/svelte + Lucide icons, Tailwind CSS  
+✅ **Principle 1 (Reduce Overwhelm)**: Adaptive navigation hides unused sections after 30 days, supports Planning (unlimited ideas) → Active Projects (max 3), provides "More..." overflow menu to reduce visual clutter  
+✅ **Principle 4 (Personal Team Permanence)**: Navigation adapts to personal vs shared teams, personal team always accessible  
+✅ **Principle 6 (Dependency-First Development)**: Navigation system is foundational - built before dependent features  
+✅ **Principle 7 (Solo Developer Efficiency)**: Uses SvelteKit + Supabase RLS for minimal maintenance, leverages existing theme system  
+✅ **Web-First Mobile-Responsive**: Sidebar designed mobile-first with overlay pattern, touch-friendly (44px targets), works on 320px+ screens  
+✅ **Real-Time Collaboration**: Notification badges update in real-time via WebSocket, team switch syncs data instantly  
+✅ **Test-Driven Development**: Tests required for: navigation state, team switching, mobile overlay, keyboard nav, theme persistence, auto-hide logic  
+✅ **Roles & Permissions**: Navigation items respect permission-based visibility (admin-only sections hidden)  
+✅ **Bun Runtime**: All commands use Bun (bun install lucide-svelte, bun run dev)  
+✅ **Technical Architecture**: Uses SvelteKit file-based router, Flowbite Svelte + Lucide icons, Tailwind CSS  
 
-**No constitutional violations. Feature fully aligned with all principles.**
+**No constitutional violations. Feature fully aligned with all principles, especially "Reduce Overwhelm" via adaptive navigation and auto-hide.**
 
 ## Project Structure
 
@@ -115,21 +121,24 @@ src/
 │   │   ├── +layout.svelte                        # NEW - Includes Sidebar component
 │   │   ├── +layout.ts                            # NEW - Load user, team, permissions
 │   │   ├── dashboard/+page.svelte                # MOVE from root
+│   │   ├── planning/+page.svelte                 # NEW (Q9) - Idea Bank / Pre-Production
+│   │   ├── active-projects/+page.svelte          # NEW (Q10) - Active WIP projects (max 3)
 │   │   ├── calendar/+page.svelte                 # NEW or MOVE
 │   │   ├── gallery/+page.svelte                  # NEW or MOVE
-│   │   ├── tasks/+page.svelte                    # NEW or MOVE
+│   │   ├── tasks/+page.svelte                    # NEW or MOVE (includes time tracking Q11)
 │   │   ├── messages/+page.svelte                 # NEW or MOVE
 │   │   ├── community-profile/+page.svelte        # NEW
-│   │   ├── characters-costumes/+page.svelte      # NEW
+│   │   ├── archive/+page.svelte                  # NEW (Q10) - Completed projects
+│   │   ├── characters-costumes/+page.svelte      # NEW (Q10) - Physical costume inventory
 │   │   ├── props/+page.svelte                    # NEW
 │   │   ├── crew/+page.svelte                     # NEW
 │   │   ├── locations/+page.svelte                # NEW
 │   │   ├── equipment/+page.svelte                # NEW
 │   │   ├── budgeting/+page.svelte                # NEW
-│   │   ├── archive/+page.svelte                  # NEW
 │   │   └── settings/                             # NEW folder
 │   │       ├── account/+page.svelte              # NEW
 │   │       ├── team/+page.svelte                 # NEW
+│   │       ├── navigation/+page.svelte           # NEW (Q12, Q13) - Customize Navigation
 │   │       └── other/+page.svelte                # NEW
 │   ├── (public)/                                 # NEW GROUP - Public routes WITHOUT sidebar
 │   │   ├── +layout.svelte                        # NEW - Public layout (no sidebar)
@@ -161,6 +170,47 @@ tailwind.config.js                                 # UPDATE - Add theme variants
 
 **Structure Decision**: SvelteKit web application with route groups for layout separation. Uses `(auth)` group for authenticated routes with sidebar, `(public)` group for marketing pages without sidebar. All navigation components live in `src/lib/components/layout/`. Stores manage global state (navigation, theme, forms). Route structure follows SvelteKit file-based routing with nested layouts.
 
+## Database Schema Changes
+
+**New Columns Required** (from clarifications Q8-Q13):
+
+```sql
+-- User Profiles: Navigation preferences (Q13)
+ALTER TABLE user_profiles 
+ADD COLUMN navigation_layout TEXT DEFAULT 'auto' CHECK (navigation_layout IN ('auto', 'minimal', 'full', 'photographer', 'coordinator'));
+
+ALTER TABLE user_profiles
+ADD COLUMN hidden_nav_sections TEXT[] DEFAULT '{}';
+
+ALTER TABLE user_profiles
+ADD COLUMN pinned_nav_sections TEXT[] DEFAULT '{}';
+
+ALTER TABLE user_profiles
+ADD COLUMN last_accessed_sections JSONB DEFAULT '{}';
+
+-- Team Members: Per-team navigation overrides (Q13)
+ALTER TABLE team_members
+ADD COLUMN navigation_layout_override TEXT CHECK (navigation_layout_override IN ('auto', 'minimal', 'full', 'photographer', 'coordinator'));
+
+-- Teams: Recommended layout for team (Q13)
+ALTER TABLE teams
+ADD COLUMN recommended_navigation_layout TEXT CHECK (recommended_navigation_layout IN ('auto', 'minimal', 'full', 'photographer', 'coordinator'));
+
+-- Projects: Status field for lifecycle (Q9, Q10)
+-- Assuming projects table exists or will be created
+ALTER TABLE projects
+ADD COLUMN status TEXT DEFAULT 'planning' CHECK (status IN ('planning', 'active', 'paused', 'completed', 'archived'));
+
+-- Note: Time tracking (Q11) will be integrated into existing tasks table
+-- No new tables needed - just add time_estimate and time_actual columns to tasks
+```
+
+**Migration Strategy**:
+1. Create migration file: `supabase/migrations/[timestamp]_navigation_preferences.sql`
+2. Add columns with safe defaults
+3. Test rollback capability
+4. Update RLS policies if needed
+
 ## Implementation Phases
 
 ### Phase 0: Foundation & Dependencies (1-2 days)
@@ -174,7 +224,11 @@ tailwind.config.js                                 # UPDATE - Add theme variants
 4. Create `src/lib/stores/navigation.ts` - sidebar state management
 5. Create `src/lib/stores/theme.ts` - theme persistence with localStorage
 6. Create `src/lib/stores/forms.ts` - form dirty state tracking
-7. Create `src/lib/utils/navigation-items.ts` - define 18 navigation items
+7. Create `src/lib/utils/navigation-items.ts` - define navigation items with:
+   - `showInPersonalTeam` and `showInSharedTeam` flags (Q8)
+   - Main Section: Dashboard, Planning (Q9), Active Projects (Q10), Gallery, Calendar, Archive (Q10)
+   - Resources Section: Characters & Costumes (Q10 - inventory), Props, Crew, Locations, Equipment, Budgeting
+   - Settings Section: Account, Team, Navigation (Q12, Q13)
 8. Create `src/lib/utils/theme-variants.ts` - define light/dark theme variants
 9. Write unit tests for stores (navigation, theme, forms)
 
