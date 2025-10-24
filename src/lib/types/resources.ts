@@ -1,7 +1,9 @@
 /**
  * Resource Management System Types
  *
- * Defines TypeScript interfaces for all 5 resource types:
+ * Defines TypeScript interfaces for all resource types:
+ * - Characters (with series, references, and budget tracking) - NEW
+ * - Wigs (with styling tasks, costs, and maintenance) - NEW
  * - Costumes (with complete lifecycle tracking)
  * - Crew Members (with contact info and roles)
  * - Equipment (with condition and ownership)
@@ -91,7 +93,7 @@ export type PropType =
 // Resource photo interface
 export interface ResourcePhoto {
   id: string
-  resource_type: 'costume' | 'crew_member' | 'equipment' | 'prop' | 'location'
+  resource_type: 'costume' | 'crew_member' | 'equipment' | 'prop' | 'location' | 'character' | 'wig'
   resource_id: string
   storage_path: string
   filename: string
@@ -206,6 +208,87 @@ export interface Location extends BaseResource {
   search_vector: string
 }
 
+// Source medium types for characters
+export type SourceMedium =
+  | 'anime'
+  | 'manga'
+  | 'video_game'
+  | 'movie'
+  | 'tv_show'
+  | 'book'
+  | 'comic'
+  | 'stage'
+  | 'original'
+
+// Budget tracking modes
+export type BudgetMode = 'personal' | 'commission'
+
+// Wig status types
+export type WigStatus =
+  | 'planned'
+  | 'ordered'
+  | 'received'
+  | 'in_progress'
+  | 'completed'
+  | 'needs_restyling'
+  | 'damaged'
+
+// Wig length types
+export type WigLength = 'short' | 'medium' | 'long' | 'extra_long'
+
+// Wig fiber types
+export type WigFiberType = 'synthetic' | 'human_hair' | 'blend'
+
+// Wig condition types
+export type WigCondition = 'pristine' | 'good' | 'needs_care' | 'damaged'
+
+// Character interface
+export interface Character extends BaseResource {
+  character_name: string
+  series: string
+  source_medium?: SourceMedium
+  appearance_description?: string
+  personality_notes?: string
+  aliases?: string // Comma-separated aliases
+  reference_images: string[] // R2 URLs
+  budget_mode: BudgetMode
+  budget_limit?: number
+  completion_percentage: number
+  updated_by?: string
+  search_vector: string
+}
+
+// Wig interface
+export interface Wig extends BaseResource {
+  wig_name: string
+  color: string
+  length: WigLength
+  fiber_type: WigFiberType
+  base_wig_brand?: string
+  status: WigStatus
+  base_wig_cost?: number
+  styling_cost?: number
+  total_cost: number
+  condition?: WigCondition
+  last_washed_date?: string
+  maintenance_notes?: string
+  storage_location?: string
+  storage_method?: string
+  source_type?: string
+  vendor_id?: string // FK to vendors table (nullable)
+  updated_by?: string
+  search_vector: string
+}
+
+// Character-Wig junction table
+export interface CharacterWig {
+  id: string
+  character_id: string
+  wig_id: string
+  notes?: string
+  created_at: string
+}
+
 // Crew account links
 export interface CrewAccountLink {
   crew_member_id: string
@@ -242,6 +325,22 @@ export const equipmentTypeSchema = z.enum([
 export const propTypeSchema = z.enum([
   'weapon', 'accessory', 'wig', 'jewelry', 'other'
 ])
+
+export const sourceMediumSchema = z.enum([
+  'anime', 'manga', 'video_game', 'movie', 'tv_show', 'book', 'comic', 'stage', 'original'
+])
+
+export const budgetModeSchema = z.enum(['personal', 'commission'])
+
+export const wigStatusSchema = z.enum([
+  'planned', 'ordered', 'received', 'in_progress', 'completed', 'needs_restyling', 'damaged'
+])
+
+export const wigLengthSchema = z.enum(['short', 'medium', 'long', 'extra_long'])
+
+export const wigFiberTypeSchema = z.enum(['synthetic', 'human_hair', 'blend'])
+
+export const wigConditionSchema = z.enum(['pristine', 'good', 'needs_care', 'damaged'])
 
 // Base resource schema
 export const baseResourceSchema = z.object({
@@ -326,10 +425,55 @@ export const locationSchema = baseResourceSchema.extend({
   is_favorite: z.boolean().default(false)
 })
 
+// Character schema
+export const characterSchema = baseResourceSchema.extend({
+  character_name: z.string().min(1, 'Character name is required'),
+  series: z.string().min(1, 'Series is required'),
+  source_medium: sourceMediumSchema.optional(),
+  appearance_description: z.string().optional(),
+  personality_notes: z.string().optional(),
+  aliases: z.string().optional(),
+  reference_images: z.array(z.string()).default([]),
+  budget_mode: budgetModeSchema.default('personal'),
+  budget_limit: z.number().min(0).optional(),
+  completion_percentage: z.number().min(0).max(100).default(0),
+  updated_by: z.string().uuid().optional()
+})
+
+// Wig schema
+export const wigSchema = baseResourceSchema.extend({
+  wig_name: z.string().min(1, 'Wig name is required'),
+  color: z.string().min(1, 'Color is required'),
+  length: wigLengthSchema,
+  fiber_type: wigFiberTypeSchema,
+  base_wig_brand: z.string().optional(),
+  status: wigStatusSchema,
+  base_wig_cost: z.number().min(0).optional(),
+  styling_cost: z.number().min(0).optional(),
+  total_cost: z.number().min(0).default(0),
+  condition: wigConditionSchema.optional(),
+  last_washed_date: z.string().optional(),
+  maintenance_notes: z.string().optional(),
+  storage_location: z.string().optional(),
+  storage_method: z.string().optional(),
+  source_type: z.string().optional(),
+  vendor_id: z.string().uuid().optional(),
+  updated_by: z.string().uuid().optional()
+})
+
+// Character-Wig junction schema
+export const characterWigSchema = z.object({
+  id: z.string().uuid(),
+  character_id: z.string().uuid(),
+  wig_id: z.string().uuid(),
+  notes: z.string().optional(),
+  created_at: z.string()
+})
+
 // Resource photo schema
 export const resourcePhotoSchema = z.object({
   id: z.string().uuid(),
-  resource_type: z.enum(['costume', 'crew_member', 'equipment', 'prop', 'location']),
+  resource_type: z.enum(['costume', 'crew_member', 'equipment', 'prop', 'location', 'character', 'wig']),
   resource_id: z.string().uuid(),
   storage_path: z.string(),
   filename: z.string(),
@@ -413,6 +557,36 @@ export const createLocationSchema = z.object({
   cost_info: z.string().optional(),
   notes: z.string().optional(),
   is_favorite: z.boolean().default(false)
+})
+
+export const createCharacterSchema = z.object({
+  team_id: z.string().uuid(),
+  character_name: z.string().min(1, 'Character name is required'),
+  series: z.string().min(1, 'Series is required'),
+  source_medium: sourceMediumSchema.optional(),
+  appearance_description: z.string().optional(),
+  personality_notes: z.string().optional(),
+  aliases: z.string().optional(),
+  reference_images: z.array(z.string()).default([]),
+  budget_mode: budgetModeSchema.default('personal'),
+  budget_limit: z.number().min(0).optional()
+})
+
+export const createWigSchema = z.object({
+  team_id: z.string().uuid(),
+  wig_name: z.string().min(1, 'Wig name is required'),
+  color: z.string().min(1, 'Color is required'),
+  length: wigLengthSchema,
+  fiber_type: wigFiberTypeSchema,
+  base_wig_brand: z.string().optional(),
+  status: wigStatusSchema.default('planned'),
+  base_wig_cost: z.number().min(0).optional(),
+  styling_cost: z.number().min(0).optional(),
+  condition: wigConditionSchema.optional(),
+  storage_location: z.string().optional(),
+  storage_method: z.string().optional(),
+  source_type: z.string().optional(),
+  vendor_id: z.string().uuid().optional()
 })
 
 // Search and filter types
