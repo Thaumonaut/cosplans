@@ -169,8 +169,12 @@
 /* Primary (UI Text) */
 --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
-/* Headings (Playful) */
---font-display: 'Cal Sans', 'Inter', sans-serif; /* or 'Clash Display' for more personality */
+/* Headings (Organic, Curvy - Matching Logo) */
+--font-display: 'Fredoka', 'Baloo 2', 'Comfortaa', 'Inter', sans-serif;
+/* Primary: Fredoka (700 Bold) - Rounded, organic, nature-inspired curves
+   Fallback 1: Baloo 2 (800 ExtraBold) - Very curvy, playful fantasy vibe
+   Fallback 2: Comfortaa - Rounded geometric, professional
+   Fallback 3: Inter - System default */
 
 /* Monospace (Code, Numbers) */
 --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
@@ -191,11 +195,31 @@
 
 **Font Weights**:
 ```css
+/* Body Text (Inter) */
 --weight-normal: 400;
 --weight-medium: 500;
 --weight-semibold: 600;
---weight-bold: 700;
---weight-extrabold: 800;  /* Use sparingly for emphasis */
+
+/* Display Headings (Fredoka) */
+--weight-bold: 700;           /* Primary - H1, H2 */
+--weight-extrabold: 800;      /* Optional - Extra emphasis (use sparingly) */
+
+/* Usage Guide:
+   - H1, H2: Fredoka Bold (700) - Strong presence, matches logo curves
+   - H3, H4: Fredoka SemiBold (600) or Inter SemiBold (600) - Versatile
+   - H5, H6, Body: Inter Regular/Medium (400/500) - Clean, readable
+   - Emphasis: Inter SemiBold (600) - Inline emphasis in body text
+*/
+```
+
+**Google Fonts Import**:
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Optional fallback fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
 ```
 
 **Line Heights**:
@@ -203,6 +227,31 @@
 --leading-tight: 1.25;    /* Headings */
 --leading-normal: 1.5;    /* Body text */
 --leading-relaxed: 1.75;  /* Long-form content */
+```
+
+**Display Font Comparison** (Matching Logo Aesthetic):
+
+| Font | Sample | Characteristics | Best For |
+|------|--------|-----------------|----------|
+| **Fredoka Bold** | Character Resources | ● Organic, rounded curves<br>● Professional + playful<br>● Nature-inspired feel | H1, H2, Page titles |
+| **Baloo 2 ExtraBold** | Character Resources | ● Very curvy, flowing<br>● Whimsical, fantasy vibe<br>● High personality | H1 only (heroes, landing) |
+| **Comfortaa** | Character Resources | ● Geometric rounded<br>● Clean, modern<br>● Friendly but subtle | H3, H4, Subheadings |
+| **Inter SemiBold** | Character Resources | ● Neutral, readable<br>● Professional<br>● Fallback option | Body, labels, UI text |
+
+**Logo Aesthetic Match**:
+- **Fredoka**: ⭐⭐⭐⭐⭐ (Organic curves, bold presence, nature vibe)
+- **Baloo 2**: ⭐⭐⭐⭐⭐ (Very curvy, fantasy feel, playful)
+- **Comfortaa**: ⭐⭐⭐○○ (Rounded but more geometric)
+- **Cal Sans** (original): ⭐⭐○○○ (Modern geometric, doesn't match logo curves)
+
+**Recommended Hierarchy**:
+```css
+h1 { font-family: var(--font-display); font-weight: 700; } /* Fredoka Bold */
+h2 { font-family: var(--font-display); font-weight: 700; } /* Fredoka Bold */
+h3 { font-family: var(--font-display); font-weight: 600; } /* Fredoka SemiBold */
+h4 { font-family: var(--font-sans); font-weight: 600; }    /* Inter SemiBold */
+h5, h6 { font-family: var(--font-sans); font-weight: 500; } /* Inter Medium */
+body { font-family: var(--font-sans); font-weight: 400; }   /* Inter Regular */
 ```
 
 ### Spacing System
