@@ -522,9 +522,102 @@ Inter Regular (Body):         This character has 3 linked wigs and 5 accessories
 - **Preview**: Grid (3-col desktop, 2-col tablet, 1-col mobile)
 - **Upload progress**: Linear progress bar, percentage text
 
-### Modals
+### Modals & Flyouts
 
-**Inline Modal** (Material Allocation, Resource Linking):
+**Detail Flyout Panel** (Character, Wig, Prop, Equipment, etc. - ALL resource details):
+```svelte
+<div class="flyout-backdrop {isExpanded ? 'expanded' : ''}" on:click={closeFlyout}>
+  <div class="flyout-panel {isExpanded ? 'fullscreen' : ''}" on:click|stopPropagation>
+    <!-- Header with quick actions -->
+    <header class="flyout-header">
+      <div class="header-left">
+        <button class="back-btn" on:click={closeFlyout} aria-label="Close">
+          <Icon name="x" size="20" />
+        </button>
+        <h1 class="resource-name">{character.character_name}</h1>
+        <StatusBadge status={character.status} />
+      </div>
+      <div class="header-right">
+        <button class="icon-btn" on:click={toggleExpand} aria-label="Expand">
+          <Icon name={isExpanded ? 'minimize' : 'maximize'} size="20" />
+        </button>
+        <button class="icon-btn" on:click={shareResource}>
+          <Icon name="share" size="20" />
+        </button>
+        <DropdownMenu items={[{edit}, {duplicate}, {delete}]} />
+      </div>
+    </header>
+    
+    <!-- Metadata section (always visible) -->
+    <div class="flyout-metadata">
+      <MetaField icon="calendar" label="Due date" value={dueDate} />
+      <MetaField icon="user" label="Assignee" value={assignee} />
+      <MetaField icon="tag" label="Tags" value={tags} />
+      <MetaField icon="dollar-sign" label="Budget" value={`$${spent} / $${budget}`} />
+    </div>
+    
+    <!-- Description section -->
+    <section class="flyout-section">
+      <h3 class="section-title">Description</h3>
+      <InlineEditTextarea bind:value={description} placeholder="Add description..." />
+    </section>
+    
+    <!-- Attachments section -->
+    <section class="flyout-section">
+      <div class="section-header">
+        <h3 class="section-title">Attachment ({photos.length})</h3>
+        <button class="link-btn">Upload</button>
+      </div>
+      <PhotoGrid photos={photos} />
+    </section>
+    
+    <!-- Tabbed content -->
+    <div class="flyout-tabs">
+      <button class="tab {activeTab === 'tasks' ? 'active' : ''}" on:click={() => activeTab = 'tasks'}>
+        Tasks
+      </button>
+      <button class="tab {activeTab === 'comments' ? 'active' : ''}" on:click={() => activeTab = 'comments'}>
+        Comments <span class="count">3</span>
+      </button>
+      <button class="tab {activeTab === 'linked' ? 'active' : ''}" on:click={() => activeTab = 'linked'}>
+        Linked Resources
+      </button>
+      <button class="tab {activeTab === 'history' ? 'active' : ''}" on:click={() => activeTab = 'history'}>
+        Activities
+      </button>
+    </div>
+    
+    <!-- Tab content -->
+    <div class="flyout-content">
+      {#if activeTab === 'tasks'}
+        <TaskList tasks={character.tasks} />
+      {:else if activeTab === 'comments'}
+        <CommentThread comments={comments} />
+      {:else if activeTab === 'linked'}
+        <LinkedResources character={character} />
+      {:else if activeTab === 'history'}
+        <ActivityFeed activities={activities} />
+      {/if}
+    </div>
+  </div>
+</div>
+```
+
+**Flyout Behavior**:
+- **Default Width**: 600px (desktop), 90vw (tablet), 100vw (mobile)
+- **Expanded Width**: 100vw (fullscreen mode)
+- **Slide-in**: From right, 300ms ease-out animation
+- **Backdrop**: rgba(0, 0, 0, 0.4) with 4px blur (not expanded), darker when expanded
+- **Dismiss**: Click backdrop, press ESC, click X button
+- **URL**: Use route params `/characters/[id]` but render as overlay
+- **Scroll**: Independent scroll for flyout content, body scroll locked
+
+**Flyout States**:
+- **Collapsed** (default): 600px panel, overview visible behind with slight opacity
+- **Expanded**: Fullscreen panel (like opening in new page), maximum focus
+- **Transition**: Smooth 250ms ease-in-out between states
+
+**Inline Modal** (Quick actions: Material Allocation, Resource Linking):
 ```svelte
 <div class="modal-backdrop" on:click={closeModal}>
   <div class="modal" on:click|stopPropagation>
@@ -631,7 +724,147 @@ Inter Regular (Body):         This character has 3 linked wigs and 5 accessories
 
 ## Page Layouts
 
-### Character Detail (Hub Layout)
+### Overview Pages (Grid/List/Kanban)
+
+**Desktop** (>1024px):
+```
++-------------------------------------------+
+| Sidebar | Header (Title + Search + Add)   |
++---------|-----------------------------------+
+|         | Filters: Status | Type | Sort    |
+| Main    +-----------------------------------+
+| Nav     |                                   |
+|         | +------+  +------+  +------+       |
+| (Chars) | | Card |  | Card |  | Card |       |
+| (Wigs)  | +------+  +------+  +------+       |
+| (Props) |                                   |
+| (Equip) | +------+  +------+  +------+       |
+| (Crew)  | | Card |  | Card |  | Card |       |
+| (Locs)  | +------+  +------+  +------+       |
+|         |                                   |
++-------------------------------------------+
+```
+- **Header**: 64px height, sticky, search + filters + create button
+- **Grid**: 3-col (desktop), 2-col (tablet), 1-col (mobile)
+- **Card**: 280×360px, hover effects, click opens flyout
+- **Empty state**: Centered illustration + CTA button
+
+**Mobile** (<768px):
+```
++----------------------+
+| Header + Search      |
++----------------------+
+| [Filter Pills]       |
++----------------------+
+| Card (Full Width)    |
++----------------------+
+| Card (Full Width)    |
++----------------------+
+| Card (Full Width)    |
++----------------------+
+| FAB (+)              |
++----------------------+
+```
+- **No sidebar**: Bottom nav or hamburger menu
+- **Cards**: Full-width, reduced height (240px)
+- **FAB**: Floating action button (bottom-right) for quick create
+
+---
+
+### Resource Detail (Flyout Panel)
+
+**Desktop - Collapsed Flyout** (default):
+```
++-------------------------------------------+
+| Sidebar | Overview Page (Blurred)         |
++---------|---------------------------------+
+|         | Grid continues...     | FLYOUT |
+| Main    |                       +--------+
+| Nav     | +------+  +------+    | Header |
+|         | | Card |  | Card |    | X  □  •|
+| (Chars) | +------+  +------+    +--------+
+| (Wigs)  |                       |        |
+| (Props) | +------+  +------+    | Meta   |
+| (Equip) | | Card |  | Card |    | fields |
+| (Crew)  | +------+  +------+    |        |
+| (Locs)  |                       +--------+
+|         |                       | Desc   |
+|         |                       +--------+
+|         |                       | Tabs   |
+|         |                       +--------+
+|         |                       | Content|
++-------------------------------------------+
+```
+- **Flyout width**: 600px (desktop), slides from right
+- **Overview**: Remains visible with 0.6 opacity + 4px blur
+- **Backdrop**: Click to close, ESC to dismiss
+- **Scroll**: Independent scrolling for flyout
+
+**Desktop - Expanded Flyout** (fullscreen mode):
+```
++-------------------------------------------+
+| Sidebar | FLYOUT (Fullscreen)             |
++---------|---------------------------------+
+|         | Header (X  ▢  •)                 |
+| Main    +---------------------------------+
+| Nav     |                                 |
+|         | Metadata Row                    |
+| (Chars) | Status | Due | Assignee | Tags  |
+| (Wigs)  +---------------------------------+
+| (Props) |                                 |
+| (Equip) | Description Section             |
+| (Crew)  | (Full width, more breathing room)|
+| (Locs)  |                                 |
+|         +---------------------------------+
+|         | Attachments (Larger previews)   |
+|         +---------------------------------+
+|         | Tabs: Tasks | Comments | Linked|
+|         +---------------------------------+
+|         | Tab Content (Expanded view)     |
+|         |                                 |
++-------------------------------------------+
+```
+- **Width**: 100vw minus sidebar (fills entire content area)
+- **Backdrop**: Darker (0.7 opacity), less blurred overview
+- **Toggle**: Maximize/minimize button in header
+- **Use case**: Deep work, editing descriptions, reviewing many tasks
+
+**Mobile** (all sizes):
+```
++----------------------+
+| FLYOUT (Fullscreen)  |
++----------------------+
+| Header               |
+| ←  Title  □  •       |
++----------------------+
+| Metadata             |
+| Status | Due | Tags  |
++----------------------+
+| Description          |
+|                      |
++----------------------+
+| Attachments          |
+| [Photo Grid]         |
++----------------------+
+| Tabs (Horizontal)    |
+| Tasks | Comments     |
++----------------------+
+| Tab Content          |
+| (Scrollable)         |
+|                      |
+|                      |
++----------------------+
+```
+- **Always fullscreen** on mobile (no collapsed state)
+- **Back button**: Top-left, returns to overview
+- **Swipe**: Swipe right to dismiss
+- **Bottom sheet**: Tabs stick to bottom, swipe up to expand
+
+---
+
+### Character Hub (Exception: Full Page)
+
+**Note**: Character pages are **full-page layouts** (not flyouts) because they serve as hubs for multiple resources.
 
 **Desktop** (>1024px):
 ```
@@ -665,6 +898,9 @@ Inter Regular (Body):         This character has 3 linked wigs and 5 accessories
 |                                           |
 +-------------------------------------------+
 ```
+- **Full-page**: Not a flyout (too much content, serves as dashboard)
+- **URL**: `/characters/[id]` (dedicated route)
+- **Navigation**: Breadcrumb (Characters > Character Name)
 
 **Mobile** (<768px):
 ```

@@ -325,10 +325,12 @@ As a developer maintaining the system, I want this specification to supersede an
 
 **UI/UX Requirements (Information Architecture & Layout):**
 - **FR-149**: System MUST implement mobile-first responsive design for all resource pages: touch-friendly targets (44px minimum), collapsible sections, bottom navigation, swipe gestures
-- **FR-150**: Character detail page MUST use hub layout: character summary card at top, linked resources grouped by type below (Outfits, Wigs, Props, Accessories), progress indicators prominent, budget summary visible
-- **FR-151**: All resource overview pages MUST use card-based layouts with consistent information density: primary image/photo, title, status badge, key metadata (cost, linked character, completion %), action buttons
-- **FR-152**: All resource detail pages MUST follow consistent layout pattern: hero section (photo gallery + key stats), tabbed content (Details, Tasks, Materials, Photos, History), sticky action bar
-- **FR-153**: Material allocation UI MUST use inline modal pattern: click "Add Material" → modal with search + quantity input + cost calculation → preview before save → update character budget in real-time
+- **FR-150**: Character detail page MUST use FULL-PAGE hub layout (exception to flyout pattern): character summary card at top, linked resources grouped by type below (Outfits, Wigs, Props, Accessories), progress indicators prominent, budget summary visible. Rationale: Characters serve as dashboards with too much content for flyout
+- **FR-151**: All resource overview pages MUST use card-based layouts with consistent information density: primary image/photo, title, status badge, key metadata (cost, linked character, completion %), action buttons. Click card opens flyout panel
+- **FR-152**: All resource detail pages (Wigs, Props, Equipment, Outfits, Crew, Locations, Accessories) MUST use FLYOUT PANEL pattern: slides from right (600px width), overview remains visible with blurred backdrop, expandable to fullscreen via toggle button, dismissible via ESC/click-outside/close button
+- **FR-152a**: Flyout panel MUST contain: header (resource name + status + expand/share/menu buttons), metadata section (status, due date, assignee, tags, budget in 2×2 grid), description section (inline-editable textarea), attachments section (photo grid with upload), tabbed content (Tasks, Comments, Linked Resources, Activity History)
+- **FR-152b**: Flyout expand mode MUST fill entire content area (minus sidebar): wider content for deep work, larger photo previews, expanded task list, more breathing room. Toggle button switches between collapsed (600px) and expanded (fullscreen) states with smooth 250ms animation
+- **FR-153**: Material allocation UI MUST use inline modal pattern: click "Add Material" → centered modal (max 600px) with search + quantity input + cost calculation → preview before save → update character budget in real-time. Modal appears over flyout panel
 - **FR-154**: Budget display MUST adapt to mode: Personal mode shows progress bar (spent vs limit with 80%/100% warnings), Commission mode shows cost breakdown table (materials + labor + markup = quote)
 - **FR-155**: Photo galleries MUST support 1-10 photos with: primary photo display, thumbnail strip, lightbox view, drag-to-reorder, upload progress indicators, compression warnings (>5MB)
 - **FR-156**: Task lists MUST use checkbox pattern with: drag-to-reorder, due date badges (overdue in red, due soon in yellow), progress bar (X of Y complete), quick-add input at bottom
@@ -346,10 +348,11 @@ As a developer maintaining the system, I want this specification to supersede an
 
 **UI/UX Requirements (Mobile & Touch Patterns):**
 - **FR-166**: Navigation MUST adapt to screen size: desktop uses sidebar (collapsible sections per spec 041), mobile uses bottom tab bar (5 primary tabs) + hamburger menu (secondary items)
-- **FR-167**: Swipe gestures MUST be supported on mobile: swipe card left for quick actions (edit, delete), swipe right to mark complete, swipe down to refresh lists, pinch to zoom photos
+- **FR-167**: Swipe gestures MUST be supported on mobile: swipe card left for quick actions (edit, delete), swipe right to mark complete, swipe down to refresh lists, pinch to zoom photos, swipe right on flyout to dismiss
 - **FR-168**: Touch targets MUST meet accessibility standards: 44×44px minimum, 8px spacing between targets, visual feedback on touch (ripple or scale), error tolerance for fat fingers
 - **FR-169**: Long-press MUST trigger contextual actions: long-press card for quick menu (edit, duplicate, delete, share), long-press photo for download/delete, long-press text for copy
-- **FR-170**: Modals MUST be mobile-friendly: full-screen on mobile (<768px), slide up animation, swipe-down to dismiss, close button top-right, actions bottom (fixed bar)
+- **FR-170**: Flyout panels MUST be mobile-optimized: always fullscreen on mobile (<768px), slide up animation from bottom, swipe-down to dismiss (with threshold), back button top-left returns to overview, tabs sticky at bottom with swipe-up to expand, body scroll locked when flyout open
+- **FR-170a**: Inline modals MUST be mobile-friendly: full-screen on mobile (<768px), slide up animation, swipe-down to dismiss, close button top-right, actions bottom (fixed bar), appear over flyout panels when necessary
 
 **UI/UX Requirements (Performance & Feedback):**
 - **FR-171**: Loading states MUST provide feedback: skeleton screens for lists (shimmer effect), progress bars for uploads, spinner for mutations, optimistic updates where safe (task checkbox)
