@@ -4,7 +4,10 @@
 	import WigCard from '$lib/components/wigs/WigCard.svelte';
 	
 	// Props
-	export let data: PageData;
+	type Props = {
+		data: PageData;
+	};
+	let { data }: Props = $props();
 	
 	// State
 	let showTooltip = $state(false);

@@ -4,7 +4,10 @@
 	import CharacterCard from '$lib/components/characters/CharacterCard.svelte';
 	
 	// Props
-	export let data: PageData;
+	type Props = {
+		data: PageData;
+	};
+	let { data }: Props = $props();
 	
 	// State
 	let showTooltip = $state(false);
@@ -80,16 +83,16 @@
 				CHARACTERS
 			</h1>
 			
-			<!-- Hint Icon -->
-			<button
-				type="button"
-				class="relative"
-				on:mouseenter={() => showTooltip = true}
-				on:mouseleave={() => showTooltip = false}
-				on:focus={() => showTooltip = true}
-				on:blur={() => showTooltip = false}
-				aria-label="About Characters"
-			>
+		<!-- Hint Icon -->
+		<button
+			type="button"
+			class="relative"
+			onmouseenter={() => showTooltip = true}
+			onmouseleave={() => showTooltip = false}
+			onfocus={() => showTooltip = true}
+			onblur={() => showTooltip = false}
+			aria-label="About Characters"
+		>
 				<HelpCircle class="w-5 h-5" style="color: var(--theme-sidebar-muted);" />
 				
 				<!-- Tooltip -->
@@ -159,16 +162,14 @@
 					<option value="100">100% Complete</option>
 				</select>
 				
-				<!-- Create Character Button -->
-				<a
-					href="/characters/new"
-					class="ml-auto px-6 py-2 rounded-lg font-semibold transition-colors duration-200"
-					style="background: var(--theme-primary); color: white;"
-					onmouseover="this.style.background = 'var(--theme-primary-hover)'"
-					onmouseout="this.style.background = 'var(--theme-primary)'"
-				>
-					Create Character
-				</a>
+			<!-- Create Character Button -->
+			<a
+				href="/characters/new"
+				class="ml-auto px-6 py-2 rounded-lg font-semibold transition-colors duration-200 hover:opacity-90"
+				style="background: var(--theme-primary); color: white;"
+			>
+				Create Character
+			</a>
 			</div>
 		</div>
 	</div>
@@ -191,15 +192,13 @@
 					</p>
 				</div>
 				
-				<a
-					href="/characters/new"
-					class="px-8 py-3 rounded-lg font-semibold transition-colors duration-200"
-					style="background: var(--theme-primary); color: white;"
-					onmouseover="this.style.background = 'var(--theme-primary-hover)'"
-					onmouseout="this.style.background = 'var(--theme-primary)'"
-				>
-					Create Character
-				</a>
+			<a
+				href="/characters/new"
+				class="px-8 py-3 rounded-lg font-semibold transition-colors duration-200 hover:opacity-90"
+				style="background: var(--theme-primary); color: white;"
+			>
+				Create Character
+			</a>
 			</div>
 		{:else if filteredCharacters().length === 0}
 			<!-- No Results State -->
