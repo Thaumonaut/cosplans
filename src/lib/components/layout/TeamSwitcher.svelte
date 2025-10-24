@@ -113,7 +113,7 @@
   $: publicTeams = teams.filter((t: any) => !t.is_personal);
 </script>
 
-<svelte:window onclick={handleClickOutside} />
+<svelte:window onclick={(e) => handleClickOutside(e)} />
 
 {#if collapsed}
   <!-- When collapsed, just show the team icon as a non-interactive badge -->

@@ -172,14 +172,14 @@
                   <ThemedButton
                     type="button"
                     variant="primary"
-                    onclick={acceptSuggestion}
+                    onclick={() => acceptSuggestion()}
                   >
                     Yes, use it
                   </ThemedButton>
                   <ThemedButton
                     type="button"
                     variant="secondary"
-                    onclick={dismissSuggestion}
+                    onclick={() => dismissSuggestion()}
                   >
                     No, keep current
                   </ThemedButton>

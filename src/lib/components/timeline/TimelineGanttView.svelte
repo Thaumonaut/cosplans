@@ -373,8 +373,8 @@
             <div 
               class="flex-1 relative py-4 px-2"
               bind:this={timelineElement}
-              on:dragover={handleTimelineDragOver}
-              on:drop={handleTimelineDrop}
+              ondragover={(e) => handleTimelineDragOver(e)}
+              ondrop={(e) => handleTimelineDrop(e)}
               role="region"
               aria-label="Timeline grid"
             >
@@ -385,8 +385,8 @@
                 role="button"
                 tabindex="0"
                 aria-label="Drag to reschedule {event.shoot_name}"
-                on:dragstart={() => handleEventDragStart(event.id)}
-                on:dragend={handleEventDragEnd}
+                ondragstart={() => handleEventDragStart(event.id)}
+                ondragend={(e) => handleEventDragEnd(e)}
                 style="left: {position.left}%; width: {position.width}%; background: {event.color || getStatusColor(event.status)}; opacity: {isDragging && draggedEventId === event.id ? 0.5 : 1};"
               >
                 <div class="flex items-center justify-center h-full text-white text-xs font-medium px-2">

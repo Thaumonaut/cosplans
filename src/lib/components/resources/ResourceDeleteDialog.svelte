@@ -95,14 +95,14 @@
   <!-- Backdrop -->
   <div
     class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
-    onclick={handleCancel}
+    onclick={() => handleCancel()}
   >
     <!-- Modal -->
     <div
       class="relative max-w-md w-full mx-4 rounded-lg border shadow-lg"
       style="background: var(--theme-background); border-color: var(--theme-sidebar-border);"
-      onclick|stopPropagation
-      onkeydown={handleKeydown}
+      onclick={(e) => e.stopPropagation()}
+      onkeydown={(e) => handleKeydown(e)}
       tabindex="-1"
       role="dialog"
       aria-modal="true"
@@ -154,14 +154,14 @@
           type="button"
           class="px-4 py-2 text-sm font-medium rounded transition-colors hover:bg-[var(--theme-sidebar-hover)]"
           style="color: var(--theme-sidebar-muted);"
-          onclick={handleCancel}
+          onclick={() => handleCancel()}
         >
           {cancelText}
         </button>
         <button
           type="button"
           class="px-4 py-2 text-sm font-medium rounded transition-colors {variantStyles.button}"
-          onclick={handleConfirm}
+          onclick={() => handleConfirm()}
         >
           {confirmText}
         </button>

@@ -31,15 +31,15 @@
   }
 </script>
 
-<svelte:window onclick={handleClickOutside} />
+<svelte:window onclick={(e) => handleClickOutside(e)} />
 
 <div class="relative" data-dropdown-wrapper>
   <button
     type="button"
     class={`relative inline-flex items-center gap-2 rounded-md px-2 py-2 text-sm font-medium ${textColorClass} transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-sidebar-accent)] focus-visible:ring-offset-2 overflow-hidden ${triggerClass}`}
     onclick={() => (isOpen = !isOpen)}
-    onmouseenter={handleMouseEnter}
-    onmouseleave={handleMouseLeave}
+    onmouseenter={(e) => handleMouseEnter(e)}
+    onmouseleave={(e) => handleMouseLeave(e)}
     aria-expanded={isOpen}
     aria-label={label}
   >

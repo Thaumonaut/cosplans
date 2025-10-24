@@ -58,7 +58,7 @@
         <button
           type="button"
           class="text-xs font-medium text-[var(--theme-muted)] transition hover:text-[var(--theme-foreground)]"
-          onclick={handleDismiss}
+          onclick={() => handleDismiss()}
         >
           Dismiss
         </button>
@@ -82,7 +82,7 @@
         <button
           type="button"
           class="rounded-md bg-[var(--theme-accent)] px-3 py-1.5 text-xs font-semibold text-white transition hover:brightness-110"
-          onclick={handleRetry}
+          onclick={() => handleRetry()}
         >
           {retryLabel}
         </button>

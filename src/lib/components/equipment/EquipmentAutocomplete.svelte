@@ -131,9 +131,9 @@
       <input
         type="text"
         bind:value
-        on:input={handleInput}
+        oninput={(e) => handleInput(e)}
         onfocus={() => value.length >= 2 && searchResults.length > 0 && (showResults = true)}
-        onblur={handleBlur}
+        onblur={(e) => handleBlur(e)}
         {placeholder}
         class="w-full pl-10 pr-10 py-2 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--theme-sidebar-accent)]"
         style="
@@ -148,7 +148,7 @@
           tabindex="-1"
           class="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 rounded hover:bg-[var(--theme-sidebar-hover)] transition-colors"
           style="color: var(--theme-sidebar-muted);"
-          onclick={clearSearch}
+          onclick={() => clearSearch()}
           title="Clear"
         >
           <X class="w-4 h-4" />

@@ -150,7 +150,7 @@
           type="button"
           class="hidden rounded-md p-2 transition-all md:inline-flex focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 hover:brightness-90"
           style="color: var(--theme-header-muted);"
-          onclick={toggleSidebarCollapse}
+          onclick={() => toggleSidebarCollapse()}
           aria-label={$navigationStore.isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {#if $navigationStore.isCollapsed}
@@ -166,7 +166,7 @@
           type="button"
           class="group inline-flex items-center gap-2 rounded-md px-2 py-2 text-sm font-medium transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 hover:brightness-90"
           style="color: var(--theme-header-text);"
-          onclick={handleSignOut}
+          onclick={() => handleSignOut()}
           aria-label="Sign out"
         >
           <span class="hidden sm:inline">Sign Out</span>

@@ -67,7 +67,7 @@
         Customize your sidebar navigation layout and visibility.
       </p>
     </div>
-    <ThemedButton variant="primary" onclick={saveSettings}>
+    <ThemedButton variant="primary" onclick={() => saveSettings()}>
       Save Changes
     </ThemedButton>
   </div>

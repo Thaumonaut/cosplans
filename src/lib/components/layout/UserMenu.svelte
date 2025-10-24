@@ -25,7 +25,7 @@
   $: userInitial = (user?.name ?? "U").charAt(0).toUpperCase();
 </script>
 
-<svelte:window onclick={handleClickOutside} />
+<svelte:window onclick={(e) => handleClickOutside(e)} />
 
 {#if collapsed}
   <!-- Collapsed: Just show avatar -->
@@ -119,7 +119,7 @@
         <button
           type="button"
           class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-rose-50 hover:text-rose-700"
-          onclick={handleSignOut}
+          onclick={() => handleSignOut()}
         >
           <LucideIcon name="LogOut" size={16} />
           <span>Sign Out</span>

@@ -161,7 +161,7 @@
         type="text"
         placeholder="Search characters, series, or tags..."
         value={searchQuery}
-        on:input={handleSearch}
+        oninput={(e) => handleSearch(e)}
         class="w-full px-4 py-2 pl-10 rounded-lg border focus:outline-none focus:ring-2 focus:ring-offset-0"
         style="background: var(--theme-sidebar-bg); color: var(--theme-foreground); border-color: var(--theme-sidebar-border); focus:ring-color: var(--theme-sidebar-accent);"
         aria-label="Search costume ideas"

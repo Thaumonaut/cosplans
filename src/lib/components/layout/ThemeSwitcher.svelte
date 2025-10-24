@@ -188,7 +188,7 @@
       <button
         type="button"
         class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-[var(--theme-sidebar-accent)] transition-colors hover:bg-[var(--theme-sidebar-hover)]"
-        onclick={createCustomTheme}
+        onclick={() => createCustomTheme()}
         role="menuitem"
       >
         <LucideIcon name="Palette" size={16} />

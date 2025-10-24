@@ -76,8 +76,8 @@
         {#if type === 'textarea'}
           <textarea
             bind:value={editValue}
-            oninput={handleInput}
-            onkeydown={handleKeydown}
+            oninput={(e) => handleInput(e)}
+            onkeydown={(e) => handleKeydown(e)}
             onblur={() => {
               // Save when focus leaves
               setTimeout(() => handleSave(), 0);
@@ -91,8 +91,8 @@
         {:else}
           <input
             bind:value={editValue}
-            oninput={handleInput}
-            onkeydown={handleKeydown}
+            oninput={(e) => handleInput(e)}
+            onkeydown={(e) => handleKeydown(e)}
             onblur={() => {
               // Save when focus leaves
               setTimeout(() => handleSave(), 0);
@@ -132,8 +132,8 @@
     <button
       type="button"
       class="group w-full text-left py-2 px-3 -mx-2 rounded-lg transition-colors {disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-[var(--theme-sidebar-hover)]'}"
-      on:click={startEdit}
-      on:focus={startEdit}
+      onclick={() => startEdit()}
+      onfocus={() => startEdit()}
       {disabled}
     >
       <span

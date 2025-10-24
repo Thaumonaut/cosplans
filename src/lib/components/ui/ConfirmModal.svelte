@@ -45,7 +45,7 @@
 	<div
 		class="fixed inset-0 z-50 flex items-center justify-center p-4"
 		style="background: rgba(0, 0, 0, 0.5);"
-		onclick={handleBackdropClick}
+		onclick={(e) => handleBackdropClick(e)}
 		onkeydown={(e) => e.key === 'Escape' && handleCancel()}
 		role="dialog"
 		aria-modal="true"
@@ -54,7 +54,7 @@
 		<div
 			class="w-full max-w-md rounded-lg shadow-xl p-6"
 			style="background: var(--theme-sidebar-bg); border: 1px solid var(--theme-sidebar-border);"
-			onclick|stopPropagation
+			onclick={(e) => e.stopPropagation()}
 		>
 			<!-- Title -->
 			<h2 class="text-xl font-semibold mb-4" style="color: var(--theme-foreground);">
@@ -70,7 +70,7 @@
 			<div class="flex gap-3 justify-end">
 				<button
 					type="button"
-					onclick={handleCancel}
+					onclick={() => handleCancel()}
 					class="px-4 py-2 rounded-lg font-medium border focus:outline-none focus:ring-2 transition-colors"
 					style="color: var(--theme-foreground); border-color: var(--theme-sidebar-border); background: var(--theme-background);"
 				>
@@ -78,7 +78,7 @@
 				</button>
 				<button
 					type="button"
-					onclick={handleConfirm}
+					onclick={() => handleConfirm()}
 					class="px-4 py-2 rounded-lg font-medium text-white focus:outline-none focus:ring-2 transition-colors"
 					style="background: {confirmButtonColor};"
 				>

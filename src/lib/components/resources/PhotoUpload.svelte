@@ -187,9 +187,9 @@
     class:border-blue-400={dragOver}
     class:bg-blue-50={dragOver}
     style="border-color: var(--theme-sidebar-border); background: var(--theme-background);"
-    on:dragover={handleDragOver}
-    on:dragleave={handleDragLeave}
-    on:drop={handleDrop}
+    ondragover={(e) => handleDragOver(e)}
+    ondragleave={(e) => handleDragLeave(e)}
+    ondrop={(e) => handleDrop(e)}
   >
     <!-- Hidden file input -->
     <input
@@ -250,7 +250,7 @@
           type="button"
           class="text-sm font-medium transition-colors hover:text-[var(--theme-error)]"
           style="color: var(--theme-sidebar-muted);"
-          onclick={clearAll}
+          onclick={() => clearAll()}
         >
           Clear all
         </button>

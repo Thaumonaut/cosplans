@@ -233,7 +233,7 @@
 							{#if hasChanges}
 								<button
 									type="button"
-									on:click={resetForm}
+									onclick={() => resetForm()}
 									class="px-4 py-2 rounded-lg font-medium border focus:outline-none focus:ring-2 transition-colors"
 									style="color: var(--theme-foreground); border-color: var(--theme-sidebar-border); background: var(--theme-sidebar-bg);"
 								>

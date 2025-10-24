@@ -99,7 +99,7 @@
         type="text"
         placeholder="Search resources..."
         bind:value={localSearchQuery}
-        on:input={handleSearch}
+        oninput={(e) => handleSearch(e)}
         class="pl-10"
       />
       <div class="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -187,7 +187,7 @@
                 type="button"
                 class="px-3 py-1 rounded border text-sm font-medium transition-colors hover:bg-[var(--theme-error)] hover:text-white"
                 style="border-color: var(--theme-sidebar-border); color: var(--theme-error);"
-                onclick={clearFilters}
+                onclick={() => clearFilters()}
               >
                 Clear ({activeFilterCount})
               </button>
