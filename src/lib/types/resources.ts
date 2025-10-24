@@ -50,6 +50,8 @@ export type OwnershipStatus =
   | 'owned'
   | 'rented'
   | 'borrowed'
+  | 'loaned_out'
+  | 'needs_sourcing'
 
 // Crew member roles
 export type CrewRole =
@@ -156,8 +158,17 @@ export interface Equipment extends BaseResource {
   ownership_status: OwnershipStatus
   purchase_date?: string
   purchase_price?: number
-  rental_info: Record<string, any>
+  serial_number?: string
+  storage_location?: string
   notes?: string
+  // Rental fields
+  rental_return_date?: string
+  rental_cost?: number
+  rental_source?: string
+  // Sourcing fields
+  estimated_purchase_cost?: number
+  estimated_rental_cost?: number
+  sourcing_notes?: string
   search_vector: string
 }
 

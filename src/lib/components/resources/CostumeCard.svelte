@@ -44,7 +44,7 @@
     type="button"
     class="w-full text-left flex items-center gap-3 rounded-lg border p-3 transition-all hover:shadow-md {className}"
     style="background: var(--theme-background); border-color: var(--theme-sidebar-border);"
-    on:click={viewCostume}
+    onclick={viewCostume}
   >
     <!-- Photo or placeholder -->
     <div class="flex-shrink-0">
@@ -97,7 +97,7 @@
     type="button"
     class="w-full text-left flex items-center gap-4 rounded-lg border p-4 transition-all hover:shadow-md {className}"
     style="background: var(--theme-background); border-color: var(--theme-sidebar-border);"
-    on:click={viewCostume}
+    onclick={viewCostume}
   >
     <!-- Photo -->
     <div class="flex-shrink-0">
@@ -159,7 +159,7 @@
     type="button"
     class="w-full text-left rounded-lg border overflow-hidden transition-all hover:shadow-lg {className}"
     style="background: var(--theme-background); border-color: var(--theme-sidebar-border);"
-    on:click={viewCostume}
+    onclick={viewCostume}
   >
     <!-- Photo -->
     <div class="relative h-48 overflow-hidden" style="background: var(--theme-sidebar-hover);">
@@ -262,7 +262,7 @@
     cursor: pointer;
   }
 
-  button:focus-visible {
+  buttonfocus-visible {
     outline: 2px solid var(--theme-primary);
     outline-offset: 2px;
   }

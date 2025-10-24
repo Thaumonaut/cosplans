@@ -7,7 +7,7 @@ import type { RequestHandler } from './$types';
  */
 export const GET: RequestHandler = async ({ params, locals }) => {
   const { shootId } = params;
-  
+
   if (!locals.user) {
     throw error(401, 'Unauthorized');
   }
@@ -86,7 +86,7 @@ export const GET: RequestHandler = async ({ params, locals }) => {
  */
 export const POST: RequestHandler = async ({ params, locals }) => {
   const { shootId } = params;
-  
+
   if (!locals.user) {
     throw error(401, 'Unauthorized');
   }

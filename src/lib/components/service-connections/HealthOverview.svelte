@@ -175,7 +175,7 @@
                     class="inline-flex items-center rounded-md border border-transparent bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:bg-muted"
                     disabled={acknowledgementState[snapshot.serviceConnectionId] === "saving" ||
                       acknowledgementState[snapshot.serviceConnectionId] === "done"}
-                    on:click={() =>
+                    onclick={() =>
                       acknowledgeIncident(snapshot.serviceConnectionId, snapshot.lastErrorEventId!)}
                   >
                     {#if acknowledgementState[snapshot.serviceConnectionId] === "done"}

@@ -266,7 +266,7 @@
               <div class="flex items-center space-x-1 ml-2">
                 {#if alert.actionable}
                   <button
-                    on:click={() => handleAlertAction(alert)}
+                    onclick={() => handleAlertAction(alert)}
                     class="text-xs underline"
                     style="color: var(--theme-sidebar-accent);"
                     title="Take action"
@@ -276,7 +276,7 @@
                 {/if}
 
                 <button
-                  on:click={() => dismissAlert(alert.id)}
+                  onclick={() => dismissAlert(alert.id)}
                   class="text-xs"
                   style="color: var(--theme-sidebar-text); opacity: 0.5;"
                   title="Dismiss alert"

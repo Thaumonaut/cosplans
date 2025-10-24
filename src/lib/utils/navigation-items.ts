@@ -91,7 +91,7 @@ export const RESOURCE_NAV_ITEMS: NavigationItem[] = [
   {
     id: "outfits",
     label: "Outfits",
-    href: "/characters-costumes",
+    href: "/costumes",
     icon: "Shirt",
     group: "resources",
   },

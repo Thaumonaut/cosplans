@@ -2,7 +2,7 @@
 	// Temporary wrapper for dashboard components
 	// Maps old shadcn Button props to ThemedButton
 	import ThemedButton from './ThemedButton.svelte';
-	
+
 	export let variant: 'default' | 'solid' | 'ghost' | 'outline' = 'default';
 	export let size: 'sm' | 'md' | 'lg' | 'icon' = 'md';
 	export let disabled: boolean = false;
@@ -11,7 +11,7 @@
 
 	// Map shadcn variants to ThemedButton variants
 	$: themedVariant = variant === 'solid' || variant === 'default' ? 'primary' : 'secondary';
-	
+
 	// Size classes for Tailwind
 	$: sizeClass = {
 		sm: 'text-sm px-3 py-1',
@@ -32,7 +32,7 @@
 		<slot />
 	</button>
 {:else}
-	<ThemedButton variant={themedVariant} {disabled} on:click>
+	<ThemedButton variant={themedVariant as 'primary' | 'secondary' | 'danger' | 'warning'} {disabled} on:click>
 		<span class="{sizeClass}">
 			<slot />
 		</span>

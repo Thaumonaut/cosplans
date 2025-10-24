@@ -1,47 +1,228 @@
 <script lang="ts">
-  import { enhance } from '$app/forms';
-  import { Button, Label, Input, Textarea, Select, Modal } from 'flowbite-svelte';
-  import { ArrowLeft, Edit, Trash2, Save, X } from 'lucide-svelte';
-  import { getStateLabel, getStateColor } from '$lib/utils/lifecycle-states';
-  import type { PageData, ActionData } from './$types';
+  import { goto } from '$app/navigation';
+  import ThemedCard from '$lib/components/ui/ThemedCard.svelte';
+  import InlineEditField from '$lib/components/ui/InlineEditField.svelte';
+  import InlineSelectField from '$lib/components/ui/InlineSelectField.svelte';
+  import InlineMoneyField from '$lib/components/ui/InlineMoneyField.svelte';
+  import InlineDateField from '$lib/components/ui/InlineDateField.svelte';
+  import { ArrowLeft, Trash2, DollarSign, Calendar, Package, Shirt } from 'lucide-svelte';
+  import { currentTeam } from '$lib/stores/team';
+  import type { PageData } from './$types';
 
   export let data: PageData;
-  export let form: ActionData;
 
-  let { costume } = data;
+  let { costume, isNew } = data;
+  let isSaving = false;
+  let showDeleteConfirm = false;
   
-  // UI state
-  let isEditing = false;
-  let isSubmitting = false;
-  let showDeleteModal = false;
+  // Track original values and changes
+  let originalData = { ...costume };
+  let hasChanges = isNew; // New items always have "changes" to save
+  
+  // Check if this is truly a new item
+  $: isNewItem = costume.id === 'new';
+  
+  // Track if user has entered a custom name (costumes use character_name as display name)
+  let hasCustomName = isNew ? false : (!!costume.character_name && costume.character_name.trim() !== '');
+  
+  // For costumes, we use character_name as the main identifier
+  $: displayName = costume.character_name || 'New Costume';
+  
+  // Suggestion system variables
+  let showSuggestion = false;
+  let suggestedName = '';
 
   // Status options
   const statusOptions = [
-    { value: 'planned', name: 'Planned' },
-    { value: 'acquiring', name: 'Acquiring' },
-    { value: 'in_progress', name: 'In Progress' },
-    { value: 'ready', name: 'Ready' },
-    { value: 'owned', name: 'Owned' },
-    { value: 'sold', name: 'Sold' },
-    { value: 'damaged', name: 'Damaged' },
-    { value: 'loaned', name: 'Loaned' },
-    { value: 'stored', name: 'Stored' },
-    { value: 'lost', name: 'Lost' }
+    { value: 'planned', label: 'Planned' },
+    { value: 'acquiring', label: 'Acquiring' },
+    { value: 'in_progress', label: 'In Progress' },
+    { value: 'ready', label: 'Ready' },
+    { value: 'owned', label: 'Owned' },
+    { value: 'sold', label: 'Sold' },
+    { value: 'damaged', label: 'Damaged' },
+    { value: 'loaned', label: 'Loaned' },
+    { value: 'stored', label: 'Stored' },
+    { value: 'lost', label: 'Lost' }
   ];
 
   // Costume type options
   const costumeTypeOptions = [
-    { value: '', name: 'Select a type (optional)' },
-    { value: 'armor', name: 'Armor' },
-    { value: 'dress', name: 'Dress' },
-    { value: 'casual', name: 'Casual' },
-    { value: 'formal', name: 'Formal' },
-    { value: 'fantasy', name: 'Fantasy' },
-    { value: 'sci-fi', name: 'Sci-Fi' },
-    { value: 'historical', name: 'Historical' },
-    { value: 'other', name: 'Other' }
+    { value: '', label: 'Select a type (optional)' },
+    { value: 'armor', label: 'Armor' },
+    { value: 'dress', label: 'Dress' },
+    { value: 'casual', label: 'Casual' },
+    { value: 'formal', label: 'Formal' },
+    { value: 'fantasy', label: 'Fantasy' },
+    { value: 'sci-fi', label: 'Sci-Fi' },
+    { value: 'historical', label: 'Historical' },
+    { value: 'other', label: 'Other' }
   ];
 
+  // Generate suggested name from costume details
+  function generateSuggestedName(): string {
+    const parts: string[] = [];
+    
+    if (costume.character_name) parts.push(costume.character_name);
+    if (costume.series) parts.push(`(${costume.series})`);
+    if (costume.costume_type) {
+      parts.push(`- ${costume.costume_type.charAt(0).toUpperCase() + costume.costume_type.slice(1)}`);
+    }
+    
+    return parts.join(' ');
+  }
+  
+  // Update field and check for changes
+  function updateField(field: string, value: any) {
+    console.log(`[Costume] updateField called: ${field} = ${value}`);
+    console.log(`[Costume] Old value:`, (costume as any)[field]);
+    (costume as any)[field] = value;
+    console.log(`[Costume] New value set:`, (costume as any)[field]);
+    
+    // Auto-update name if not using custom name
+    if (['character_name', 'series', 'costume_type'].includes(field)) {
+      if (!hasCustomName) {
+        const suggestedName = generateSuggestedName();
+        console.log(`[Costume] Auto-updating name to:`, suggestedName);
+        costume.character_name = suggestedName || '';
+      }
+    }
+    
+    checkForChanges();
+  }
+  
+  function useSuggestedName() {
+    const suggested = generateSuggestedName();
+    if (suggested) {
+      costume.character_name = suggested;
+      hasCustomName = false; // Switch to auto-generated mode
+      checkForChanges();
+    }
+  }
+  
+  function checkForChanges() {
+    hasChanges = 
+      costume.character_name !== originalData.character_name ||
+      costume.series !== originalData.series ||
+      costume.costume_type !== originalData.costume_type ||
+      costume.status !== originalData.status ||
+      costume.completion_date !== originalData.completion_date ||
+      costume.estimated_cost !== originalData.estimated_cost ||
+      costume.actual_cost !== originalData.actual_cost ||
+      costume.storage_location !== originalData.storage_location ||
+      costume.notes !== originalData.notes;
+  }
+  
+  async function saveChanges() {
+    
+    if (!costume.character_name || !costume.character_name.trim()) {
+      alert('Character name is required');
+      return;
+    }
+    
+    // Ensure required enum fields have default values
+    if (!costume.status || costume.status.trim() === '') {
+      costume.status = 'planned';
+    }
+    
+    // Ensure user has a team selected
+    if (!$currentTeam) {
+      alert('Please select a team first');
+      return;
+    }
+    
+    isSaving = true;
+    try {
+      const formData = new FormData();
+      formData.append('team_id', $currentTeam.id);
+      formData.append('character_name', costume.character_name);
+      formData.append('series', costume.series || '');
+      formData.append('costume_type', costume.costume_type || '');
+      formData.append('status', costume.status);
+      formData.append('completion_date', costume.completion_date || '');
+      formData.append('estimated_cost', costume.estimated_cost?.toString() || '');
+      formData.append('actual_cost', costume.actual_cost?.toString() || '');
+      formData.append('storage_location', costume.storage_location || '');
+      formData.append('notes', costume.notes || '');
+      
+      const action = isNewItem ? 'create' : 'update';
+      
+      const response = await fetch(`?/${action}`, {
+        method: 'POST',
+        body: formData
+      });
+      
+      if (response.redirected) {
+        window.location.href = response.url;
+        return;
+      }
+      
+      // Handle SvelteKit form action response
+      const responseText = await response.text();
+      
+      try {
+        const json = JSON.parse(responseText);
+        
+        // Check for SvelteKit failure response
+        if (json.type === 'failure') {
+          const errorMsg = json.data?.[1] || json.data?.error || 'Failed to save';
+          alert(errorMsg);
+          return;
+        }
+        
+        // Check for manual redirect
+        if (json.location) {
+          window.location.href = json.location;
+          return;
+        }
+      } catch (e) {
+        console.error('Failed to parse response:', e);
+      }
+      
+      // Success - mark as saved
+      originalData = { ...costume };
+      hasChanges = false;
+      if (isNew) {
+        isNew = false;
+      }
+    } catch (error: any) {
+      console.error('Save error:', error);
+      alert('Error saving. Please try again.');
+    } finally {
+      isSaving = false;
+    }
+  }
+  
+  function cancelChanges() {
+    if (isNew) {
+      goto('/costumes');
+    } else {
+      // Revert to original data
+      costume = { ...originalData };
+      hasChanges = false;
+    }
+  }
+  
+  function deleteItem() {
+    showDeleteConfirm = true;
+  }
+  
+  async function confirmDelete() {
+    try {
+      const response = await fetch('?/delete', {
+        method: 'POST'
+      });
+      
+      if (response.ok) {
+        goto('/costumes');
+      } else {
+        alert('Failed to delete costume');
+      }
+    } catch (error) {
+      alert('Error deleting costume');
+    }
+  }
+  
   // Format currency
   function formatCurrency(amount: number | undefined): string {
     if (!amount) return 'Not set';
@@ -73,294 +254,188 @@
     <div class="flex justify-between items-start">
       <div>
         <h1 class="text-2xl font-bold" style="color: var(--theme-foreground);">
-          {costume.character_name}
+          {isNewItem ? 'Add Costume' : costume.character_name || 'Costume Details'}
         </h1>
-        {#if costume.series}
-          <p class="text-lg mt-1" style="color: var(--theme-sidebar-muted);">
-            {costume.series}
-          </p>
-        {/if}
+        <p class="text-sm mt-1" style="color: var(--theme-sidebar-muted);">
+          {isNewItem ? 'Create a new costume entry' : 'Edit costume details'}
+        </p>
       </div>
       
       <div class="flex gap-2">
-        {#if !isEditing}
-          <Button
-            color="blue"
-            on:click={() => isEditing = true}
+        {#if hasChanges}
+          <button
+            type="button"
+            class="inline-flex items-center px-4 py-2 rounded-lg font-medium focus:outline-none focus:ring-2 transition-opacity"
+            style="background: var(--theme-sidebar-accent); color: white;"
+            onclick={saveChanges}
+            disabled={isSaving}
           >
-            <Edit class="w-4 h-4 mr-2" />
-            Edit
-          </Button>
-          <Button
-            color="red"
-            on:click={() => showDeleteModal = true}
+            {#if isSaving}
+              Saving...
+            {:else}
+              Save Changes
+            {/if}
+          </button>
+          <button
+            type="button"
+            class="inline-flex items-center px-4 py-2 rounded-lg font-medium border focus:outline-none focus:ring-2 transition-opacity"
+            style="border-color: var(--theme-sidebar-border); color: var(--theme-foreground);"
+            onclick={cancelChanges}
+            disabled={isSaving}
+          >
+            Cancel
+          </button>
+        {/if}
+        
+        {#if !isNewItem}
+          <button
+            type="button"
+            class="inline-flex items-center px-3 py-2 rounded-lg font-medium border focus:outline-none focus:ring-2 transition-opacity"
+            style="border-color: var(--theme-error); color: var(--theme-error);"
+            onclick={deleteItem}
           >
             <Trash2 class="w-4 h-4" />
-          </Button>
-        {:else}
-          <Button
-            color="gray"
-            on:click={() => isEditing = false}
-            disabled={isSubmitting}
-          >
-            <X class="w-4 h-4 mr-2" />
-            Cancel
-          </Button>
+          </button>
         {/if}
       </div>
     </div>
   </div>
 
-  <!-- Success Message -->
-  {#if form?.success}
-    <div
-      class="mb-6 p-4 rounded-lg border"
-      style="background: var(--theme-success); border-color: var(--theme-success); color: white;"
-    >
-      <p class="font-medium">{form.message}</p>
-    </div>
-  {/if}
-
-  <!-- Error Message -->
-  {#if form?.error}
-    <div
-      class="mb-6 p-4 rounded-lg border"
-      style="background: var(--theme-error); border-color: var(--theme-error); color: white;"
-    >
-      <p class="font-medium">{form.error}</p>
-    </div>
-  {/if}
-
-  {#if isEditing}
-    <!-- Edit Form -->
-    <form
-      method="POST"
-      action="?/update"
-      use:enhance={() => {
-        isSubmitting = true;
-        return async ({ update }) => {
-          await update();
-          isSubmitting = false;
-          isEditing = false;
-        };
-      }}
-      class="space-y-6"
-    >
-      <!-- Character Name -->
-      <div>
-        <Label for="character_name" class="mb-2">
-          Character Name <span class="text-red-500">*</span>
-        </Label>
-        <Input
-          id="character_name"
-          name="character_name"
-          type="text"
-          value={costume.character_name}
-          required
-          class="w-full"
-        />
-      </div>
-
-      <!-- Series -->
-      <div>
-        <Label for="series" class="mb-2">Series / Source Material</Label>
-        <Input
-          id="series"
-          name="series"
-          type="text"
-          value={costume.series || ''}
-          class="w-full"
-        />
-      </div>
-
-      <!-- Costume Type -->
-      <div>
-        <Label for="costume_type" class="mb-2">Costume Type</Label>
-        <Select
-          id="costume_type"
-          name="costume_type"
-          items={costumeTypeOptions}
-          value={costume.costume_type || ''}
-          class="w-full"
-        />
-      </div>
-
-      <!-- Status -->
-      <div>
-        <Label for="status" class="mb-2">Status</Label>
-        <Select
-          id="status"
-          name="status"
-          items={statusOptions}
-          value={costume.status}
-          class="w-full"
-        />
-      </div>
-
-      <!-- Estimated Cost -->
-      <div>
-        <Label for="estimated_cost" class="mb-2">Estimated Cost</Label>
-        <Input
-          id="estimated_cost"
-          name="estimated_cost"
-          type="number"
-          step="0.01"
-          min="0"
-          value={costume.estimated_cost || ''}
-          class="w-full"
-        />
-      </div>
-
-      <!-- Actual Cost -->
-      <div>
-        <Label for="actual_cost" class="mb-2">Actual Cost</Label>
-        <Input
-          id="actual_cost"
-          name="actual_cost"
-          type="number"
-          step="0.01"
-          min="0"
-          value={costume.actual_cost || ''}
-          class="w-full"
-        />
-      </div>
-
-      <!-- Completion Date -->
-      <div>
-        <Label for="completion_date" class="mb-2">Completion Date</Label>
-        <Input
-          id="completion_date"
-          name="completion_date"
-          type="date"
-          value={costume.completion_date || ''}
-          class="w-full"
-        />
-      </div>
-
-      <!-- Storage Location -->
-      <div>
-        <Label for="storage_location" class="mb-2">Storage Location</Label>
-        <Input
-          id="storage_location"
-          name="storage_location"
-          type="text"
-          value={costume.storage_location || ''}
-          class="w-full"
-        />
-      </div>
-
-      <!-- Notes -->
-      <div>
-        <Label for="notes" class="mb-2">Notes</Label>
-        <Textarea
-          id="notes"
-          name="notes"
-          rows={4}
-          value={costume.notes || ''}
-          class="w-full"
-        />
-      </div>
-
-      <!-- Form Actions -->
-      <div class="flex justify-end gap-3 pt-4 border-t" style="border-color: var(--theme-sidebar-border);">
-        <Button
-          type="submit"
-          disabled={isSubmitting}
+  <!-- Suggested Name Banner -->
+  {#if showSuggestion}
+    <div class="mb-6 p-4 rounded-lg border" style="background: var(--theme-info); border-color: var(--theme-info); color: white;">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="font-medium">Suggested name: {suggestedName}</p>
+          <p class="text-sm opacity-90">Based on character and series information</p>
+        </div>
+        <button
+          type="button"
+          class="px-3 py-1 rounded text-sm font-medium"
+          style="background: rgba(255,255,255,0.2); color: white;"
+          onclick={useSuggestedName}
         >
-          <Save class="w-4 h-4 mr-2" />
-          {isSubmitting ? 'Saving...' : 'Save Changes'}
-        </Button>
+          Use This Name
+        </button>
       </div>
-    </form>
-  {:else}
-    <!-- View Mode -->
-    <div class="space-y-6">
-      <!-- Status Badge -->
-      <div>
-        <h3 class="text-sm font-medium mb-2" style="color: var(--theme-sidebar-muted);">Status</h3>
-        <span
-          class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
-          style="background: {getStateColor(costume.status)}; color: white;"
-        >
-          {getStateLabel(costume.status)}
-        </span>
-      </div>
-
-      <!-- Details Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {#if costume.costume_type}
-          <div>
-            <h3 class="text-sm font-medium mb-1" style="color: var(--theme-sidebar-muted);">Costume Type</h3>
-            <p style="color: var(--theme-foreground);">{costume.costume_type}</p>
-          </div>
-        {/if}
-
-        <div>
-          <h3 class="text-sm font-medium mb-1" style="color: var(--theme-sidebar-muted);">Estimated Cost</h3>
-          <p style="color: var(--theme-foreground);">{formatCurrency(costume.estimated_cost)}</p>
-        </div>
-
-        <div>
-          <h3 class="text-sm font-medium mb-1" style="color: var(--theme-sidebar-muted);">Actual Cost</h3>
-          <p style="color: var(--theme-foreground);">{formatCurrency(costume.actual_cost)}</p>
-        </div>
-
-        <div>
-          <h3 class="text-sm font-medium mb-1" style="color: var(--theme-sidebar-muted);">Completion Date</h3>
-          <p style="color: var(--theme-foreground);">{formatDate(costume.completion_date)}</p>
-        </div>
-
-        {#if costume.storage_location}
-          <div>
-            <h3 class="text-sm font-medium mb-1" style="color: var(--theme-sidebar-muted);">Storage Location</h3>
-            <p style="color: var(--theme-foreground);">{costume.storage_location}</p>
-          </div>
-        {/if}
-
-        <div>
-          <h3 class="text-sm font-medium mb-1" style="color: var(--theme-sidebar-muted);">Created</h3>
-          <p style="color: var(--theme-foreground);">{formatDate(costume.created_at)}</p>
-        </div>
-
-        <div>
-          <h3 class="text-sm font-medium mb-1" style="color: var(--theme-sidebar-muted);">Last Updated</h3>
-          <p style="color: var(--theme-foreground);">{formatDate(costume.updated_at)}</p>
-        </div>
-      </div>
-
-      <!-- Notes -->
-      {#if costume.notes}
-        <div>
-          <h3 class="text-sm font-medium mb-2" style="color: var(--theme-sidebar-muted);">Notes</h3>
-          <div
-            class="p-4 rounded-lg border"
-            style="background: var(--theme-sidebar-bg); border-color: var(--theme-sidebar-border);"
-          >
-            <p class="whitespace-pre-wrap" style="color: var(--theme-foreground);">{costume.notes}</p>
-          </div>
-        </div>
-      {/if}
     </div>
   {/if}
+
+  <!-- Main Content -->
+  <div class="grid gap-6">
+    <!-- Basic Information -->
+    <ThemedCard title="Basic Information">
+      <div class="grid gap-4 md:grid-cols-2">
+        <!-- Character Name -->
+        <div>
+          <label class="block text-sm font-medium mb-1" style="color: var(--theme-sidebar-muted);">
+            Character Name <span class="text-red-500">*</span>
+          </label>
+          <InlineEditField
+            value={costume.character_name || ''}
+            placeholder="Enter character name"
+            required={true}
+            onchange={(e) => updateField('character_name', e.detail)}
+          />
+        </div>
+        
+        <!-- Series -->
+        <div>
+          <label class="block text-sm font-medium mb-1" style="color: var(--theme-sidebar-muted);">
+            Series
+          </label>
+          <InlineEditField
+            value={costume.series || ''}
+            placeholder="Enter series name"
+            onchange={(e) => updateField('series', e.detail)}
+          />
+        </div>
+        
+        <!-- Costume Type -->
+        <div>
+          <label class="block text-sm font-medium mb-1" style="color: var(--theme-sidebar-muted);">
+            Costume Type
+          </label>
+          <InlineSelectField
+            value={costume.costume_type || ''}
+            options={costumeTypeOptions}
+            placeholder="Select costume type"
+            onchange={(e) => updateField('costume_type', e.detail)}
+          />
+        </div>
+        
+        <!-- Status -->
+        <div>
+          <label class="block text-sm font-medium mb-1" style="color: var(--theme-sidebar-muted);">
+            Status
+          </label>
+          <InlineSelectField
+            value={costume.status || 'planned'}
+            options={statusOptions}
+            onchange={(e) => updateField('status', e.detail)}
+          />
+        </div>
+      </div>
+    </ThemedCard>
+    
+    <!-- Financial Information -->
+    <ThemedCard title="Financial Information">
+      <div class="grid gap-4 md:grid-cols-2">
+        <!-- Purchase Date -->
+        <div>
+          <label class="block text-sm font-medium mb-1" style="color: var(--theme-sidebar-muted);">
+            <Calendar class="w-4 h-4 inline mr-1" />
+            Completion Date
+          </label>
+          <InlineDateField
+            value={costume.completion_date || ''}
+            onchange={(e) => updateField('completion_date', e.detail)}
+          />
+        </div>
+        
+        <!-- Estimated Cost -->
+        <div>
+          <label class="block text-sm font-medium mb-1" style="color: var(--theme-sidebar-muted);">
+            <DollarSign class="w-4 h-4 inline mr-1" />
+            Estimated Cost
+          </label>
+          <InlineMoneyField
+            value={costume.estimated_cost || undefined}
+            onchange={(e) => updateField('estimated_cost', e.detail)}
+          />
+        </div>
+      </div>
+    </ThemedCard>
+    
+    <!-- Storage & Notes -->
+    <ThemedCard title="Storage & Notes">
+      <div class="grid gap-4">
+        <!-- Storage Location -->
+        <div>
+          <label class="block text-sm font-medium mb-1" style="color: var(--theme-sidebar-muted);">
+            <Package class="w-4 h-4 inline mr-1" />
+            Storage Location
+          </label>
+          <InlineEditField
+            value={costume.storage_location || ''}
+            placeholder="Where is this costume stored?"
+            onchange={(e) => updateField('storage_location', e.detail)}
+          />
+        </div>
+        
+        <!-- Notes -->
+        <div>
+          <label class="block text-sm font-medium mb-1" style="color: var(--theme-sidebar-muted);">
+            Notes
+          </label>
+          <InlineEditField
+            value={costume.notes || ''}
+            placeholder="Additional notes about this costume"
+            type="textarea"
+            onchange={(e) => updateField('notes', e.detail)}
+          />
+        </div>
+      </div>
+    </ThemedCard>
+  </div>
 </div>
-
-<!-- Delete Confirmation Modal -->
-<Modal bind:open={showDeleteModal} size="xs" autoclose>
-  <div class="text-center">
-    <Trash2 class="mx-auto mb-4 w-12 h-12 text-gray-400 dark:text-gray-200" />
-    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-      Are you sure you want to delete this costume?
-    </h3>
-    <p class="mb-5 text-sm text-gray-500 dark:text-gray-400">
-      This action cannot be undone.
-    </p>
-    <form method="POST" action="?/delete" use:enhance class="flex justify-center gap-4">
-      <Button color="red" type="submit">
-        Yes, delete it
-      </Button>
-      <Button color="gray" on:click={() => showDeleteModal = false}>
-        No, cancel
-      </Button>
-    </form>
-  </div>
-</Modal>

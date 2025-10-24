@@ -197,7 +197,7 @@
       multiple
       accept={acceptedTypes.join(',')}
       class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-      on:change={handleFileSelect}
+      onchange={handleFileSelect}
       {disabled}
     />
 
@@ -250,7 +250,7 @@
           type="button"
           class="text-sm font-medium transition-colors hover:text-[var(--theme-error)]"
           style="color: var(--theme-sidebar-muted);"
-          on:click={clearAll}
+          onclick={clearAll}
         >
           Clear all
         </button>
@@ -271,7 +271,7 @@
             <button
               type="button"
               class="absolute top-2 right-2 p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity bg-black/50 text-white hover:bg-black/70"
-              on:click={() => removePhoto(index)}
+              onclick={() => removePhoto(index)}
               aria-label="Remove photo"
             >
               <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

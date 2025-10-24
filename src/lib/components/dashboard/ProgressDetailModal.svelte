@@ -114,7 +114,7 @@
   <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
   <div
     class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
-    on:click={handleBackdropClick}
+    onclick={handleBackdropClick}
   >
     <div
       class="w-full max-w-4xl max-h-[90vh] overflow-hidden rounded-lg shadow-2xl"
@@ -137,7 +137,7 @@
           </p>
         </div>
         <button
-          on:click={handleClose}
+          onclick={handleClose}
           class="p-2 rounded-lg hover:bg-opacity-10"
           style="color: var(--theme-header-text);"
           aria-label="Close"
@@ -224,7 +224,7 @@
                   <div class="space-y-2">
                     {#each tasks as task}
                       <button
-                        on:click={() => handleTaskClick(task.id, category)}
+                        onclick={() => handleTaskClick(task.id, category)}
                         class="w-full text-left p-3 rounded-lg border transition-all hover:shadow-md"
                         style="background: var(--theme-sidebar-hover); border-color: var(--theme-sidebar-border);"
                       >
@@ -265,7 +265,7 @@
         class="flex justify-end gap-3 px-6 py-4 border-t"
         style="background: var(--theme-header-bg); border-color: var(--theme-sidebar-border);"
       >
-        <Button variant="solid" on:click={handleClose}>
+        <Button variant="solid" onclick={handleClose}>
           Close
         </Button>
       </div>

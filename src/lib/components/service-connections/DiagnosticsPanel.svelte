@@ -229,7 +229,7 @@
               name="scenario"
               value={scenario}
               checked={isScenarioSelected(scenario)}
-              on:change={(event) =>
+              onchange={(event) =>
                 toggleScenario(scenario, (event.currentTarget as HTMLInputElement).checked)}
             />
             <span class="leading-snug">

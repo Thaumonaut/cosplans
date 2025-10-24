@@ -110,7 +110,25 @@ As a photographer, I want to maintain a library of shoot locations (studios, par
 
 ---
 
-### User Story 6 - Resource Lifecycle Tracking (Priority: P2)
+### User Story 6 - Manage Accessories Collection (Priority: P2)
+
+As a cosplayer, I want to track my costume accessories and makeup (jewelry, colored contacts, makeup products, wigs) with their condition, usage, and maintenance schedules so that I can coordinate accessories with costumes and maintain my collection properly.
+
+**Why this priority**: Accessories represent significant investment and are essential for complete costume looks. They need different tracking than full costumes (more frequent maintenance, expiration dates for makeup, usage coordination). Builds on established resource management patterns.
+
+**Independent Test**: User can add accessories with type-specific fields (prescription info for contacts, expiration dates for makeup), track usage and maintenance, and link accessories to costumes independently.
+
+**Acceptance Scenarios**:
+
+1. **Given** I'm managing accessories, **When** I navigate to Accessories page and click "Add Accessory", **Then** I see type-specific forms (makeup with expiration dates, contacts with prescription details, jewelry with metal type)
+2. **Given** I have colored contacts, **When** I add them with prescription and usage schedule, **Then** system tracks wear and suggests replacement timing
+3. **Given** makeup is approaching expiry, **When** I set expiration date, **Then** system warns 30 days before expiry and marks as unavailable
+4. **Given** wig needs restyling, **When** I schedule maintenance and track usage, **Then** system reminds me before next use
+5. **Given** I'm coordinating a costume, **When** I view accessory suggestions, **Then** I see accessories that match the character or have been used together before
+
+---
+
+### User Story 7 - Resource Lifecycle Tracking (Priority: P2)
 
 As a team coordinator, I want to track the complete lifecycle of costumes and props (planned → acquiring → in-progress → ready → owned → sold/damaged/rented/lost/stored/loaned) so that I have accurate inventory and can make informed decisions about availability and value.
 
@@ -194,6 +212,19 @@ As a team coordinator, I want to track the complete lifecycle of costumes and pr
 - **FR-031**: System MUST allow users to filter locations by type or favorite status
 - **FR-032**: System MUST display location address with map preview (if address provided)
 
+**Accessories Management:**
+- **FR-044**: System MUST allow users to create, read, update, and delete accessory entries within their team
+- **FR-045**: System MUST support accessory types: jewelry, contacts, makeup, wig, other
+- **FR-046**: System MUST track accessory metadata: name, type, color/style, brand, size, prescription info (contacts), expiration date (makeup), condition, storage location, purchase cost, purchase date
+- **FR-047**: System MUST support accessory-specific lifecycle states: available, in-use, needs-cleaning, needs-repair, damaged, lost, expired (makeup), needs-restyling (wigs)
+- **FR-048**: System MUST allow users to upload 1-5 photos per accessory (minimum 1, maximum 5)
+- **FR-049**: System MUST allow users to filter accessories by type, color, condition, availability, or character association
+- **FR-050**: System MUST track accessory usage history and frequency for maintenance planning
+- **FR-051**: System MUST support maintenance reminders for accessories (cleaning schedules, repair due dates, restyling intervals)
+- **FR-052**: System MUST allow linking accessories to costumes for coordination planning and requirement tracking
+- **FR-053**: System MUST provide expiration warnings for makeup products (30 days advance notice)
+- **FR-054**: System MUST support makeup-specific features: usage level tracking (new, half-full, low, empty), skin tone matching, brand categorization
+
 **Cross-Resource Requirements:**
 - **FR-033**: All resources MUST be scoped to teams (no cross-team resource sharing in MVP)
 - **FR-034**: System MUST support real-time search across all resource types by name or description with 300ms debouncing
@@ -201,7 +232,7 @@ As a team coordinator, I want to track the complete lifecycle of costumes and pr
 - **FR-036**: System MUST track creation date, last modified date, and created by user for all resources
 - **FR-037**: System MUST enforce team permissions (only team members can view/edit team resources)
 - **FR-038**: System MUST compress uploaded images to optimize storage and bandwidth
-- **FR-039**: System MUST provide resource usage statistics (total costumes, props, crew, equipment, locations)
+- **FR-039**: System MUST provide resource usage statistics (total costumes, props, crew, equipment, locations, accessories)
 - **FR-040**: System MUST support exporting resource lists to CSV for backup/reporting
 - **FR-041**: System MUST soft-delete resources (mark as deleted, retain for 6 months, then permanently delete)
 - **FR-042**: System MUST provide archive view for deleted resources within 6-month retention period
@@ -209,14 +240,12 @@ As a team coordinator, I want to track the complete lifecycle of costumes and pr
 
 ### Key Entities
 
-- **Costume**: Represents a cosplay outfit with character, series, photos, lifecycle state, cost, and storage location. Tracks complete lifecycle from planning to disposal/sale.
-- **Crew Member**: Represents a person who works with the team (photographer, assistant, model, etc.) with contact info, role, and portfolio links. Not a full team member but can be assigned to shoots.
-- **Equipment**: Represents photography or production gear with brand, model, condition, and ownership status. Tracks availability for shoot planning.
-- **Prop**: Represents costume accessories, weapons, wigs with lifecycle state, condition, and storage location. Similar to costumes but smaller, reusable items.
-- **Location**: Represents a shoot location (studio, park, convention) with address, photos, accessibility notes, and cost information.
-- **Resource Lifecycle State**: Tracks state transitions for costumes/props with timestamps, state-specific metadata (sale price, damage cost, borrower info), and history.
-- **Resource Photo**: Represents uploaded images for any resource type with order, caption, and thumbnail generation.
-- **Team**: All resources belong to a team and inherit team permissions. Resources are not shared across teams in MVP.
+- **Accessory**: Represents costume accessories and makeup items with type, color, condition, usage tracking, and maintenance schedules. Links to costumes for coordination planning.
+- **Makeup Product**: Represents makeup items with brand, shade, expiration dates, usage levels, and skin tone matching. Specialized tracking for consumable beauty products.
+- **Accessory Type**: Categorizes accessories (jewelry, contacts, makeup, wig) with specific metadata fields and validation rules for each type.
+- **Accessory Usage History**: Tracks when and how accessories are used, including which costumes they were paired with and condition changes over time.
+- **Maintenance Schedule**: Represents scheduled maintenance tasks for accessories (cleaning, repair, restyling) with due dates and completion tracking.
+- **Costume-Accessory Link**: Junction entity linking accessories to costumes with usage notes and character-specific associations.
 
 ## Clarifications
 
@@ -240,7 +269,7 @@ As a team coordinator, I want to track the complete lifecycle of costumes and pr
 ### Measurable Outcomes
 
 - **SC-001**: Users can add a new costume with photos and details in under 2 minutes
-- **SC-002**: Users can find a specific resource (costume, crew, equipment, prop, location) in under 10 seconds using search/filter
+- **SC-002**: Users can find a specific resource (costume, crew, equipment, prop, location, accessory) in under 10 seconds using search/filter
 - **SC-003**: 90% of users successfully create their first resource entry on first attempt without help documentation
 - **SC-004**: System displays resource lists with 50+ items without performance degradation (page load under 2 seconds)
 - **SC-005**: Users can transition a costume through complete lifecycle (planned → owned → sold) with all required metadata in under 5 minutes

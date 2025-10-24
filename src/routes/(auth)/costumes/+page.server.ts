@@ -6,24 +6,23 @@ import { getAdminClient } from '$lib/server/supabase/admin-client';
 export const load: PageServerLoad = async ({ locals, url }) => {
   const { session, user } = await locals.safeGetSession();
   if (!session || !user) {
-    throw redirect(303, '/login');
+    return { error: 'Unauthorized', costumes: [], teams: [], pagination: { currentPage: 1, totalPages: 0, totalItems: 0 } };
   }
 
-  let teamId = url.searchParams.get('team_id');
+  // Get all teams the user belongs to
+  const adminClient = getAdminClient();
+  const { data: memberships } = await adminClient
+    .from('team_members')
+    .select('team_id, teams(id, name)')
+    .eq('user_id', user.id);
   
-  if (!teamId) {
-    const adminClient = getAdminClient();
-    const { data: memberships } = await adminClient
-      .from('team_members')
-      .select('team_id')
-      .eq('user_id', user.id)
-      .limit(1);
-    
-    if (!memberships || memberships.length === 0) {
-      throw error(400, 'You must be a member of a team. Please create or join a team first.');
-    }
-    teamId = (memberships[0] as any).team_id;
+  if (!memberships || memberships.length === 0) {
+    return { error: 'No team found', costumes: [], teams: [], pagination: { currentPage: 1, totalPages: 0, totalItems: 0 } };
   }
+
+  // Extract team IDs and team info
+  const teamIds = memberships.map((m: any) => m.team_id);
+  const teamsMap = new Map(memberships.map((m: any) => [m.team_id, m.teams]));
 
   // Get pagination parameters
   const page = parseInt(url.searchParams.get('page') || '1');
@@ -33,36 +32,70 @@ export const load: PageServerLoad = async ({ locals, url }) => {
   const offset = (page - 1) * limit;
 
   try {
-    console.log('[Costumes] Searching with params:', { team_id: teamId, query: searchQuery, status, limit, offset });
+    console.log('[Costumes] Loading for', teamIds.length, 'teams');
     
-    // Fetch costumes with pagination and filters
-    const result = await costumeService.search({
-      team_id: teamId,
-      query: searchQuery,
-      status,
-      limit,
-      offset
-    });
+    // Get costumes from all user's teams with filters
+    let query = adminClient
+      .from('costumes')
+      .select('*')
+      .in('team_id', teamIds)
+      .order('created_at', { ascending: false });
+    
+    // Apply filters
+    if (searchQuery) {
+      query = query.or(`name.ilike.%${searchQuery}%,character_name.ilike.%${searchQuery}%,series.ilike.%${searchQuery}%`);
+    }
+    if (status) {
+      query = query.eq('status', status);
+    }
+    
+    const { data: allCostumes, error: costumesError } = await query
+      .range(offset, offset + limit - 1);
 
-    console.log('[Costumes] Search result:', { count: result.resources.length, total: result.total });
+    if (costumesError) {
+      console.error('[Costumes] Error:', costumesError);
+      return { error: costumesError.message, costumes: [], teams: [], pagination: { currentPage: 1, totalPages: 0, totalItems: 0 } };
+    }
+
+    // Get total count with same filters
+    let countQuery = adminClient
+      .from('costumes')
+      .select('*', { count: 'exact', head: true })
+      .in('team_id', teamIds);
+    
+    if (searchQuery) {
+      countQuery = countQuery.or(`name.ilike.%${searchQuery}%,character_name.ilike.%${searchQuery}%,series.ilike.%${searchQuery}%`);
+    }
+    if (status) {
+      countQuery = countQuery.eq('status', status);
+    }
+    
+    const { count } = await countQuery;
+    
+    console.log('[Costumes] Found', count, 'items across all teams');
+
+    // Add team info to each costume
+    const costumesWithTeams = (allCostumes || []).map((costume: any) => ({
+      ...costume,
+      team: teamsMap.get(costume.team_id)
+    }));
 
     return {
-      costumes: result.resources,
+      costumes: costumesWithTeams,
+      teams: Array.from(teamsMap.values()),
       pagination: {
         currentPage: page,
-        totalPages: Math.ceil((result.total || 0) / limit),
-        totalItems: result.total || 0,
+        totalPages: Math.ceil((count || 0) / limit),
+        totalItems: count || 0,
         itemsPerPage: limit
       },
       filters: {
         status,
         searchQuery
-      },
-      teamId
+      }
     };
   } catch (err) {
     console.error('[Costumes] Error loading costumes:', err);
-    console.error('[Costumes] Error details:', JSON.stringify(err, null, 2));
     throw error(500, `Failed to load costumes: ${err instanceof Error ? err.message : 'Unknown error'}`);
   }
 };

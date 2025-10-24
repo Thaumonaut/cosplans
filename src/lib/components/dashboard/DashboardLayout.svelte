@@ -187,7 +187,7 @@
           <select
             id="template-select"
             value={$currentTemplate}
-            on:change={handleTemplateChange}
+            onchange={handleTemplateChange}
             class="block w-40 rounded-lg pl-3 pr-8 py-2 text-sm font-medium transition-colors hover:bg-[var(--theme-sidebar-hover)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-sidebar-accent)]"
             style="background: var(--theme-sidebar-bg); color: var(--theme-sidebar-text); border: 1px solid var(--theme-sidebar-border);"
           >
@@ -276,7 +276,7 @@
                 variant="ghost"
                 className="hover:opacity-70 focus:ring-2 text-[var(--theme-sidebar-muted)]"
                 ariaLabel={widget.visible ? "Hide widget" : "Show widget"}
-                on:click={() => dashboardActions.toggleWidget(widget.id)}
+                onclick={() => dashboardActions.toggleWidget(widget.id)}
               >
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -327,7 +327,7 @@
                 variant="ghost"
                 className="hover:opacity-70 focus:ring-2 text-[var(--theme-sidebar-muted)]"
                 ariaLabel={widget.visible ? "Hide widget" : "Show widget"}
-                on:click={() => dashboardActions.toggleWidget(widget.id)}
+                onclick={() => dashboardActions.toggleWidget(widget.id)}
               >
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -378,7 +378,7 @@
                   variant="ghost"
                   className="hover:opacity-70 focus:ring-2 text-[var(--theme-sidebar-muted)]"
                   ariaLabel={widget.visible ? "Hide widget" : "Show widget"}
-                  on:click={() => dashboardActions.toggleWidget(widget.id)}
+                  onclick={() => dashboardActions.toggleWidget(widget.id)}
                 >
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
@@ -445,7 +445,7 @@
                   variant="ghost"
                   className="hover:opacity-70 focus:ring-2 text-[var(--theme-sidebar-muted)]"
                   ariaLabel={widget.visible ? "Hide widget" : "Show widget"}
-                  on:click={() => dashboardActions.toggleWidget(widget.id)}
+                  onclick={() => dashboardActions.toggleWidget(widget.id)}
                 >
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path

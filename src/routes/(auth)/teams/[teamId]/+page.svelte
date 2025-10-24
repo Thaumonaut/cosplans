@@ -301,7 +301,7 @@
 											<select 
 												name="role" 
 												value={member.role}
-												on:change={(e) => e.currentTarget.form?.requestSubmit()}
+												onchange={(e) => e.currentTarget.form?.requestSubmit()}
 												class="px-2 py-1 text-xs font-medium rounded-full border cursor-pointer {getRoleBadgeClass(member.role)}"
 												style="border-color: var(--theme-sidebar-border);"
 											>
@@ -324,7 +324,7 @@
 												type="button"
 												class="px-2 py-1 text-xs font-medium rounded hover:bg-red-100 transition-colors"
 												style="color: #ef4444;"
-												on:click={() => {
+												onclick={() => {
 													memberToRemove = { id: member.user_id, name: member.display_name };
 													showRemoveMemberModal = true;
 												}}
@@ -363,7 +363,7 @@
 								href="/teams/{form.team.id}"
 								class="inline-block mt-2 px-4 py-2 rounded-lg font-medium"
 								style="background: rgba(255, 255, 255, 0.2);"
-								on:click={() => {
+								onclick={() => {
 									if (typeof window !== 'undefined' && (window as any).reloadTeamSwitcher) {
 										(window as any).reloadTeamSwitcher();
 									}
@@ -431,15 +431,20 @@
 							<div class="flex gap-2">
 								<a
 									href="/teams/{form.joinedTeam.id}"
-									class="px-4 py-2 rounded-lg font-medium text-white focus:outline-none"
+									class="inline-block mt-2 px-4 py-2 rounded-lg font-medium text-white focus:outline-none"
 									style="background: rgba(255, 255, 255, 0.2);"
-									on:click={() => window.location.href = `/teams/${form.joinedTeam.id}`}
+									onclick={() => {
+										if (typeof window !== 'undefined' && (window as any).reloadTeamSwitcher) {
+											(window as any).reloadTeamSwitcher();
+										}
+										window.location.href = `/teams/${form.joinedTeam.id}`;
+									}}
 								>
 									Switch to {form.joinedTeam.name}
 								</a>
 								<button
 									type="button"
-									on:click={() => {
+									onclick={() => {
 										if (typeof window !== 'undefined' && (window as any).reloadTeamSwitcher) {
 											(window as any).reloadTeamSwitcher();
 										}
@@ -539,13 +544,13 @@
 												name="joinLink"
 												readonly
 												value="{origin}/register?joinCode={data.joinLink.code}"
-												on:click={(e) => e.currentTarget.select()}
+												onclick={(e) => e.currentTarget.select()}
 											/>
 										</div>
 										<ThemedButton
 											type="button"
 											variant="primary"
-											on:click={() => {
+											onclick={() => {
 												navigator.clipboard.writeText(`${origin}/register?joinCode=${data.joinLink.code}`);
 											}}
 										>
@@ -580,13 +585,13 @@
 												name="joinCode"
 												readonly
 												value={data.joinLink.code}
-												on:click={(e) => e.currentTarget.select()}
+												onclick={(e) => e.currentTarget.select()}
 											/>
 										</div>
 										<ThemedButton
 											type="button"
 											variant="primary"
-											on:click={() => {
+											onclick={() => {
 												navigator.clipboard.writeText(data.joinLink.code);
 											}}
 										>
@@ -695,7 +700,7 @@
 								<ThemedButton
 									type="button"
 									variant="danger"
-									on:click={() => {
+									onclick={() => {
 										console.log('Delete button clicked, opening modal');
 										showDeleteTeamModal = true;
 										console.log('showDeleteTeamModal:', showDeleteTeamModal);
@@ -734,7 +739,7 @@
 								<ThemedButton
 									type="button"
 									variant="warning"
-									on:click={() => showTransferOwnership = true}
+									onclick={() => showTransferOwnership = true}
 								>
 									Transfer Ownership
 								</ThemedButton>
@@ -766,14 +771,16 @@
 											type="button"
 											variant="warning"
 											disabled={!selectedNewOwner}
-											on:click={() => showTransferOwnershipModal = true}
+											onclick={() => {
+												showTransferOwnershipModal = true;
+											}}
 										>
 											Confirm Transfer
 										</ThemedButton>
 										<ThemedButton
 											type="button"
 											variant="secondary"
-											on:click={() => {
+											onclick={() => {
 												showTransferOwnership = false;
 												selectedNewOwner = '';
 											}}
@@ -825,7 +832,7 @@
 									<ThemedButton
 										type="button"
 										variant="warning"
-										on:click={() => showLeaveTeamModal = true}
+										onclick={() => showLeaveTeamModal = true}
 									>
 										Leave Team
 									</ThemedButton>

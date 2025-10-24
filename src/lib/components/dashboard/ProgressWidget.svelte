@@ -42,6 +42,7 @@
   onMount(async () => {
     try {
       loading = true;
+
       // Fetch real progress data from API
       const response = await fetch(`/api/progress/team/${teamId}`);
       if (response.ok) {
@@ -66,6 +67,8 @@
       }
       error = null;
     } catch (err) {
+      // Fallback to mock data on error
+      progressData = mockProgressData;
       error = "Failed to load progress data";
       console.error("Error loading progress:", err);
     } finally {

@@ -336,7 +336,7 @@ Create `src/lib/components/dashboard/DashboardWidget.svelte`:
 <div class="dashboard-widget" class:hidden={!widget.visible}>
     <div class="widget-header">
         <h3>{widget.type.replace('_', ' ').toUpperCase()}</h3>
-        <button on:click={handleToggleVisibility}>
+        <button onclick={handleToggleVisibility}>
             {widget.visible ? 'Hide' : 'Show'}
         </button>
     </div>
@@ -490,7 +490,7 @@ Create `src/routes/dashboard/+page.svelte`:
         
         <div class="template-selector">
             <label for="template">Layout:</label>
-            <select bind:value={template} on:change={e => changeTemplate(e.target.value)}>
+            <select bind:value={template} onchange={e => changeTemplate(e.target.value)}>
                 <option value="compact">Compact</option>
                 <option value="detailed">Detailed</option>
                 <option value="timeline-focus">Timeline Focus</option>
@@ -503,7 +503,7 @@ Create `src/routes/dashboard/+page.svelte`:
             <DashboardWidget 
                 {widget} 
                 data={data.widgetData[widget.type]} 
-                on:update={e => updateWidget(e.detail)}
+                onupdate={e => updateWidget(e.detail)}
             />
         {/each}
     </main>

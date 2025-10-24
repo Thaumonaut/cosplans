@@ -11,6 +11,35 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 
   const { id } = params;
 
+  // Handle "new" costume creation
+  if (id === 'new') {
+    const newCostume = {
+      id: 'new',
+      team_id: '',
+      created_by: user.id,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      deleted_at: null,
+      character_name: '',
+      series: '',
+      costume_type: '',
+      status: 'planned' as LifecycleState,
+      estimated_cost: undefined,
+      actual_cost: undefined,
+      completion_date: '',
+      storage_location: '',
+      state_metadata: {},
+      notes: '',
+      search_vector: ''
+    };
+
+    return {
+      costume: newCostume,
+      isNew: true,
+      user
+    };
+  }
+
   try {
     const costume = await costumeService.getById(id);
     
@@ -20,6 +49,7 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 
     return {
       costume,
+      isNew: false,
       user
     };
   } catch (err) {
@@ -29,6 +59,45 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 };
 
 export const actions: Actions = {
+  create: async ({ request, locals }) => {
+    const { session, user } = await locals.safeGetSession();
+    if (!session || !user) {
+      return fail(401, { error: 'Unauthorized' });
+    }
+
+    const formData = await request.formData();
+    const teamId = formData.get('team_id') as string;
+    
+    if (!teamId) {
+      return fail(400, { error: 'Team ID is required' });
+    }
+    
+    const data = {
+      team_id: teamId,
+      created_by: user.id,
+      character_name: formData.get('character_name') as string,
+      series: formData.get('series') as string || undefined,
+      costume_type: formData.get('costume_type') as string || undefined,
+      status: (formData.get('status') as LifecycleState) || 'planned',
+      estimated_cost: formData.get('estimated_cost') ? parseFloat(formData.get('estimated_cost') as string) : undefined,
+      actual_cost: formData.get('actual_cost') ? parseFloat(formData.get('actual_cost') as string) : undefined,
+      completion_date: formData.get('completion_date') as string || undefined,
+      storage_location: formData.get('storage_location') as string || undefined,
+      notes: formData.get('notes') as string || undefined,
+      state_metadata: {},
+    };
+
+    try {
+      const costume = await costumeService.create(data);
+      redirect(303, `/costumes/${costume.id}`);
+    } catch (err) {
+      console.error('Error creating costume:', err);
+      return fail(500, {
+        error: 'Failed to create costume. Please try again.'
+      });
+    }
+  },
+
   update: async ({ request, params, locals }) => {
     const { session, user } = await locals.safeGetSession();
     if (!session || !user) {

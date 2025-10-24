@@ -1,7 +1,9 @@
 <script lang="ts">
   import ThemedCard from '$lib/components/ui/ThemedCard.svelte';
-  import { Plus, MapPin, Star, Building, Map, Navigation } from 'lucide-svelte';
+  import { Plus, MapPin, Star, Building, Map, Navigation, HelpCircle } from 'lucide-svelte';
   export let data;
+  
+  let showHelp = false;
   
   // Calculate stats
   $: stats = {
@@ -16,11 +18,34 @@
   <!-- Header -->
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-3xl font-bold" style="color: var(--theme-foreground);">
-        Location Library
-      </h1>
+      <div class="flex items-center gap-3">
+        <h1 class="text-3xl font-bold" style="color: var(--theme-foreground);">
+          Location Library
+        </h1>
+        <button
+          type="button"
+          class="relative p-1 rounded-full transition-colors hover:bg-[var(--theme-sidebar-hover)]"
+          style="color: var(--theme-sidebar-muted);"
+          onmouseenter={() => showHelp = true}
+          onmouseleave={() => showHelp = false}
+          onclick={() => showHelp = !showHelp}
+        >
+          <HelpCircle class="w-5 h-5" />
+          {#if showHelp}
+            <div 
+              class="absolute left-0 top-full mt-2 w-80 p-4 rounded-lg shadow-lg border z-50"
+              style="background: var(--theme-background); border-color: var(--theme-sidebar-border); color: var(--theme-foreground);"
+            >
+              <p class="text-sm" style="color: var(--theme-sidebar-muted);">
+                Maintain a library of shoot locations with photos, addresses, and accessibility notes. 
+                Track contact information, parking details, and other important logistics for each location.
+              </p>
+            </div>
+          {/if}
+        </button>
+      </div>
       <p class="mt-2 text-sm" style="color: var(--theme-sidebar-muted);">
-        Maintain a library of shoot locations with photos, addresses, and accessibility notes.
+        Maintain library of shoot locations with photos and accessibility details.
       </p>
     </div>
     <a
@@ -129,22 +154,5 @@
         {/each}
       </div>
     {/if}
-  </ThemedCard>
-
-  <!-- Info Box -->
-  <ThemedCard>
-    <div class="flex items-start gap-3">
-      <Map class="h-5 w-5 mt-0.5" style="color: var(--theme-info);" />
-      <div>
-        <h4 class="font-medium mb-1" style="color: var(--theme-foreground);">
-          About Location Library
-        </h4>
-        <p class="text-sm" style="color: var(--theme-sidebar-muted);">
-          Maintain a comprehensive library of shoot locations including studios, outdoor spaces, and convention centers. 
-          Store addresses, contact information, parking details, and accessibility notes. Mark favorites for quick access 
-          to your go-to locations.
-        </p>
-      </div>
-    </div>
   </ThemedCard>
 </div>

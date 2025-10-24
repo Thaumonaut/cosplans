@@ -91,7 +91,7 @@
     <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
       <Button
         color="gray"
-        on:click={() => window.history.back()}
+        onclick={() => window.history.back()}
       >
         <ArrowLeft class="w-4 h-4 mr-2" />
         Go Back

@@ -4,19 +4,20 @@
   import ThemedCard from '$lib/components/ui/ThemedCard.svelte';
   import ThemedButton from '$lib/components/ui/ThemedButton.svelte';
   import ThemedSelect from '$lib/components/ui/ThemedSelect.svelte';
-  import { Plus, Search, Shirt, Package, Tag, TrendingUp } from 'lucide-svelte';
+  import { Plus, Search, Shirt, Package, Tag, TrendingUp, HelpCircle } from 'lucide-svelte';
   import { fade } from 'svelte/transition';
   import CostumeCard from '$lib/components/resources/CostumeCard.svelte';
 
   export let data;
   
   // Extract data from server load
-  let { costumes, pagination, filters, teamId } = data;
+  let { costumes, pagination, filters } = data;
   
   // Local state
-  let searchQuery = filters.searchQuery || '';
-  let selectedStatus = filters.status || '';
+  let searchQuery = filters?.searchQuery || '';
+  let selectedStatus = filters?.status || '';
   let showFilters = false;
+  let showHelp = false;
   
   // Calculate stats
   $: stats = {
@@ -44,7 +45,6 @@
     
     if (searchQuery) params.set('q', searchQuery);
     if (selectedStatus) params.set('status', selectedStatus);
-    if (teamId) params.set('team_id', teamId);
     
     // Reset to first page when filters change
     params.set('page', '1');
@@ -91,9 +91,32 @@
   <!-- Header -->
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-3xl font-bold" style="color: var(--theme-foreground);">
-        Costume Inventory
-      </h1>
+      <div class="flex items-center gap-3">
+        <h1 class="text-3xl font-bold" style="color: var(--theme-foreground);">
+          Costume Inventory
+        </h1>
+        <button
+          type="button"
+          class="relative p-1 rounded-full transition-colors hover:bg-[var(--theme-sidebar-hover)]"
+          style="color: var(--theme-sidebar-muted);"
+          onmouseenter={() => showHelp = true}
+          onmouseleave={() => showHelp = false}
+          onclick={() => showHelp = !showHelp}
+        >
+          <HelpCircle class="w-5 h-5" />
+          {#if showHelp}
+            <div 
+              class="absolute left-0 top-full mt-2 w-80 p-4 rounded-lg shadow-lg border z-50"
+              style="background: var(--theme-background); border-color: var(--theme-sidebar-border); color: var(--theme-foreground);"
+            >
+              <p class="text-sm" style="color: var(--theme-sidebar-muted);">
+                Track your physical costume collection with photos, lifecycle states, and storage details. 
+                Monitor costume status from planning to completion, and organize by character and series.
+              </p>
+            </div>
+          {/if}
+        </button>
+      </div>
       <p class="mt-2 text-sm" style="color: var(--theme-sidebar-muted);">
         Track your physical costume collection with photos, lifecycle states, and storage details.
       </p>
@@ -172,7 +195,7 @@
             type="text"
             placeholder="Search costumes or characters..."
             bind:value={searchQuery}
-            on:keydown={(e) => e.key === 'Enter' && updateFilters()}
+            onkeydown={(e) => e.key === 'Enter' && updateFilters()}
             class="w-full rounded-md border px-10 py-2 text-sm transition-colors focus:outline-none focus:ring-2"
             style="
               background: var(--theme-sidebar-bg);
@@ -184,7 +207,7 @@
       </div>
       <div class="flex items-center gap-2">
         <span class="text-sm" style="color: var(--theme-sidebar-muted);">Status:</span>
-        <ThemedSelect name="filterStatus" bind:value={selectedStatus} on:change={updateFilters}>
+        <ThemedSelect name="filterStatus" bind:value={selectedStatus} onchange={updateFilters}>
           {#each statusOptions as option}
             <option value={option.value}>{option.label}</option>
           {/each}
@@ -230,7 +253,7 @@
         <div class="flex-1 flex justify-between sm:hidden">
           {#if pagination.currentPage > 1}
             <button
-              on:click={() => goToPage(pagination.currentPage - 1)}
+              onclick={() => goToPage(pagination.currentPage - 1)}
               class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
             >
               Previous
@@ -238,7 +261,7 @@
           {/if}
           {#if pagination.currentPage < pagination.totalPages}
             <button
-              on:click={() => goToPage(pagination.currentPage + 1)}
+              onclick={() => goToPage(pagination.currentPage + 1)}
               class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
             >
               Next
@@ -260,7 +283,7 @@
               <!-- Previous Page -->
               {#if pagination.currentPage > 1}
                 <button
-                  on:click={() => goToPage(pagination.currentPage - 1)}
+                  onclick={() => goToPage(pagination.currentPage - 1)}
                   class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm font-medium text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
                   <span class="sr-only">Previous</span>
@@ -288,7 +311,7 @@
                   </span>
                 {:else}
                   <button
-                    on:click={() => goToPage(pageNum)}
+                    onclick={() => goToPage(pageNum)}
                     class={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
                       isCurrent
                         ? 'z-10 bg-blue-50 dark:bg-blue-900 border-blue-500 text-blue-600 dark:text-blue-200'
@@ -304,7 +327,7 @@
               <!-- Next Page -->
               {#if pagination.currentPage < pagination.totalPages}
                 <button
-                  on:click={() => goToPage(pagination.currentPage + 1)}
+                  onclick={() => goToPage(pagination.currentPage + 1)}
                   class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm font-medium text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
                   <span class="sr-only">Next</span>
@@ -328,22 +351,4 @@
         </div>
       </div>
   {/if}
-
-  <!-- Info Box -->
-  <ThemedCard>
-    <div class="flex items-start gap-3">
-      <Package class="h-5 w-5 mt-0.5" style="color: var(--theme-info);" />
-      <div>
-        <h4 class="font-medium mb-1" style="color: var(--theme-foreground);">
-          About Costume Inventory
-        </h4>
-        <p class="text-sm" style="color: var(--theme-sidebar-muted);">
-          Track your physical costume collection with detailed information about each piece. 
-          Monitor lifecycle states from planning through completion, manage storage locations, 
-          and keep photos of your work. Use status filters to quickly find costumes that are 
-          ready for events or need attention.
-        </p>
-      </div>
-    </div>
-  </ThemedCard>
 </div>

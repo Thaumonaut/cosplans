@@ -108,6 +108,7 @@
   onMount(async () => {
     try {
       loading = true;
+
       // Fetch real tasks data from API
       const response = await fetch(`/api/tasks/team/${teamId}`);
       if (response.ok) {
@@ -120,6 +121,8 @@
       }
       error = null;
     } catch (err) {
+      // Fallback to filtered mock data on error
+      tasks = mockTasks.filter((t) => t.team_id === teamId && !t.completed);
       error = "Failed to load tasks";
       console.error("Error loading tasks:", err);
     } finally {
@@ -270,8 +273,10 @@
               <input
                 type="checkbox"
                 checked={task.completed}
-                on:click|stopPropagation
-                on:change={() => toggleTask(task.id)}
+                onchange={(e) => {
+                  e.stopPropagation();
+                  toggleTask(task.id);
+                }}
                 class="mt-0.5 w-4 h-4 rounded"
                 style="accent-color: var(--theme-alert-color);"
               />
@@ -356,8 +361,10 @@
               <input
                 type="checkbox"
                 checked={task.completed}
-                on:click|stopPropagation
-                on:change={() => toggleTask(task.id)}
+                onchange={(e) => {
+                  e.stopPropagation();
+                  toggleTask(task.id);
+                }}
                 class="mt-0.5 w-4 h-4 rounded"
                 style="accent-color: var(--theme-sidebar-accent);"
               />

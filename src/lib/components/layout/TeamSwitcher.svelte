@@ -113,7 +113,7 @@
   $: publicTeams = teams.filter((t: any) => !t.is_personal);
 </script>
 
-<svelte:window on:click={handleClickOutside} />
+<svelte:window onclick={handleClickOutside} />
 
 {#if collapsed}
   <!-- When collapsed, just show the team icon as a non-interactive badge -->
@@ -129,7 +129,7 @@
     <button
       type="button"
       class="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors hover:bg-[var(--theme-sidebar-hover)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--theme-sidebar-accent)]"
-      on:click={() => (isOpen = !isOpen)}
+      onclick={() => (isOpen = !isOpen)}
       disabled={$teamStore.isSwitching}
     >
       <div
@@ -170,7 +170,7 @@
               style={teamItem.id === currentTeam?.id
                 ? "color: var(--theme-sidebar-accent);"
                 : "color: var(--theme-foreground);"}
-              on:click={() => selectTeam(teamItem.id)}
+              onclick={() => selectTeam(teamItem.id)}
               role="menuitem"
             >
               <LucideIcon name="User" size={16} />
@@ -203,7 +203,7 @@
               style={teamItem.id === currentTeam?.id
                 ? "color: var(--theme-sidebar-accent);"
                 : "color: var(--theme-foreground);"}
-              on:click={() => selectTeam(teamItem.id)}
+              onclick={() => selectTeam(teamItem.id)}
               role="menuitem"
             >
               <LucideIcon name="Users" size={16} />

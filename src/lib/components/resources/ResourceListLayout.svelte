@@ -25,10 +25,10 @@
             <button
               type="button"
               class="p-1 rounded-full hover:bg-[var(--theme-sidebar-hover)] transition-colors"
-              on:mouseenter={() => showHelp = true}
-              on:mouseleave={() => showHelp = false}
-              on:focus={() => showHelp = true}
-              on:blur={() => showHelp = false}
+              onmouseenter={() => showHelp = true}
+              onmouseleave={() => showHelp = false}
+              onfocus={() => showHelp = true}
+              onblur={() => showHelp = false}
             >
               <HelpCircle class="h-5 w-5" style="color: var(--theme-sidebar-muted);" />
             </button>

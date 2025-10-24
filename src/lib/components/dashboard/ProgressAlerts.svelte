@@ -163,7 +163,7 @@
 
     <div class="flex gap-2">
       <button
-        on:click={() => filter = 'unacknowledged'}
+        onclick={() => filter = 'unacknowledged'}
         class="px-3 py-1.5 rounded text-sm font-medium transition-colors"
         class:active={filter === 'unacknowledged'}
         style="background: {filter === 'unacknowledged' ? 'var(--theme-sidebar-accent)' : 'var(--theme-sidebar-hover)'}; color: {filter === 'unacknowledged' ? 'white' : 'var(--theme-sidebar-text)'};"
@@ -171,7 +171,7 @@
         Unacknowledged
       </button>
       <button
-        on:click={() => filter = 'all'}
+        onclick={() => filter = 'all'}
         class="px-3 py-1.5 rounded text-sm font-medium transition-colors"
         class:active={filter === 'all'}
         style="background: {filter === 'all' ? 'var(--theme-sidebar-accent)' : 'var(--theme-sidebar-hover)'}; color: {filter === 'all' ? 'white' : 'var(--theme-sidebar-text)'};"
@@ -277,7 +277,7 @@
                 <button
                   type="button"
                   class="px-3 py-1 text-sm rounded hover:bg-gray-100 dark:hover:bg-gray-700"
-                  on:click={() => acknowledgeAlert(alert.id)}
+                  onclick={() => acknowledgeAlert(alert.id)}
                 >
                   Acknowledge
                 </button>
@@ -285,7 +285,7 @@
               <button
                 type="button"
                 class="px-3 py-1 text-sm rounded hover:bg-gray-100 dark:hover:bg-gray-700"
-                on:click={() => dismissAlert(alert.id)}
+                onclick={() => dismissAlert(alert.id)}
               >
                 Dismiss
               </button>

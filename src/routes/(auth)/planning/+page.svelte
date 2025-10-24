@@ -12,6 +12,14 @@
       status: 'planning',
       estimatedCost: 450,
       priority: 'high'
+    },
+    {
+      id: '2',
+      title: 'Cyberpunk 2077 - V Cosplay',
+      description: 'Full costume with LED accents',
+      status: 'planning',
+      estimatedCost: 450,
+      priority: 'high'
     }
   ];
 </script>

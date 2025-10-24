@@ -151,7 +151,7 @@
             type="button"
             class="p-1 rounded transition-colors hover:bg-[var(--theme-sidebar-hover)]"
             style="color: var(--theme-sidebar-muted);"
-            on:click={() => onFavorite(resource)}
+            onclick={() => onFavorite(resource)}
             aria-label={resource.is_favorite ? 'Remove from favorites' : 'Add to favorites'}
           >
             <svg class="h-4 w-4 {resource.is_favorite ? 'fill-current' : ''}" viewBox="0 0 24 24">
@@ -164,7 +164,7 @@
             type="button"
             class="p-1 rounded transition-colors hover:bg-[var(--theme-sidebar-hover)]"
             style="color: var(--theme-sidebar-muted);"
-            on:click={() => onEdit(resource)}
+            onclick={() => onEdit(resource)}
             aria-label="Edit"
           >
             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -178,7 +178,7 @@
             type="button"
             class="p-1 rounded transition-colors hover:bg-[var(--theme-error)] hover:text-white"
             style="color: var(--theme-sidebar-muted);"
-            on:click={() => onDelete(resource)}
+            onclick={() => onDelete(resource)}
             aria-label="Delete"
           >
             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -265,7 +265,7 @@
             type="button"
             class="p-2 rounded transition-colors hover:bg-[var(--theme-sidebar-hover)]"
             style="color: var(--theme-sidebar-muted);"
-            on:click={() => onFavorite(resource)}
+            onclick={() => onFavorite(resource)}
             aria-label={resource.is_favorite ? 'Remove from favorites' : 'Add to favorites'}
           >
             <svg class="h-4 w-4 {resource.is_favorite ? 'fill-current text-yellow-500' : ''}" viewBox="0 0 24 24">
@@ -278,7 +278,7 @@
             type="button"
             class="p-2 rounded transition-colors hover:bg-[var(--theme-sidebar-hover)]"
             style="color: var(--theme-sidebar-muted);"
-            on:click={() => onEdit(resource)}
+            onclick={() => onEdit(resource)}
             aria-label="Edit"
           >
             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -292,7 +292,7 @@
             type="button"
             class="p-2 rounded transition-colors hover:bg-[var(--theme-error)] hover:text-white"
             style="color: var(--theme-sidebar-muted);"
-            on:click={() => onDelete(resource)}
+            onclick={() => onDelete(resource)}
             aria-label="Delete"
           >
             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -477,7 +477,7 @@
             type="button"
             class="px-3 py-1 rounded text-sm transition-colors hover:bg-[var(--theme-sidebar-hover)]"
             style="color: var(--theme-sidebar-muted);"
-            on:click={() => onFavorite(resource)}
+            onclick={() => onFavorite(resource)}
           >
             {resource.is_favorite ? '★ Favorited' : '☆ Add to favorites'}
           </button>
@@ -487,7 +487,7 @@
             type="button"
             class="px-3 py-1 rounded text-sm font-medium transition-colors hover:bg-[var(--theme-sidebar-hover)]"
             style="color: var(--theme-sidebar-accent);"
-            on:click={() => onEdit(resource)}
+            onclick={() => onEdit(resource)}
           >
             Edit
           </button>
@@ -497,7 +497,7 @@
             type="button"
             class="px-3 py-1 rounded text-sm font-medium transition-colors hover:bg-[var(--theme-error)] hover:text-white"
             style="color: var(--theme-error);"
-            on:click={() => onDelete(resource)}
+            onclick={() => onDelete(resource)}
           >
             Delete
           </button>

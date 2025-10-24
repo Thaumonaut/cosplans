@@ -1,0 +1,362 @@
+# Cursor Rules for Cosplans Spec-Driven Development
+
+## Project Context
+This is a SvelteKit cosplay planning application following strict spec-driven development workflow per the Project Constitution (Principle VI.7).
+
+## Core Workflow Commands
+
+### `/speckit.specify [feature-description]`
+**Purpose**: Create a new feature specification (Phase 1)
+
+**Actions**:
+1. Find next available spec number in `specs/` directory (current highest: 044)
+2. Create directory: `specs/[###-feature-name]/`
+3. Copy template: `.specify/templates/spec-template.md` → `specs/[###-feature-name]/spec.md`
+4. Fill in:
+   - Feature name and branch name
+   - Current date
+   - User stories with priorities (P1, P2, P3)
+   - Functional requirements
+   - Success criteria
+   - Edge cases
+5. Open `spec.md` for review
+6. Remind user: "✋ CHECKPOINT: Review spec.md before proceeding to `/speckit.plan`"
+
+**Example**: `/speckit.specify Modal resource creation forms for costumes`
+
+**Output**: `specs/045-modal-resource-forms/spec.md`
+
+---
+
+### `/speckit.plan`
+**Purpose**: Create implementation plan from approved spec (Phase 2)
+
+**Prerequisites**: 
+- Approved spec.md must exist
+- User must explicitly confirm spec is approved
+
+**Actions**:
+1. Find the most recent spec directory
+2. Read `spec.md` to understand requirements
+3. Copy template: `.specify/templates/plan-template.md` → `specs/[###]/plan.md`
+4. Fill in:
+   - Technical context (SvelteKit, TypeScript, Supabase, etc.)
+   - Constitution check (cross-reference with `.specify/memory/constitution.md`)
+   - Project structure (follow existing `src/` layout)
+   - Data model changes (if database tables needed)
+   - API endpoints (if backend changes)
+   - Component architecture
+   - Dependencies on existing code
+5. Create `research.md` if external APIs or new tech required
+6. Create `data-model.md` if database schema changes
+7. Open `plan.md` for review
+8. Remind user: "✋ CHECKPOINT: Review plan.md before proceeding to `/speckit.tasks`"
+
+**Example**: `/speckit.plan`
+
+**Output**: 
+- `specs/[###]/plan.md`
+- `specs/[###]/research.md` (if needed)
+- `specs/[###]/data-model.md` (if needed)
+
+---
+
+### `/speckit.tasks`
+**Purpose**: Break plan into actionable tasks (Phase 3)
+
+**Prerequisites**: 
+- Approved plan.md must exist
+- User must explicitly confirm plan is approved
+
+**Actions**:
+1. Read `spec.md` for user stories and priorities
+2. Read `plan.md` for technical approach
+3. Copy template: `.specify/templates/tasks-template.md` → `specs/[###]/tasks.md`
+4. Generate tasks organized by:
+   - Phase 1: Setup (project initialization)
+   - Phase 2: Foundational (blocking prerequisites like DB migrations)
+   - Phase 3+: One phase per user story (P1, P2, P3...)
+   - Final Phase: Polish & documentation
+5. For each task:
+   - Assign unique ID (T001, T002, etc.)
+   - Mark parallel tasks with [P]
+   - Tag with user story [US1, US2, etc.]
+   - Include exact file paths
+   - Add clear acceptance criteria
+6. Ensure tasks are:
+   - Dependency-ordered
+   - Small (< 4 hours each)
+   - Independently testable
+7. Open `tasks.md` for review
+8. Remind user: "✋ CHECKPOINT: Review tasks.md before proceeding to `/speckit.implement`"
+
+**Example**: `/speckit.tasks`
+
+**Output**: `specs/[###]/tasks.md`
+
+---
+
+### `/speckit.implement [task-id]`
+**Purpose**: Implement a specific task with TDD approach (Phase 4)
+
+**Prerequisites**: 
+- Approved tasks.md must exist
+- All dependencies for this task must be complete
+
+**Actions**:
+1. Read `tasks.md` and find the specified task
+2. Check task dependencies are marked complete
+3. If task involves tests:
+   - Write failing tests FIRST
+   - Run tests to confirm they fail
+4. Implement the task following the description
+5. Run tests to confirm they pass
+6. Update `tasks.md` to mark task complete: `- [x] T###`
+7. Suggest commit message:
+   ```
+   feat(feature-name): implement task [###] - [title]
+   
+   - Acceptance criterion 1 ✓
+   - Acceptance criterion 2 ✓
+   
+   Refs: specs/[###-feature-name]/tasks.md#task-[###]
+   ```
+
+**Example**: `/speckit.implement T012`
+
+**Output**: Code changes + updated tasks.md
+
+---
+
+### `/speckit.integrate [feature-number]`
+**Purpose**: Integrate a completed feature after all tasks are done
+
+**Prerequisites**:
+- All tasks in tasks.md must be marked complete
+- All tests must pass
+- Documentation must be updated
+
+**Actions**:
+1. Read `specs/[###]/spec.md`, `plan.md`, and `tasks.md`
+2. Verify all tasks marked `[x]`
+3. Run full test suite: `bun run test`
+4. Check for linting errors
+5. Verify acceptance criteria from spec.md are met
+6. Update relevant documentation:
+   - README.md (if new feature visible to users)
+   - API docs (if new endpoints)
+   - User guides (if UI changes)
+7. Create integration summary in `specs/[###]/INTEGRATION.md`:
+   - What was built
+   - Files changed
+   - Tests added
+   - Documentation updated
+   - Any deviations from plan (with justification)
+8. Suggest PR description with spec references
+9. Remind user: "✋ CHECKPOINT: Review integration before merging"
+
+**Example**: `/speckit.integrate 045`
+
+**Output**: 
+- `specs/045-modal-resource-forms/INTEGRATION.md`
+- PR description template
+
+---
+
+## Constitutional Requirements
+
+### Before ANY Feature Work:
+1. ✅ Spec must exist and be approved
+2. ✅ Plan must exist and be approved
+3. ✅ Tasks must exist and be approved
+4. ✅ Dependencies must be built first
+
+### During Implementation:
+1. ✅ Follow tasks in dependency order
+2. ✅ Write tests first (TDD) when applicable
+3. ✅ Commit after each task
+4. ✅ Update task status immediately
+5. ✅ Verify acceptance criteria
+
+### After Implementation:
+1. ✅ All tests pass
+2. ✅ Code follows project style (Svelte 5, TypeScript)
+3. ✅ Documentation updated
+4. ✅ Spec acceptance criteria met
+5. ✅ No linting errors
+
+---
+
+## Tech Stack Reference
+
+**Frontend**: 
+- SvelteKit (Svelte 5 with runes)
+- TypeScript
+- TailwindCSS
+- Lucide icons
+
+**Backend**:
+- Supabase (PostgreSQL, Auth, RLS)
+- SvelteKit server routes (API)
+- Edge functions (when needed)
+
+**Testing**:
+- Vitest (unit tests)
+- Playwright (E2E tests)
+
+**File Structure**:
+```
+src/
+├── lib/
+│   ├── components/      # Svelte components
+│   ├── server/          # Server-side code
+│   ├── stores/          # Client stores (Svelte 5)
+│   ├── types/           # TypeScript types
+│   └── utils/           # Utility functions
+└── routes/
+    └── (auth)/          # Authenticated routes
+```
+
+---
+
+## Code Style Conventions
+
+### Svelte 5 Syntax:
+- Use `$state()` for reactive variables
+- Use `$derived()` for computed values
+- Use `$effect()` for side effects
+- Event handlers: `on:click` (not `onclick` for DOM)
+- Component props: `export let prop: Type`
+
+### Event Forwarding:
+- Use `on:event` syntax (e.g., `on:change`, `on:blur`, `on:focus`)
+- NOT string syntax (e.g., NOT `onchange`, `onblur`, `onfocus`)
+
+### Redirects in Server Code:
+- Always `throw redirect(303, '/path')` outside try-catch
+- Never catch redirects as errors
+```typescript
+// ✅ CORRECT
+try {
+  const result = await service.create(data);
+} catch (err) {
+  console.error('Error:', err);
+  return fail(500, { error: 'Failed' });
+}
+throw redirect(303, `/resource/${result.id}`);
+
+// ❌ WRONG
+try {
+  const result = await service.create(data);
+  throw redirect(303, `/resource/${result.id}`);
+} catch (err) {
+  // This catches the redirect!
+  console.error('Error:', err);
+}
+```
+
+### Client-side Redirects:
+- Use `redirect: 'manual'` in fetch for POST requests
+- Manually check status codes 300-399
+- Use `window.location.href` for redirect
+
+---
+
+## Spec Numbering Ranges
+```
+001-099: Core Platform Features
+100-199: User Management & Auth
+200-299: Team & Collaboration
+300-399: Content & Media
+400-499: Integrations & APIs
+500-599: Monetization & Payments
+600-699: Analytics & Reporting
+700-799: Admin & Moderation
+800-899: Performance & Optimization
+900-999: Developer Tools
+```
+
+Current highest: 044
+
+---
+
+## Quick Response Patterns
+
+When user says: "I want to add [feature]"
+→ Ask: "Would you like me to create a spec using `/speckit.specify`?"
+
+When user says: "Let's build [feature]"
+→ Check: Does spec exist? If not, require `/speckit.specify` first
+
+When user mentions a feature without spec:
+→ Remind: "This requires spec-driven workflow. Let's start with `/speckit.specify [description]`"
+
+---
+
+## Enforcement
+
+**NO CODE WITHOUT SPEC**
+- Refuse to implement features without approved spec/plan/tasks
+- Always reference spec number in commits
+- Always update tasks.md status
+- Always verify acceptance criteria
+
+**CHECKPOINT CULTURE**
+- Pause after each phase for human review
+- Don't proceed without explicit approval
+- Document any deviations from plan
+
+---
+
+## Example Full Workflow
+
+```bash
+# 1. User: "I want modal forms for creating resources"
+→ AI: "Let's start with /speckit.specify..."
+
+/speckit.specify Modal resource creation forms
+
+# 2. User reviews spec.md, approves
+→ AI: "Now let's plan the implementation..."
+
+/speckit.plan
+
+# 3. User reviews plan.md, approves
+→ AI: "Breaking this into tasks..."
+
+/speckit.tasks
+
+# 4. User reviews tasks.md, approves
+→ AI: "Starting with first task..."
+
+/speckit.implement T001
+/speckit.implement T002
+# ... continue for all tasks
+
+# 5. All tasks complete
+/speckit.integrate 045
+
+# 6. Create PR with spec references
+```
+
+---
+
+## When in Doubt
+- **Read the constitution**: `.specify/memory/constitution.md`
+- **Check the workflow**: `docs/SPEC_DRIVEN_WORKFLOW.md`
+- **Review examples**: Look at existing specs in `specs/`
+- **Ask the user**: Better to clarify than implement wrong thing
+
+---
+
+## Remember
+The spec-driven workflow exists to:
+- ✅ Prevent building wrong things
+- ✅ Catch design issues early
+- ✅ Enable parallel work
+- ✅ Maintain documentation
+- ✅ Reduce rework and technical debt
+
+**Slow down to go fast.**
+
+

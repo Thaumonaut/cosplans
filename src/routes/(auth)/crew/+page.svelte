@@ -100,9 +100,9 @@
           type="button"
           class="relative p-1 rounded-full transition-colors hover:bg-[var(--theme-sidebar-hover)]"
           style="color: var(--theme-sidebar-muted);"
-          on:mouseenter={() => showHelp = true}
-          on:mouseleave={() => showHelp = false}
-          on:click={() => showHelp = !showHelp}
+          onmouseenter={() => showHelp = true}
+          onmouseleave={() => showHelp = false}
+          onclick={() => showHelp = !showHelp}
         >
           <HelpCircle class="w-5 h-5" />
           {#if showHelp}
@@ -197,7 +197,7 @@
             type="text"
             placeholder="Search crew members..."
             bind:value={searchQuery}
-            on:keydown={(e) => e.key === 'Enter' && updateFilters()}
+            onkeydown={(e) => e.key === 'Enter' && updateFilters()}
             class="w-full rounded-md border px-10 py-2 text-sm transition-colors focus:outline-none focus:ring-2"
             style="
               background: var(--theme-sidebar-bg);
@@ -212,13 +212,13 @@
           type="button"
           class="inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
           style="{showFavorites ? 'background: var(--theme-warning); color: white;' : 'background: var(--theme-sidebar-bg); border: 1px solid var(--theme-sidebar-border); color: var(--theme-foreground);'}"
-          on:click={() => { showFavorites = !showFavorites; updateFilters(); }}
+          onclick={() => { showFavorites = !showFavorites; updateFilters(); }}
         >
           <Star class="w-4 h-4 {showFavorites ? 'fill-current' : ''}" />
           Favorites
         </button>
         <span class="text-sm" style="color: var(--theme-sidebar-muted);">Role:</span>
-        <ThemedSelect name="filterRole" bind:value={selectedRole} on:change={updateFilters}>
+        <ThemedSelect name="filterRole" bind:value={selectedRole} onchange={updateFilters}>
           {#each roleOptions as option}
             <option value={option.value}>{option.label}</option>
           {/each}
@@ -256,7 +256,7 @@
             type="button"
             class="text-left rounded-lg border p-4 transition-all hover:shadow-md"
             style="background: var(--theme-sidebar-bg); border-color: var(--theme-sidebar-border);"
-            on:click={() => viewCrewMember(member.id)}
+            onclick={() => viewCrewMember(member.id)}
           >
             <!-- Header with Image and Name -->
             <div class="flex items-start gap-3 mb-3">
@@ -316,7 +316,7 @@
                   rel="noopener noreferrer"
                   class="p-1.5 rounded transition-colors hover:bg-[var(--theme-sidebar-hover)]"
                   style="color: var(--theme-sidebar-accent);"
-                  on:click={(e) => e.stopPropagation()}
+                  onclick={(e) => e.stopPropagation()}
                 >
                   <Globe class="w-4 h-4" />
                 </a>
@@ -334,7 +334,7 @@
                   rel="noopener noreferrer"
                   class="p-1.5 rounded transition-colors hover:bg-[var(--theme-sidebar-hover)]"
                   style="color: #E4405F;"
-                  on:click={(e) => e.stopPropagation()}
+                  onclick={(e) => e.stopPropagation()}
                 >
                   <Instagram class="w-4 h-4" />
                 </a>
@@ -352,7 +352,7 @@
                   rel="noopener noreferrer"
                   class="p-1.5 rounded transition-colors hover:bg-[var(--theme-sidebar-hover)]"
                   style="color: #1DA1F2;"
-                  on:click={(e) => e.stopPropagation()}
+                  onclick={(e) => e.stopPropagation()}
                 >
                   <Twitter class="w-4 h-4" />
                 </a>

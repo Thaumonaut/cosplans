@@ -155,19 +155,19 @@
   <!-- Filters -->
   <div class="flex flex-wrap gap-2">
     <div class="flex gap-1">
-      <Button size="sm" variant={selectedType === 'all' ? 'solid' : 'ghost'} on:click={() => selectedType = 'all'}>
+      <Button size="sm" variant={selectedType === 'all' ? 'solid' : 'ghost'} onclick={() => selectedType = 'all'}>
         All Types
       </Button>
-      <Button size="sm" variant={selectedType === 'costume' ? 'solid' : 'ghost'} on:click={() => selectedType = 'costume'}>
+      <Button size="sm" variant={selectedType === 'costume' ? 'solid' : 'ghost'} onclick={() => selectedType = 'costume'}>
         Costumes
       </Button>
-      <Button size="sm" variant={selectedType === 'prop' ? 'solid' : 'ghost'} on:click={() => selectedType = 'prop'}>
+      <Button size="sm" variant={selectedType === 'prop' ? 'solid' : 'ghost'} onclick={() => selectedType = 'prop'}>
         Props
       </Button>
-      <Button size="sm" variant={selectedType === 'accessory' ? 'solid' : 'ghost'} on:click={() => selectedType = 'accessory'}>
+      <Button size="sm" variant={selectedType === 'accessory' ? 'solid' : 'ghost'} onclick={() => selectedType = 'accessory'}>
         Accessories
       </Button>
-      <Button size="sm" variant={selectedType === 'makeup' ? 'solid' : 'ghost'} on:click={() => selectedType = 'makeup'}>
+      <Button size="sm" variant={selectedType === 'makeup' ? 'solid' : 'ghost'} onclick={() => selectedType = 'makeup'}>
         Makeup
       </Button>
     </div>
@@ -177,7 +177,7 @@
   <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
     {#each statusCounts as { status, count }}
       <button
-        on:click={() => selectedStatus = selectedStatus === status ? 'all' : status}
+        onclick={() => selectedStatus = selectedStatus === status ? 'all' : status}
         class="p-3 rounded-lg border transition-all hover:shadow-md"
         class:ring-2={selectedStatus === status}
         style="background: var(--theme-sidebar-hover); border-color: var(--theme-sidebar-border); {selectedStatus === status ? 'ring-color: var(--theme-sidebar-accent);' : ''}"

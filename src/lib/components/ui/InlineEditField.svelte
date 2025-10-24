@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
   import { Input, Textarea, Helper } from 'flowbite-svelte';
-  import { Edit2 } from 'lucide-svelte';
+  import { Check, X } from 'lucide-svelte';
 
   export let value: string | undefined = undefined;
   export let placeholder: string = 'Click to add...';
@@ -12,7 +12,8 @@
   export let variant: 'default' | 'heading' = 'default';
 
   const dispatch = createEventDispatcher<{
-    save: string;
+    save: string | undefined;
+    input: string;
   }>();
 
   let isEditing = false;
@@ -32,6 +33,14 @@
       dispatch('save', editValue);
     }
     isEditing = false;
+  }
+
+  function handleInput(event: Event) {
+    const input = event.target as HTMLInputElement | HTMLTextAreaElement;
+    const currentValue = input.value;
+    console.log(`[InlineEditField] Input changed to: '${currentValue}'`);
+    editValue = currentValue;
+    dispatch('input', currentValue);
   }
 
   function handleCancel() {
@@ -62,77 +71,69 @@
   {/if}
 
   {#if isEditing}
-    <div class="flex items-start gap-2">
-      <div class="flex-1">
+    <div class="relative">
+      <div class="w-full">
         {#if type === 'textarea'}
           <textarea
             bind:value={editValue}
+            oninput={handleInput}
             onkeydown={handleKeydown}
-            onblur={(e) => {
-              // Delay to check if focus moved to our buttons
-              setTimeout(() => {
-                const activeEl = document.activeElement;
-                const isOurButton = activeEl?.closest('.inline-edit-buttons');
-                if (!isOurButton) {
-                  handleSave();
-                }
-              }, 100);
+            onblur={() => {
+              // Save when focus leaves
+              setTimeout(() => handleSave(), 0);
             }}
             rows={3}
-            placeholder={placeholder}
-            class="w-full py-1 px-2 -mx-2 rounded border-0 focus:outline-none focus:ring-2 focus:ring-[var(--theme-sidebar-accent)] {variant === 'heading' ? 'text-3xl font-bold' : ''}"
-            style="background: var(--theme-sidebar-hover); color: var(--theme-foreground);"
+            placeholder=""
+            class="w-full py-2 pl-3 pr-20 -mx-2 rounded-lg border border-[var(--theme-sidebar-border)] focus:outline-none focus:ring-2 focus:ring-[var(--theme-sidebar-accent)] {variant === 'heading' ? 'text-3xl font-bold' : ''}"
+            style="background: var(--theme-background); color: var(--theme-foreground);"
             autofocus
           ></textarea>
         {:else}
           <input
             bind:value={editValue}
+            oninput={handleInput}
             onkeydown={handleKeydown}
-            onblur={(e) => {
-              // Delay to check if focus moved to our buttons
-              setTimeout(() => {
-                const activeEl = document.activeElement;
-                const isOurButton = activeEl?.closest('.inline-edit-buttons');
-                if (!isOurButton) {
-                  handleSave();
-                }
-              }, 100);
+            onblur={() => {
+              // Save when focus leaves
+              setTimeout(() => handleSave(), 0);
             }}
             {type}
-            placeholder={placeholder}
-            class="w-full py-1 px-2 -mx-2 rounded border-0 focus:outline-none focus:ring-2 focus:ring-[var(--theme-sidebar-accent)] {variant === 'heading' ? 'text-3xl font-bold' : ''}"
-            style="background: var(--theme-sidebar-hover); color: var(--theme-foreground);"
+            placeholder=""
+            class="w-full py-2 pl-3 pr-20 -mx-2 rounded-lg border border-[var(--theme-sidebar-border)] focus:outline-none focus:ring-2 focus:ring-[var(--theme-sidebar-accent)] {variant === 'heading' ? 'text-3xl font-bold' : ''}"
+            style="background: var(--theme-background); color: var(--theme-foreground);"
             autofocus
           />
         {/if}
-        <p class="text-xs mt-1" style="color: var(--theme-sidebar-muted);">
-          Press Enter to save, Esc to cancel
-        </p>
       </div>
-      <div class="inline-edit-buttons flex gap-1 pt-1">
+      <div class="inline-edit-buttons flex gap-1 absolute right-2 top-1/2 -translate-y-1/2">
         <button
           type="button"
-          class="px-2 py-1 rounded text-xs font-medium transition-colors"
-          style="background: var(--theme-success); color: white;"
-          onclick={handleSave}
+          tabindex="-1"
+          class="p-1.5 rounded-lg transition-colors hover:bg-[var(--theme-success)] hover:bg-opacity-10"
+          style="color: var(--theme-success);"
+          onmousedown={(e) => { e.preventDefault(); handleSave(); }}
+          title="Save (Enter)"
         >
-          Save
+          <Check class="w-4 h-4" />
         </button>
         <button
           type="button"
-          class="px-2 py-1 rounded text-xs font-medium transition-colors"
-          style="background: var(--theme-sidebar-bg); color: var(--theme-foreground);"
-          onclick={handleCancel}
+          tabindex="-1"
+          class="p-1.5 rounded-lg transition-colors hover:bg-[var(--theme-sidebar-hover)]"
+          style="color: var(--theme-sidebar-muted);"
+          onmousedown={(e) => { e.preventDefault(); handleCancel(); }}
+          title="Cancel (Esc)"
         >
-          Cancel
+          <X class="w-4 h-4" />
         </button>
       </div>
     </div>
   {:else}
     <button
       type="button"
-      class="group w-full text-left py-1 px-2 -mx-2 rounded transition-colors {disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-[var(--theme-sidebar-hover)]'}"
-      onclick={startEdit}
+      class="group w-full text-left py-2 px-3 -mx-2 rounded-lg transition-colors {disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-[var(--theme-sidebar-hover)]'}"
+      on:click={startEdit}
+      on:focus={startEdit}
       {disabled}
     >
       <span

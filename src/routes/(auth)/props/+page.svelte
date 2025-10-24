@@ -1,8 +1,10 @@
 <script lang="ts">
   import ThemedCard from '$lib/components/ui/ThemedCard.svelte';
-  import { Plus, Package, Tag, CheckCircle, TrendingUp } from 'lucide-svelte';
+  import { Plus, Package, Tag, CheckCircle, TrendingUp, HelpCircle } from 'lucide-svelte';
   import LifecycleStateBadge from '$lib/components/resources/LifecycleStateBadge.svelte';
   export let data;
+  
+  let showHelp = false;
   
   // Calculate stats
   $: stats = {
@@ -17,9 +19,32 @@
   <!-- Header -->
   <div class="flex items-center justify-between">
     <div>
-      <h1 class="text-3xl font-bold" style="color: var(--theme-foreground);">
-        Props Catalog
-      </h1>
+      <div class="flex items-center gap-3">
+        <h1 class="text-3xl font-bold" style="color: var(--theme-foreground);">
+          Props Catalog
+        </h1>
+        <button
+          type="button"
+          class="relative p-1 rounded-full transition-colors hover:bg-[var(--theme-sidebar-hover)]"
+          style="color: var(--theme-sidebar-muted);"
+          onmouseenter={() => showHelp = true}
+          onmouseleave={() => showHelp = false}
+          onclick={() => showHelp = !showHelp}
+        >
+          <HelpCircle class="w-5 h-5" />
+          {#if showHelp}
+            <div 
+              class="absolute left-0 top-full mt-2 w-80 p-4 rounded-lg shadow-lg border z-50"
+              style="background: var(--theme-background); border-color: var(--theme-sidebar-border); color: var(--theme-foreground);"
+            >
+              <p class="text-sm" style="color: var(--theme-sidebar-muted);">
+                Track costume accessories and props with lifecycle states and storage. 
+                Organize props by character and series, and monitor their condition and availability.
+              </p>
+            </div>
+          {/if}
+        </button>
+      </div>
       <p class="mt-2 text-sm" style="color: var(--theme-sidebar-muted);">
         Track costume accessories and props with lifecycle states and storage.
       </p>
@@ -122,21 +147,5 @@
         {/each}
       </div>
     {/if}
-  </ThemedCard>
-
-  <!-- Info Box -->
-  <ThemedCard>
-    <div class="flex items-start gap-3">
-      <Package class="h-5 w-5 mt-0.5" style="color: var(--theme-info);" />
-      <div>
-        <h4 class="font-medium mb-1" style="color: var(--theme-foreground);">
-          About Props Catalog
-        </h4>
-        <p class="text-sm" style="color: var(--theme-sidebar-muted);">
-          Manage costume accessories, weapons, and other props. Track lifecycle states from planning through completion, 
-          organize by character or series, and monitor storage locations to keep everything organized.
-        </p>
-      </div>
-    </div>
   </ThemedCard>
 </div>

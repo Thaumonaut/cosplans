@@ -67,7 +67,7 @@
         Customize your sidebar navigation layout and visibility.
       </p>
     </div>
-    <ThemedButton variant="primary" on:click={saveSettings}>
+    <ThemedButton variant="primary" onclick={saveSettings}>
       Save Changes
     </ThemedButton>
   </div>
@@ -140,7 +140,7 @@
                     type="button"
                     class="rounded-md p-2 transition-colors hover:brightness-90"
                     style="color: {pinnedSections.includes(section.id) ? 'var(--theme-info)' : 'var(--theme-sidebar-muted)'};"
-                    on:click={() => togglePin(section.id)}
+                    onclick={() => togglePin(section.id)}
                     title={pinnedSections.includes(section.id) ? 'Unpin' : 'Pin (prevent auto-hide)'}
                   >
                     <Pin class="h-4 w-4" />
@@ -149,7 +149,7 @@
                     type="button"
                     class="rounded-md p-2 transition-colors hover:brightness-90"
                     style="color: {hiddenSections.includes(section.id) ? 'var(--theme-error)' : 'var(--theme-sidebar-muted)'};"
-                    on:click={() => toggleHide(section.id)}
+                    onclick={() => toggleHide(section.id)}
                     title={hiddenSections.includes(section.id) ? 'Show in sidebar' : 'Hide in overflow menu'}
                   >
                     {#if hiddenSections.includes(section.id)}

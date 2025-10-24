@@ -124,7 +124,7 @@
                 class="px-3 py-1 rounded border text-sm"
                 style="background: var(--theme-background); border-color: var(--theme-sidebar-border); color: var(--theme-foreground);"
                 value={filters.status || ''}
-                on:change={(e) => handleFilterChange('status', (e.target as HTMLSelectElement).value || undefined)}
+                onchange={(e) => handleFilterChange('status', (e.target as HTMLSelectElement).value || undefined)}
               >
                 <option value="">All Statuses</option>
                 <option value="owned">Owned</option>
@@ -141,7 +141,7 @@
                 class="px-3 py-1 rounded border text-sm"
                 style="background: var(--theme-background); border-color: var(--theme-sidebar-border); color: var(--theme-foreground);"
                 value={filters.role || ''}
-                on:change={(e) => handleFilterChange('role', (e.target as HTMLSelectElement).value || undefined)}
+                onchange={(e) => handleFilterChange('role', (e.target as HTMLSelectElement).value || undefined)}
               >
                 <option value="">All Roles</option>
                 <option value="photographer">Photographer</option>
@@ -158,7 +158,7 @@
                 class="px-3 py-1 rounded border text-sm"
                 style="background: var(--theme-background); border-color: var(--theme-sidebar-border); color: var(--theme-foreground);"
                 value={filters.type || ''}
-                on:change={(e) => handleFilterChange('type', (e.target as HTMLSelectElement).value || undefined)}
+                onchange={(e) => handleFilterChange('type', (e.target as HTMLSelectElement).value || undefined)}
               >
                 <option value="">All Types</option>
                 <option value="costume">Costumes</option>
@@ -175,7 +175,7 @@
                 type="button"
                 class="px-3 py-1 rounded border text-sm transition-colors {filters.is_favorite ? 'bg-yellow-100 text-yellow-800' : ''}"
                 style="background: var(--theme-background); border-color: var(--theme-sidebar-border); color: var(--theme-foreground);"
-                on:click={() => handleFilterChange('is_favorite', filters.is_favorite ? undefined : true)}
+                onclick={() => handleFilterChange('is_favorite', filters.is_favorite ? undefined : true)}
               >
                 ⭐ Favorites
               </button>
@@ -187,7 +187,7 @@
                 type="button"
                 class="px-3 py-1 rounded border text-sm font-medium transition-colors hover:bg-[var(--theme-error)] hover:text-white"
                 style="border-color: var(--theme-sidebar-border); color: var(--theme-error);"
-                on:click={clearFilters}
+                onclick={clearFilters}
               >
                 Clear ({activeFilterCount})
               </button>

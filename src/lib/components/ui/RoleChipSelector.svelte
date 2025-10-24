@@ -54,7 +54,7 @@
           {#if !disabled}
             <button
               type="button"
-              on:click={() => removeRole(role)}
+              onclick={() => removeRole(role)}
               class="ml-1 hover:bg-blue-600 rounded-full p-0.5"
             >
               <X class="w-3 h-3" />
@@ -80,7 +80,7 @@
           <DropdownItem class="flex items-center gap-2">
             <Checkbox
               checked={selectedRoles.includes(value)}
-              on:change={() => toggleRole(value)}
+              onchange={() => toggleRole(value)}
             />
             {label}
           </DropdownItem>

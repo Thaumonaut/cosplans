@@ -25,14 +25,14 @@
   $: userInitial = (user?.name ?? "U").charAt(0).toUpperCase();
 </script>
 
-<svelte:window on:click={handleClickOutside} />
+<svelte:window onclick={handleClickOutside} />
 
 {#if collapsed}
   <!-- Collapsed: Just show avatar -->
   <button
     type="button"
     class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-700 hover:bg-blue-200 transition-colors"
-    on:click={() => (isOpen = !isOpen)}
+    onclick={() => (isOpen = !isOpen)}
     aria-label="User menu"
     title={user?.name ?? "User"}
   >
@@ -52,7 +52,7 @@
     <button
       type="button"
       class="flex w-full items-center gap-3 px-4 py-4 transition-colors hover:bg-[var(--theme-sidebar-hover)] focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--theme-sidebar-accent)]"
-      on:click={() => (isOpen = !isOpen)}
+      onclick={() => (isOpen = !isOpen)}
       aria-label="User menu"
     >
       <div class="flex-shrink-0">
@@ -96,7 +96,7 @@
           href="/settings"
           class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-[var(--theme-sidebar-hover)]"
           style="color: var(--theme-foreground);"
-          on:click={() => (isOpen = false)}
+          onclick={() => (isOpen = false)}
         >
           <LucideIcon name="User" size={16} />
           <span>Account Settings</span>
@@ -107,7 +107,7 @@
             href="/teams/{$currentTeam.id}"
             class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-[var(--theme-sidebar-hover)]"
             style="color: var(--theme-foreground);"
-            on:click={() => (isOpen = false)}
+            onclick={() => (isOpen = false)}
           >
             <LucideIcon name="Users" size={16} />
             <span>Team Settings</span>
@@ -119,7 +119,7 @@
         <button
           type="button"
           class="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-rose-50 hover:text-rose-700"
-          on:click={handleSignOut}
+          onclick={handleSignOut}
         >
           <LucideIcon name="LogOut" size={16} />
           <span>Sign Out</span>

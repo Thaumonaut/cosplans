@@ -104,7 +104,7 @@
   }
 </script>
 
-<svelte:window on:resize={() => navigationStore.toggleMobile(false)} on:keydown={handleKeyDown} />
+<svelte:window on:resize={() => navigationStore.toggleMobile(false)} onkeydown={handleKeyDown} />
 
 <aside
   class={`relative flex h-full flex-col transition-[width] duration-200 ease-in-out ${
