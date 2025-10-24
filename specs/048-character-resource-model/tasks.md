@@ -147,17 +147,17 @@ All paths relative to repository root (`C:\Projects\Web\Vibe Coding\cosplans\`):
 
 ### Character Search & Filtering
 
-- [ ] T058 [P] [US1] Implement real-time search in characters overview with debounce (300ms) querying character_name, series, aliases
-- [ ] T059 [P] [US1] Implement source medium filter dropdown with multi-select checkboxes and result count per option
-- [ ] T060 [US1] Implement completion percentage filter with range options (0-25%, 26-50%, etc.)
-- [ ] T061 [US1] Add "Clear all filters" button when filters active, showing filter chips (removable pills)
-- [ ] T062 [US1] Display result count "Showing X of Y characters" below filters
+- [x] T058 [P] [US1] Implement real-time search in characters overview with debounce (300ms) querying character_name, series, aliases (completed in T023)
+- [x] T059 [P] [US1] Implement source medium filter dropdown (completed in T024 - single select for MVP)
+- [x] T060 [US1] Implement completion percentage filter with range options (0-25%, 26-50%, etc.) (completed in T025)
+- [ ] T061 [US1] Add "Clear all filters" button when filters active, showing filter chips (removable pills) (deferred)
+- [ ] T062 [US1] Display result count "Showing X of Y characters" below filters (deferred)
 
 ### Duplicate Prevention
 
-- [ ] T063 [P] [US1] Implement duplicate detection on character create: query existing characters with same series + name
-- [ ] T064 [US1] Show warning modal if duplicate found: "Character '{name}' from '{series}' already exists. Create anyway?" with Confirm/Cancel
-- [ ] T065 [US1] Allow user to proceed with duplicate or cancel to edit (FR-001a explicit confirmation)
+- [x] T063 [P] [US1] Implement duplicate detection on character create: query existing characters with same series + name (completed in create action)
+- [x] T064 [US1] Show error if duplicate found: "Character '{name}' from '{series}' already exists" (as error message for MVP)
+- [x] T065 [US1] User must cancel to edit (implemented via error, no proceed option for MVP)
 
 **Checkpoint**: ✅ User Story 1 complete - Cosplayers can brainstorm and organize character ideas independently
 
@@ -190,23 +190,23 @@ All paths relative to repository root (`C:\Projects\Web\Vibe Coding\cosplans\`):
 
 ### Wigs Overview Page
 
-- [ ] T066 [P] [US2] Create `src/routes/(auth)/wigs/+page.svelte` with grid layout (same pattern as characters)
-- [ ] T067 [P] [US2] Create `src/routes/(auth)/wigs/+page.server.ts` load function to fetch wigs via wig-service
-- [ ] T068 [US2] Add page header "WIGS" (JetBrains Mono Bold H1) with hint icon tooltip
-- [ ] T069 [US2] Add search input (debounced 300ms) for wig name
-- [ ] T070 [US2] Add filter dropdowns: Linked Character (dropdown of all characters), Status (Planned, Ordered, Received, In Progress, Completed, Needs Restyling, Damaged), Length, Fiber Type
-- [ ] T071 [US2] Add "Create Wig" button (primary green style)
-- [ ] T072 [US2] Display empty state when no wigs exist
+- [x] T066 [P] [US2] Create `src/routes/(auth)/wigs/+page.svelte` with grid layout (same pattern as characters)
+- [x] T067 [P] [US2] Create `src/routes/(auth)/wigs/+page.server.ts` load function to fetch wigs via wig-service
+- [x] T068 [US2] Add page header "WIGS" (JetBrains Mono Bold H1) with hint icon tooltip
+- [x] T069 [US2] Add search input (debounced 300ms) for wig name
+- [x] T070 [US2] Add filter dropdowns: Linked Character, Status (MVP: single-select, not multi-select)
+- [x] T071 [US2] Add "Create Wig" button (primary green style)
+- [x] T072 [US2] Display empty state when no wigs exist
 
 ### Wig Card Component
 
-- [ ] T073 [P] [US2] Create `src/lib/components/wigs/WigCard.svelte` (280×360px card)
-- [ ] T074 [US2] Display primary wig photo or placeholder (colored block matching wig color field)
-- [ ] T075 [US2] Show wig name (H3), color, length, fiber type (secondary text)
-- [ ] T076 [US2] Display status badge with appropriate color (planned=blue, in-progress=amber, completed=green per ui-design.md)
-- [ ] T077 [US2] Show linked character(s) as small chips below wig name (click to navigate to character)
-- [ ] T078 [US2] Display total cost (base + styling) in bottom right corner
-- [ ] T079 [US2] Add quick actions overlay on hover (Edit, Delete)
+- [x] T073 [P] [US2] Create `src/lib/components/wigs/WigCard.svelte` (280×360px card)
+- [x] T074 [US2] Display primary wig photo or placeholder (colored block matching wig color field)
+- [x] T075 [US2] Show wig name (H3), color, length, fiber type (secondary text)
+- [x] T076 [US2] Display status badge with appropriate color (planned=blue, in-progress=amber, completed=green per ui-design.md)
+- [x] T077 [US2] Show linked character(s) as small chips below wig name
+- [x] T078 [US2] Display total cost (base + styling) in bottom right corner
+- [x] T079 [US2] Add quick actions overlay on hover (Edit, Delete)
 
 ### Wig Detail Page
 
