@@ -17,11 +17,15 @@
 	let errorMessage = $state('');
 	
 	// Handle character selection from API
+	let selectedApiImage = $state<string | null>(null);
+	
 	function handleCharacterSelect(event: CustomEvent) {
-		const { name, series: selectedSeries, sourceMedia } = event.detail;
+		const { name, series: selectedSeries, sourceMedia, imageUrl, description } = event.detail;
 		characterName = name;
 		if (selectedSeries) series = selectedSeries;
 		if (sourceMedia) sourceMedium = sourceMedia;
+		if (imageUrl) selectedApiImage = imageUrl;
+		if (description && !appearanceDescription) appearanceDescription = description;
 	}
 	
 	// Source medium options
@@ -54,15 +58,20 @@
 		errorMessage = '';
 		
 		try {
-			const formData = new FormData();
-			formData.append('character_name', characterName);
-			formData.append('series', series);
-			if (sourceMedium) formData.append('source_medium', sourceMedium);
-			if (aliases) formData.append('aliases', aliases);
-			if (appearanceDescription) formData.append('appearance_description', appearanceDescription);
-			if (personalityNotes) formData.append('personality_notes', personalityNotes);
-			formData.append('budget_mode', budgetMode);
-			if (budgetLimit !== null) formData.append('budget_limit', budgetLimit.toString());
+		const formData = new FormData();
+		formData.append('character_name', characterName);
+		formData.append('series', series);
+		if (sourceMedium) formData.append('source_medium', sourceMedium);
+		if (aliases) formData.append('aliases', aliases);
+		if (appearanceDescription) formData.append('appearance_description', appearanceDescription);
+		if (personalityNotes) formData.append('personality_notes', personalityNotes);
+		formData.append('budget_mode', budgetMode);
+		if (budgetLimit !== null) formData.append('budget_limit', budgetLimit.toString());
+		
+		// Include reference image from API if selected
+		if (selectedApiImage) {
+			formData.append('reference_images', JSON.stringify([selectedApiImage]));
+		}
 			
 			const response = await fetch('?/create', {
 				method: 'POST',

@@ -26,14 +26,18 @@ export const actions: Actions = {
 			return fail(400, { error: 'Series is required' });
 		}
 		
-		// Extract optional fields
-		const sourceMedium = formData.get('source_medium')?.toString() || undefined;
-		const aliases = formData.get('aliases')?.toString() || undefined;
-		const appearanceDescription = formData.get('appearance_description')?.toString() || undefined;
-		const personalityNotes = formData.get('personality_notes')?.toString() || undefined;
-		const budgetMode = formData.get('budget_mode')?.toString() as 'personal' | 'commission' || 'personal';
-		const budgetLimitStr = formData.get('budget_limit')?.toString();
-		const budgetLimit = budgetLimitStr ? parseFloat(budgetLimitStr) : undefined;
+	// Extract optional fields
+	const sourceMedium = formData.get('source_medium')?.toString() || undefined;
+	const aliases = formData.get('aliases')?.toString() || undefined;
+	const appearanceDescription = formData.get('appearance_description')?.toString() || undefined;
+	const personalityNotes = formData.get('personality_notes')?.toString() || undefined;
+	const budgetMode = formData.get('budget_mode')?.toString() as 'personal' | 'commission' || 'personal';
+	const budgetLimitStr = formData.get('budget_limit')?.toString();
+	const budgetLimit = budgetLimitStr ? parseFloat(budgetLimitStr) : undefined;
+	
+	// Parse reference images (from API or uploads)
+	const referenceImagesStr = formData.get('reference_images')?.toString();
+	const referenceImages = referenceImagesStr ? JSON.parse(referenceImagesStr) : [];
 		
 		// Get user's first team (or default team) - same pattern as other pages
 		const adminClient = getAdminClient();
@@ -59,20 +63,20 @@ export const actions: Actions = {
 				});
 			}
 			
-			// Create character
-			const character = await characterService.create({
-				team_id: teamId,
-				character_name: characterName,
-				series,
-				source_medium: sourceMedium,
-				aliases,
-				appearance_description: appearanceDescription,
-				personality_notes: personalityNotes,
-				budget_mode: budgetMode,
-				budget_limit: budgetLimit,
-				reference_images: [],
-				created_by: session.user.id
-			});
+		// Create character
+		const character = await characterService.create({
+			team_id: teamId,
+			character_name: characterName,
+			series,
+			source_medium: sourceMedium,
+			aliases,
+			appearance_description: appearanceDescription,
+			personality_notes: personalityNotes,
+			budget_mode: budgetMode,
+			budget_limit: budgetLimit,
+			reference_images: referenceImages,
+			created_by: session.user.id
+		});
 			
 			// Redirect to character detail page
 			throw redirect(303, `/characters/${character.id}`);
