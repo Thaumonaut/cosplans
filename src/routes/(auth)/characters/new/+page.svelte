@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import ThemedTextarea from '$lib/components/ui/ThemedTextarea.svelte';
+	import SeriesAutocomplete from '$lib/components/costumes/SeriesAutocomplete.svelte';
+	import CharacterAutocomplete from '$lib/components/costumes/CharacterAutocomplete.svelte';
 	
 	// State
 	let characterName = $state('');
@@ -13,6 +15,14 @@
 	let budgetLimit = $state<number | null>(null);
 	let isSubmitting = $state(false);
 	let errorMessage = $state('');
+	
+	// Handle character selection from API
+	function handleCharacterSelect(event: CustomEvent) {
+		const { name, series: selectedSeries, sourceMedia } = event.detail;
+		characterName = name;
+		if (selectedSeries) series = selectedSeries;
+		if (sourceMedia) sourceMedium = sourceMedia;
+	}
 	
 	// Source medium options
 	const sourceMediumOptions = [
@@ -112,38 +122,42 @@
 					BASIC INFORMATION
 				</h2>
 				
-				<div class="space-y-6">
-					<!-- Character Name (required) -->
-					<div>
-						<label for="character_name" class="block text-sm font-medium mb-2" style="color: var(--theme-sidebar-muted);">
-							Character Name <span style="color: var(--theme-error);">*</span>
-						</label>
-						<input
-							id="character_name"
-							type="text"
-							bind:value={characterName}
-							required
-							class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2"
-							style="background: var(--theme-input-bg); border-color: var(--theme-border); color: var(--theme-foreground); focus:ring-color: var(--theme-primary);"
-							placeholder="e.g., Saber"
-						/>
-					</div>
-					
-					<!-- Series (required) -->
-					<div>
-						<label for="series" class="block text-sm font-medium mb-2" style="color: var(--theme-sidebar-muted);">
-							Series <span style="color: var(--theme-error);">*</span>
-						</label>
-						<input
-							id="series"
-							type="text"
-							bind:value={series}
-							required
-							class="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2"
-							style="background: var(--theme-input-bg); border-color: var(--theme-border); color: var(--theme-foreground); focus:ring-color: var(--theme-primary);"
-							placeholder="e.g., Fate/Stay Night"
-						/>
-					</div>
+			<div class="space-y-6">
+				<!-- Helper Text -->
+				<div class="p-3 rounded-lg" style="background: var(--theme-sidebar-hover); border-left: 3px solid var(--theme-primary);">
+					<p class="text-sm" style="color: var(--theme-foreground);">
+						💡 <strong>Tip:</strong> Search for characters from anime, manga, video games, movies, TV shows, and books. We'll auto-fill details for you!
+					</p>
+				</div>
+				
+				<!-- Character Name (required) with API search -->
+				<div>
+					<label class="block text-sm font-medium mb-2" style="color: var(--theme-sidebar-muted);">
+						Character Name <span style="color: var(--theme-error);">*</span>
+					</label>
+					<CharacterAutocomplete
+						bind:value={characterName}
+						placeholder="Search characters from anime, games, movies..."
+						on:select={handleCharacterSelect}
+					/>
+					<p class="text-xs mt-1" style="color: var(--theme-sidebar-muted);">
+						Start typing to search across multiple sources
+					</p>
+				</div>
+				
+				<!-- Series (required) with API search -->
+				<div>
+					<label class="block text-sm font-medium mb-2" style="color: var(--theme-sidebar-muted);">
+						Series <span style="color: var(--theme-error);">*</span>
+					</label>
+					<SeriesAutocomplete
+						bind:value={series}
+						placeholder="Search series or enter custom..."
+					/>
+					<p class="text-xs mt-1" style="color: var(--theme-sidebar-muted);">
+						Searches anime, games, movies, TV shows, and books
+					</p>
+				</div>
 					
 					<!-- Source Medium -->
 					<div>

@@ -4,6 +4,8 @@
 	import { Trash2, Image as ImageIcon } from 'lucide-svelte';
 	import InlineEditField from '$lib/components/ui/InlineEditField.svelte';
 	import ThemedTextarea from '$lib/components/ui/ThemedTextarea.svelte';
+	import SeriesAutocomplete from '$lib/components/costumes/SeriesAutocomplete.svelte';
+	import CharacterAutocomplete from '$lib/components/costumes/CharacterAutocomplete.svelte';
 	
 	// Props
 	type Props = {
