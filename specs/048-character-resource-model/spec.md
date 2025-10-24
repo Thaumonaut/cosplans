@@ -2,7 +2,7 @@
 
 > ✅ **SINGLE SOURCE OF TRUTH FOR RESOURCE MANAGEMENT**  
 > This specification consolidates and supersedes specs 045, 046, and 047.  
-> It provides a unified, character-centric approach to managing all cosplay resources (characters, costumes, wigs, props, accessories, makeup, equipment, locations, crew, tasks, and craft supplies).  
+> It provides a unified, character-centric approach to managing all cosplay resources (characters, outfits, wigs, props, accessories, makeup, equipment, locations, crew, tasks, and craft supplies).  
 > **All future resource management development should reference THIS spec.**
 
 **Feature Branch**: `048-character-resource-model`  
@@ -17,23 +17,23 @@
 
 As a cosplayer planning future projects, I want a dedicated character section where I can collect and organize character ideas with their series, appearance details, and reference notes so that I can evaluate which characters to cosplay and use them as a central hub for all related resources.
 
-**Why this priority**: Character is the fundamental organizing principle for cosplay. Before creating costumes, wigs, or props, cosplayers research characters and gather references. This entity becomes the hub that all resources (costumes, wigs, props, accessories) link to, enabling character-centric planning and organization.
+**Why this priority**: Character is the fundamental organizing principle for cosplay. Before creating outfits, wigs, or props, cosplayers research characters and gather references. This entity becomes the hub that all resources (outfits, wigs, props, accessories) link to, enabling character-centric planning and organization.
 
-**Independent Test**: User can create character entries with series, character name, appearance details, and notes, browse character collection, and use characters as reference without creating any costumes/wigs yet.
+**Independent Test**: User can create character entries with series, character name, appearance details, and notes, browse character collection, and use characters as reference without creating any outfits/wigs yet.
 
 **Acceptance Scenarios**:
 
 1. **Given** I'm researching cosplay ideas, **When** I navigate to Characters page and click "Add Character", **Then** I see a form for character name, aliases (comma-separated), series, source medium, appearance details, personality notes, and reference images
 2. **Given** I want to cosplay Saber from Fate/stay night, **When** I create character entry with series "Fate/stay night", name "Saber (Artoria Pendragon)", and appearance notes "blonde hair, green eyes, armor with blue and silver", **Then** character displays in my collection with all details
 3. **Given** I have 15 character ideas, **When** I filter by series "Fate" or source medium "Anime", **Then** matching characters display
-4. **Given** I'm planning which character to cosplay next, **When** I view character detail page, **Then** I see linked resources (costumes, wigs, props) and can add new ones from this central hub
+4. **Given** I'm planning which character to cosplay next, **When** I view character detail page, **Then** I see linked resources (outfits, wigs, props) and can add new ones from this central hub
 5. **Given** I'm gathering inspiration, **When** I upload reference images to character entry, **Then** images display in character gallery for future reference
 
 ---
 
 ### User Story 2 - Wigs as Independent Resource Category (Priority: P1)
 
-As a cosplayer who creates and styles wigs, I want wigs to be a separate resource category (not under accessories) with task tracking, material requirements, due dates, and cost tracking so that I can manage wig projects with the same detail as costumes and props.
+As a cosplayer who creates and styles wigs, I want wigs to be a separate resource category (not under accessories) with task tracking, material requirements, due dates, and cost tracking so that I can manage wig projects with the same detail as outfits and props.
 
 **Why this priority**: Wigs are major cosplay components requiring significant time (10-40 hours styling), materials ($30-200+ per wig), and project management. Treating wigs as accessories undervalues their complexity. Separate wig category enables proper project tracking, material planning, and cost management.
 
@@ -52,20 +52,20 @@ As a cosplayer who creates and styles wigs, I want wigs to be a separate resourc
 
 ### User Story 3 - Resource-to-Character Linking (Priority: P1)
 
-As a cosplayer managing multiple character cosplays, I want to link costumes, wigs, props, and accessories to their associated characters so that I can see all resources for a character in one place and understand which characters have incomplete resource sets.
+As a cosplayer managing multiple character cosplays, I want to link outfits, wigs, props, and accessories to their associated characters so that I can see all resources for a character in one place and understand which characters have incomplete resource sets.
 
-**Why this priority**: Cosplayers often juggle multiple characters with varying completion states. Character-centric organization (all Saber resources in one view) is more intuitive than resource-centric organization (all costumes, then all wigs separately). This enables better planning, prevents duplicate resources, and shows completion status per character.
+**Why this priority**: Cosplayers often juggle multiple characters with varying completion states. Character-centric organization (all Saber resources in one view) is more intuitive than resource-centric organization (all outfits listed separately, then all wigs). This enables better planning, prevents duplicate resources, and shows completion status per character.
 
-**Independent Test**: User can link existing or new resources (costumes, wigs, props, accessories) to characters, view all resources for a character on character detail page, and see resource completion status per character.
+**Independent Test**: User can link existing or new resources (outfits, wigs, props, accessories) to characters, view all resources for a character on character detail page, and see resource completion status per character.
 
 **Acceptance Scenarios**:
 
-1. **Given** I have a character "Saber" and existing costume, **When** I open Saber's detail page and click "Link Costume", **Then** I see list of my costumes with option to link existing or create new
-2. **Given** I'm viewing Saber character page, **When** I link costume "Saber Armor", wig "Saber Blonde Wig", and prop "Excalibur Sword", **Then** all resources display under Saber with status badges (completed/in-progress/planned)
+1. **Given** I have a character "Saber" and existing outfit, **When** I open Saber's detail page and click "Link Outfit", **Then** I see list of my outfits with option to link existing or create new
+2. **Given** I'm viewing Saber character page, **When** I link outfit "Saber Armor", wig "Saber Blonde Wig", and prop "Excalibur Sword", **Then** all resources display under Saber with status badges (completed/in-progress/planned)
 3. **Given** I'm planning a new character, **When** I create character and immediately add resources, **Then** resources are created with character association automatically set
 4. **Given** I have props/accessories for multiple characters, **When** I link prop "Generic Katana" to both "Character A" and "Character B", **Then** prop shows on both character pages (reusable resources)
 5. **Given** I'm reviewing character completion, **When** I view character list, **Then** each character shows completion percentage calculated as (completed resources / total resources) × 100 (e.g., "Saber: 75% (3 of 4 complete)")
-6. **Given** I want to see all resources for a shoot, **When** I filter resources by character "Saber", **Then** all linked costumes, wigs, props, accessories display together
+6. **Given** I want to see all resources for a shoot, **When** I filter resources by character "Saber", **Then** all linked outfits, wigs, props, accessories display together
 
 ---
 
@@ -73,7 +73,7 @@ As a cosplayer managing multiple character cosplays, I want to link costumes, wi
 
 As a cosplayer who creates multiple versions of the same character, I want outfit entries to specify which version/adaptation (video game, manga, anime, movie, TV show, stage, original) and track patterns, alteration notes, and crafting tasks so that I can distinguish between versions and maintain detailed construction records.
 
-**Why this priority**: Many characters have multiple canon appearances (Saber has 10+ outfit variations across Fate series). Specifying version prevents confusion ("Which Saber outfit?") and enables better organization. Enhanced tracking (patterns, alterations, tasks) supports the sewing/crafting workflow central to costume creation.
+**Why this priority**: Many characters have multiple canon appearances (Saber has 10+ outfit variations across Fate series). Specifying version prevents confusion ("Which Saber outfit?") and enables better organization. Enhanced tracking (patterns, alterations, tasks) supports the sewing/crafting workflow central to outfit creation.
 
 **Independent Test**: User can create outfit entries with version specification, upload/link patterns, add alteration notes, track crafting tasks with due dates, and view construction history independently.
 
@@ -81,7 +81,7 @@ As a cosplayer who creates multiple versions of the same character, I want outfi
 
 1. **Given** I'm creating an outfit for Saber, **When** I click "Add Outfit" from Saber character page, **Then** I see form with character pre-filled, plus version field (Fate/stay night anime, Fate/Zero, Fate/Grand Order, etc.)
 2. **Given** I have multiple Saber outfits, **When** I view Saber character page, **Then** outfits display with version labels: "Armor (Fate/stay night anime)", "Casual Outfit (Fate/Grand Order)"
-3. **Given** I'm sewing a costume, **When** I upload pattern file "Simplicity 8234.pdf" to outfit with notes "Lengthen bodice 2 inches, widen hips 1 inch", **Then** pattern and alterations display on outfit detail page
+3. **Given** I'm sewing an outfit, **When** I upload pattern file "Simplicity 8234.pdf" to outfit with notes "Lengthen bodice 2 inches, widen hips 1 inch", **Then** pattern and alterations display on outfit detail page
 4. **Given** outfit requires construction work, **When** I add tasks "Cut fabric", "Sew bodice", "Attach armor plates" with due dates, **Then** tasks show with progress tracking
 5. **Given** I made alterations during construction, **When** I add alteration notes "Added back zipper instead of lacing for easier wear", **Then** notes save for future reference
 6. **Given** outfit is complete, **When** I review outfit detail page, **Then** I see complete construction record: patterns used, alterations made, time spent, total cost
@@ -98,7 +98,7 @@ As a developer maintaining the system, I want this specification to supersede an
 
 **Acceptance Scenarios**:
 
-1. **Given** this spec is approved, **When** implementing character entity, **Then** all resource types (costume/outfit, wig, prop, accessory, equipment, location, crew) can optionally link to character
+1. **Given** this spec is approved, **When** implementing character entity, **Then** all resource types (outfit, wig, prop, accessory, equipment, location, crew) can optionally link to character
 2. **Given** wigs are separated from accessories, **When** migrating existing data, **Then** wig records move from accessories table to dedicated wigs table with enhanced fields
 3. **Given** character is organizational hub, **When** deleting a character, **Then** system automatically unlinks all resources (keeps resources, removes character association) with confirmation dialog showing count of affected resources
 4. **Given** outfit versioning is added, **When** creating outfit, **Then** version field is required if character is linked (to prevent ambiguity)
@@ -115,9 +115,12 @@ As a developer maintaining the system, I want this specification to supersede an
 - What happens when outfit version doesn't match predefined options? (Provide "Custom" option with text field for specific version description)
 - How does system handle wigs in various completion states? (Support statuses: Planned, Ordered, Received, In Progress, Completed, Needs Restyling, Damaged; allow free transition between any statuses without restrictions)
 - What happens when material requirements for wig change during styling? (Allow editing material list; track changes in notes)
-- How does system handle costumes worn with different wigs? (Costume and wig are independently linked to character; outfit detail shows "typically worn with [wig name]" as suggestion, not requirement)
-- What happens when character has no linked resources yet? (Show empty state with prompts to add costume, wig, props; character acts as planning placeholder)
+- How does system handle outfits worn with different wigs? (Outfit and wig are independently linked to character; outfit detail shows "typically worn with [wig name]" as suggestion, not requirement)
+- What happens when character has no linked resources yet? (Show empty state with prompts to add outfit, wig, props; character acts as planning placeholder)
 - How does system handle series with many characters (e.g., Fate series with 50+ characters)? (Support series-based filtering; character search across series names)
+- What happens when file upload to R2 fails during character/wig/outfit creation? (System attempts 3 retries with exponential backoff; if all fail, save resource as draft without images/files and notify user with retry option)
+- How does system handle partial upload failures (e.g., 3 of 5 images succeed)? (Successfully uploaded files are kept; failed files can be retried individually without re-uploading successful ones)
+- What happens when two team members edit the same character/wig/outfit simultaneously? (Last save wins; user who saves second sees notification: "Your changes saved (overwrote changes by [User] from X minutes ago)")
 
 ## Requirements *(mandatory)*
 
@@ -125,10 +128,11 @@ As a developer maintaining the system, I want this specification to supersede an
 
 **Character Management:**
 - **FR-001**: System MUST allow users to create, read, update, and delete character entries within their team
+- **FR-001a**: System MUST warn users when creating a character with duplicate series+name combination and require explicit confirmation to proceed (prevents accidental duplicates while allowing intentional versions)
 - **FR-002**: System MUST track character metadata: character name, series name, source medium (anime/manga/game/movie/TV/book/comic/stage/original), appearance description, personality notes, reference images (1-10 images)
 - **FR-003**: System MUST support character aliases/alternate names via comma-separated text field for flexible searching (users enter aliases as "Saber, Artoria Pendragon, Altria Pendragon"; search finds character by any alias)
 - **FR-004**: System MUST allow users to upload 1-10 reference images per character to Cloudflare R2 storage
-- **FR-005**: System MUST display character detail page as hub showing all linked resources (costumes, wigs, props, accessories) with status indicators
+- **FR-005**: System MUST display character detail page as hub showing all linked resources (outfits, wigs, props, accessories) with status indicators
 - **FR-006**: System MUST calculate character completion percentage as: (number of completed resources / total linked resources) × 100, where completed means resource status is "Completed" or "Owned" or equivalent terminal state
 - **FR-007**: System MUST allow users to filter characters by series, source medium, or completion status
 - **FR-008**: System MUST support character search across name, series, and aliases with real-time filtering
@@ -148,7 +152,7 @@ As a developer maintaining the system, I want this specification to supersede an
 - **FR-020**: System MUST display wig tasks on wig detail page with deadline countdown and overdue warnings
 
 **Resource-to-Character Linking:**
-- **FR-021**: System MUST allow linking costumes/outfits to characters (one costume to one character)
+- **FR-021**: System MUST allow linking outfits to characters (one outfit to one character)
 - **FR-022**: System MUST allow linking wigs to characters (one wig to multiple characters for reusable wigs)
 - **FR-023**: System MUST allow linking props to characters (one prop to multiple characters for reusable props)
 - **FR-024**: System MUST allow linking accessories to characters (one accessory to multiple characters)
@@ -159,7 +163,7 @@ As a developer maintaining the system, I want this specification to supersede an
 - **FR-029**: System MUST allow unlinking resources from characters without deleting the resource
 - **FR-030**: System MUST support resource reuse across multiple characters where appropriate (wigs, props, accessories)
 
-**Enhanced Outfit/Costume Tracking:**
+**Enhanced Outfit Tracking:**
 - **FR-031**: System MUST add version/variation field to outfit entries: text field specifying which adaptation or variation (e.g., "Fate/stay night Anime Episode 1", "Fate/Grand Order Summer Event", "Personal Redesign")
 - **FR-032**: System MUST require version field when outfit is linked to a character (to prevent ambiguity)
 - **FR-033**: System MUST allow version field to be optional when outfit is not character-linked (original designs)
@@ -182,14 +186,17 @@ As a developer maintaining the system, I want this specification to supersede an
 - **FR-048**: System MUST soft-delete characters and wigs (retain for 6 months, then permanently delete)
 - **FR-049**: System MUST provide archive view for deleted characters and wigs within 6-month retention period
 - **FR-050**: System MUST migrate existing wig records from accessories category to new wigs category during implementation
+- **FR-051**: System MUST handle Cloudflare R2 upload failures with retry strategy: attempt 3 retries with exponential backoff (1s, 2s, 4s); if all fail, save resource as draft without uploaded files and display user-friendly error with option to retry upload later
+- **FR-052**: System MUST use last-write-wins strategy for concurrent edits; when saving changes, system MUST check if resource was modified since user loaded it and display toast notification showing who made the previous change and when (e.g., "Your changes saved (overwrote changes by Alice from 2 minutes ago)")
+- **FR-053**: System MUST enforce soft scalability limits per team: 500 characters maximum, 200 wigs maximum, 1000 total resources maximum; display warning when approaching limits (90%) and prevent creation at limits with user-friendly message
 
 ### Key Entities
 
-- **Character**: Central organizational entity representing a character to cosplay. Contains character name, series, source medium, appearance description, personality notes, aliases, reference images (R2 URLs). Acts as hub for linking all related resources (costumes, wigs, props, accessories). Tracks completion percentage based on linked resources.
+- **Character**: Central organizational entity representing a character to cosplay. Contains character name, series, source medium, appearance description, personality notes, aliases, reference images (R2 URLs). Acts as hub for linking all related resources (outfits, wigs, props, accessories). Tracks completion percentage based on linked resources.
 
 - **Wig**: Dedicated resource category for wig management (separated from accessories). Contains wig name, color, length, fiber type, base wig brand, character links (many-to-many), status, tasks, material requirements, costs, styling notes, progress photos (R2 URLs). Tracks completion and time spent.
 
-- **Outfit/Costume (Enhanced)**: Existing costume entity with added fields: version/variation (required if character-linked), pattern files (R2 URLs), pattern metadata, alteration notes, construction tasks, crafting notes, completion tracking.
+- **Outfit** (formerly "Costume"): Enhanced entity with added fields: version/variation (required if character-linked), pattern files (R2 URLs), pattern metadata, alteration notes, construction tasks, crafting notes, completion tracking.
 
 - **Character-Resource Link**: Junction entities linking characters to resources:
   - Character-Outfit: One-to-one (one outfit to one character)
@@ -212,13 +219,18 @@ As a developer maintaining the system, I want this specification to supersede an
 - Q: How should time spent on wigs be tracked? → A: Hybrid: optional manual entry with automatic fallback (system calculates elapsed time from creation/status changes, users can manually override with actual hours worked)
 - Q: How should users add and manage character aliases/alternate names? → A: Comma-separated text field (single text field where users enter aliases separated by commas, e.g., "Saber, Artoria Pendragon, Altria Pendragon")
 - Q: Should wig status transitions be restricted or allow free changes between any statuses? → A: Free transition (users can change to any status at any time without restrictions)
+- Q: How should the system prevent duplicate characters (same series + name)? → A: Series + Name uniqueness with manual confirmation (warn user when creating character with same series+name combination, require explicit confirmation to proceed)
+- Q: How should the system handle file upload failures to Cloudflare R2 (character images, wig photos, pattern files)? → A: Retry with fallback to draft state (attempt 3 retries with exponential backoff; if all fail, save resource as draft without uploaded files and allow user to re-upload later)
+- Q: How should the system handle concurrent edits to the same character/wig/outfit by multiple team members? → A: Last-write-wins with timestamp notification (always allow save; show toast notification like "Your changes saved (overwrote changes by [User] from 2 minutes ago)" to maintain awareness)
+- Q: Should the spec use "Costume" or "Outfit" terminology consistently? → A: Standardize on "Outfit" throughout (aligns with functional requirements FR-031 to FR-041 and better reflects version tracking capability)
+- Q: What are the upper scalability limits for characters, wigs, and total resources per team? → A: 500 characters, 200 wigs, 1000 total resources per team (soft limits; start here and adjust based on real-world usage patterns)
 
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
 
 - **SC-001**: Users can create a character entry with series, name, and reference images in under 1 minute
-- **SC-002**: Users can link an existing costume, wig, and prop to a character in under 30 seconds total
+- **SC-002**: Users can link an existing outfit, wig, and prop to a character in under 30 seconds total
 - **SC-003**: Users can create a wig entry with tasks and material requirements in under 2 minutes
 - **SC-004**: Character detail page loads with all linked resources (10+ items) in under 2 seconds
 - **SC-005**: 90% of users successfully navigate from character to linked resources and back on first attempt
@@ -234,7 +246,7 @@ As a developer maintaining the system, I want this specification to supersede an
 
 ## Assumptions
 
-- Characters typically have 1-5 linked outfits, 1-3 wigs, 2-10 props, 3-15 accessories
+- Characters typically have 1-5 linked outfits, 1-3 wigs, 2-10 props, 3-15 accessories (note: "outfit" is the standard term used throughout this spec, formerly called "costume" in spec 045)
 - Most wigs are character-specific (80%), some are reusable across characters (20%)
 - Users understand character version/variation context (which anime season, game, etc.)
 - Wig styling tasks range from simple (3-5 tasks) to complex (15-20 tasks)
@@ -275,7 +287,7 @@ As a developer maintaining the system, I want this specification to supersede an
 - Cross-team character sharing or public character database
 - Mobile app-specific features (photo capture from app for character references)
 - Wig condition tracking over time (wear and tear, cleaning history)
-- Outfit wear history (which events costume was worn to)
+- Outfit wear history (which events outfit was worn to)
 - Character popularity or trending suggestions
 
 ## Integration Notes
@@ -288,7 +300,7 @@ As a developer maintaining the system, I want this specification to supersede an
 
 #### From Spec 045 (Resource Management System):
 ✅ **Retained & Enhanced:**
-- Costumes/Outfits (enhanced with version, patterns, tasks, character linking)
+- Outfits (formerly "Costumes" in spec 045; enhanced with version, patterns, tasks, character linking)
 - Props catalog (enhanced with character linking)
 - Equipment inventory (maintained as-is)
 - Crew directory (maintained as-is)
@@ -303,7 +315,7 @@ As a developer maintaining the system, I want this specification to supersede an
 ✅ **Fully Integrated:**
 - Dedicated accessories management page (now with character linking)
 - Makeup-specific tracking (expiration dates, usage levels, skin tone matching)
-- Accessory-to-costume linking (now character-to-accessory linking)
+- Accessory-to-outfit linking (now character-to-accessory linking)
 - Maintenance schedules for accessories (integrated into new model)
 - Usage history tracking (integrated into new model)
 
@@ -316,21 +328,21 @@ As a developer maintaining the system, I want this specification to supersede an
 ✅ **Already Implemented (Retrospective Documentation):**
 - Series autocomplete with external APIs (AniList, RAWG, TMDB, Google Books)
 - Character autocomplete with autofill
-- Source medium field (replacing costume type)
+- Source medium field (replacing outfit type from spec 045)
 - Component linking (inline dropdowns for wigs/makeup/props/equipment)
-- Photo uploads on costume detail pages
-- Task checklists within costume pages
+- Photo uploads on outfit detail pages
+- Task checklists within outfit pages
 - Delete confirmation dialogs
 
 ### Key Architectural Changes
 
-**From**: Flat resource lists (costumes, props, accessories managed separately)  
+**From**: Flat resource lists (outfits, props, accessories managed separately)  
 **To**: Character-centric model (character as organizational hub, resources link to characters)
 
 **Before (Specs 045/046/047):**
 ```
 Resources:
-├── Costumes (flat list)
+├── Outfits/Costumes (flat list)
 ├── Props (flat list)
 ├── Accessories (flat list, includes wigs)
 ├── Makeup (flat list)
@@ -367,10 +379,10 @@ Standalone Resources (not character-specific):
 - `character_wigs` - Junction table (many-to-many)
 - `character_props` - Junction table (many-to-many)
 - `character_accessories` - Junction table (many-to-many)
-- `character_costumes` - Junction table (one-to-one, but using junction for consistency)
+- `character_outfits` - Junction table (one-to-one, but using junction for consistency)
 
 **Enhanced Tables:**
-- `costumes` → Add: `version`, `pattern_files_r2_urls`, `alteration_notes`, `crafting_notes`, `character_id` (nullable)
+- `outfits` (formerly `costumes`) → Add: `version`, `pattern_files_r2_urls`, `alteration_notes`, `crafting_notes`, `character_id` (nullable)
 - `props` → Add: `character_id` (nullable, via junction)
 - `accessories` → Add: `character_id` (nullable, via junction)
 
@@ -387,7 +399,7 @@ Standalone Resources (not character-specific):
 1. Create `characters` table
 2. Create `wigs` table with enhanced fields
 3. Create junction tables for character-resource linking
-4. Add version/pattern fields to `costumes` table
+4. Add version/pattern fields to `outfits` table
 
 **Phase 2: Data Migration**
 1. Identify existing accessories marked as "wig" type
@@ -398,7 +410,7 @@ Standalone Resources (not character-specific):
 **Phase 3: UI Updates**
 1. Create Characters page (list and detail views)
 2. Create Wigs page (separate from accessories)
-3. Update Costumes page with version/pattern fields
+3. Update Outfits page with version/pattern fields
 4. Add character linking UI to all compatible resources
 5. Maintain backward compatibility (resource pages work without character context)
 
@@ -418,7 +430,7 @@ Standalone Resources (not character-specific):
 
 ### Backward Compatibility
 
-- Direct resource access maintained (costume/prop/accessory pages still work independently)
+- Direct resource access maintained (outfit/prop/accessory pages still work independently)
 - Character linking is optional (resources can exist without character association)
 - Existing resources continue to function (no breaking changes)
 - Users can gradually adopt character-centric workflow

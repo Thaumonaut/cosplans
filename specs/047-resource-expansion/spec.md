@@ -18,7 +18,7 @@
 
 As a cosplayer and coordinator, I want to create and manage general tasks that aren't tied to specific resources (like "reach out to venue coordinator" or "order fabric samples") so that I can track all my project-related work in one place, not just resource-specific tasks.
 
-**Why this priority**: Users need a general task management system beyond resource-specific checklists. Many cosplay project tasks (communication, research, planning) don't belong to a specific costume or prop but still need tracking. This is foundational for project organization.
+**Why this priority**: Users need a general task management system beyond resource-specific checklists. Many cosplay project tasks (communication, research, planning) don't belong to a specific outfit or prop but still need tracking. This is foundational for project organization.
 
 **Independent Test**: User can create standalone tasks, organize them by category/project, set due dates and priorities, mark tasks complete, and filter/search tasks independently of any resource pages.
 
@@ -32,31 +32,31 @@ As a cosplayer and coordinator, I want to create and manage general tasks that a
 
 ---
 
-### User Story 2 - Costume Templates and Patterns Storage (Priority: P1)
+### User Story 2 - Outfit Templates and Patterns Storage (Priority: P1)
 
-As a cosplayer who sews, I want to store and organize sewing patterns and templates for my costumes (PDF patterns, reference images, tutorial links, measurement notes) so that I can easily access my sewing resources when working on costumes.
+As a cosplayer who sews, I want to store and organize sewing patterns and templates for my outfits (PDF patterns, reference images, tutorial links, measurement notes) so that I can easily access my sewing resources when working on outfits.
 
-**Why this priority**: Many cosplayers create or purchase sewing patterns that need to be tracked with their costumes. Pattern files are expensive (often $15-30 each) and need proper organization. This fills a gap in the existing costume management system.
+**Why this priority**: Many cosplayers create or purchase sewing patterns that need to be tracked with their outfits. Pattern files are expensive (often $15-30 each) and need proper organization. This fills a gap in the existing outfit management system.
 
-**Independent Test**: User can upload pattern files (PDF, images), add pattern metadata (brand, size, modifications), link patterns to costumes, and search patterns independently of other features.
+**Independent Test**: User can upload pattern files (PDF, images), add pattern metadata (brand, size, modifications), link patterns to outfits, and search patterns independently of other features.
 
 **Acceptance Scenarios**:
 
-1. **Given** I purchased a Simplicity pattern for a dress, **When** I navigate to costume detail page and click "Add Pattern", **Then** I see a form to upload PDF/images, enter pattern name, brand, size, and notes
-2. **Given** I have pattern files, **When** I upload "Simplicity 8234 - Size 12.pdf" with notes "Lengthen bodice by 2 inches", **Then** pattern displays in costume's patterns section with download link
-3. **Given** I'm working on a costume, **When** I view attached patterns, **Then** I see all pattern files with modification notes and can download originals
-4. **Given** I use a pattern for multiple costumes, **When** I link existing pattern to new costume, **Then** same pattern appears on both costumes without re-uploading
-5. **Given** I'm searching for a specific pattern, **When** I search by brand name or pattern number, **Then** matching patterns display with their associated costumes
+1. **Given** I purchased a Simplicity pattern for a dress, **When** I navigate to outfit detail page and click "Add Pattern", **Then** I see a form to upload PDF/images, enter pattern name, brand, size, and notes
+2. **Given** I have pattern files, **When** I upload "Simplicity 8234 - Size 12.pdf" with notes "Lengthen bodice by 2 inches", **Then** pattern displays in outfit's patterns section with download link
+3. **Given** I'm working on an outfit, **When** I view attached patterns, **Then** I see all pattern files with modification notes and can download originals
+4. **Given** I use a pattern for multiple outfits, **When** I link existing pattern to new outfit, **Then** same pattern appears on both outfits without re-uploading
+5. **Given** I'm searching for a specific pattern, **When** I search by brand name or pattern number, **Then** matching patterns display with their associated outfits
 
 ---
 
 ### User Story 3 - Craft Supplies and Materials Management (Priority: P2)
 
-As a prop maker and costume creator, I want to track craft supplies and materials (foam, paints, fabrics, adhesives, tools) with quantities, costs, and storage locations so that I know what materials I have before starting projects and can track material costs accurately.
+As a prop maker and outfit creator, I want to track craft supplies and materials (foam, paints, fabrics, adhesives, tools) with quantities, costs, and storage locations so that I know what materials I have before starting projects and can track material costs accurately.
 
 **Why this priority**: Cosplayers invest hundreds of dollars in craft supplies that need inventory tracking. Knowing what foam, paint colors, and fabrics are in stock prevents duplicate purchases and enables better project budgeting. Builds on established resource management patterns.
 
-**Independent Test**: User can add craft supplies with type, quantity, cost, storage location, and usage tracking, create supply shopping lists, and mark supplies as running low independently of costumes/props.
+**Independent Test**: User can add craft supplies with type, quantity, cost, storage location, and usage tracking, create supply shopping lists, and mark supplies as running low independently of outfits/props.
 
 **Acceptance Scenarios**:
 
@@ -72,11 +72,11 @@ As a prop maker and costume creator, I want to track craft supplies and material
 
 ### User Story 4 - Accessories and Makeup Dedicated Pages (Priority: P2)
 
-As a cosplayer with extensive accessory and makeup collections, I want dedicated pages for managing jewelry, contacts, wigs, and makeup products (separate from general costume management) so that I can maintain detailed records with type-specific fields like expiration dates for makeup and prescription info for contacts.
+As a cosplayer with extensive accessory and makeup collections, I want dedicated pages for managing jewelry, contacts, wigs, and makeup products (separate from general outfit management) so that I can maintain detailed records with type-specific fields like expiration dates for makeup and prescription info for contacts.
 
-**Why this priority**: Accessories and makeup were included in spec 045 but need dedicated pages with specialized features. These items have unique requirements (expiration tracking, prescription info, maintenance schedules) that deserve focused management separate from full costumes.
+**Why this priority**: Accessories and makeup were included in spec 045 but need dedicated pages with specialized features. These items have unique requirements (expiration tracking, prescription info, maintenance schedules) that deserve focused management separate from full outfits.
 
-**Independent Test**: User can access dedicated Accessories and Makeup pages, add items with type-specific fields, track expiration/maintenance, and link accessories to costumes for coordination independently.
+**Independent Test**: User can access dedicated Accessories and Makeup pages, add items with type-specific fields, track expiration/maintenance, and link accessories to outfits for coordination independently.
 
 **Acceptance Scenarios**:
 
@@ -84,8 +84,8 @@ As a cosplayer with extensive accessory and makeup collections, I want dedicated
 2. **Given** I'm adding colored contacts, **When** I click "Add Contacts", **Then** I see specialized form with prescription details (base curve, diameter, power), brand, color, purchase date, and replacement schedule
 3. **Given** I'm managing makeup, **When** I navigate to dedicated Makeup page, **Then** I see products organized by category (foundation, eyeshadow, lipstick) with expiration warnings
 4. **Given** I'm adding foundation, **When** I enter purchase date and typical shelf life, **Then** system calculates expiration date and warns 30 days before expiry
-5. **Given** I'm coordinating a costume, **When** I view costume detail page, **Then** I see linked accessories/makeup with quick-add from existing collection
-6. **Given** wig needs restyling, **When** I set maintenance reminder, **Then** system alerts me before next scheduled use of that costume
+5. **Given** I'm coordinating an outfit, **When** I view outfit detail page, **Then** I see linked accessories/makeup with quick-add from existing collection
+6. **Given** wig needs restyling, **When** I set maintenance reminder, **Then** system alerts me before next scheduled use of that outfit
 
 ---
 
@@ -99,12 +99,12 @@ As a developer maintaining the system, I want the specification to accurately re
 
 **Acceptance Scenarios**:
 
-1. **Given** series field was implemented with autocomplete, **When** reviewing costume spec, **Then** spec documents series autocomplete with external API integration (AniList, RAWG, TMDB, Google Books)
-2. **Given** character name has autocomplete with autofill, **When** reviewing costume spec, **Then** spec documents character search with series/medium autofill behavior
-3. **Given** "costume type" was changed to "source medium", **When** reviewing costume spec, **Then** spec reflects updated field name and new values (Anime, Manga, Video Game, TV Show, Movie, Book, Original)
-4. **Given** component linking was implemented with inline dropdowns, **When** reviewing costume spec, **Then** spec documents linking wigs, makeup, props, equipment to costumes
-5. **Given** photo upload section was added, **When** reviewing costume spec, **Then** spec documents photo upload with preview and management capabilities
-6. **Given** task checklist was implemented with local storage, **When** reviewing costume spec, **Then** spec documents task management within costume detail pages
+1. **Given** series field was implemented with autocomplete, **When** reviewing outfit spec, **Then** spec documents series autocomplete with external API integration (AniList, RAWG, TMDB, Google Books)
+2. **Given** character name has autocomplete with autofill, **When** reviewing outfit spec, **Then** spec documents character search with series/medium autofill behavior
+3. **Given** "outfit type" was changed to "source medium", **When** reviewing outfit spec, **Then** spec reflects updated field name and new values (Anime, Manga, Video Game, TV Show, Movie, Book, Original)
+4. **Given** component linking was implemented with inline dropdowns, **When** reviewing outfit spec, **Then** spec documents linking wigs, makeup, props, equipment to outfits
+5. **Given** photo upload section was added, **When** reviewing outfit spec, **Then** spec documents photo upload with preview and management capabilities
+6. **Given** task checklist was implemented with local storage, **When** reviewing outfit spec, **Then** spec documents task management within outfit detail pages
 
 ---
 
@@ -114,8 +114,8 @@ As a developer maintaining the system, I want the specification to accurately re
 - How does system handle pattern files that are very large (>10MB PDFs)? (Enforce 10MB file size limit with compression if possible, suggest external storage links for large files)
 - What happens when craft supply quantity goes negative (e.g., user forgets to log purchase)? (Allow negative quantities with warning, prompt user to correct inventory)
 - How does system handle expired makeup products that users want to keep as reference? (Allow marking as "Reference Only" status, remove from active inventory but keep in archives)
-- What happens when user tries to link a pattern to multiple costumes that require different sizes? (Store pattern link with costume-specific notes, allow size variations per costume)
-- How does system handle craft supplies shared across multiple props/costumes? (Track material usage per project with usage notes, maintain running quantity)
+- What happens when user tries to link a pattern to multiple outfits that require different sizes? (Store pattern link with outfit-specific notes, allow size variations per outfit)
+- How does system handle craft supplies shared across multiple props/outfits? (Track material usage per project with usage notes, maintain running quantity)
 - What happens when accessory prescription info needs updating (new eye prescription)? (Allow editing prescription details, track prescription history for reference)
 - How does system handle bulk import of existing inventory (user has spreadsheet of 100 supplies)? (Provide CSV import functionality with field mapping and validation)
 - What happens when task due dates are in the past? (Show overdue badge with days overdue, allow updating due date or marking complete)
@@ -139,24 +139,24 @@ As a developer maintaining the system, I want the specification to accurately re
 - **FR-009**: System MUST allow bulk operations on tasks (multi-select and bulk status changes)
 - **FR-010**: System MUST provide task statistics (total tasks, completed percentage, overdue count)
 
-**Costume Patterns and Templates:**
-- **FR-011**: System MUST allow users to upload pattern files (PDF, JPG, PNG) up to 10MB per file to costume detail pages using Cloudflare R2 storage
+**Outfit Patterns and Templates:**
+- **FR-011**: System MUST allow users to upload pattern files (PDF, JPG, PNG) up to 10MB per file to outfit detail pages using Cloudflare R2 storage
 - **FR-012**: System MUST track pattern metadata: name, brand, pattern number, size, purchased date, cost, modification notes, and R2 file URL/path
-- **FR-013**: System MUST support multiple patterns per costume (1-20 patterns)
-- **FR-014**: System MUST allow linking existing patterns to multiple costumes without re-uploading
+- **FR-013**: System MUST support multiple patterns per outfit (1-20 patterns)
+- **FR-014**: System MUST allow linking existing patterns to multiple outfits without re-uploading
 - **FR-015**: System MUST provide pattern download functionality with original filename preservation
 - **FR-016**: System MUST support external pattern links (Etsy, Patreon, personal websites) as alternative to file uploads
 - **FR-017**: System MUST display pattern thumbnails for image files and PDF icon for PDF files
 - **FR-018**: System MUST allow users to add modification notes to patterns (alterations, sizing adjustments)
-- **FR-019**: System MUST allow users to search patterns by brand, pattern number, or costume association
-- **FR-020**: System MUST track pattern usage across costumes for inventory purposes
+- **FR-019**: System MUST allow users to search patterns by brand, pattern number, or outfit association
+- **FR-020**: System MUST track pattern usage across outfits for inventory purposes
 
 **Craft Supplies and Materials:**
 - **FR-021**: System MUST allow users to create, read, update, and delete craft supply entries within their team
 - **FR-022**: System MUST support supply categories: Foam, Paint, Fabric, Adhesive, Tool, Hardware, Electronics, Other
 - **FR-023**: System MUST track supply metadata: name, category, quantity, unit (sheets/bottles/yards/pieces), cost per unit, total cost, brand, color/size, storage location, purchase date, supplier/link
 - **FR-024**: System MUST allow users to update quantities as supplies are used (addition/subtraction)
-- **FR-025**: System MUST track supply usage history with date, quantity change, and optional project/costume association
+- **FR-025**: System MUST track supply usage history with date, quantity change, and optional project/outfit association
 - **FR-026**: System MUST support per-supply low-stock thresholds with optional global default (users can set individual thresholds per item or use team-wide default value)
 - **FR-027**: System MUST generate shopping lists from low-stock items with estimated restock costs
 - **FR-028**: System MUST allow users to upload 1-3 photos per supply (product photo, storage location photo) to Cloudflare R2 storage
@@ -166,25 +166,25 @@ As a developer maintaining the system, I want the specification to accurately re
 - **FR-032**: System MUST allow users to mark supplies as "running low" manually even if above threshold
 
 **Accessories and Makeup Pages:**
-- **FR-033**: System MUST provide dedicated Accessories page separate from costume management with categories: Jewelry, Contacts, Wigs, Other Accessories
-- **FR-034**: System MUST provide dedicated Makeup page separate from costume management with categories: Foundation, Eyes, Lips, Nails, SFX, Body Paint, Tools
+- **FR-033**: System MUST provide dedicated Accessories page separate from outfit management with categories: Jewelry, Contacts, Wigs, Other Accessories
+- **FR-034**: System MUST provide dedicated Makeup page separate from outfit management with categories: Foundation, Eyes, Lips, Nails, SFX, Body Paint, Tools
 - **FR-035**: System MUST support type-specific fields for contacts: prescription details (base curve, diameter, power), usage schedule, replacement reminder
 - **FR-036**: System MUST support type-specific fields for makeup: expiration date, usage level (new/half-full/low/empty), skin tone match, finish type
 - **FR-037**: System MUST support type-specific fields for wigs: fiber type (synthetic/human hair), style, color, cap size, restyling needs
 - **FR-038**: System MUST provide expiration warnings for makeup products (30 days advance notice, visual warning at 7 days)
-- **FR-039**: System MUST allow linking accessories and makeup to costumes for coordination and requirement tracking
+- **FR-039**: System MUST allow linking accessories and makeup to outfits for coordination and requirement tracking
 - **FR-040**: System MUST support maintenance schedules for wigs (cleaning, restyling) and contacts (replacement) with in-app badge/indicator warnings
 - **FR-040a**: System MUST provide optional email notifications for maintenance reminders (opt-in per user preference)
 - **FR-041**: System MUST allow users to mark makeup as "Reference Only" after expiration for color matching
-- **FR-042**: System MUST display accessory/makeup usage history (which costumes, how often)
+- **FR-042**: System MUST display accessory/makeup usage history (which outfits, how often)
 
 **Retrospective Documentation:**
 - **FR-043**: Specification MUST document series autocomplete feature with external API integration (AniList, RAWG, TMDB, Google Books)
 - **FR-044**: Specification MUST document character autocomplete with autofill behavior (series and source medium)
-- **FR-045**: Specification MUST document "source medium" field replacing "costume type" with values: Anime, Manga, Video Game, TV Show, Movie, Book, Comic, Stage Production, Original
-- **FR-046**: Specification MUST document component linking feature (linking wigs, makeup, props, equipment to costumes)
-- **FR-047**: Specification MUST document photo upload implementation on costume detail pages
-- **FR-048**: Specification MUST document task checklist implementation within costume detail pages with local storage
+- **FR-045**: Specification MUST document "source medium" field replacing "outfit type" with values: Anime, Manga, Video Game, TV Show, Movie, Book, Comic, Stage Production, Original
+- **FR-046**: Specification MUST document component linking feature (linking wigs, makeup, props, equipment to outfits)
+- **FR-047**: Specification MUST document photo upload implementation on outfit detail pages
+- **FR-048**: Specification MUST document task checklist implementation within outfit detail pages with local storage
 - **FR-049**: Specification MUST document inline dropdown UI pattern for adding components (search and create)
 - **FR-050**: Specification MUST document delete confirmation dialogs for all resource pages
 
@@ -201,11 +201,11 @@ As a developer maintaining the system, I want the specification to accurately re
 ### Key Entities
 
 - **Task**: Represents standalone tasks with title, description, predefined category (6 fixed options), optional custom tags/labels, optional assigned team member, due date, priority, status, and completion tracking. Not tied to specific resources but can reference them in description.
-- **Pattern**: Represents sewing patterns and templates with file storage, metadata (brand, size, cost), modification notes, and multi-costume linking capability.
+- **Pattern**: Represents sewing patterns and templates with file storage, metadata (brand, size, cost), modification notes, and multi-outfit linking capability.
 - **Craft Supply**: Represents materials and supplies with quantity tracking, usage history, cost tracking, per-item low-stock thresholds (with global default fallback), low-stock warnings, and shopping list generation.
-- **Accessory (Dedicated)**: Enhanced accessory entity with type-specific fields, maintenance scheduling, prescription tracking for contacts, and costume coordination links.
+- **Accessory (Dedicated)**: Enhanced accessory entity with type-specific fields, maintenance scheduling, prescription tracking for contacts, and outfit coordination links.
 - **Makeup Product (Dedicated)**: Enhanced makeup entity with expiration tracking, usage levels, skin tone matching, and reference-only status for expired items.
-- **Pattern-Costume Link**: Junction entity linking patterns to costumes with costume-specific notes (size variations, modifications per costume).
+- **Pattern-Outfit Link**: Junction entity linking patterns to outfits with outfit-specific notes (size variations, modifications per outfit).
 - **Supply Usage Record**: Tracks material consumption with date, quantity change, optional project association, and running quantity balance.
 - **Shopping List Item**: Generated from low-stock supplies with supply reference, desired quantity, estimated cost, priority, and purchase status.
 
@@ -213,7 +213,7 @@ As a developer maintaining the system, I want the specification to accurately re
 
 ### Session 2025-10-24
 
-- Q: Where should pattern files (PDF, JPG, PNG up to 10MB) be stored? → A: Upload files to Cloudflare R2 storage; also migrate existing image uploads (costumes, props, supplies) to Cloudflare R2 for better scalability and cost optimization
+- Q: Where should pattern files (PDF, JPG, PNG up to 10MB) be stored? → A: Upload files to Cloudflare R2 storage; also migrate existing image uploads (outfits, props, supplies) to Cloudflare R2 for better scalability and cost optimization
 - Q: Should low-stock threshold warnings be set globally for all supplies or per-supply item? → A: Per-supply threshold with optional global default (users can set per-item or use global fallback)
 - Q: Can users add entirely new task categories or only use predefined ones? → A: Predefined categories plus custom tags/labels (6 fixed categories for filtering, plus optional user-defined tags)
 - Q: Can tasks be assigned to specific team members or are they unassigned/team-wide only? → A: Unassigned by default, optional assignment to team members (flexible for solo and team use)
@@ -224,12 +224,12 @@ As a developer maintaining the system, I want the specification to accurately re
 ### Measurable Outcomes
 
 - **SC-001**: Users can create a standalone task with all details in under 30 seconds
-- **SC-002**: Users can upload and attach a pattern file to a costume in under 1 minute
+- **SC-002**: Users can upload and attach a pattern file to an outfit in under 1 minute
 - **SC-003**: Users can add a craft supply with photo and quantity in under 1 minute
 - **SC-004**: System generates accurate shopping list from low-stock supplies in under 2 seconds
 - **SC-005**: 90% of users successfully find and access dedicated Accessories and Makeup pages on first attempt
 - **SC-006**: Makeup expiration warnings display 30 days before expiry with 100% accuracy
-- **SC-007**: Users can link existing patterns to multiple costumes without re-uploading in under 20 seconds per costume
+- **SC-007**: Users can link existing patterns to multiple outfits without re-uploading in under 20 seconds per outfit
 - **SC-008**: Supply quantity updates reflect immediately across all views with zero lag
 - **SC-009**: Task filtering and search return results in under 500ms for lists with 100+ tasks
 - **SC-010**: Users report that standalone task management reduces missed deadlines by at least 40%
@@ -249,7 +249,7 @@ As a developer maintaining the system, I want the specification to accurately re
 - Accessories and makeup collections will average 30-50 items per team
 - Users understand basic sewing pattern terminology (pattern number, size, etc.)
 - Shopping lists are manual reference (no auto-purchase integration)
-- Photo uploads for supplies follow same constraints as costumes (5MB limit, auto-compression)
+- Photo uploads for supplies follow same constraints as outfits (5MB limit, auto-compression)
 
 ## Dependencies
 
@@ -270,7 +270,7 @@ As a developer maintaining the system, I want the specification to accurately re
 ## Out of Scope
 
 - Task dependencies and project management (Gantt charts, critical path)
-- Automated material cost calculations per costume/prop (manual association only)
+- Automated material cost calculations per outfit/prop (manual association only)
 - Barcode/QR code scanning for supply inventory
 - Integration with online shopping platforms (Amazon, Etsy) for automatic purchasing
 - Pattern sharing marketplace between teams
@@ -283,14 +283,14 @@ As a developer maintaining the system, I want the specification to accurately re
 - Automated restock notifications for supplies
 - Pattern version control or modification tracking
 - Supply lending/borrowing tracking between team members
-- Costume component requirement calculation from patterns
+- Outfit component requirement calculation from patterns
 
 ## Integration Notes
 
 This specification expands spec 045 (Resource Management System) with:
 
 1. **New Resource Types**: Standalone tasks, craft supplies, patterns
-2. **Enhanced Pages**: Dedicated accessories and makeup pages (splitting from general costume accessories)
+2. **Enhanced Pages**: Dedicated accessories and makeup pages (splitting from general outfit accessories)
 3. **Retrospective Updates**: Documenting already-implemented features that weren't captured in original spec
 
 All new features should follow established patterns from spec 045 for consistency:
