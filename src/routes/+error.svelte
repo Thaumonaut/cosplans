@@ -1,6 +1,5 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import { Button } from 'flowbite-svelte';
   import { Home, ArrowLeft, AlertCircle } from 'lucide-svelte';
 
   $: status = $page.status;
@@ -89,17 +88,23 @@
 
     <!-- Actions -->
     <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-      <Button
-        color="gray"
-        onclick={() => window.history.back()}
+      <button
+        type="button"
+        class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium rounded-lg border transition-colors"
+        style="border-color: var(--theme-sidebar-border); color: var(--theme-foreground); background: var(--theme-background);"
+        on:click={() => window.history.back()}
       >
         <ArrowLeft class="w-4 h-4 mr-2" />
         Go Back
-      </Button>
-      <Button href="/">
+      </button>
+      <a
+        href="/"
+        class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium rounded-lg transition-colors"
+        style="background: var(--theme-sidebar-accent); color: white;"
+      >
         <Home class="w-4 h-4 mr-2" />
         Go Home
-      </Button>
+      </a>
     </div>
 
     <!-- Help Text -->

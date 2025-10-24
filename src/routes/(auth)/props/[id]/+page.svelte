@@ -108,12 +108,17 @@
       
       const response = await fetch(`?/${action}`, {
         method: 'POST',
-        body: formData
+        body: formData,
+        redirect: 'manual'
       });
       
-      if (response.redirected) {
-        window.location.href = response.url;
-        return;
+      // Handle redirects
+      if (response.status >= 300 && response.status < 400) {
+        const location = response.headers.get('location');
+        if (location) {
+          window.location.href = location;
+          return;
+        }
       }
       
       // Handle SvelteKit form action response
@@ -168,9 +173,21 @@
   
   async function confirmDelete() {
     try {
+      const formData = new FormData();
       const response = await fetch('?/delete', {
-        method: 'POST'
+        method: 'POST',
+        body: formData,
+        redirect: 'manual'
       });
+      
+      // Handle redirect response
+      if (response.status >= 300 && response.status < 400) {
+        const location = response.headers.get('location');
+        if (location) {
+          window.location.href = location;
+          return;
+        }
+      }
       
       if (response.ok) {
         goto('/props');
@@ -211,7 +228,7 @@
             type="button"
             class="inline-flex items-center px-4 py-2 rounded-lg font-medium focus:outline-none focus:ring-2 transition-opacity"
             style="background: var(--theme-sidebar-accent); color: white;"
-            onclick={saveChanges}
+            onclick={() => saveChanges()}
             disabled={isSaving}
           >
             {#if isSaving}
@@ -224,7 +241,7 @@
             type="button"
             class="inline-flex items-center px-4 py-2 rounded-lg font-medium border focus:outline-none focus:ring-2 transition-opacity"
             style="border-color: var(--theme-sidebar-border); color: var(--theme-foreground);"
-            onclick={cancelChanges}
+            onclick={() => cancelChanges()}
             disabled={isSaving}
           >
             Cancel
@@ -236,7 +253,7 @@
             type="button"
             class="inline-flex items-center px-3 py-2 rounded-lg font-medium border focus:outline-none focus:ring-2 transition-opacity"
             style="border-color: var(--theme-error); color: var(--theme-error);"
-            onclick={deleteItem}
+            onclick={() => deleteItem()}
           >
             <Trash2 class="w-4 h-4" />
           </button>
@@ -259,7 +276,7 @@
             value={prop.name || ''}
             placeholder="Enter prop name"
             required={true}
-            onchange={(e) => updateField('name', e.detail)}
+            on:save={(e) => updateField('name', e.detail)}
           />
         </div>
         
@@ -271,7 +288,7 @@
           <InlineEditField
             value={prop.character_name || ''}
             placeholder="Which character uses this prop?"
-            onchange={(e) => updateField('character_name', e.detail)}
+            on:save={(e) => updateField('character_name', e.detail)}
           />
         </div>
         
@@ -284,7 +301,7 @@
           <InlineEditField
             value={prop.character_series || ''}
             placeholder="Enter series or franchise name"
-            onchange={(e) => updateField('character_series', e.detail)}
+            on:save={(e) => updateField('character_series', e.detail)}
           />
         </div>
         
@@ -297,7 +314,7 @@
             value={prop.prop_type || ''}
             options={propTypeOptions}
             placeholder="Select prop type"
-            onchange={(e) => updateField('prop_type', e.detail)}
+            on:save={(e) => updateField('prop_type', e.detail)}
           />
         </div>
         
@@ -309,7 +326,7 @@
           <InlineSelectField
             value={prop.status || 'planned'}
             options={statusOptions}
-            onchange={(e) => updateField('status', e.detail)}
+            on:save={(e) => updateField('status', e.detail)}
           />
         </div>
       </div>
@@ -326,7 +343,7 @@
           </label>
           <InlineDateField
             value={prop.purchase_date || ''}
-            onchange={(e) => updateField('purchase_date', e.detail)}
+            on:save={(e) => updateField('purchase_date', e.detail)}
           />
         </div>
         
@@ -338,7 +355,7 @@
           </label>
           <InlineMoneyField
             value={prop.estimated_cost || null}
-            onchange={(e) => updateField('estimated_cost', e.detail)}
+            on:save={(e) => updateField('estimated_cost', e.detail)}
           />
         </div>
         
@@ -350,7 +367,7 @@
           </label>
           <InlineMoneyField
             value={prop.actual_cost || null}
-            onchange={(e) => updateField('actual_cost', e.detail)}
+            on:save={(e) => updateField('actual_cost', e.detail)}
           />
         </div>
       </div>
@@ -368,7 +385,7 @@
           <InlineEditField
             value={prop.storage_location || ''}
             placeholder="Where is this prop stored?"
-            onchange={(e) => updateField('storage_location', e.detail)}
+            on:save={(e) => updateField('storage_location', e.detail)}
           />
         </div>
         
@@ -381,7 +398,7 @@
             value={prop.notes || ''}
             placeholder="Additional notes about this prop"
             multiline={true}
-            onchange={(e) => updateField('notes', e.detail)}
+            on:save={(e) => updateField('notes', e.detail)}
           />
         </div>
       </div>
@@ -407,7 +424,7 @@
             type="button"
             class="px-4 py-2 rounded-lg font-medium"
             style="background: var(--theme-error); color: white;"
-            onclick={confirmDelete}
+            onclick={() => confirmDelete()}
           >
             Delete
           </button>

@@ -87,15 +87,17 @@ export const actions: Actions = {
       state_metadata: {},
     };
 
+    let costume;
     try {
-      const costume = await costumeService.create(data);
-      redirect(303, `/costumes/${costume.id}`);
+      costume = await costumeService.create(data);
     } catch (err) {
       console.error('Error creating costume:', err);
       return fail(500, {
         error: 'Failed to create costume. Please try again.'
       });
     }
+    
+    throw redirect(303, `/costumes/${costume.id}`);
   },
 
   update: async ({ request, params, locals }) => {
@@ -144,12 +146,13 @@ export const actions: Actions = {
 
     try {
       await costumeService.delete(id);
-      throw redirect(303, '/costumes');
     } catch (err) {
       console.error('Error deleting costume:', err);
       return fail(500, {
         error: 'Failed to delete costume. Please try again.'
       });
     }
+    
+    throw redirect(303, '/costumes');
   }
 };

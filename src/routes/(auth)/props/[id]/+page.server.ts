@@ -87,15 +87,17 @@ export const actions: Actions = {
       state_metadata: {},
     };
 
+    let prop;
     try {
-      const prop = await propService.create(data);
-      redirect(303, `/props/${prop.id}`);
+      prop = await propService.create(data);
     } catch (err) {
       console.error('Error creating prop:', err);
       return fail(500, {
         error: 'Failed to create prop. Please try again.'
       });
     }
+    
+    throw redirect(303, `/props/${prop.id}`);
   },
 
   update: async ({ request, params, locals }) => {
@@ -144,12 +146,13 @@ export const actions: Actions = {
 
     try {
       await propService.delete(id);
-      redirect(303, '/props');
     } catch (err) {
       console.error('Error deleting prop:', err);
       return fail(500, {
         error: 'Failed to delete prop. Please try again.'
       });
     }
+    
+    throw redirect(303, '/props');
   }
 };

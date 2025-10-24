@@ -181,12 +181,17 @@
       
       const response = await fetch(`?/${action}`, {
         method: 'POST',
-        body: formData
+        body: formData,
+        redirect: 'manual'
       });
       
-      if (response.redirected) {
-        window.location.href = response.url;
-        return;
+      // Handle redirects
+      if (response.status >= 300 && response.status < 400) {
+        const location = response.headers.get('location');
+        if (location) {
+          window.location.href = location;
+          return;
+        }
       }
       
       // Handle SvelteKit form action response
@@ -236,12 +241,31 @@
   }
   
   async function handleDelete() {
-    const formData = new FormData();
-    await fetch(`/equipment/${equipment.id}?/delete`, {
-      method: 'POST',
-      body: formData
-    });
-    goto('/equipment');
+    try {
+      const formData = new FormData();
+      const response = await fetch(`/equipment/${equipment.id}?/delete`, {
+        method: 'POST',
+        body: formData,
+        redirect: 'manual'
+      });
+      
+      // Handle redirect response
+      if (response.status >= 300 && response.status < 400) {
+        const location = response.headers.get('location');
+        if (location) {
+          window.location.href = location;
+          return;
+        }
+      }
+      
+      if (response.ok) {
+        goto('/equipment');
+      } else {
+        alert('Failed to delete equipment');
+      }
+    } catch (error) {
+      alert('Error deleting equipment');
+    }
   }
   
   function handleAutocompleteSelect(event: CustomEvent) {
@@ -357,7 +381,7 @@
               type="button"
               class="text-xs px-2 py-1 rounded transition-colors"
               style="background: var(--theme-sidebar-accent); color: white;"
-              onclick={useSuggestedName}
+              onclick={() => useSuggestedName()}
               title="Use suggested name"
             >
               Use: {suggestedName}
@@ -579,7 +603,7 @@
           type="button"
           class="px-4 py-2 rounded-lg transition-colors"
           style="background: var(--theme-error); color: white;"
-          onclick={handleDelete}
+          onclick={() => handleDelete()}
         >
           Delete
         </button>
@@ -600,7 +624,7 @@
           type="button"
           class="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
           style="background: var(--theme-sidebar-bg); color: var(--theme-foreground); border: 1px solid var(--theme-sidebar-border);"
-          onclick={cancelChanges}
+          onclick={() => cancelChanges()}
           disabled={isSaving}
         >
           Cancel
@@ -609,7 +633,7 @@
           type="button"
           class="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
           style="background: var(--theme-success); color: white;"
-          onclick={saveChanges}
+          onclick={() => saveChanges()}
           disabled={isSaving}
         >
           {isSaving ? (isNew ? 'Creating...' : 'Saving...') : (isNew ? 'Create Equipment' : 'Save Changes')}

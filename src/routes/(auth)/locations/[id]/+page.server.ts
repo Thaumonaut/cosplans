@@ -93,15 +93,17 @@ export const actions: Actions = {
       notes: formData.get('notes') as string || undefined,
     };
 
+    let location;
     try {
-      const location = await locationService.create(data);
-      redirect(303, `/locations/${location.id}`);
+      location = await locationService.create(data);
     } catch (err) {
       console.error('Error creating location:', err);
       return fail(500, {
         error: 'Failed to create location. Please try again.'
       });
     }
+    
+    throw redirect(303, `/locations/${location.id}`);
   },
 
   update: async ({ request, params, locals }) => {
@@ -154,12 +156,13 @@ export const actions: Actions = {
 
     try {
       await locationService.delete(id);
-      redirect(303, '/locations');
     } catch (err) {
       console.error('Error deleting location:', err);
       return fail(500, {
         error: 'Failed to delete location. Please try again.'
       });
     }
+    
+    throw redirect(303, '/locations');
   }
 };

@@ -75,15 +75,17 @@ export const actions: Actions = {
       return fail(400, { error: 'Name is required' });
     }
 
+    let newCrewMember;
     try {
-      const newCrewMember = await crewService.create(data);
-      throw redirect(303, `/crew/${newCrewMember.id}`);
+      newCrewMember = await crewService.create(data);
     } catch (err) {
       console.error('Error creating crew member:', err);
       return fail(500, {
         error: 'Failed to create crew member. Please try again.'
       });
     }
+    
+    throw redirect(303, `/crew/${newCrewMember.id}`);
   },
 
   update: async ({ request, params, locals }) => {
@@ -148,12 +150,13 @@ export const actions: Actions = {
 
     try {
       await crewService.delete(id);
-      throw redirect(303, '/crew');
     } catch (err) {
       console.error('Error deleting crew member:', err);
       return fail(500, {
         error: 'Failed to delete crew member. Please try again.'
       });
     }
+    
+    throw redirect(303, '/crew');
   }
 };

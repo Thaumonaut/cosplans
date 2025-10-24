@@ -122,8 +122,7 @@ export const actions: Actions = {
       });
     }
     
-    // Redirect to equipment list on success
-    redirect(303, `/equipment`);
+    throw redirect(303, `/equipment`);
   },
 
   update: async ({ request, params, locals }) => {
@@ -183,12 +182,13 @@ export const actions: Actions = {
 
     try {
       await equipmentService.delete(id);
-      throw redirect(303, '/equipment');
     } catch (err) {
       console.error('Error deleting equipment:', err);
       return fail(500, {
         error: 'Failed to delete equipment. Please try again.'
       });
     }
+    
+    throw redirect(303, '/equipment');
   }
 };

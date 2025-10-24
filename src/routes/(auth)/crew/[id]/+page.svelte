@@ -54,13 +54,20 @@
       const action = isNew ? 'create' : 'update';
       const response = await fetch(`?/${action}`, {
         method: 'POST',
-        body: formData
+        body: formData,
+        redirect: 'manual'
       });
       
-      if (response.redirected) {
-        // For create, we get redirected to the new crew member page
-        window.location.href = response.url;
-      } else if (response.ok) {
+      // Handle redirects
+      if (response.status >= 300 && response.status < 400) {
+        const location = response.headers.get('location');
+        if (location) {
+          window.location.href = location;
+          return;
+        }
+      }
+      
+      if (response.ok) {
         // Update original data to match current
         originalData = { ...crewMember };
         hasChanges = false;
@@ -98,12 +105,31 @@
   }
   
   async function handleDelete() {
-    const formData = new FormData();
-    await fetch(`/crew/${crewMember.id}?/delete`, {
-      method: 'POST',
-      body: formData
-    });
-    goto('/crew');
+    try {
+      const formData = new FormData();
+      const response = await fetch(`/crew/${crewMember.id}?/delete`, {
+        method: 'POST',
+        body: formData,
+        redirect: 'manual'
+      });
+      
+      // Handle redirect response
+      if (response.status >= 300 && response.status < 400) {
+        const location = response.headers.get('location');
+        if (location) {
+          window.location.href = location;
+          return;
+        }
+      }
+      
+      if (response.ok) {
+        goto('/crew');
+      } else {
+        alert('Failed to delete crew member');
+      }
+    } catch (error) {
+      alert('Error deleting crew member');
+    }
   }
 </script>
 
@@ -130,7 +156,7 @@
           type="button"
           class="p-2 rounded-lg transition-colors hover:bg-[var(--theme-sidebar-hover)]"
           style="color: {crewMember.is_favorite ? 'var(--theme-warning)' : 'var(--theme-sidebar-muted)'};"
-          onclick={toggleFavorite}
+          onclick={() => toggleFavorite()}
         >
           <Star class="w-5 h-5 {crewMember.is_favorite ? 'fill-current' : ''}" />
         </button>
@@ -298,7 +324,7 @@
           type="button"
           class="px-4 py-2 rounded-lg transition-colors"
           style="background: var(--theme-error); color: white;"
-          onclick={handleDelete}
+          onclick={() => handleDelete()}
         >
           Delete
         </button>
@@ -319,7 +345,7 @@
           type="button"
           class="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
           style="background: var(--theme-sidebar-bg); color: var(--theme-foreground); border: 1px solid var(--theme-sidebar-border);"
-          onclick={cancelChanges}
+          onclick={() => cancelChanges()}
           disabled={isSaving}
         >
           Cancel
@@ -328,7 +354,7 @@
           type="button"
           class="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
           style="background: var(--theme-success); color: white;"
-          onclick={saveChanges}
+          onclick={() => saveChanges()}
           disabled={isSaving}
         >
           {isSaving ? (isNew ? 'Creating...' : 'Saving...') : (isNew ? 'Create Crew Member' : 'Save Changes')}
