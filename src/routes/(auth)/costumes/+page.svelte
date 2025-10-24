@@ -207,7 +207,7 @@
       </div>
       <div class="flex items-center gap-2">
         <span class="text-sm" style="color: var(--theme-sidebar-muted);">Status:</span>
-        <ThemedSelect name="filterStatus" bind:value={selectedStatus} onchange={updateFilters}>
+        <ThemedSelect name="filterStatus" bind:value={selectedStatus} onchange={(e) => updateFilters(e)}>
           {#each statusOptions as option}
             <option value={option.value}>{option.label}</option>
           {/each}

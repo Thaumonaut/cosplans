@@ -186,6 +186,43 @@ export class CostumeService {
       offset
     });
   }
+
+  /**
+   * Search for unique series names
+   */
+  async searchSeries(query: string, limit = 10): Promise<string[]> {
+    const { data, error: searchError } = await this.client
+      .from('costumes')
+      .select('series')
+      .is('deleted_at', null)
+      .not('series', 'is', null)
+      .neq('series', '')
+      .ilike('series', `%${query}%`)
+      .limit(limit * 2); // Get more to filter duplicates
+
+    if (searchError) {
+      console.error('Error searching series:', searchError);
+      throw error(500, `Failed to search series: ${searchError.message}`);
+    }
+
+    // Extract unique series names (case-insensitive)
+    const uniqueSeries = new Set<string>();
+    const seriesList: string[] = [];
+    
+    for (const item of data || []) {
+      if (item.series) {
+        const lowerSeries = item.series.toLowerCase();
+        if (!uniqueSeries.has(lowerSeries)) {
+          uniqueSeries.add(lowerSeries);
+          seriesList.push(item.series);
+          
+          if (seriesList.length >= limit) break;
+        }
+      }
+    }
+
+    return seriesList;
+  }
 }
 
 export const costumeService = CostumeService.getInstance();
