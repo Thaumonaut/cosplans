@@ -178,6 +178,7 @@ As a developer maintaining the system, I want this specification to supersede an
 - **FR-039**: System MUST allow users to add general crafting notes to outfit entries (techniques used, fabric sources, lessons learned)
 - **FR-040**: System MUST track outfit completion date and construction time when status changes to "Completed" using same hybrid approach as wigs: automatic calculation with optional manual override
 - **FR-041**: System MUST display complete construction record on outfit detail page: patterns, alterations, tasks, notes, time, cost
+- **FR-041a**: System MUST track detailed outfit cost breakdown: base outfit cost (if purchased), material costs (fabric, notions, zippers), pattern costs, commission fees (if applicable), and total cost; costs aggregated into character budget (FR-005b) for insurance documentation and historical cost tracking over time
 
 **Cross-Resource Requirements:**
 - **FR-042**: All new/modified resources (characters, wigs) MUST be scoped to teams
@@ -201,6 +202,7 @@ As a developer maintaining the system, I want this specification to supersede an
 - **FR-058**: System MUST calculate event readiness: percentage of linked characters that are complete/ready
 - **FR-059**: System MUST show countdown to event on character detail pages when character is linked to upcoming events
 - **FR-060**: System MUST allow filtering characters by linked event to see "all characters for Anime Expo 2026"
+- **Note**: Advanced event logistics (packing checklists, weather forecasts, backup locations, transportation planning) are covered in spec 051 (Convention Logistics)
 
 **Vendor/Shop Management:**
 - **FR-061**: System MUST allow users to create, read, update, and delete vendor/shop entries within their team
