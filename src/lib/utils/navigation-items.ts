@@ -103,6 +103,27 @@ export const RESOURCE_NAV_ITEMS: NavigationItem[] = [
     group: "resources",
   },
   {
+    id: "accessories",
+    label: "Accessories",
+    href: "/accessories",
+    icon: "Sparkles",
+    group: "resources",
+  },
+  {
+    id: "makeup",
+    label: "Makeup",
+    href: "/makeup",
+    icon: "Palette",
+    group: "resources",
+  },
+  {
+    id: "misc-resources",
+    label: "Misc Resources",
+    href: "/misc-resources",
+    icon: "Wrench",
+    group: "resources",
+  },
+  {
     id: "crew",
     label: "Crew",
     href: "/crew",
@@ -120,7 +141,7 @@ export const RESOURCE_NAV_ITEMS: NavigationItem[] = [
     id: "equipment",
     label: "Equipment",
     href: "/equipment",
-    icon: "Wrench",
+    icon: "Monitor",
     group: "resources",
   },
 ];
